@@ -36,7 +36,7 @@ class MatxTheme extends Component {
                 --text-body: ${activeTheme.palette.text.primary}; 
                 --text-muted: ${activeTheme.palette.text.secondary}; 
                 --text-hint: ${activeTheme.palette.text.hint}; 
-                --font: Roboto,"Helvetica Neue",sans-serif;
+            --font: proxima-nova,"Helvetica Neue",sans-serif;
                 --font-caption: 400 12px/20px var(--font);
                 --font-body-1: 400 14px/20px var(--font);
                 --font-body-2: 500 14px/24px var(--font);

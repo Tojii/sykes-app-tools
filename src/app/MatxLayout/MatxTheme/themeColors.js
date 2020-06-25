@@ -1,5 +1,5 @@
 const textLight = {
-  primary: "rgba(74, 70, 109, 0.87)",
+  primary: "#484748",
   secondary: "rgba(74, 70, 109, 0.54)",
   disabled: "rgba(74, 70, 109, 0.38)",
   hint: "rgba(74, 70, 109, 0.38)"
@@ -14,7 +14,7 @@ export const themeColors = {
         contrastText: textLight.primary
       },
       secondary: {
-        main: "#7467ef",
+        main: "#039be5",
         contrastText: textLight.primary
       },
       text: textLight
@@ -28,7 +28,7 @@ export const themeColors = {
         contrastText: "#ffffff"
       },
       secondary: {
-        main: "#ff9e43",
+        main: "#ff9805",
         contrastText: textLight.primary
       },
       background: {
@@ -45,11 +45,11 @@ export const themeColors = {
         contrastText: "#ffffff"
       },
       secondary: {
-        main: "#ff9e43",
+        main: "#ff9805",
         contrastText: textLight.primary
       },
       background: {
-        paper: "#222A45",
+        paper: "#00589c",
         default: "#1a2038"
       }
     }
@@ -58,11 +58,11 @@ export const themeColors = {
     palette: {
       type: "light",
       primary: {
-        main: "#7467ef",
+        main: "#039be5",
         contrastText: "#ffffff"
       },
       secondary: {
-        main: "#ff9e43",
+        main: "#ff9805",
         contrastText: textLight.primary
       },
       text: textLight
@@ -76,7 +76,7 @@ export const themeColors = {
         contrastText: "#ffffff"
       },
       secondary: {
-        main: "#ff9e43",
+        main: "#ff9805",
         contrastText: textLight.primary
       },
       text: textLight
@@ -86,11 +86,11 @@ export const themeColors = {
     palette: {
       type: "dark",
       primary: {
-        main: "#7467ef",
+        main: "#039be5",
         contrastText: "#ffffff"
       },
       secondary: {
-        main: "#ff9e43",
+        main: "#ff9805",
         contrastText: textLight.primary
       },
       background: {
@@ -107,7 +107,7 @@ export const themeColors = {
         contrastText: "#ffffff"
       },
       secondary: {
-        main: "#ff9e43",
+        main: "#ff9805",
         contrastText: textLight.primary
       },
       background: {

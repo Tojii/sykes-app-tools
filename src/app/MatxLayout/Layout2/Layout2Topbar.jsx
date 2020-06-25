@@ -70,7 +70,7 @@ class Layout2Topbar extends Component {
           <div className="flex flex-space-between flex-middle container h-100">
             <div className="flex flex-middle brand">
               <img src="/assets/images/logo.svg" alt="company-logo" />
-              <span className="brand__text">TOJII</span>
+              <span className="brand__text"></span>
             </div>
             <div className="mx-auto"></div>
             <div className="flex flex-middle">
