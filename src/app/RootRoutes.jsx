@@ -21,7 +21,7 @@ import propietarioRoute from "./views/mantenimientos/propietarios/PropietariosRo
 import proveedorRoute from "./views/mantenimientos/proveedores/ProveedoresRoutes";
 import proyectoRoute from "./views/mantenimientos/proyectos/ProyectosRoutes";
 import inboxRoute from "./views/inbox/InboxRoutes";
-import formsRoutes from "./views/forms/FormsRoutes";
+import hrRoutes from "./views/humanresources/hrRoutes";
 import mapRoutes from "./views/map/MapRoutes";
 import chatRoutes from "./views/chat-box/ChatRoutes";
 import todoRoutes from "./views/todo/TodoRoutes";
@@ -73,7 +73,7 @@ const routes = [
   ...proveedorRoute,
   ...proyectoRoute,
   ...inboxRoute,
-  ...formsRoutes,
+  ...hrRoutes,
   ...mapRoutes,
   ...chatRoutes,
   ...todoRoutes,

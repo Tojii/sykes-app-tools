@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Breadcrumb } from "matx";
-import SimpleForm from "../material-kit/forms/SimpleFormLeader";
+import SimpleForm from "../../material-kit/forms/SimpleFormLeader";
 
 class BasicForm extends Component {
   render() {
@@ -9,8 +9,8 @@ class BasicForm extends Component {
         <div  className="mb-sm-30">
           <Breadcrumb
             routeSegments={[
-              { name: "Start", path: "/start" },
-              { name: "BasicLeader" }
+              { name: "LSS", path: "/hr/lss" },
+              { name: "Leadership Satisfaction Form" }
             ]}
           />
         </div>

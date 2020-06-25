@@ -82,35 +82,14 @@ export const navigations = [
     ]
   },
   {
-    name: "Forms",
+    name: "Human Resources",
     icon: "description",
     children: [
       {
-        name: "Basic",
-        path: "/forms/basic",
-        iconText: "B"
-      },
-      {
-        name: "Start",
-        path: "/start",
-        iconText: "S"
-      },
-      {
-        name: "Editor",
-        path: "/forms/editor",
-        iconText: "E"
-      },
-      {
-        name: "Upload",
-        path: "/forms/upload",
-        iconText: "U",
-        badge: { value: "Pro", color: "secondary" },
-      },
-      {
-        name: "Wizard",
-        path: "/forms/wizard",
-        iconText: "W",
-        badge: { value: "Pro", color: "secondary" },
+        name: "LSS",
+        path: "/hr/lss",
+        iconText: "L",
+        badge: { value: "New", color: "secondary" },
       }
     ]
   },

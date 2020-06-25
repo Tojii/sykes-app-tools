@@ -4,12 +4,12 @@ const BasicForm = MatxLoadable({
   loader: () => import("./BasicForm")
 });
 
-const BasicFormLeader = MatxLoadable({
-  loader: () => import("./BasicFormLeader")
+const LLSForm = MatxLoadable({
+  loader: () => import("./lss/LeadershipSatisfactionForm")
 });
 
 const StartFormLeader = MatxLoadable({
-  loader: () => import("./Start")
+  loader: () => import("./lss/Start")
 });
 
 const EditorForm = MatxLoadable({
@@ -24,17 +24,17 @@ const UploadForm = MatxLoadable({
   loader: () => import("./UploadForm")
 });
 
-const formsRoutes = [
+const hrRoutes = [
   {
     path: "/forms/basic",
     component: BasicForm
   },
   {
-    path: "/start/basicleader",
-    component: BasicFormLeader
+    path: "/hr/lss/form",
+    component: LLSForm
   },
   {
-    path: "/start",
+    path: "/hr/lss",
     component: StartFormLeader
   },
   {
@@ -51,4 +51,4 @@ const formsRoutes = [
   }
 ];
 
-export default formsRoutes;
+export default hrRoutes;
