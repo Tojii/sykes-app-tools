@@ -46,7 +46,9 @@ class SimpleForm extends Component {
     confirmPassword: "",
     gender: "",
     agreement: "",
-    positions: "Indirect"
+    positions: "Indirect",
+    value: 0,
+    hover: 0
   };
 
   componentDidMount() {
@@ -72,7 +74,7 @@ class SimpleForm extends Component {
   handleChange = event => {
     event.persist();
     this.setState({ [event.target.name]: event.target.value });
-    console.log(this.state.positions);
+    // console.log(this.state.positions);
   };
 
   handleDateChange = date => {
@@ -93,6 +95,13 @@ class SimpleForm extends Component {
       date,
       email
     } = this.state;
+    const labels = {
+      1: 'Nunca',
+      2: 'Casi nunca',
+      3: 'A veces',
+      4: 'Casi siempre',
+      5: 'Siempre',
+    };
     return (
       <div>
         <ValidatorForm
@@ -265,12 +274,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="relacion_equipo_rating1"
-                      // value={value}
-                      // onChange={(event, newValue) => {
-                      //   setValue(newValue);
-                      // }}
+                      value={this.state.value}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "value": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "hover": newHover });
+                      }}
                       icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.value !== null && <Box mb={3}>{labels[this.state.hover !== -1 ? this.state.hover : this.state.value]}</Box>}
                   </Box>
               </FormControl>
             </div>
