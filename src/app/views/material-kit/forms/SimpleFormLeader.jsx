@@ -13,6 +13,7 @@ import {
   Box,
   Checkbox
 } from "@material-ui/core";
+import MenuItem from '@material-ui/core/MenuItem';
 import Rating from '@material-ui/lab/Rating';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { withStyles } from '@material-ui/core/styles';
@@ -44,7 +45,8 @@ class SimpleForm extends Component {
     password: "",
     confirmPassword: "",
     gender: "",
-    agreement: ""
+    agreement: "",
+    positions: "Indirect"
   };
 
   componentDidMount() {
@@ -70,6 +72,7 @@ class SimpleForm extends Component {
   handleChange = event => {
     event.persist();
     this.setState({ [event.target.name]: event.target.value });
+    console.log(this.state.positions);
   };
 
   handleDateChange = date => {
@@ -100,11 +103,15 @@ class SimpleForm extends Component {
           <SimpleCard title="Información personal">
             <FormControl className="form-control-leader">          
               <InputLabel id="cuenta">Cuenta area *</InputLabel>
-              <Select labelId="cuenta" className="mr-24" required style={{width: "calc(90% - 24px)"}} />
+              <Select labelId="cuenta" className="mr-24" required style={{width: "calc(90% - 24px)"}}>
+                <MenuItem value={0}>Seleccione...</MenuItem>
+              </Select>
             </FormControl>
             <FormControl className="form-control-leader">
               <InputLabel id="cuenta">Mi supervisor directo es *</InputLabel>         
-              <Select labelId="cuenta" className="mr-24" required style={{width: "calc(90% - 24px)"}} />
+              <Select labelId="cuenta" className="mr-24" required style={{width: "calc(90% - 24px)"}}>
+                <MenuItem value={0}>Seleccione...</MenuItem>
+              </Select>
               <h7 style={{width: "calc(90% - 24px)", color: "#ffa420", display: "block"}}>Si su líder directo no aparece en la lista, seleccione: No aparece en la lista y proceda a ingresar el  nombre de su líder de manera manual en la opción que se habilita.</h7>
             </FormControl>
             <FormControl className="form-control-leader">
@@ -114,7 +121,7 @@ class SimpleForm extends Component {
                   className="mb-16"
                   //value={gender}
                   name="positions"
-                  // onChange={this.handleChange}
+                  onChange={this.handleChange}
                   row
                 >
                   <FormControlLabel
@@ -136,6 +143,7 @@ class SimpleForm extends Component {
           </SimpleCard>
           <div className="py-12" />
 
+          {this.state.positions === "Indirect" ? null : (
           <SimpleCard title="Retroalimentación y seguimiento">
             <FormControl className="form-control-leader">
               <label style={{width: "calc(90% - 24px)", display: "inline-block"}}>¿Ha tenido una reunión de equipo en el último mes? *</label>
@@ -143,8 +151,8 @@ class SimpleForm extends Component {
               <RadioGroup
                   className="mb-16"
                   //value={gender}
-                  name="positions"
-                  // onChange={this.handleChange}
+                  name="retroalimentacion_1"
+                  //onChange={this.handleChange}
                   row
                 >
                   <FormControlLabel
@@ -167,7 +175,7 @@ class SimpleForm extends Component {
               <RadioGroup
                   className="mb-16"
                   //value={gender}
-                  name="positions"
+                  name="retroalimentacion_2"
                   // onChange={this.handleChange}
                   row
                 >
@@ -191,7 +199,7 @@ class SimpleForm extends Component {
               <RadioGroup
                   className="mb-16"
                   //value={gender}
-                  name="positions"
+                  name="retroalimentacion_3"
                   // onChange={this.handleChange}
                   row
                 >
@@ -215,7 +223,7 @@ class SimpleForm extends Component {
               <RadioGroup
                   className="mb-16"
                   //value={gender}
-                  name="positions"
+                  name="retroalimentacion_4"
                   // onChange={this.handleChange}
                   row
                 >
@@ -233,7 +241,7 @@ class SimpleForm extends Component {
                   />
                 </RadioGroup>
             </FormControl>         
-          </SimpleCard>
+          </SimpleCard> )}
           <div className="py-12" />
 
           <SimpleCard title="Relación en el equipo">
@@ -246,6 +254,7 @@ class SimpleForm extends Component {
             <div style={{textAlign: "center"}} >
               <h5>Para cada uno de los siguientes enunciados responda de acuerdo a la escala de valor ascendente donde NUNCA significa que su líder no exhibe este comportamiento y SIEMPRE significa que su líder si lo demuestra de manera contundente.</h5>
             </div>
+            <hr></hr>
             <div>
               <FormControl className="form-control-leader">
                 <div >
@@ -253,7 +262,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="relacion_equipo_rating1"
                       // value={value}
@@ -272,7 +281,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="relacion_equipo_rating2"
                       icon={<RemoveIcon fontSize="large" />}
@@ -287,7 +296,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="relacion_equipo_rating3"
                       icon={<RemoveIcon fontSize="large" />}
@@ -306,7 +315,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="colaboracion_equipo_rating1"
                       // value={value}
@@ -325,7 +334,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="colaboracion_equipo_rating2"
                       icon={<RemoveIcon fontSize="large" />}
@@ -340,7 +349,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="colaboracion_equipo_rating3"
                       icon={<RemoveIcon fontSize="large" />}
@@ -359,7 +368,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="planeamiento_rating1"
                       // value={value}
@@ -378,7 +387,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="planeamiento_rating2"
                       icon={<RemoveIcon fontSize="large" />}
@@ -393,7 +402,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="planeamiento_rating3"
                       icon={<RemoveIcon fontSize="large" />}
@@ -412,7 +421,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="ejecucion_rating1"
                       // value={value}
@@ -431,7 +440,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="ejecucion_rating2"
                       icon={<RemoveIcon fontSize="large" />}
@@ -446,7 +455,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="ejecucion_rating3"
                       icon={<RemoveIcon fontSize="large" />}
@@ -465,7 +474,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="trato_colaboradores_rating1"
                       // value={value}
@@ -484,7 +493,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="trato_colaboradores_rating2"
                       icon={<RemoveIcon fontSize="large" />}
@@ -499,7 +508,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="trato_colaboradores_rating3"
                       icon={<RemoveIcon fontSize="large" />}
@@ -518,7 +527,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="pensamiento_estrategico_rating1"
                       // value={value}
@@ -537,7 +546,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="pensamiento_estrategico_rating2"
                       icon={<RemoveIcon fontSize="large" />}
@@ -552,7 +561,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="pensamiento_estrategico_rating3"
                       icon={<RemoveIcon fontSize="large" />}
@@ -571,7 +580,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="enfoque_resultados_rating1"
                       // value={value}
@@ -590,7 +599,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="enfoque_resultados_rating2"
                       icon={<RemoveIcon fontSize="large" />}
@@ -605,7 +614,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="enfoque_resultados_rating3"
                       icon={<RemoveIcon fontSize="large" />}
@@ -624,7 +633,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="satisfaccion_general_rating1"
                       // value={value}
@@ -647,7 +656,7 @@ class SimpleForm extends Component {
                 </div>
               </FormControl>
               <FormControl className="ratingform">
-                  <Box component="fieldset" mb={3} style={{margin: "5%"}} borderColor="transparent">
+                  <Box component="fieldset" mb={3} borderColor="transparent">
                     <textarea rows="5" style={{width: "100%"}}></textarea>
                   </Box>
               </FormControl>
