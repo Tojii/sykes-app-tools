@@ -112,7 +112,7 @@ const StackedAreaChart = ({ height, width }) => {
           dataKey="OnePlus"
           stackId="1"
           //   stroke="#82ca9d"
-          fill="#7467ef"
+          fill="#039be5"
         />
         <Area
           type="monotone"
