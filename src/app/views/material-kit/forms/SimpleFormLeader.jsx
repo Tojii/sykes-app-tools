@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   InputLabel,
   FormControl,
+  FormHelperText,
   Select,
   Box,
   Checkbox
@@ -36,17 +37,7 @@ const StyledRating = withStyles({
 
 class SimpleForm extends Component {
   state = {
-    username: "",
-    firstName: "",
-    email: "",
-    date: new Date(),
-    creditCard: "",
-    mobile: "",
-    password: "",
-    confirmPassword: "",
-    gender: "",
-    agreement: "",
-    positions: "Indirect",
+    positions: "",
     relacion_equipo_rating1: 0,
     relacion_equipo_hover1: 0,
     relacion_equipo_rating2: 0,
@@ -91,33 +82,69 @@ class SimpleForm extends Component {
     enfoque_resultados_rating3: 0,
     satisfaccion_general_rating1: 0,
     satisfaccion_general_hover1: 0,
-    value: 0,
-    hover: 0
+    error_cuenta: false,
+    error_supervisor: false,
+    error_general: false,
+    cuenta_area: "",
+    supervisor_directo: "",
+    sugerencia: ""
   };
 
   componentDidMount() {
     // custom rule will have name 'isPasswordMatch'
-    ValidatorForm.addValidationRule("isPasswordMatch", value => {
-      if (value !== this.state.password) {
-        return false;
-      }
-      return true;
-    });
+    // ValidatorForm.addValidationRule("isPasswordMatch", value => {
+    //   if (value !== this.state.password) {
+    //     return false;
+    //   }
+    //   return true;
+    // });
   }
 
   componentWillUnmount() {
     // remove rule when it is not needed
-    ValidatorForm.removeValidationRule("isPasswordMatch");
+    // ValidatorForm.removeValidationRule("isPasswordMatch");
   }
 
   handleSubmit = event => {
-    console.log("submitted");
-    console.log(event);
+    if (this.state.cuenta_area === "") {
+      this.setState({ "error_cuenta": true });
+    } else {
+      this.setState({ "error_cuenta": false });
+    }
+
+    if(this.state.supervisor_directo === "") {
+      this.setState({ "error_supervisor": true });
+    } else {
+      this.setState({ "error_supervisor": false });
+    }
+
+    if(this.state.error_cuenta || this.state.error_supervisor || this.state.relacion_equipo_rating1 === 0 || this.state.relacion_equipo_rating2 === 0 || this.state.relacion_equipo_rating3 === 0
+      || this.state.colaboracion_equipo_rating1 === 0 || this.state.colaboracion_equipo_rating2 === 0 || this.state.colaboracion_equipo_rating3 === 0
+      || this.state.planeamiento_rating1 === 0 || this.state.planeamiento_rating2 === 0 || this.state.planeamiento_rating3 === 0
+      || this.state.ejecucion_rating1 === 0 || this.state.ejecucion_rating2 === 0 || this.state.ejecucion_rating3 === 0
+      || this.state.trato_colaboradores_rating1 === 0 || this.state.trato_colaboradores_rating2 === 0 || this.state.trato_colaboradores_rating3 === 0
+      || this.state.pensamiento_estrategico_rating1 === 0 || this.state.pensamiento_estrategico_rating2 === 0 || this.state.pensamiento_estrategico_rating3 === 0
+      || this.state.enfoque_resultados_rating1 === 0 || this.state.enfoque_resultados_rating2 === 0 || this.state.enfoque_resultados_rating3 === 0
+      || this.state.satisfaccion_general_rating1 === 0 || this.state.sugerencia === "" || this.state.positions === ""){
+      this.setState({ "error_general": true });
+    } else {
+      this.setState({ "error_general": false });
+      console.log("submitted");
+      console.log(event);
+    }
   };
 
   handleChange = event => {
     event.persist();
     this.setState({ [event.target.name]: event.target.value });
+
+    if ( event.target.name === "cuenta_area" && event.target.value !== "") {
+      this.setState({ "error_cuenta": false });
+    }
+
+    if ( event.target.name === "supervisor_directo" && event.target.value !== "") {
+      this.setState({ "error_supervisor": false });
+    }
     // console.log(this.state.positions);
   };
 
@@ -128,17 +155,6 @@ class SimpleForm extends Component {
   };
 
   render() {
-    let {
-      username,
-      firstName,
-      creditCard,
-      mobile,
-      password,
-      confirmPassword,
-      gender,
-      date,
-      email
-    } = this.state;
     const labels = {
       1: 'Nunca',
       2: 'Casi nunca',
@@ -154,23 +170,27 @@ class SimpleForm extends Component {
           onError={errors => null}
         >
           <SimpleCard title="Información personal">
-            <FormControl className="form-control-leader">          
+            <FormControl className="form-control-leader" error={this.state.error_cuenta}>          
               <InputLabel id="cuenta">Cuenta area *</InputLabel>
-              <Select labelId="cuenta" className="mr-24" required style={{width: "calc(90% - 24px)"}}>
+              <Select labelId="cuenta" className="mr-24" name="cuenta_area" onChange={this.handleChange} required style={{width: "calc(90% - 24px)"}}>
                 <MenuItem value={0}>Seleccione...</MenuItem>
               </Select>
+              <FormHelperText hidden={!this.state.error_cuenta}>El campo es requerido</FormHelperText>
             </FormControl>
-            <FormControl className="form-control-leader">
+            <FormControl className="form-control-leader" error={this.state.error_supervisor}>
               <InputLabel id="cuenta">Mi supervisor directo es *</InputLabel>         
-              <Select labelId="cuenta" className="mr-24" required style={{width: "calc(90% - 24px)"}}>
+              <Select labelId="cuenta" className="mr-24" name="supervisor_directo" onChange={this.handleChange} required style={{width: "calc(90% - 24px)"}}>
                 <MenuItem value={0}>Seleccione...</MenuItem>
               </Select>
+              <FormHelperText hidden={!this.state.error_supervisor}>El campo es requerido</FormHelperText>
               <h7 style={{width: "calc(90% - 24px)", color: "#ffa420", display: "block"}}>Si su líder directo no aparece en la lista, seleccione: No aparece en la lista y proceda a ingresar el  nombre de su líder de manera manual en la opción que se habilita.</h7>
             </FormControl>
-            <FormControl className="form-control-leader">
+            <FormControl className="form-control-leader" error>
               <label style={{display: "inline-block"}}>Posición *</label>
+              <FormHelperText hidden={true}>El campo es requerido</FormHelperText>
               &nbsp;
               <RadioGroup
+                  required
                   className="mb-16"
                   //value={gender}
                   name="positions"
@@ -196,7 +216,7 @@ class SimpleForm extends Component {
           </SimpleCard>
           <div className="py-12" />
 
-          {this.state.positions === "Indirect" ? null : (
+          {(this.state.positions === "Indirect" || this.state.positions === "") ? null : (
           <SimpleCard title="Retroalimentación y seguimiento">
             <FormControl className="form-control-leader">
               <label style={{width: "calc(90% - 24px)", display: "inline-block"}}>¿Ha tenido una reunión de equipo en el último mes? *</label>
@@ -270,7 +290,7 @@ class SimpleForm extends Component {
                   />
                 </RadioGroup>
             </FormControl> 
-            <FormControl className="form-control-leader">
+            <FormControl className="form-control-leader" error>
               <label style={{width: "calc(90% - 24px)", display: "inline-block"}}>¿Logra divulgar los eventos de voluntariado y promover la participación activamente? *</label>
               &nbsp;
               <RadioGroup
@@ -303,12 +323,12 @@ class SimpleForm extends Component {
           <p>Para cada uno de los siguientes enunciados responda de acuerdo a la escala de valor ascendente donde NUNCA significa que su líder no exhibe este comportamiento y SIEMPRE significa que su líder si lo demuestra de manera contundente.</p>
            <hr />
             <div>
-              <FormControl className="form-control-leader">
+              <FormControl className="form-control-leader" error>
                 <div >
                   <label className="label-rating">Establece un clima de confianza en el grupo, generando un ambiente de entusiasmo, compromiso y respeto. *  </label>
                 </div>
               </FormControl>
-              <FormControl className="ratingform">
+              <FormControl className="ratingform" error>
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="relacion_equipo_rating1"
@@ -892,7 +912,7 @@ class SimpleForm extends Component {
               </FormControl>
               <FormControl className="ratingform">
                   <Box component="fieldset" mb={3} borderColor="transparent">
-                    <textarea rows="5" style={{width: "100%"}}></textarea>
+                    <textarea name="sugerencia" rows="5" style={{width: "100%"}} onChange={this.handleChange}></textarea>
                   </Box>
               </FormControl>
             </div>
@@ -903,6 +923,7 @@ class SimpleForm extends Component {
             <Icon>send</Icon>
             <span className="pl-8 capitalize">Save</span>
           </Button>
+          <FormHelperText style={{color: "red"}} hidden={!this.state.error_general}>Se deben ingresar todos los campos requeridos</FormHelperText>
         </ValidatorForm>
       </div>
     );
