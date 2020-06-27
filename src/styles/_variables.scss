@@ -18,7 +18,7 @@ $text-hint: var(--text-hint);
 
 $brand: $primary;
 
-$light-gray: rgba(0, 0, 0, 0.08);
+$light-gray: #e7e7e7;
 
 // Layout
 $topbar-mobile-width: 220px;
@@ -32,7 +32,7 @@ $contained-layout-width: 1200px;
 // Typography
 $font-weight-base: 400;
 $font-size-base: 0.875rem;
-$font-family-base: Roboto, "Helvetica Neue", sans-serif !default;
+$font-family-base: Proxima-nova, Roboto, "Helvetica Neue", sans-serif !default;
 
 $font-caption: var(--font-caption);
 $font-body-1: var(--font-body-1);
