@@ -87,7 +87,11 @@ class SimpleForm extends Component {
     error_general: false,
     cuenta_area: "",
     supervisor_directo: "",
-    sugerencia: ""
+    sugerencia: "",
+    retroalimentacion_1: "",
+    retroalimentacion_2: "",
+    retroalimentacion_3: "",
+    retroalimentacion_4: ""
   };
 
   componentDidMount() {
@@ -128,9 +132,19 @@ class SimpleForm extends Component {
       || this.state.satisfaccion_general_rating1 === 0 || this.state.sugerencia === "" || this.state.positions === ""){
       this.setState({ "error_general": true });
     } else {
-      this.setState({ "error_general": false });
-      console.log("submitted");
-      console.log(event);
+      if (this.state.positions === "Direct" ) {
+        if (this.state.retroalimentacion_1 === "" || this.state.retroalimentacion_2 === "" || this.state.retroalimentacion_3 === "" || this.state.retroalimentacion_4 === "") {
+          this.setState({ "error_general": true });
+        } else {
+          this.setState({ "error_general": false });
+          console.log("submitted");
+          // console.log(event);
+        }
+      } else {
+        this.setState({ "error_general": false });
+        console.log("submitted");
+        // console.log(event);
+      }
     }
   };
 
@@ -138,12 +152,18 @@ class SimpleForm extends Component {
     event.persist();
     this.setState({ [event.target.name]: event.target.value });
 
-    if ( event.target.name === "cuenta_area" && event.target.value !== "") {
+    if (event.target.name === "cuenta_area" && event.target.value !== "") {
       this.setState({ "error_cuenta": false });
     }
 
-    if ( event.target.name === "supervisor_directo" && event.target.value !== "") {
+    if (event.target.name === "supervisor_directo" && event.target.value !== "") {
       this.setState({ "error_supervisor": false });
+    }
+    if (event.target.name === "positions" && event.target.value === "Indirect") {
+      this.setState({ "retroalimentacion_1": "" });
+      this.setState({ "retroalimentacion_2": "" });
+      this.setState({ "retroalimentacion_3": "" });
+      this.setState({ "retroalimentacion_4": "" });
     }
     // console.log(this.state.positions);
   };
@@ -172,7 +192,7 @@ class SimpleForm extends Component {
           <SimpleCard title="Información personal">
             <FormControl className="form-control-leader" error={this.state.error_cuenta}>          
               <InputLabel id="cuenta">Cuenta area *</InputLabel>
-              <Select labelId="cuenta" className="mr-24" name="cuenta_area" onChange={this.handleChange} required style={{width: "calc(90% - 24px)"}}>
+              <Select data-tut="reactour__select" labelId="cuenta" className="mr-24" name="cuenta_area" onChange={this.handleChange} required style={{width: "calc(90% - 24px)"}}>
                 <MenuItem value={0}>Seleccione...</MenuItem>
               </Select>
               <FormHelperText hidden={!this.state.error_cuenta}>El campo es requerido</FormHelperText>
@@ -190,6 +210,7 @@ class SimpleForm extends Component {
               <FormHelperText hidden={true}>El campo es requerido</FormHelperText>
               &nbsp;
               <RadioGroup
+                  data-tut="reactour__info"
                   required
                   className="mb-16"
                   //value={gender}
@@ -225,7 +246,7 @@ class SimpleForm extends Component {
                   className="mb-16"
                   //value={gender}
                   name="retroalimentacion_1"
-                  //onChange={this.handleChange}
+                  onChange={this.handleChange}
                   row
                 >
                   <FormControlLabel
@@ -249,7 +270,7 @@ class SimpleForm extends Component {
                   className="mb-16"
                   //value={gender}
                   name="retroalimentacion_2"
-                  // onChange={this.handleChange}
+                  onChange={this.handleChange}
                   row
                 >
                   <FormControlLabel
@@ -273,7 +294,7 @@ class SimpleForm extends Component {
                   className="mb-16"
                   //value={gender}
                   name="retroalimentacion_3"
-                  // onChange={this.handleChange}
+                  onChange={this.handleChange}
                   row
                 >
                   <FormControlLabel
@@ -297,7 +318,7 @@ class SimpleForm extends Component {
                   className="mb-16"
                   //value={gender}
                   name="retroalimentacion_4"
-                  // onChange={this.handleChange}
+                  onChange={this.handleChange}
                   row
                 >
                   <FormControlLabel
@@ -331,6 +352,7 @@ class SimpleForm extends Component {
               <FormControl className="ratingform" error>
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
+                      data-tut="reactour__rate"
                       name="relacion_equipo_rating1"
                       value={this.state.relacion_equipo_rating1}
                       onChange={(event, newValue) => {
