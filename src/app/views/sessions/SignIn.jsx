@@ -109,15 +109,6 @@ class SignIn extends Component {
                           />
                         )}
                       </div>
-                      <span className="ml-16 mr-8">or</span>
-                      <Button
-                        className="capitalize"
-                        onClick={() =>
-                          this.props.history.push("/session/signup")
-                        }
-                      >
-                        Sign up
-                      </Button>
                     </div>
                     <Button
                       className="text-primary"
