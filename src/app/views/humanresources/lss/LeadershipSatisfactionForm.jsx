@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Breadcrumb } from "matx";
-import SimpleForm from "../../material-kit/forms/SimpleFormLeader";
+import SimpleFormTour from "../../material-kit/forms/SimpleFormLeaderTour";
 
 class BasicForm extends Component {
   render() {
@@ -14,7 +14,7 @@ class BasicForm extends Component {
             ]}
           />
         </div>
-        <SimpleForm />
+        <SimpleFormTour />
       </div>
     );
   }
