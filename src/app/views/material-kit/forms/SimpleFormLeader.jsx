@@ -36,19 +36,61 @@ const StyledRating = withStyles({
 
 class SimpleForm extends Component {
   state = {
-    username: "",
-    firstName: "",
-    email: "",
-    date: new Date(),
-    creditCard: "",
-    mobile: "",
-    password: "",
-    confirmPassword: "",
-    gender: "",
-    agreement: "",
-    positions: "Indirect",
-    value: 0,
-    hover: 0
+    positions: "",
+    relacion_equipo_rating1: 0,
+    relacion_equipo_hover1: 0,
+    relacion_equipo_rating2: 0,
+    relacion_equipo_hover2: 0,
+    relacion_equipo_rating3: 0,
+    relacion_equipo_hover3: 0,
+    colaboracion_equipo_rating1: 0,
+    colaboracion_equipo_hover1: 0,
+    colaboracion_equipo_rating2: 0,
+    colaboracion_equipo_hover2: 0,
+    colaboracion_equipo_rating3: 0,
+    colaboracion_equipo_hover3: 0,
+    planeamiento_rating1: 0,
+    planeamiento_hover1: 0,
+    planeamiento_rating2: 0,
+    planeamiento_hover2: 0,
+    planeamiento_rating3: 0,
+    planeamiento_hover3: 0,
+    ejecucion_rating1: 0,
+    ejecucion_hover1: 0,
+    ejecucion_rating2: 0,
+    ejecucion_hover2: 0,
+    ejecucion_rating3: 0,
+    ejecucion_hover3: 0,
+    trato_colaboradores_rating1: 0,
+    trato_colaboradores_hover1: 0,
+    trato_colaboradores_rating2: 0,
+    trato_colaboradores_hover2: 0,
+    trato_colaboradores_rating3: 0,
+    trato_colaboradores_hover3: 0,
+    pensamiento_estrategico_rating1: 0,
+    pensamiento_estrategico_hover1: 0,
+    pensamiento_estrategico_rating2: 0,
+    pensamiento_estrategico_hover2: 0,
+    pensamiento_estrategico_rating3: 0,
+    pensamiento_estrategico_hover3: 0,
+    enfoque_resultados_rating1: 0,
+    enfoque_resultados_rating1: 0,
+    enfoque_resultados_rating2: 0,
+    enfoque_resultados_rating2: 0,
+    enfoque_resultados_rating3: 0,
+    enfoque_resultados_rating3: 0,
+    satisfaccion_general_rating1: 0,
+    satisfaccion_general_hover1: 0,
+    error_cuenta: false,
+    error_supervisor: false,
+    error_general: false,
+    cuenta_area: "",
+    supervisor_directo: "",
+    sugerencia: "",
+    retroalimentacion_1: "",
+    retroalimentacion_2: "",
+    retroalimentacion_3: "",
+    retroalimentacion_4: ""
   };
 
   componentDidMount() {
@@ -67,13 +109,61 @@ class SimpleForm extends Component {
   }
 
   handleSubmit = event => {
-    console.log("submitted");
-    console.log(event);
+    if (this.state.cuenta_area === "") {
+      this.setState({ "error_cuenta": true });
+    } else {
+      this.setState({ "error_cuenta": false });
+    }
+
+    if(this.state.supervisor_directo === "") {
+      this.setState({ "error_supervisor": true });
+    } else {
+      this.setState({ "error_supervisor": false });
+    }
+
+    if(this.state.error_cuenta || this.state.error_supervisor || this.state.relacion_equipo_rating1 === 0 || this.state.relacion_equipo_rating2 === 0 || this.state.relacion_equipo_rating3 === 0
+      || this.state.colaboracion_equipo_rating1 === 0 || this.state.colaboracion_equipo_rating2 === 0 || this.state.colaboracion_equipo_rating3 === 0
+      || this.state.planeamiento_rating1 === 0 || this.state.planeamiento_rating2 === 0 || this.state.planeamiento_rating3 === 0
+      || this.state.ejecucion_rating1 === 0 || this.state.ejecucion_rating2 === 0 || this.state.ejecucion_rating3 === 0
+      || this.state.trato_colaboradores_rating1 === 0 || this.state.trato_colaboradores_rating2 === 0 || this.state.trato_colaboradores_rating3 === 0
+      || this.state.pensamiento_estrategico_rating1 === 0 || this.state.pensamiento_estrategico_rating2 === 0 || this.state.pensamiento_estrategico_rating3 === 0
+      || this.state.enfoque_resultados_rating1 === 0 || this.state.enfoque_resultados_rating2 === 0 || this.state.enfoque_resultados_rating3 === 0
+      || this.state.satisfaccion_general_rating1 === 0 || this.state.sugerencia === "" || this.state.positions === ""){
+      this.setState({ "error_general": true });
+    } else {
+      if (this.state.positions === "Direct" ) {
+        if (this.state.retroalimentacion_1 === "" || this.state.retroalimentacion_2 === "" || this.state.retroalimentacion_3 === "" || this.state.retroalimentacion_4 === "") {
+          this.setState({ "error_general": true });
+        } else {
+          this.setState({ "error_general": false });
+          console.log("submitted");
+          // console.log(event);
+        }
+      } else {
+        this.setState({ "error_general": false });
+        console.log("submitted");
+        // console.log(event);
+      }
+    }
   };
 
   handleChange = event => {
     event.persist();
     this.setState({ [event.target.name]: event.target.value });
+
+    if (event.target.name === "cuenta_area" && event.target.value !== "") {
+      this.setState({ "error_cuenta": false });
+    }
+
+    if (event.target.name === "supervisor_directo" && event.target.value !== "") {
+      this.setState({ "error_supervisor": false });
+    }
+    if (event.target.name === "positions" && event.target.value === "Indirect") {
+      this.setState({ "retroalimentacion_1": "" });
+      this.setState({ "retroalimentacion_2": "" });
+      this.setState({ "retroalimentacion_3": "" });
+      this.setState({ "retroalimentacion_4": "" });
+    }
     // console.log(this.state.positions);
   };
 
@@ -112,7 +202,7 @@ class SimpleForm extends Component {
           <SimpleCard title="Información personal">
             <FormControl className="form-control-leader">          
               <InputLabel id="cuenta">Cuenta area *</InputLabel>
-              <Select labelId="cuenta" className="mr-24" required style={{width: "calc(90% - 24px)"}}>
+              <Select data-tut="reactour__select" labelId="cuenta" className="mr-24" name="cuenta_area" onChange={this.handleChange} required style={{width: "calc(90% - 24px)"}}>
                 <MenuItem value={0}>Seleccione...</MenuItem>
               </Select>
             </FormControl>
@@ -127,6 +217,8 @@ class SimpleForm extends Component {
               <label style={{display: "inline-block"}}>Posición *</label>
               &nbsp;
               <RadioGroup
+                  data-tut="reactour__info"
+                  required
                   className="mb-16"
                   //value={gender}
                   name="positions"
@@ -161,7 +253,7 @@ class SimpleForm extends Component {
                   className="mb-16"
                   //value={gender}
                   name="retroalimentacion_1"
-                  //onChange={this.handleChange}
+                  onChange={this.handleChange}
                   row
                 >
                   <FormControlLabel
@@ -185,7 +277,7 @@ class SimpleForm extends Component {
                   className="mb-16"
                   //value={gender}
                   name="retroalimentacion_2"
-                  // onChange={this.handleChange}
+                  onChange={this.handleChange}
                   row
                 >
                   <FormControlLabel
@@ -209,7 +301,7 @@ class SimpleForm extends Component {
                   className="mb-16"
                   //value={gender}
                   name="retroalimentacion_3"
-                  // onChange={this.handleChange}
+                  onChange={this.handleChange}
                   row
                 >
                   <FormControlLabel
@@ -233,7 +325,7 @@ class SimpleForm extends Component {
                   className="mb-16"
                   //value={gender}
                   name="retroalimentacion_4"
-                  // onChange={this.handleChange}
+                  onChange={this.handleChange}
                   row
                 >
                   <FormControlLabel
@@ -267,6 +359,7 @@ class SimpleForm extends Component {
               <FormControl className="ratingform">
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
+                      data-tut="reactour__rate"
                       name="relacion_equipo_rating1"
                       value={this.state.value}
                       onChange={(event, newValue) => {
