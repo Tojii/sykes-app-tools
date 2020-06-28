@@ -17,7 +17,6 @@ import { isMdScreen } from "utils";
 import NotificationBar from "../SharedCompoents/NotificationBar";
 import { Link } from "react-router-dom";
 // import ShoppingCart from "../SharedCompoents/ShoppingCart";
-import EdificioMenu from '../../views/material-kit/menu/EdificiosMenu';
 
 const styles = theme => ({
   root: {
@@ -77,8 +76,6 @@ class Layout1Topbar extends Component {
                   <Icon>menu</Icon>
                 </IconButton>
 
-                <EdificioMenu />
-
                 <div className="hide-on-mobile">
                   {/* <IconButton>
                     <Icon>mail_outline</Icon>
@@ -94,9 +91,9 @@ class Layout1Topbar extends Component {
                 </div>
               </div>
               <div className="flex flex-middle">
-                <MatxSearchBox />
+                {/* <MatxSearchBox />
 
-                <NotificationBar />
+                <NotificationBar /> */}
 
                 {/* <ShoppingCart></ShoppingCart> */}
 

@@ -15,9 +15,11 @@ function createMatxThemes() {
 }
 const themes = createMatxThemes();
 
+console.log("thems", themes);
+
 export const MatxLayoutSettings = {
   activeLayout: "layout1", // layout1, layout2
-  activeTheme: "purple1", // View all valid theme colors inside MatxTheme/themeColors.js
+  activeTheme: "light", // View all valid theme colors inside MatxTheme/themeColors.js
   perfectScrollbar: true,
 
   themes: themes,
@@ -25,13 +27,13 @@ export const MatxLayoutSettings = {
   layout2Settings, // open Layout1/Layout2Settings.js
 
   secondarySidebar: {
-    show: true,
-    theme: "slateDark1" // View all valid theme colors inside MatxTheme/themeColors.js
+    show: false,
+    theme: "white" // View all valid theme colors inside MatxTheme/themeColors.js
   },
   // Footer options
   footer: {
-    show: true,
+    show: false,
     fixed: false,
-    theme: "slateDark1" // View all valid theme colors inside MatxTheme/themeColors.js
+    theme: "dark" // View all valid theme colors inside MatxTheme/themeColors.js
   }
 };

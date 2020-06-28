@@ -46,19 +46,19 @@ class MatxCustomizer extends Component {
       isPro: false,
       options: {
         activeLayout: "layout1",
-        activeTheme: "purple1",
+        activeTheme: "light",
         layout1Settings: {
           leftSidebar: {
-            theme: "white",
+            theme: "light",
             bgOpacity: .98,
           },
           topbar: {
-            theme: "purpleDark1",
+            theme: "light",
             fixed: true
           }
         },
         footer: {
-          theme: "slateDark1"
+          theme: "light"
         }
       }
     },
@@ -68,14 +68,14 @@ class MatxCustomizer extends Component {
       isPro: false,
       options: {
         activeLayout: "layout1",
-        activeTheme: "purple1",
+        activeTheme: "dark",
         layout1Settings: {
           leftSidebar: {
-            theme: "slateDark1",
+            theme: "dark",
             bgOpacity: .92,
           },
           topbar: {
-            theme: "purpleDark1",
+            theme: "dark",
             fixed: false
           }
         }
@@ -87,19 +87,19 @@ class MatxCustomizer extends Component {
       isPro: false,
       options: {
         activeLayout: "layout1",
-        activeTheme: "purpleDark1",
+        activeTheme: "dark",
         layout1Settings: {
           leftSidebar: {
-            theme: "slateDark1",
+            theme: "dark",
             bgOpacity: .92,
           },
           topbar: {
-            theme: "purpleDark1",
+            theme: "dark",
             fixed: false
           }
         },
         footer: {
-          theme: "slateDark1"
+          theme: "dark"
         }
       }
     },
@@ -109,7 +109,7 @@ class MatxCustomizer extends Component {
       isPro: true,
       options: {
         activeLayout: "layout2",
-        activeTheme: "purple1",
+        activeTheme: "light",
         layout2Settings: {
           mode: "full"
           // topbar: {
@@ -117,7 +117,7 @@ class MatxCustomizer extends Component {
           // }
         },
         footer: {
-          theme: "slateDark1"
+          theme: "dark"
         }
       }
     }
