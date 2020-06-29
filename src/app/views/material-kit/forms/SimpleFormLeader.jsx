@@ -15,7 +15,8 @@ import {
 } from "@material-ui/core";
 import MenuItem from '@material-ui/core/MenuItem';
 import Rating from '@material-ui/lab/Rating';
-import RemoveIcon from '@material-ui/icons/Remove';
+import MaximizeIcon from '@material-ui/icons/Maximize';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import { withStyles } from '@material-ui/core/styles';
 import { SimpleCard } from "matx";
 import {
@@ -31,6 +32,11 @@ const StyledRating = withStyles({
   },
   iconHover: {
     color: '#1664F4',
+  },
+  largeIcon: {
+    fontSize: '5.1875rem',
+    width: 60,
+    height: 60,
   },
 })(Rating);
 
@@ -344,13 +350,15 @@ class SimpleForm extends Component {
             </FormControl>         
           </SimpleCard> )}
           <div className="py-12" />
+          <SimpleCard>
+          <p><strong>Deseamos obtener la siguiente información para seguir mejorando nuestra experiencia SYKES. Sus respuestas serán procesadas con estricta confidencialidad. Cada líder recibirá una serie de recomendaciones basadas en la retroalimentación que usted dará a continuación, siempre y cuando él/ella tenga 5 o más reportes directos.</strong></p>
+          <p><strong>Por favor conteste las siguientes preguntas en relación a las 7 competencias esenciales de cada líder SYKES con la mayor sinceridad y objetividad posible.</strong></p>
+          <p><strong>Para cada uno de los siguientes enunciados responda de acuerdo a la escala de valor ascendente donde NUNCA significa que su líder no exhibe este comportamiento y SIEMPRE significa que su líder si lo demuestra de manera contundente.</strong></p>
+          </SimpleCard>
+          <div className="py-12" />
 
-          <SimpleCard title="Relación en el equipo" >
-          <p>Deseamos obtener la siguiente información para seguir mejorando nuestra experiencia SYKES. Sus respuestas serán procesadas con estricta confidencialidad. Cada líder recibirá una serie de recomendaciones basadas en la retroalimentación que usted dará a continuación, siempre y cuando él/ella tenga 5 o más reportes directos.</p>
-          <p>Por favor conteste las siguientes preguntas en relación a las 7 competencias esenciales de cada líder SYKES con la mayor sinceridad y objetividad posible.</p>
-          <p>Para cada uno de los siguientes enunciados responda de acuerdo a la escala de valor ascendente donde NUNCA significa que su líder no exhibe este comportamiento y SIEMPRE significa que su líder si lo demuestra de manera contundente.</p>
-           <hr />
-            <div data-tut="reactour__rate" overflow="hidden">
+          <SimpleCard title="Relación en el equipo">
+            <div>
               <FormControl className="form-control-leader">
                 <div >
                   <label className="label-rating">Establece un clima de confianza en el grupo, generando un ambiente de entusiasmo, compromiso y respeto. *  </label>
@@ -369,7 +377,7 @@ class SimpleForm extends Component {
                        
                         this.setState({ "hover": newHover });
                       }}
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                     {this.state.value !== null && <Box mb={3}>{labels[this.state.hover !== -1 ? this.state.hover : this.state.value]}</Box>}
                   </Box>
@@ -385,7 +393,7 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="relacion_equipo_rating2"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -400,7 +408,7 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="relacion_equipo_rating3"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -423,7 +431,7 @@ class SimpleForm extends Component {
                       // onChange={(event, newValue) => {
                       //   setValue(newValue);
                       // }}
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -438,7 +446,7 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="colaboracion_equipo_rating2"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -453,7 +461,7 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="colaboracion_equipo_rating3"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -476,7 +484,7 @@ class SimpleForm extends Component {
                       // onChange={(event, newValue) => {
                       //   setValue(newValue);
                       // }}
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -491,7 +499,7 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="planeamiento_rating2"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -506,7 +514,7 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="planeamiento_rating3"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -515,7 +523,7 @@ class SimpleForm extends Component {
           <div className="py-12" />
 
           <SimpleCard title="Ejecución">
-            <div>
+            {/* <div>
               <FormControl className="form-control-leader">
                 <div >
                   <label className="label-rating">Logra transmitir sus ideas y objetivos de forma clara y efectiva. *</label>
@@ -529,27 +537,27 @@ class SimpleForm extends Component {
                       // onChange={(event, newValue) => {
                       //   setValue(newValue);
                       // }}
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
-            </div>
+            </div>*/}
             <div>
-              <FormControl className="form-control-leader">
+              <FormControl className="form-control-leader" xs={12} sm={7}>
                 <div >
                   <label className="label-rating">Monitorea el progreso y dirige los esfuerzos para alcanzar metas y objetivos. *</label>
                 </div>
-              </FormControl>
+              </FormControl> 
               <FormControl className="ratingform">
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="ejecucion_rating2"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" iconStyle={StyledRating.largeIcon} />}
                     />
                   </Box>
               </FormControl>
-            </div>
-            <div>
+             </div>
+            {/*<div>
               <FormControl className="form-control-leader">
                 <div >
                   <label className="label-rating">Responsabiliza a los miembros de su equipo en la consecusion de objetivos. *</label>
@@ -559,11 +567,11 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="ejecucion_rating3"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
-            </div>
+            </div> */}
           </SimpleCard>
           <div className="py-12" />
 
@@ -582,7 +590,7 @@ class SimpleForm extends Component {
                       // onChange={(event, newValue) => {
                       //   setValue(newValue);
                       // }}
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -597,7 +605,7 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="trato_colaboradores_rating2"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -612,7 +620,7 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="trato_colaboradores_rating3"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -635,7 +643,7 @@ class SimpleForm extends Component {
                       // onChange={(event, newValue) => {
                       //   setValue(newValue);
                       // }}
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -650,7 +658,7 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="pensamiento_estrategico_rating2"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -665,7 +673,7 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="pensamiento_estrategico_rating3"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -688,7 +696,7 @@ class SimpleForm extends Component {
                       // onChange={(event, newValue) => {
                       //   setValue(newValue);
                       // }}
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -703,7 +711,7 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="enfoque_resultados_rating2"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -718,7 +726,7 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="enfoque_resultados_rating3"
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -733,7 +741,7 @@ class SimpleForm extends Component {
                   <label className="label-rating">En general estoy satisfecho y recomiendo a mi líder por la experiencia que he tenido al laborar con el/ella. *</label>
                 </div>
               </FormControl>
-              <FormControl className="ratingform">
+              <FormControl className="ratingform" root="ratingform" >
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="satisfaccion_general_rating1"
@@ -741,7 +749,7 @@ class SimpleForm extends Component {
                       // onChange={(event, newValue) => {
                       //   setValue(newValue);
                       // }}
-                      icon={<RemoveIcon fontSize="large" />}
+                      icon={<MaximizeIcon fontSize="large" />}
                     />
                   </Box>
               </FormControl>
@@ -762,13 +770,19 @@ class SimpleForm extends Component {
                   </Box>
               </FormControl>
             </div>
+            
           </SimpleCard>
-          <div className="py-12" />
-
-          <Button color="primary" variant="contained" type="submit">
-            <Icon>send</Icon>
-            <span className="pl-8 capitalize">Save</span>
-          </Button>
+          <div className="py-12"/>
+          <Grid container justify="flex-end">
+            <Button className="mr-12" color="" variant="contained" href="/lss">
+              <Icon>close</Icon>
+              <span className="pl-8 capitalize">Cancel</span>
+            </Button>
+            <Button color="primary" variant="contained" type="submit">
+              <Icon>send</Icon>
+              <span className="pl-8 capitalize">Save</span>
+              </Button>
+          </Grid>
         </ValidatorForm>
       </div>
     );

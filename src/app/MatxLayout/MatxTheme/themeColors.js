@@ -17,6 +17,10 @@ export const themeColors = {
         main: "#ff9805",
         contrastText: textLight.primary
       },
+      error: {
+        main: "#e51b23",
+        contrastText: textLight.primary
+      },
       text: textLight
     }
   },

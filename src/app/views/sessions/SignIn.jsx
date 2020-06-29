@@ -19,7 +19,9 @@ const styles = theme => ({
   wrapper: {
     position: "relative"
   },
-
+  logoWrapper: {
+    justifyContent: "space-around"
+  },
   buttonProgress: {
     position: "absolute",
     top: "50%",
@@ -53,7 +55,8 @@ class SignIn extends Component {
           <Card className="signup-card position-relative y-center">
             <Grid container>
               <Grid item lg={5} md={5} sm={5} xs={12}>
-                <div className="p-32 flex flex-center flex-middle h-100">
+                <div className={"p-32 flex flex-center flex-middle flex-column h-100 " + classes.logoWrapper }>
+                  <img className="mb-5" src="/assets/images/logo.png" alt="SYKES" />
                   <img src="/assets/images/illustrations/dreamer.svg" alt="" />
                 </div>
               </Grid>
@@ -100,7 +103,7 @@ class SignIn extends Component {
                           disabled={this.props.login.loading}
                           type="submit"
                         >
-                          Sign in to Enter Dashboard
+                          Sign in 
                         </Button>
                         {this.props.login.loading && (
                           <CircularProgress
@@ -110,14 +113,14 @@ class SignIn extends Component {
                         )}
                       </div>
                     </div>
-                    <Button
+                    {/*<Button
                       className="text-primary"
                       onClick={() =>
                         this.props.history.push("/session/forgot-password")
                       }
                     >
                       Forgot password?
-                    </Button>
+                    </Button>*/}
                   </ValidatorForm>
                 </div>
               </Grid>

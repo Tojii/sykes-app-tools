@@ -19,14 +19,19 @@ class StartForm extends Component {
           />
         </div>
         <SimpleCard>
+        <Grid container>
+          <Grid item xs={12} sm={8}>
             <h1>Leader Satisfaction Survey</h1>
-            <br></br>
-            <p>Al ingresar a la encuesta debe completar todas las preguntas.</p>
-            <p>Recuerde seleccionar su perfil según su posicón actual: "Direct" (Customer Service, Tech Support, Sales) y "Indirect/Business Partners" (Human Capital, Performance Excellence, IT, Finance, Administration, Team Managers, SMEs, Supervisors, Temporary backups).</p>
-            <Button color="primary" variant="contained" href="/lss/form">
-            <Icon>add</Icon>
-            <span className="pl-8 capitalize">Leader Satisfaction Survey</span>
-          </Button>
+            <h2>Thank You</h2>
+            <h4>Su aporte es muy importante para la organización.</h4>
+          </Grid>
+          <Grid item xs={12} sm={4} className="h-200vh">
+            <img src="/assets/images/illustrations/ThankYou.svg" alt="" />
+          </Grid>
+           <Grid item xs={12} sm={8}></Grid>
+        </Grid>
+       
+
         </SimpleCard>
       </div>
     );

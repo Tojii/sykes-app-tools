@@ -6,7 +6,7 @@ export const navigations = [
   },
   {
     name: "LSS",
-    path: "/hr/lss",
+    path: "/lss",
     icon: "content_paste",
     badge: { value: "New", color: "secondary" },
   },
