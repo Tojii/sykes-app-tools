@@ -213,11 +213,11 @@ class SimpleForm extends Component {
               </Select>
               <h7 style={{width: "calc(90% - 24px)", color: "#ffa420", display: "block"}}>Si su líder directo no aparece en la lista, seleccione: No aparece en la lista y proceda a ingresar el  nombre de su líder de manera manual en la opción que se habilita.</h7>
             </FormControl>
-            <FormControl className="form-control-leader">
+
+            <FormControl className="form-control-leader"  data-tut="tour_step1_posicion">
               <label style={{display: "inline-block"}}>Posición *</label>
               &nbsp;
               <RadioGroup
-                  data-tut="reactour__info"
                   required
                   className="mb-16"
                   //value={gender}
@@ -345,12 +345,12 @@ class SimpleForm extends Component {
           </SimpleCard> )}
           <div className="py-12" />
 
-          <SimpleCard title="Relación en el equipo">
+          <SimpleCard title="Relación en el equipo" >
           <p>Deseamos obtener la siguiente información para seguir mejorando nuestra experiencia SYKES. Sus respuestas serán procesadas con estricta confidencialidad. Cada líder recibirá una serie de recomendaciones basadas en la retroalimentación que usted dará a continuación, siempre y cuando él/ella tenga 5 o más reportes directos.</p>
           <p>Por favor conteste las siguientes preguntas en relación a las 7 competencias esenciales de cada líder SYKES con la mayor sinceridad y objetividad posible.</p>
           <p>Para cada uno de los siguientes enunciados responda de acuerdo a la escala de valor ascendente donde NUNCA significa que su líder no exhibe este comportamiento y SIEMPRE significa que su líder si lo demuestra de manera contundente.</p>
            <hr />
-            <div>
+            <div data-tut="reactour__rate" overflow="hidden">
               <FormControl className="form-control-leader">
                 <div >
                   <label className="label-rating">Establece un clima de confianza en el grupo, generando un ambiente de entusiasmo, compromiso y respeto. *  </label>
@@ -359,7 +359,6 @@ class SimpleForm extends Component {
               <FormControl className="ratingform">
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
-                      data-tut="reactour__rate"
                       name="relacion_equipo_rating1"
                       value={this.state.value}
                       onChange={(event, newValue) => {

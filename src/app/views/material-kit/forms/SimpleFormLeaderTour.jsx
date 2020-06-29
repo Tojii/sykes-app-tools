@@ -28,16 +28,19 @@ class SimpleFormTour extends Component {
     const { isTourOpen, isShowingMore } = this.state;
     const accentColor = "#5cb7b7";
     return (
-      <div>
+      <div overflow="hidden">
         <SimpleForm/>
         <Tour
           onRequestClose={this.closeTour}
-          steps={tourConfig}
+          steps={steps}
           isOpen={isTourOpen}
-          maskClassName="mask"
-          className="helper"
-          rounded={5}
-          accentColor={accentColor}
+          disableKeyboardNavigation={['esc']}
+          closeWithMask={false}
+          scrollDuration={2}
+          // maskClassName="mask"
+          // className="helper"
+          // rounded={5}
+          // accentColor={accentColor}
           onAfterOpen={this.disableBody}
           onBeforeClose={this.enableBody}
         />
@@ -46,9 +49,9 @@ class SimpleFormTour extends Component {
   }
 }
 
-const tourConfig = [
+const steps = [
   {
-    selector: '[data-tut="reactour__info"]',
+    selector: '[data-tut="tour_step1_posicion"]',
     content: `Ok, esto es lo primero.`,
   },
   {
