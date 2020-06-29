@@ -9,7 +9,7 @@ const LLSForm = MatxLoadable({
 });
 
 const StartFormLeader = MatxLoadable({
-  loader: () => import("./lss/Start")
+  loader: () => import("./lss/ThankYou")
 });
 
 const EditorForm = MatxLoadable({
@@ -30,11 +30,11 @@ const hrRoutes = [
     component: BasicForm
   },
   {
-    path: "/hr/lss/form",
+    path: "/lss/form",
     component: LLSForm
   },
   {
-    path: "/hr/lss",
+    path: "/lss",
     component: StartFormLeader
   },
   {

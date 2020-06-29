@@ -41,3 +41,17 @@
   display: inline-block;
   // margin: 2%;
 }
+
+@media screen and (max-width: 375px) {
+  .form-control-leader{
+   width: 100%;
+  }
+
+  .MuiFormControl-root.ratingform {
+   width: 100%;
+   margin-top: 20px;
+    
+  }
+}
+
+
