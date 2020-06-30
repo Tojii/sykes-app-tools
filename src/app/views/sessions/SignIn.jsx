@@ -8,11 +8,11 @@ import {
   withStyles,
   CircularProgress
 } from "@material-ui/core";
+import Alert from '@material-ui/lab/Alert';
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { withRouter } from "react-router-dom";
-
 import { loginWithEmailAndPassword } from "../../redux/actions/LoginActions";
 
 const styles = theme => ({
@@ -33,8 +33,8 @@ const styles = theme => ({
 
 class SignIn extends Component {
   state = {
-    email: "watson@example.com",
-    password: "testpass",
+    email: "hernanale",
+    password: "Sykes2017",
     agreement: ""
   };
   handleChange = event => {
@@ -46,7 +46,11 @@ class SignIn extends Component {
   handleFormSubmit = event => {
     this.props.loginWithEmailAndPassword({ ...this.state });
   };
+  
   render() {
+    const error = this.props.login.error && !this.props.success ? null : 
+      <Alert variant="outlined" severity="error">The username or password is incorrect!</Alert>
+
     let { email, password } = this.state;
     let { classes } = this.props;
     return (
@@ -66,12 +70,12 @@ class SignIn extends Component {
                     <TextValidator
                       className="mb-24 w-100"
                       variant="outlined"
-                      label="Email"
+                      label="User"
                       onChange={this.handleChange}
-                      type="email"
+                      type="text"
                       name="email"
                       value={email}
-                      validators={["required", "isEmail"]}
+                      validators={["required"]}
                       errorMessages={[
                         "this field is required",
                         "email is not valid"
@@ -111,8 +115,11 @@ class SignIn extends Component {
                             className={classes.buttonProgress}
                           />
                         )}
+
                       </div>
                     </div>
+                    {error}
+
                     {/*<Button
                       className="text-primary"
                       onClick={() =>

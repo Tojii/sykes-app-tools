@@ -4,14 +4,18 @@ import {
   USER_LOGGED_OUT
 } from "../actions/UserActions";
 
-const initialState = {};
+const initialState = {
+  user: { }
+};
 
 const userReducer = function(state = initialState, action) {
   switch (action.type) {
     case SET_USER_DATA: {
+      // console.log("reducer". action.data);
       return {
         ...state,
-        ...action.data
+        ...action.data,
+        // user:action.data
       };
     }
     case REMOVE_USER_DATA: {

@@ -12,14 +12,15 @@ class Auth extends Component {
   
   constructor(props) {
     super(props);
-
-    // Set user if exists in local storage
-    // This is only for demo purpose
-    // You should remove this
-    this.props.setUserData(localStorageService.getItem("auth_user"));
+    
+    // // Set user if exists in local storage
+    // // This is only for demo purpose
+    // // You should remove this
+    // this.props.setUserData(localStorageService.getItem("auth_user"));
     
     // Check current token is valid on page load/reload
-    this.checkJwtAuth();
+    if (!localStorageService.getItem("auth_user"))
+      this.checkJwtAuth();
 
     // this.checkFirebaseAuth();
   }

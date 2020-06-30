@@ -15,8 +15,6 @@ function createMatxThemes() {
 }
 const themes = createMatxThemes();
 
-console.log("thems", themes);
-
 export const MatxLayoutSettings = {
   activeLayout: "layout1", // layout1, layout2
   activeTheme: "light", // View all valid theme colors inside MatxTheme/themeColors.js

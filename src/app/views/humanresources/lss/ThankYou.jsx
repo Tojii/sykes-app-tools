@@ -26,7 +26,7 @@ class StartForm extends Component {
             <h4>Su aporte es muy importante para la organización.</h4>
           </Grid>
           <Grid item xs={12} sm={4} className="h-200vh">
-            <img src="/assets/images/illustrations/ThankYou.svg" alt="" />
+            <img src="/assets/images/illustrations/ThankYou.jpg" alt="" />
           </Grid>
            <Grid item xs={12} sm={8}></Grid>
         </Grid>

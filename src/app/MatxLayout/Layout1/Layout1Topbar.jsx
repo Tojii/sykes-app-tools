@@ -17,6 +17,7 @@ import { isMdScreen } from "utils";
 import NotificationBar from "../SharedCompoents/NotificationBar";
 import { Link } from "react-router-dom";
 // import ShoppingCart from "../SharedCompoents/ShoppingCart";
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   root: {
@@ -60,6 +61,8 @@ class Layout1Topbar extends Component {
   };
 
   render() {
+    console.log("this", this.props);
+
     let { theme, settings, className, style } = this.props;
     const topbarTheme =
       settings.themes[settings.layout1Settings.topbar.theme] || theme;
@@ -99,11 +102,19 @@ class Layout1Topbar extends Component {
 
                 <MatxMenu
                   menuButton={
-                    <img
-                      className="mx-8 text-middle circular-image-small cursor-pointer"
-                      src="/assets/images/face-6.jpg"
-                      alt="user"
-                    />
+                    // <img
+                    //   className="mx-8 text-middle circular-image-small cursor-pointer"
+                    //   src="/assets/images/face-6.jpg"
+                    //   alt="user"
+                    // />
+                    <Button
+                      aria-controls="customized-menu"
+                      aria-haspopup="true"
+                      variant="contained"
+                      color="secondary"
+                    >
+                      { this.props.user.fullname }
+                    </Button>
                   }
                 >
                   <MenuItem style={{ minWidth: 185 }}>
@@ -112,7 +123,7 @@ class Layout1Topbar extends Component {
                       <span className="pl-16"> Home </span>
                     </Link>
                   </MenuItem>
-                  <MenuItem style={{ minWidth: 185 }}>
+                  {/* <MenuItem style={{ minWidth: 185 }}>
                     <Link
                       className="flex flex-middle"
                       to="/page-layouts/user-profile"
@@ -127,7 +138,7 @@ class Layout1Topbar extends Component {
                   >
                     <Icon> settings </Icon>
                     <span className="pl-16"> Settings </span>
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem
                     onClick={this.handleSignOut}
                     className="flex flex-middle"
@@ -153,6 +164,7 @@ Layout1Topbar.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  user: state.user,
   setLayoutSettings: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
   settings: state.layout.settings
