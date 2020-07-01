@@ -9,6 +9,7 @@ import {
   MuiThemeProvider
 } from "@material-ui/core";
 import { connect } from "react-redux";
+import localStorageService from "../../services/localStorageService";
 import { setLayoutSettings } from "app/redux/actions/LayoutActions";
 import { logoutUser } from "app/redux/actions/UserActions";
 import { PropTypes } from "prop-types";
@@ -26,7 +27,7 @@ const styles = theme => ({
 });
 
 class Layout1Topbar extends Component {
-  state = {};
+  state = {user: localStorage.getItem("user")};
 
   updateSidebarMode = sidebarSettings => {
     let { settings, setLayoutSettings } = this.props;
@@ -113,7 +114,8 @@ class Layout1Topbar extends Component {
                       variant="contained"
                       color="secondary"
                     >
-                      { this.props.user.fullname }
+                      {/* { this.props.user.fullname } */}
+                      {this.state.user}
                     </Button>
                   }
                 >
@@ -164,7 +166,7 @@ Layout1Topbar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  user: state.user,
+  user: state.user.user,
   setLayoutSettings: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
   settings: state.layout.settings

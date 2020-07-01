@@ -7,14 +7,15 @@ import {
   } from "@material-ui/core";
 import { SimpleCard } from "matx";
 
-class StartForm extends Component {
+class ThankYouForm extends Component {
   render() {
     return (
       <div className="m-sm-30">
         <div  className="mb-sm-30">
           <Breadcrumb
             routeSegments={[
-              { name: "LSS", path: "lss" },
+              { name: "LSS", path: "/lss" },
+              { name: "Thank you" }
             ]}
           />
         </div>
@@ -30,12 +31,9 @@ class StartForm extends Component {
           </Grid>
            <Grid item xs={12} sm={8}></Grid>
         </Grid>
-       
-
         </SimpleCard>
       </div>
     );
   }
 }
-
-export default StartForm;
+export default ThankYouForm;

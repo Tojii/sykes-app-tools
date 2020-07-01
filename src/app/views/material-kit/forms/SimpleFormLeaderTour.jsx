@@ -8,7 +8,7 @@ class SimpleFormTour extends Component {
   constructor() {
     super();
     this.state = {
-      isTourOpen: true,
+      isTourOpen: false,
       isShowingMore: false
     };
   }

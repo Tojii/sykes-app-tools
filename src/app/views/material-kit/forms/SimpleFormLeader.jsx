@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+import history from "history.js";
 import {
   Button,
   Icon,
@@ -9,11 +10,20 @@ import {
   FormControlLabel,
   InputLabel,
   FormControl,
+  FormHelperText,
   Select,
   Box,
   Checkbox
 } from "@material-ui/core";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import {
+  getAccount,
+  getSupervisorAccount,
+  submitData
+} from "../../../redux/actions/UserActions";
 import MenuItem from '@material-ui/core/MenuItem';
+import RemoveIcon from '@material-ui/icons/Remove';
 import Rating from '@material-ui/lab/Rating';
 import MaximizeIcon from '@material-ui/icons/Maximize';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -42,54 +52,80 @@ const StyledRating = withStyles({
 
 class SimpleForm extends Component {
   state = {
+    rate: ["","Nunca","Casi nunca", "A veces", "Casi siempre", "Siempre"],
     positions: "",
+    username: "hernanale",
+    title: "titulo",
     relacion_equipo_rating1: 0,
+    CimaDeConfianza: "",
     relacion_equipo_hover1: 0,
     relacion_equipo_rating2: 0,
+    SituacionesAdversas: "",
     relacion_equipo_hover2: 0,
     relacion_equipo_rating3: 0,
+    Escuchar: "",
     relacion_equipo_hover3: 0,
     colaboracion_equipo_rating1: 0,
+    Cooperacion: "",
     colaboracion_equipo_hover1: 0,
     colaboracion_equipo_rating2: 0,
+    SituacionesConflictivas: "",
     colaboracion_equipo_hover2: 0,
     colaboracion_equipo_rating3: 0,
+    RelacionesInterpersonales: "",
     colaboracion_equipo_hover3: 0,
     planeamiento_rating1: 0,
+    Guiar: "",
     planeamiento_hover1: 0,
     planeamiento_rating2: 0,
+    Recursos: "",
     planeamiento_hover2: 0,
     planeamiento_rating3: 0,
+    Planes: "",
     planeamiento_hover3: 0,
     ejecucion_rating1: 0,
+    Objetivos: "",
     ejecucion_hover1: 0,
     ejecucion_rating2: 0,
+    Monitorea: "",
     ejecucion_hover2: 0,
     ejecucion_rating3: 0,
+    Responsabiliza: "",
     ejecucion_hover3: 0,
     trato_colaboradores_rating1: 0,
+    TomaEnCuentaOpinion: "",
     trato_colaboradores_hover1: 0,
     trato_colaboradores_rating2: 0,
+    retroalimentacion: "",
     trato_colaboradores_hover2: 0,
     trato_colaboradores_rating3: 0,
+    conversaciones: "",
     trato_colaboradores_hover3: 0,
     pensamiento_estrategico_rating1: 0,
+    estrategias: "",
     pensamiento_estrategico_hover1: 0,
     pensamiento_estrategico_rating2: 0,
+    balance: "",
     pensamiento_estrategico_hover2: 0,
     pensamiento_estrategico_rating3: 0,
+    balance: "",
     pensamiento_estrategico_hover3: 0,
     enfoque_resultados_rating1: 0,
-    enfoque_resultados_rating1: 0,
+    barreras: "",
+    enfoque_resultados_hover1: 0,
     enfoque_resultados_rating2: 0,
-    enfoque_resultados_rating2: 0,
+    seguimiento: "",
+    enfoque_resultados_hover2: 0,
     enfoque_resultados_rating3: 0,
-    enfoque_resultados_rating3: 0,
+    perseverante: "",
+    enfoque_resultados_hover3: 0,
     satisfaccion_general_rating1: 0,
+    general: "",
     satisfaccion_general_hover1: 0,
     error_cuenta: false,
     error_supervisor: false,
     error_general: false,
+    disabled_supervisor: true,
     cuenta_area: "",
     supervisor_directo: "",
     sugerencia: "",
@@ -101,20 +137,23 @@ class SimpleForm extends Component {
 
   componentDidMount() {
     // custom rule will have name 'isPasswordMatch'
-    ValidatorForm.addValidationRule("isPasswordMatch", value => {
-      if (value !== this.state.password) {
-        return false;
-      }
-      return true;
-    });
+    this.props.getAccount();
+    //this.props.getSupervisorAccount();
+    // ValidatorForm.addValidationRule("isPasswordMatch", value => {
+    //   if (value !== this.state.password) {
+    //     return false;
+    //   }
+    //   return true;
+    // });
   }
 
   componentWillUnmount() {
     // remove rule when it is not needed
-    ValidatorForm.removeValidationRule("isPasswordMatch");
+    //ValidatorForm.removeValidationRule("isPasswordMatch");
   }
 
-  handleSubmit = event => {
+  handleSubmit = async () => {
+    console.log("submit", this.state);
     if (this.state.cuenta_area === "") {
       this.setState({ "error_cuenta": true });
     } else {
@@ -141,24 +180,81 @@ class SimpleForm extends Component {
         if (this.state.retroalimentacion_1 === "" || this.state.retroalimentacion_2 === "" || this.state.retroalimentacion_3 === "" || this.state.retroalimentacion_4 === "") {
           this.setState({ "error_general": true });
         } else {
+          this.setState({ "CimaDeConfianza": this.state.rate[this.state.relacion_equipo_rating1]});
+          this.setState({ "SituacionesAdversas": this.state.rate[this.state.relacion_equipo_rating2]});
+          this.setState({ "Escuchar": this.state.rate[this.state.relacion_equipo_rating3]});
+          this.setState({ "Cooperacion": this.state.rate[this.state.colaboracion_equipo_rating1]});
+          this.setState({ "SituacionesConflictivas": this.state.rate[this.state.colaboracion_equipo_rating2]});
+          this.setState({ "RelacionesInterpersonales": this.state.rate[this.state.colaboracion_equipo_rating3]});
+          this.setState({ "Guiar": this.state.rate[this.state.planeamiento_rating1]});
+          this.setState({ "Recursos": this.state.rate[this.state.planeamiento_rating2]});
+          this.setState({ "Planes": this.state.rate[this.state.planeamiento_rating3]});
+          this.setState({ "Objetivos": this.state.rate[this.state.ejecucion_rating1]});
+          this.setState({ "Monitorea": this.state.rate[this.state.ejecucion_rating2]});
+          this.setState({ "Responsabiliza": this.state.rate[this.state.ejecucion_rating3]});
+          this.setState({ "TomaEnCuentaOpinion": this.state.rate[this.state.trato_colaboradores_rating1]});
+          this.setState({ "retroalimentacion": this.state.rate[this.state.trato_colaboradores_rating2]});
+          this.setState({ "conversaciones": this.state.rate[this.state.trato_colaboradores_rating3]});
+          this.setState({ "estrategias": this.state.rate[this.state.pensamiento_estrategico_rating1]});
+          this.setState({ "balance": this.state.rate[this.state.pensamiento_estrategico_rating2]});
+          this.setState({ "entendimiento": this.state.rate[this.state.pensamiento_estrategico_rating3]});
+          this.setState({ "barreras": this.state.rate[this.state.enfoque_resultados_rating1]});
+          this.setState({ "seguimiento": this.state.rate[this.state.enfoque_resultados_rating2]});
+          this.setState({ "perseverante": this.state.rate[this.state.enfoque_resultados_rating3]});
+          this.setState({ "general": this.state.rate[this.state.satisfaccion_general_rating1]});
           this.setState({ "error_general": false });
-          console.log("submitted");
+          //console.log("submitted"); 
+          await this.props.submitData({
+            ...this.state
+          });
+          history.push('/lss/thankyou');
           // console.log(event);
         }
       } else {
+        this.setState({ "CimaDeConfianza": this.state.rate[this.state.relacion_equipo_rating1]});
+        this.setState({ "SituacionesAdversas": this.state.rate[this.state.relacion_equipo_rating2]});
+        this.setState({ "Escuchar": this.state.rate[this.state.relacion_equipo_rating3]});
+        this.setState({ "Cooperacion": this.state.rate[this.state.colaboracion_equipo_rating1]});
+        this.setState({ "SituacionesConflictivas": this.state.rate[this.state.colaboracion_equipo_rating2]});
+        this.setState({ "RelacionesInterpersonales": this.state.rate[this.state.colaboracion_equipo_rating3]});
+        this.setState({ "Guiar": this.state.rate[this.state.planeamiento_rating1]});
+        this.setState({ "Recursos": this.state.rate[this.state.planeamiento_rating2]});
+        this.setState({ "Planes": this.state.rate[this.state.planeamiento_rating3]});
+        this.setState({ "Objetivos": this.state.rate[this.state.ejecucion_rating1]});
+        this.setState({ "Monitorea": this.state.rate[this.state.ejecucion_rating2]});
+        this.setState({ "Responsabiliza": this.state.rate[this.state.ejecucion_rating3]});
+        this.setState({ "TomaEnCuentaOpinion": this.state.rate[this.state.trato_colaboradores_rating1]});
+        this.setState({ "retroalimentacion": this.state.rate[this.state.trato_colaboradores_rating2]});
+        this.setState({ "conversaciones": this.state.rate[this.state.trato_colaboradores_rating3]});
+        this.setState({ "estrategias": this.state.rate[this.state.pensamiento_estrategico_rating1]});
+        this.setState({ "balance": this.state.rate[this.state.pensamiento_estrategico_rating2]});
+        this.setState({ "entendimiento": this.state.rate[this.state.pensamiento_estrategico_rating3]});
+        this.setState({ "barreras": this.state.rate[this.state.enfoque_resultados_rating1]});
+        this.setState({ "seguimiento": this.state.rate[this.state.enfoque_resultados_rating2]});
+        this.setState({ "perseverante": this.state.rate[this.state.enfoque_resultados_rating3]});
+        this.setState({ "general": this.state.rate[this.state.satisfaccion_general_rating1]});
         this.setState({ "error_general": false });
         console.log("submitted");
+        console.log("data", this.state);
+        await this.props.submitData({
+          ...this.state
+        });
+        history.push('/lss/thankyou');
         // console.log(event);
       }
     }
   };
 
-  handleChange = event => {
+  handleChange = event => { 
     event.persist();
     this.setState({ [event.target.name]: event.target.value });
 
     if (event.target.name === "cuenta_area" && event.target.value !== "") {
       this.setState({ "error_cuenta": false });
+      this.setState({ "disabled_supervisor": true });
+      this.props.getSupervisorAccount(event.target.value);
+      // console.log("supervisors", this.props.supervisor_accounts);
+      this.setState({ "disabled_supervisor": false });
     }
 
     if (event.target.name === "supervisor_directo" && event.target.value !== "") {
@@ -170,7 +266,7 @@ class SimpleForm extends Component {
       this.setState({ "retroalimentacion_3": "" });
       this.setState({ "retroalimentacion_4": "" });
     }
-    // console.log(this.state.positions);
+    console.log(this.state.cuenta_area);
   };
 
   handleDateChange = date => {
@@ -198,6 +294,8 @@ class SimpleForm extends Component {
       4: 'Casi siempre',
       5: 'Siempre',
     };
+    let {accounts = [], supervisor_accounts = []} = this.props;
+
     return (
       <div>
         <ValidatorForm
@@ -206,17 +304,27 @@ class SimpleForm extends Component {
           onError={errors => null}
         >
           <SimpleCard title="Información personal">
-            <FormControl className="form-control-leader">          
+            <FormControl className="form-control-leader" error={this.state.error_cuenta}>          
               <InputLabel id="cuenta">Cuenta area *</InputLabel>
               <Select data-tut="reactour__select" labelId="cuenta" className="mr-24" name="cuenta_area" onChange={this.handleChange} required style={{width: "calc(90% - 24px)"}}>
-                <MenuItem value={0}>Seleccione...</MenuItem>
+                {accounts.map(account => (
+                  <MenuItem key={account} value={account.name}>
+                    {account.name}
+                  </MenuItem>
+                ))}
               </Select>
+              <FormHelperText hidden={!this.state.error_supervisor}>El campo es requerido</FormHelperText>
             </FormControl>
-            <FormControl className="form-control-leader">
+            <FormControl className="form-control-leader" error={this.state.error_supervisor}>
               <InputLabel id="cuenta">Mi supervisor directo es *</InputLabel>         
-              <Select labelId="cuenta" className="mr-24" required style={{width: "calc(90% - 24px)"}}>
-                <MenuItem value={0}>Seleccione...</MenuItem>
+              <Select labelId="cuenta" className="mr-24" name="supervisor_directo" disabled={this.state.disabled_supervisor} onChange={this.handleChange} required style={{width: "calc(90% - 24px)"}}>
+                {supervisor_accounts.map(supervisor => (
+                  <MenuItem key={supervisor} value={supervisor.netLogin}>
+                    {supervisor.name}
+                  </MenuItem>
+                ))}
               </Select>
+              <FormHelperText hidden={!this.state.error_supervisor}>El campo es requerido</FormHelperText>
               <h7 style={{width: "calc(90% - 24px)", color: "#ffa420", display: "block"}}>Si su líder directo no aparece en la lista, seleccione: No aparece en la lista y proceda a ingresar el  nombre de su líder de manera manual en la opción que se habilita.</h7>
             </FormControl>
 
@@ -359,27 +467,27 @@ class SimpleForm extends Component {
 
           <SimpleCard title="Relación en el equipo">
             <div>
-              <FormControl className="form-control-leader">
+            <FormControl className="form-control-leader" error>
                 <div >
                   <label className="label-rating">Establece un clima de confianza en el grupo, generando un ambiente de entusiasmo, compromiso y respeto. *  </label>
                 </div>
               </FormControl>
-              <FormControl className="ratingform">
+              <FormControl className="ratingform" error>
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="relacion_equipo_rating1"
-                      value={this.state.value}
+                      value={this.state.relacion_equipo_rating1}
                       onChange={(event, newValue) => {
                        
-                        this.setState({ "value": newValue });
+                        this.setState({ "relacion_equipo_rating1": newValue });
                       }}
                       onChangeActive={(event, newHover) => {
                        
-                        this.setState({ "hover": newHover });
+                        this.setState({ "relacion_equipo_hover1": newHover });
                       }}
-                      icon={<MaximizeIcon fontSize="large" />}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
-                    {this.state.value !== null && <Box mb={3}>{labels[this.state.hover !== -1 ? this.state.hover : this.state.value]}</Box>}
+                    {this.state.relacion_equipo_rating1 !== null && <Box mb={3}>{labels[this.state.relacion_equipo_hover1 !== -1 ? this.state.relacion_equipo_hover1 : this.state.relacion_equipo_rating1]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -393,8 +501,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="relacion_equipo_rating2"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.relacion_equipo_rating2}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "relacion_equipo_rating2": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "relacion_equipo_hover2": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.relacion_equipo_rating2 !== null && <Box mb={3}>{labels[this.state.relacion_equipo_hover2 !== -1 ? this.state.relacion_equipo_hover2 : this.state.relacion_equipo_rating2]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -408,8 +526,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="relacion_equipo_rating3"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.relacion_equipo_rating3}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "relacion_equipo_rating3": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "relacion_equipo_hover3": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.relacion_equipo_rating3 !== null && <Box mb={3}>{labels[this.state.relacion_equipo_hover3 !== -1 ? this.state.relacion_equipo_hover3 : this.state.relacion_equipo_rating3]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -427,12 +555,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="colaboracion_equipo_rating1"
-                      // value={value}
-                      // onChange={(event, newValue) => {
-                      //   setValue(newValue);
-                      // }}
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.colaboracion_equipo_rating1}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "colaboracion_equipo_rating1": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "colaboracion_equipo_hover1": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.colaboracion_equipo_rating1 !== null && <Box mb={3}>{labels[this.state.colaboracion_equipo_hover1 !== -1 ? this.state.colaboracion_equipo_hover1 : this.state.colaboracion_equipo_rating1]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -446,8 +580,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="colaboracion_equipo_rating2"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.colaboracion_equipo_rating2}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "colaboracion_equipo_rating2": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "colaboracion_equipo_hover2": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.colaboracion_equipo_rating2 !== null && <Box mb={3}>{labels[this.state.colaboracion_equipo_hover2 !== -1 ? this.state.colaboracion_equipo_hover2 : this.state.colaboracion_equipo_rating2]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -461,15 +605,25 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="colaboracion_equipo_rating3"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.colaboracion_equipo_rating3}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "colaboracion_equipo_rating3": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "colaboracion_equipo_hover3": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.colaboracion_equipo_rating3 !== null && <Box mb={3}>{labels[this.state.colaboracion_equipo_hover3 !== -1 ? this.state.colaboracion_equipo_hover3 : this.state.colaboracion_equipo_rating3]}</Box>}
                   </Box>
               </FormControl>
             </div>
           </SimpleCard>
           <div className="py-12" />
 
-           <SimpleCard title="Planeamiento">
+          <SimpleCard title="Planeamiento">
             <div>
               <FormControl className="form-control-leader">
                 <div >
@@ -480,12 +634,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="planeamiento_rating1"
-                      // value={value}
-                      // onChange={(event, newValue) => {
-                      //   setValue(newValue);
-                      // }}
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.planeamiento_rating1}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "planeamiento_rating1": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "planeamiento_hover1": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.planeamiento_rating1 !== null && <Box mb={3}>{labels[this.state.planeamiento_hover1 !== -1 ? this.state.planeamiento_hover1 : this.state.planeamiento_rating1]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -499,8 +659,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="planeamiento_rating2"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.planeamiento_rating2}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "planeamiento_rating2": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "planeamiento_hover2": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.planeamiento_rating2 !== null && <Box mb={3}>{labels[this.state.planeamiento_hover2 !== -1 ? this.state.planeamiento_hover2 : this.state.planeamiento_rating2]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -514,8 +684,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="planeamiento_rating3"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.planeamiento_rating3}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "planeamiento_rating3": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "planeamiento_hover3": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.planeamiento_rating3 !== null && <Box mb={3}>{labels[this.state.planeamiento_hover3 !== -1 ? this.state.planeamiento_hover3 : this.state.planeamiento_rating3]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -523,7 +703,7 @@ class SimpleForm extends Component {
           <div className="py-12" />
 
           <SimpleCard title="Ejecución">
-            {/* <div>
+            <div>
               <FormControl className="form-control-leader">
                 <div >
                   <label className="label-rating">Logra transmitir sus ideas y objetivos de forma clara y efectiva. *</label>
@@ -533,31 +713,47 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="ejecucion_rating1"
-                      // value={value}
-                      // onChange={(event, newValue) => {
-                      //   setValue(newValue);
-                      // }}
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.ejecucion_rating1}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "ejecucion_rating1": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "ejecucion_hover1": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.ejecucion_rating1 !== null && <Box mb={3}>{labels[this.state.ejecucion_hover1 !== -1 ? this.state.ejecucion_hover1 : this.state.ejecucion_rating1]}</Box>}
                   </Box>
               </FormControl>
-            </div>*/}
+            </div>
             <div>
-              <FormControl className="form-control-leader" xs={12} sm={7}>
+              <FormControl className="form-control-leader">
                 <div >
                   <label className="label-rating">Monitorea el progreso y dirige los esfuerzos para alcanzar metas y objetivos. *</label>
                 </div>
-              </FormControl> 
+              </FormControl>
               <FormControl className="ratingform">
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="ejecucion_rating2"
-                      icon={<MaximizeIcon fontSize="large" iconStyle={StyledRating.largeIcon} />}
+                      value={this.state.ejecucion_rating2}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "ejecucion_rating2": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "ejecucion_hover2": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.ejecucion_rating2 !== null && <Box mb={3}>{labels[this.state.ejecucion_hover2 !== -1 ? this.state.ejecucion_hover2 : this.state.ejecucion_rating2]}</Box>}
                   </Box>
               </FormControl>
-             </div>
-            {/*<div>
+            </div>
+            <div>
               <FormControl className="form-control-leader">
                 <div >
                   <label className="label-rating">Responsabiliza a los miembros de su equipo en la consecusion de objetivos. *</label>
@@ -567,11 +763,21 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="ejecucion_rating3"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.ejecucion_rating3}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "ejecucion_rating3": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "ejecucion_hover3": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.ejecucion_rating3 !== null && <Box mb={3}>{labels[this.state.ejecucion_hover3 !== -1 ? this.state.ejecucion_hover3 : this.state.ejecucion_rating3]}</Box>}
                   </Box>
               </FormControl>
-            </div> */}
+            </div>
           </SimpleCard>
           <div className="py-12" />
 
@@ -586,12 +792,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="trato_colaboradores_rating1"
-                      // value={value}
-                      // onChange={(event, newValue) => {
-                      //   setValue(newValue);
-                      // }}
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.trato_colaboradores_rating1}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "trato_colaboradores_rating1": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "trato_colaboradores_hover1": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.trato_colaboradores_rating1 !== null && <Box mb={3}>{labels[this.state.trato_colaboradores_hover1 !== -1 ? this.state.trato_colaboradores_hover1 : this.state.trato_colaboradores_rating1]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -605,8 +817,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="trato_colaboradores_rating2"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.trato_colaboradores_rating2}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "trato_colaboradores_rating2": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "trato_colaboradores_hover2": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.trato_colaboradores_rating2 !== null && <Box mb={3}>{labels[this.state.trato_colaboradores_hover2 !== -1 ? this.state.trato_colaboradores_hover2 : this.state.trato_colaboradores_rating2]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -620,8 +842,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="trato_colaboradores_rating3"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.trato_colaboradores_rating3}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "trato_colaboradores_rating3": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "trato_colaboradores_hover3": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.trato_colaboradores_rating3 !== null && <Box mb={3}>{labels[this.state.trato_colaboradores_hover3 !== -1 ? this.state.trato_colaboradores_hover3 : this.state.trato_colaboradores_rating3]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -639,12 +871,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="pensamiento_estrategico_rating1"
-                      // value={value}
-                      // onChange={(event, newValue) => {
-                      //   setValue(newValue);
-                      // }}
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.pensamiento_estrategico_rating1}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "pensamiento_estrategico_rating1": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "pensamiento_estrategico_hover1": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.pensamiento_estrategico_rating1 !== null && <Box mb={3}>{labels[this.state.pensamiento_estrategico_hover1 !== -1 ? this.state.pensamiento_estrategico_hover1 : this.state.pensamiento_estrategico_rating1]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -658,8 +896,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="pensamiento_estrategico_rating2"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.pensamiento_estrategico_rating2}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "pensamiento_estrategico_rating2": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "pensamiento_estrategico_hover2": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.pensamiento_estrategico_rating2 !== null && <Box mb={3}>{labels[this.state.pensamiento_estrategico_hover2 !== -1 ? this.state.pensamiento_estrategico_hover2 : this.state.pensamiento_estrategico_rating2]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -673,8 +921,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="pensamiento_estrategico_rating3"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.pensamiento_estrategico_rating3}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "pensamiento_estrategico_rating3": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "pensamiento_estrategico_hover3": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.pensamiento_estrategico_rating3 !== null && <Box mb={3}>{labels[this.state.pensamiento_estrategico_hover3 !== -1 ? this.state.pensamiento_estrategico_hover3 : this.state.pensamiento_estrategico_rating3]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -692,12 +950,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="enfoque_resultados_rating1"
-                      // value={value}
-                      // onChange={(event, newValue) => {
-                      //   setValue(newValue);
-                      // }}
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.enfoque_resultados_rating1}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "enfoque_resultados_rating1": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "enfoque_resultados_hover1": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.enfoque_resultados_rating1 !== null && <Box mb={3}>{labels[this.state.enfoque_resultados_hover1 !== -1 ? this.state.enfoque_resultados_hover1 : this.state.enfoque_resultados_rating1]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -711,8 +975,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="enfoque_resultados_rating2"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.enfoque_resultados_rating2}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "enfoque_resultados_rating2": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "enfoque_resultados_hover2": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.enfoque_resultados_rating2 !== null && <Box mb={3}>{labels[this.state.enfoque_resultados_hover2 !== -1 ? this.state.enfoque_resultados_hover2 : this.state.enfoque_resultados_rating2]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -726,8 +1000,18 @@ class SimpleForm extends Component {
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="enfoque_resultados_rating3"
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.enfoque_resultados_rating3}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "enfoque_resultados_rating3": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "enfoque_resultados_hover3": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.enfoque_resultados_rating3 !== null && <Box mb={3}>{labels[this.state.enfoque_resultados_hover3 !== -1 ? this.state.enfoque_resultados_hover3 : this.state.enfoque_resultados_rating3]}</Box>}
                   </Box>
               </FormControl>
             </div> 
@@ -741,16 +1025,22 @@ class SimpleForm extends Component {
                   <label className="label-rating">En general estoy satisfecho y recomiendo a mi líder por la experiencia que he tenido al laborar con el/ella. *</label>
                 </div>
               </FormControl>
-              <FormControl className="ratingform" root="ratingform" >
+              <FormControl className="ratingform">
                   <Box component="fieldset" mb={3} borderColor="transparent">
                     <StyledRating
                       name="satisfaccion_general_rating1"
-                      // value={value}
-                      // onChange={(event, newValue) => {
-                      //   setValue(newValue);
-                      // }}
-                      icon={<MaximizeIcon fontSize="large" />}
+                      value={this.state.satisfaccion_general_rating1}
+                      onChange={(event, newValue) => {
+                       
+                        this.setState({ "satisfaccion_general_rating1": newValue });
+                      }}
+                      onChangeActive={(event, newHover) => {
+                       
+                        this.setState({ "satisfaccion_general_hover1": newHover });
+                      }}
+                      icon={<RemoveIcon fontSize="large" />}
                     />
+                    {this.state.satisfaccion_general_rating1 !== null && <Box mb={3}>{labels[this.state.satisfaccion_general_hover1 !== -1 ? this.state.satisfaccion_general_hover1 : this.state.satisfaccion_general_rating1]}</Box>}
                   </Box>
               </FormControl>
             </div>
@@ -761,16 +1051,16 @@ class SimpleForm extends Component {
            <div>
               <FormControl className="form-control-leader">
                 <div >
-                  <label className="label-rating">Sugerencias *</label>
+                  <label name className="label-rating">Sugerencias *</label>
                 </div>
               </FormControl>
               <FormControl className="ratingform">
                   <Box component="fieldset" mb={3} borderColor="transparent">
-                    <textarea rows="5" style={{width: "100%"}}></textarea>
+                  <textarea name="sugerencia" rows="5" style={{width: "100%"}} onChange={this.handleChange}></textarea>
                   </Box>
               </FormControl>
             </div>
-            
+            <FormHelperText style={{color: "red"}} hidden={!this.state.error_general}>No se han podido guardar los datos, por favor ingrese todos los campos requeridos</FormHelperText>
           </SimpleCard>
           <div className="py-12"/>
           <Grid container justify="flex-end">
@@ -789,4 +1079,18 @@ class SimpleForm extends Component {
   }
 }
 
-export default SimpleForm;
+const mapStateToProps = state => ({
+  getAccount: PropTypes.func.isRequired,
+  getSupervisorAccount: PropTypes.func.isRequired,
+  submitData: PropTypes.func.isRequired,
+  accounts: state.user.accounts,
+  supervisor_accounts: state.user.supervisor_accounts,
+  user: state.user.user
+});
+
+export default connect(
+  mapStateToProps,
+  { getAccount, getSupervisorAccount, submitData }
+)(SimpleForm);
+
+//export default SimpleForm;
