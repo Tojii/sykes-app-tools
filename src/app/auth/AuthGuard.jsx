@@ -38,9 +38,11 @@ class AuthGuard extends Component {
     }
   }
 
-  // handleClose() {
-  //   this.setState({showModal: false})
-  // }
+  handleClose = () => {
+    this.idleTimer.current.reset();
+    this.setState({ isTimedOut: false })
+
+  }
 
   // handleLogout() {
   //   this.setState({showModal: false})
@@ -60,8 +62,10 @@ class AuthGuard extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log("shouldComponentUpdate")
-    return nextState.authenticated !== this.state.authenticated && nextState.isTimedOut !== this.state.isTimedOut;
+    // if (this.state.authenticated && this.state.isTimedOut)
+    //   return false;
+    // else
+      return nextState.authenticated !== this.state.authenticated;
   }
 
   static getDerivedStateFromProps(props, state) {    
@@ -98,7 +102,7 @@ class AuthGuard extends Component {
     const idleAlert = this.state.isTimedOut ? 
                           <IdleTimeOutModal 
                           showModal={true} 
-                          // handleClose={this.handleClose}
+                          handleClose={this.handleClose}
                           // handleLogout={this.handleLogout}
                         /> : null;
 
