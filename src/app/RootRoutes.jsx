@@ -45,7 +45,6 @@ const redirectRoute = [
     path: "/",
     exact: true,
     component: () => <Redirect to="/lss" />
-
     // component: () => <Redirect to="/dashboard/analytics" />
   }
 ];
@@ -57,9 +56,9 @@ const errorRoute = [
 ];
 
 const routes = [
+  ...sessionRoutes,
   ...lssRoutes,
   // ...homeRoutes,
-  // ...sessionRoutes,
   // ...dashboardRoutes,
   // ...materialRoutes,
   // ...utilitiesRoutes,
@@ -86,7 +85,7 @@ const routes = [
   // ...ecommerceRoutes,
   // ...pageLayoutRoutes,
   // ...otherRoutes,
-  ...ListRoute,
+  // ...ListRoute,
   ...redirectRoute,
   ...errorRoute
 ];

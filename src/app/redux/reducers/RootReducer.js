@@ -7,8 +7,10 @@ import NotificationReducer from "./NotificationReducer";
 import EcommerceReducer from "./EcommerceReducer";
 import MantenimientoReducer from "./MantenimientoReducer";
 import LSSReducer from "./LSSReducer";
+import { persistStore } from 'redux-persist'
 
-const RootReducer = combineReducers({
+
+const appReducer = combineReducers({
   login: LoginReducer,
   user: UserReducer,
   layout: LayoutReducer,
@@ -18,5 +20,17 @@ const RootReducer = combineReducers({
   mantenimientos: MantenimientoReducer,
   lss: LSSReducer
 });
+
+const RootReducer = (state, action) => {
+  if (action.type === 'USER_LOGGED_OUT') {
+    // for all keys defined in your persistConfig(s)
+    persistStore.removeItem('persist:root')
+    // storage.removeItem('persist:otherKey')
+
+    state = undefined;
+  }
+
+  return appReducer(state, action)
+}
 
 export default RootReducer;

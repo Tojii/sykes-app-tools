@@ -12,8 +12,6 @@ const initialState = {
 const userReducer = function(state = initialState, action) {
   switch (action.type) {
     case SET_USER_DATA: {
-      //console.log("reducer", [...action.data]);
-      localStorageService.setItem("user", action.data.fullname); 
       return {
         ...state,
         ...action.data

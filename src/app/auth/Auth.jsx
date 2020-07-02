@@ -19,21 +19,22 @@ class Auth extends Component {
     // this.props.setUserData(localStorageService.getItem("auth_user"));
     
     // Check current token is valid on page load/reload
-    if (!localStorageService.getItem("auth_user"))
-      this.checkJwtAuth();
+    //if (!localStorageService.getItem("auth_user"))
+    // this.checkJwtAuth();
 
-    // this.checkFirebaseAuth();
   }
 
   checkJwtAuth = () => {
     // You need to send token to your server to check token is valid
     // modify loginWithToken method in jwtService
     jwtAuthService.loginWithToken().then(user => {
-
+      console.log("really")
       // Valid token
       // Set user
-      this.props.setUserData(user);
-
+      // this.props.setUserData(user);
+history.push({
+        pathname: "/session/signin"
+      });
       // You should redirect user to Dashboard here
       
     }).catch(err => {
@@ -43,18 +44,6 @@ class Auth extends Component {
       history.push({
         pathname: "/session/signin"
       });
-    });
-  };
-
-  checkFirebaseAuth = () => {
-    firebaseAuthService.checkAuthStatus(user => {
-      if (user) {
-        console.log(user.uid);
-        console.log(user.email);
-        console.log(user.emailVerified);
-      } else {
-        console.log("not logged in");
-      }
     });
   };
 
