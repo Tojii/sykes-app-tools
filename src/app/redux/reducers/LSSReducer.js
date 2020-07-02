@@ -1,14 +1,17 @@
 import {
     GET_ACCOUNT,
     GET_SUPERVISOR_ACCOUNT,
-    SUBMIT_DATA
+    SUBMIT_DATA,
+    GET_VALIDATE
   } from "../actions/LSSActions";
   import localStorageService from "../../services/localStorageService";
   
   const initialState = {
     user: {},
     accounts: [],
-    supervisor_accounts: []
+    supervisor_accounts: [],
+    hasAnswered: false,
+    loading: false
   };
   
   const LSSReducer = function(state = initialState, action) {
@@ -28,6 +31,13 @@ import {
       case SUBMIT_DATA: {
         return {
           ...state,  
+        };
+      }
+      case GET_VALIDATE: {
+        console.log("reducer", action.data);
+        return {
+          ...state,
+          hasAnswered: action.data
         };
       }
       default: {

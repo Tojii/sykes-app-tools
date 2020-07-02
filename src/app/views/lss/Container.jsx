@@ -8,10 +8,19 @@ import { Link } from 'react-router-dom';
 import { SimpleCard } from "matx";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ThankYou from './ThankYou';
+import {
+  getValidation
+} from "../../redux/actions/LSSActions";
 
 class Wrapper extends Component {
 
+  componentDidMount() {
+    this.props.getValidation(this.props.user.username);
+    console.log("user", this.props.user.username);
+  }
+  
   render() {
     return (
       this.props.lss.loading ? <Loading /> : 
@@ -34,7 +43,12 @@ class Wrapper extends Component {
 }
 
 const mapStateToProps = state => ({
-  lss: state.lss
+  getValidation: PropTypes.func.isRequired,
+  lss: state.lss,
+  user: state.user
 });
 
-export default connect(mapStateToProps)(Wrapper);
+export default connect(
+  mapStateToProps,
+  { getValidation }
+)(Wrapper);

@@ -5,6 +5,7 @@ import jwtAuthService from "../../services/jwtAuthService";
 export const GET_ACCOUNT = "GET_ACCOUNT";
 export const GET_SUPERVISOR_ACCOUNT = "GET_SUPERVISOR_ACCOUNT";
 export const SUBMIT_DATA = "SUBMIT_DATA";
+export const GET_VALIDATE = "GET_VALIDATE";
 
 export const getAccount = () => {
   return async dispatch => {
@@ -56,6 +57,18 @@ export const submitData = Data => {
       "perseverante": Data.perseverante, "general": Data.general, "Sugerencias": Data.sugerencia}).then(res => {
           dispatch({
           type: SUBMIT_DATA
+          });
+      })
+  };
+};
+
+export const getValidation = username => {
+  return async dispatch => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+      await axios.get("https://sykescr.dev/sykessurvey/survey?username=" + username).then(res => {
+          dispatch({
+          type: GET_VALIDATE,
+          data: res.data
           });
       })
   };

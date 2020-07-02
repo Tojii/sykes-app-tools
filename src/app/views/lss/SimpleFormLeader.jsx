@@ -54,7 +54,7 @@ class SimpleForm extends Component {
   state = {
     rate: ["","Nunca","Casi nunca", "A veces", "Casi siempre", "Siempre"],
     positions: "",
-    username: "hernanale",
+    username: this.props.user.username,
     title: "titulo",
     relacion_equipo_rating1: 0,
     CimaDeConfianza: "",
@@ -1085,7 +1085,7 @@ const mapStateToProps = state => ({
   submitData: PropTypes.func.isRequired,
   accounts: state.lss.accounts,
   supervisor_accounts: state.lss.supervisor_accounts,
-  //user: state.user.user
+  user: state.user
 });
 
 export default connect(
