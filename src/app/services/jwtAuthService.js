@@ -5,42 +5,35 @@ import localStorageService from "./localStorageService";
 class JwtAuthService {
 
   // Dummy user object just for the demo
-  user = {
-    userId: "1",
-    role: 'ADMIN',
-    displayName: "Jason Alexander",
-    email: "jasonalexander@gmail.com",
-    photoURL: "/assets/images/face-6.jpg",
-    age: 25,
-    token: "faslkhfh423oiu4h4kj432rkj23h432u49ufjaklj423h4jkhkjh"
-  }
+  // user = {
+  //   userId: "1",
+  //   role: 'ADMIN',
+  //   displayName: "Jason Alexander",
+  //   email: "jasonalexander@gmail.com",
+  //   photoURL: "/assets/images/face-6.jpg",
+  //   age: 25,
+  //   token: "faslkhfh423oiu4h4kj432rkj23h432u49ufjaklj423h4jkhkjh"
+  // }
 
   // You need to send http request with email and passsword to your server in this method
   // Your server will return user object & a Token
   // User should have role property
   // You can define roles in app/auth/authRoles.js
   loginWithEmailAndPassword = (email, password) => {
+    const parameters = {
+      username: email,
+      password: password
+    }
+
+    return axios.post("https://sykescr.dev/sykessurvey/authenticate", parameters).then(response => {
+      // Login successful
       // Save token
-      this.setSession(this.user.token);
+      this.setSession(response.data.token);
       // Set user
-      this.setUser(this.user.token);
+      this.setUser(response.data.token);
 
-      return jwtDecode(this.user);
-
-    // const parameters = {
-    //   username: email,
-    //   password: password
-    // }
-
-    // return axios.post("https://sykescr.dev/sykessurvey/authenticate", parameters).then(response => {
-    //   // Login successful
-    //   // Save token
-    //   this.setSession(response.data.token);
-    //   // Set user
-    //   this.setUser(response.data.token);
-
-    //   return jwtDecode(response.data.token);
-    // });
+      return jwtDecode(response.data.token);
+    });
   };
 
   // You need to send http requst with existing token to your server to check token is valid
