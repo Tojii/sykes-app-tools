@@ -27,7 +27,7 @@ const styles = theme => ({
 });
 
 class Layout1Topbar extends Component {
-  state = {user: localStorage.getItem("user")};
+  // state = {user: localStorage.getItem("user")};
 
   updateSidebarMode = sidebarSettings => {
     let { settings, setLayoutSettings } = this.props;
@@ -62,7 +62,7 @@ class Layout1Topbar extends Component {
   };
 
   render() {
-    console.log("this", this.props);
+    console.log("this", this.props.user);
 
     let { theme, settings, className, style } = this.props;
     const topbarTheme =
@@ -114,8 +114,7 @@ class Layout1Topbar extends Component {
                       variant="contained"
                       color="secondary"
                     >
-                      {/* { this.props.user.fullname } */}
-                      {this.state.user}
+                      { this.props.user.fullname }
                     </Button>
                   }
                 >
@@ -166,7 +165,7 @@ Layout1Topbar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  user: state.user.user,
+  user: state.user,
   setLayoutSettings: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
   settings: state.layout.settings

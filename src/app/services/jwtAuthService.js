@@ -31,6 +31,7 @@ class JwtAuthService {
       this.setSession(response.data.token);
       // Set user
       this.setUser(response.data.token);
+
       return jwtDecode(response.data.token);
     });
   };
