@@ -7,10 +7,19 @@ import {
   } from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import { SimpleCard } from "matx";
+import Loading from "../../../../matx/components/MatxLoadable/Loading";
 
-class StartForm extends Component {
+class LSSHome extends Component {
+
+
+
   render() {
+    var isLoading = false;
+    
+
     return (
+      isLoading ? <Loading /> : 
+      
       <div className="m-sm-30">
         <div  className="mb-sm-30">
           <Breadcrumb
@@ -44,4 +53,9 @@ class StartForm extends Component {
   }
 }
 
-export default StartForm;
+const mapStateToProps = state => ({
+  lss: state.lss
+});
+
+
+export default LSSHome;

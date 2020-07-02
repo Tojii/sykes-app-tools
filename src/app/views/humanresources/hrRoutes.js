@@ -9,7 +9,7 @@ const LLSForm = MatxLoadable({
 });
 
 const StartFormLeader = MatxLoadable({
-  loader: () => import("./lss/Start")
+  loader: () => import("./lss/Home")
 });
 
 const EditorForm = MatxLoadable({

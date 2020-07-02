@@ -7,6 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import MatxTheme from "./MatxLayout/MatxTheme/MatxTheme";
 import AppContext from "./appContext";
 import history from "history.js";
+import Loading from "../matx/components/MatxLoadable/Loading";
 
 import routes from "./RootRoutes";
 import configureStore from "./redux/Store";
@@ -20,7 +21,7 @@ const App = () => {
   return (
     <AppContext.Provider value={{ routes }}>
       <Provider store={Store}>
-      <PersistGate loading={null} persistor={Persistor}>
+      <PersistGate loading={<Loading />} persistor={Persistor}>
         <MatxTheme>
           <Auth>
             <Router history={history}>
