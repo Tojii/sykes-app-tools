@@ -21,7 +21,7 @@ import {
   getAccount,
   getSupervisorAccount,
   submitData
-} from "../../../redux/actions/LSSActions";
+} from "../../redux/actions/LSSActions";
 import MenuItem from '@material-ui/core/MenuItem';
 import RemoveIcon from '@material-ui/icons/Remove';
 import Rating from '@material-ui/lab/Rating';

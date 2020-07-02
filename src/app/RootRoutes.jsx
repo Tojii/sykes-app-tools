@@ -1,6 +1,8 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 
+import lssRoutes from './views/lss/LssRoutes';
+
 import dashboardRoutes from "./views/dashboard/DashboardRoutes";
 import utilitiesRoutes from "./views/utilities/UtilitiesRoutes";
 import sessionRoutes from "./views/sessions/SessionRoutes";
@@ -55,34 +57,35 @@ const errorRoute = [
 ];
 
 const routes = [
-  ...homeRoutes,
-  ...sessionRoutes,
-  ...dashboardRoutes,
-  ...materialRoutes,
-  ...utilitiesRoutes,
-  ...chartsRoute,
-  ...dragAndDropRoute,
-  ...calendarRoutes,
-  ...invoiceRoutes,
-  ...crudRoute,
-  ...cuentaRoute,
-  ...domicilioRoute,
-  ...inquilinoRoute,
+  ...lssRoutes,
+  // ...homeRoutes,
+  // ...sessionRoutes,
+  // ...dashboardRoutes,
+  // ...materialRoutes,
+  // ...utilitiesRoutes,
+  // ...chartsRoute,
+  // ...dragAndDropRoute,
+  // ...calendarRoutes,
+  // ...invoiceRoutes,
+  // ...crudRoute,
+  // ...cuentaRoute,
+  // ...domicilioRoute,
+  // ...inquilinoRoute,
   // ...maestroFondosRoute,
-  ...maestroGastosRoute,
-  ...previsionRoute,
-  ...propietarioRoute,
-  ...proveedorRoute,
-  ...proyectoRoute,
-  ...inboxRoute,
-  ...hrRoutes,
-  ...mapRoutes,
-  ...chatRoutes,
-  ...todoRoutes,
-  ...scrumBoardRoutes,
-  ...ecommerceRoutes,
-  ...pageLayoutRoutes,
-  ...otherRoutes,
+  // ...maestroGastosRoute,
+  // ...previsionRoute,
+  // ...propietarioRoute,
+  // ...proveedorRoute,
+  // ...proyectoRoute,
+  // ...inboxRoute,
+  // ...hrRoutes,
+  // ...mapRoutes,
+  // ...chatRoutes,
+  // ...todoRoutes,
+  // ...scrumBoardRoutes,
+  // ...ecommerceRoutes,
+  // ...pageLayoutRoutes,
+  // ...otherRoutes,
   ...ListRoute,
   ...redirectRoute,
   ...errorRoute
