@@ -2,7 +2,8 @@ import {
     GET_ACCOUNT,
     GET_SUPERVISOR_ACCOUNT,
     SUBMIT_DATA,
-    GET_VALIDATE
+    GET_VALIDATE,
+    LSS_LOADING
   } from "../actions/LSSActions";
   import localStorageService from "../../services/localStorageService";
   
@@ -16,28 +17,38 @@ import {
   
   const LSSReducer = function(state = initialState, action) {
     switch (action.type) {
+      case LSS_LOADING: {
+        return {
+          ...state,
+          loading: true
+        };
+      }
       case GET_ACCOUNT: {
         return {
           ...state,
-          accounts: [...action.data]
+          accounts: [...action.data],
+          loading: false
         };
       }
       case GET_SUPERVISOR_ACCOUNT: {
         return {
           ...state,
-          supervisor_accounts: [...action.data]
+          supervisor_accounts: [...action.data],
+          loading: false
         };
       }
       case SUBMIT_DATA: {
         return {
-          ...state,  
+          ...state,
+          loading: false  
         };
       }
       case GET_VALIDATE: {
         console.log("reducer", action.data);
         return {
           ...state,
-          hasAnswered: action.data
+          hasAnswered: action.data,
+          loading: false
         };
       }
       default: {

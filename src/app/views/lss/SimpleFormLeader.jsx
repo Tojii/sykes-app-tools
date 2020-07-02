@@ -17,6 +17,7 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import Loading from "../../../matx/components/MatxLoadable/Loading";
 import {
   getAccount,
   getSupervisorAccount,
@@ -132,7 +133,8 @@ class SimpleForm extends Component {
     retroalimentacion_1: "",
     retroalimentacion_2: "",
     retroalimentacion_3: "",
-    retroalimentacion_4: ""
+    retroalimentacion_4: "",
+    disabled_button: false
   };
 
   componentDidMount() {
@@ -154,6 +156,7 @@ class SimpleForm extends Component {
 
   handleSubmit = async () => {
     console.log("submit", this.state);
+    this.setState({ disabled_button: true });
     if (this.state.cuenta_area === "") {
       this.setState({ "error_cuenta": true });
     } else {
@@ -175,10 +178,12 @@ class SimpleForm extends Component {
       || this.state.enfoque_resultados_rating1 === 0 || this.state.enfoque_resultados_rating2 === 0 || this.state.enfoque_resultados_rating3 === 0
       || this.state.satisfaccion_general_rating1 === 0 || this.state.sugerencia === "" || this.state.positions === ""){
       this.setState({ "error_general": true });
+      this.setState({ "disabled_button": false });
     } else {
       if (this.state.positions === "Direct" ) {
         if (this.state.retroalimentacion_1 === "" || this.state.retroalimentacion_2 === "" || this.state.retroalimentacion_3 === "" || this.state.retroalimentacion_4 === "") {
           this.setState({ "error_general": true });
+          this.setState({ "disabled_button": false });
         } else {
           this.setState({ "CimaDeConfianza": this.state.rate[this.state.relacion_equipo_rating1]});
           this.setState({ "SituacionesAdversas": this.state.rate[this.state.relacion_equipo_rating2]});
@@ -243,6 +248,7 @@ class SimpleForm extends Component {
         // console.log(event);
       }
     }
+    this.setState({ "disabled_button": false });
   };
 
   handleChange = event => { 
@@ -297,6 +303,8 @@ class SimpleForm extends Component {
     let {accounts = [], supervisor_accounts = []} = this.props;
 
     return (
+      console.log("loadingForm", this.props.loading),
+      this.props.loading ? <Loading /> :
       <div>
         <ValidatorForm
           ref="form"
@@ -358,7 +366,7 @@ class SimpleForm extends Component {
           </SimpleCard>
           <div className="py-12" />
 
-          {this.state.positions === "Indirect" ? null : (
+          {this.state.positions === "Indirect" || this.state.positions === "" ? null : (
           <SimpleCard title="Retroalimentación y seguimiento">
             <FormControl className="form-control-leader">
               <label style={{width: "calc(90% - 24px)", display: "inline-block"}}>¿Ha tenido una reunión de equipo en el último mes? *</label>
@@ -1064,11 +1072,11 @@ class SimpleForm extends Component {
           </SimpleCard>
           <div className="py-12"/>
           <Grid container justify="flex-end">
-            <Button className="mr-12" color="" variant="contained" href="/lss">
+            <Button className="mr-12" color="" disabled={this.state.disabled_button} variant="contained" href="/lss">
               <Icon>close</Icon>
               <span className="pl-8 capitalize">Cancel</span>
             </Button>
-            <Button color="primary" variant="contained" type="submit">
+            <Button color="primary" variant="contained" disabled={this.state.disabled_button} type="submit">
               <Icon>send</Icon>
               <span className="pl-8 capitalize">Save</span>
               </Button>
@@ -1077,7 +1085,7 @@ class SimpleForm extends Component {
       </div>
     );
   }
-}
+} 
 
 const mapStateToProps = state => ({
   getAccount: PropTypes.func.isRequired,
@@ -1085,7 +1093,8 @@ const mapStateToProps = state => ({
   submitData: PropTypes.func.isRequired,
   accounts: state.lss.accounts,
   supervisor_accounts: state.lss.supervisor_accounts,
-  user: state.user
+  user: state.user,
+  loading: state.lss.loading
 });
 
 export default connect(
