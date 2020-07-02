@@ -2,8 +2,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import AppContext from "app/appContext";
-import IdleTimer from 'react-idle-timer';
-import IdleTimeOutModal from '../views/sessions/IdleTimeOutModal';
+import IdleSignOut from '../views/sessions/IdleSignOut';
 
 class AuthGuard extends Component {
   constructor(props, context) {
@@ -11,43 +10,10 @@ class AuthGuard extends Component {
     let { routes } = context;
 
     this.state = {
-      isTimedOut: false,
       authenticated: false,
       routes,
     };
-
-    this.idleTimer = React.createRef();
-    // console.log("test");
-    // this.handleClose = this.handleClose.bind(this)
-    // this.handleLogout = this.handleLogout.bind(this)
   }
-
-  _onAction = (e) => {
-    this.setState({ 'isTimedOut': false })
-  }
-  _onIdle = (e) => {
-    console.log(this.state);
-    const { isTimedOut } = this.state;
-    if (isTimedOut){
-      // Logout user or show warning modal
-      console.log("inativity")
-    }
-    else {
-      this.idleTimer.current.reset();
-      this.setState({ isTimedOut: true })
-    }
-  }
-
-  handleClose = () => {
-    this.idleTimer.current.reset();
-    this.setState({ isTimedOut: false })
-
-  }
-
-  // handleLogout() {
-  //   this.setState({showModal: false})
-  //   this.props.history.push('/')
-  // }
 
   componentDidMount() {
     if (!this.state.authenticated) {
@@ -62,9 +28,6 @@ class AuthGuard extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // if (this.state.authenticated && this.state.isTimedOut)
-    //   return false;
-    // else
       return nextState.authenticated !== this.state.authenticated;
   }
 
@@ -97,31 +60,11 @@ class AuthGuard extends Component {
     let { children } = this.props;
     const { authenticated, isTimedOut } = this.state;
 
-    console.log("Hellow");
-
-    const idleAlert = this.state.isTimedOut ? 
-                          <IdleTimeOutModal 
-                          showModal={true} 
-                          handleClose={this.handleClose}
-                          // handleLogout={this.handleLogout}
-                        /> : null;
-
-
     return authenticated ? 
-                        <Fragment>
-                            <IdleTimer 
-                              key='idleTimer'
-                              startOnMount={ true }
-                              ref={ this.idleTimer }
-                              element={ document }
-                              onActive={ this._onActive }
-                              onIdle={ this._onIdle }
-                              timeout={5000}
-                            />
-                          {idleAlert}
-                          {children}
-
-                        </Fragment> : null;
+                      <Fragment>
+                        <IdleSignOut />
+                        {children}
+                      </Fragment> : null;
   }
 }
 

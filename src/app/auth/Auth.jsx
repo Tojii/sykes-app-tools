@@ -28,11 +28,10 @@ class Auth extends Component {
     // You need to send token to your server to check token is valid
     // modify loginWithToken method in jwtService
     jwtAuthService.loginWithToken().then(user => {
-      console.log("really")
       // Valid token
       // Set user
       // this.props.setUserData(user);
-history.push({
+      history.push({
         pathname: "/session/signin"
       });
       // You should redirect user to Dashboard here

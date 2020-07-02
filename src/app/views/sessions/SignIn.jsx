@@ -99,6 +99,9 @@ class SignIn extends Component {
                       control={<Checkbox checked />}
                       label="I have read and agree to the terms of service."
                     /> */}
+                    <div>
+                    {process.env.API_URL}
+                    </div>
                     <div className="flex flex-middle mb-8">
                       <div className={classes.wrapper}>
                         <Button

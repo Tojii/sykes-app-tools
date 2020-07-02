@@ -12,7 +12,7 @@ const Home = () => (
         <SimpleCard>
             <Grid container>
               <Grid item xs={12} sm={8}>
-                <h1>Leader Satisfaction Survey Test</h1>
+                <h1>Leader Satisfaction Survey</h1>
                 <br></br>
                 <p>Al ingresar a la encuesta debe completar todas las preguntas.</p>
                 <p>Recuerde seleccionar su perfil según su posicón actual: "Direct" (Customer Service, Tech Support, Sales) y "Indirect/Business Partners" (Human Capital, Performance Excellence, IT, Finance, Administration, Team Managers, SMEs, Supervisors, Temporary backups).</p>

@@ -62,8 +62,6 @@ class Layout1Topbar extends Component {
   };
 
   render() {
-    console.log("this", this.props.user);
-
     let { theme, settings, className, style } = this.props;
     const topbarTheme =
       settings.themes[settings.layout1Settings.topbar.theme] || theme;

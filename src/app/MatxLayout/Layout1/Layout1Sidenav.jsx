@@ -46,6 +46,7 @@ class Layout1Sidenav extends Component {
   };
 
   componentWillMount() {
+    console.log("it's triggering this")
     // CLOSE SIDENAV ON ROUTE CHANGE ON MOBILE
     this.unlistenRouteChange = this.props.history.listen((location, action) => {
       if (isMdScreen()) {

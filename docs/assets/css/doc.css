@@ -25,7 +25,7 @@ $opacity-map: (
   background: #fff8f5; }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Proxima Nova Rg', "Roboto", sans-serif;
   font-size: 1rem;
   line-height: 1.5;
   letter-spacing: 0.01875rem;
@@ -84,7 +84,7 @@ input,
 optgroup,
 select,
 textarea {
-  font-family: "Roboto", sans-serif; }
+  font-family: 'Proxima Nova Rg', "Roboto", sans-serif; }
 
 p {
   font-weight: 300;

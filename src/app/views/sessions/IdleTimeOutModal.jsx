@@ -1,12 +1,6 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import CircularProgress from '@material-ui/core/CircularProgress';
-import CircularProgressWithLabel from '../../../matx/components/CircularProgressWithLabel';
+
 
 const IdleTimeOutModal = (props) => (
       <Dialog
@@ -27,7 +21,7 @@ const IdleTimeOutModal = (props) => (
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.handleClose} color="primary">
+          <Button onClick={props.handleSignOut} color="primary">
             Cerrar sesión
           </Button>
           <Button onClick={props.handleClose} color="primary" autoFocus>

@@ -6,7 +6,7 @@ import {
 import localStorageService from "../../services/localStorageService";
 
 const initialState = {
-  user: {},
+  // user: {},
 };
 
 const userReducer = function(state = initialState, action) {
