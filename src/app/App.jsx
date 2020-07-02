@@ -24,7 +24,7 @@ const App = () => {
       <PersistGate loading={<Loading />} persistor={Persistor}>
         <MatxTheme>
           <Auth>
-            <Router history={history}>
+            <Router basename={process.env.PUBLIC_URL} history={history}>
               <AuthGuard>
                 <MatxLayout />
               </AuthGuard>
