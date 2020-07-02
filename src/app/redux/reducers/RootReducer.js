@@ -6,6 +6,7 @@ import ScrumBoardReducer from "./ScrumBoardReducer";
 import NotificationReducer from "./NotificationReducer";
 import EcommerceReducer from "./EcommerceReducer";
 import MantenimientoReducer from "./MantenimientoReducer";
+import LSSReducer from "./LSSReducer";
 
 const RootReducer = combineReducers({
   login: LoginReducer,
@@ -14,7 +15,8 @@ const RootReducer = combineReducers({
   scrumboard: ScrumBoardReducer,
   notification: NotificationReducer,
   ecommerce: EcommerceReducer,
-  mantenimientos: MantenimientoReducer
+  mantenimientos: MantenimientoReducer,
+  lss: LSSReducer
 });
 
 export default RootReducer;

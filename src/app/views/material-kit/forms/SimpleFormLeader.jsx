@@ -21,7 +21,7 @@ import {
   getAccount,
   getSupervisorAccount,
   submitData
-} from "../../../redux/actions/UserActions";
+} from "../../../redux/actions/LSSActions";
 import MenuItem from '@material-ui/core/MenuItem';
 import RemoveIcon from '@material-ui/icons/Remove';
 import Rating from '@material-ui/lab/Rating';
@@ -1083,9 +1083,9 @@ const mapStateToProps = state => ({
   getAccount: PropTypes.func.isRequired,
   getSupervisorAccount: PropTypes.func.isRequired,
   submitData: PropTypes.func.isRequired,
-  accounts: state.user.accounts,
-  supervisor_accounts: state.user.supervisor_accounts,
-  user: state.user.user
+  accounts: state.lss.accounts,
+  supervisor_accounts: state.lss.supervisor_accounts,
+  //user: state.user.user
 });
 
 export default connect(
