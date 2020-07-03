@@ -32,6 +32,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <base href="%REACT_APP_PUBLIC_URL%/">
     <title>SYKES Employee Tools</title>
 
     <!-- style -->
@@ -93,7 +94,7 @@
     <div id="root">
       <div class="matx-loader">
         <img
-          src="/assets/images/logo-circle.svg"
+          src="%REACT_APP_PUBLIC_URL%/assets/images/logo-circle.svg"
           alt=""
         />
         <div></div>

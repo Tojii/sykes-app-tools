@@ -3,6 +3,10 @@
   @include input-placeholder($gray-800, .6);
 }
 
+.input-required, .input-feedback {
+  color: $danger;
+}
+
 .input-group {
   border-radius: $input-default-radius;
   &.has-success,

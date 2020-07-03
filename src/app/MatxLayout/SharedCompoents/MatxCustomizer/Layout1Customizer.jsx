@@ -18,8 +18,8 @@ import BadgeSelected from "./BadgeSelected";
 import { mainSidebarThemes, topbarThemes } from "./customizerOptions";
 
 const sidebarBG = [
-  "/assets/images/sidebar/sidebar-bg-dark.jpg",
-  "/assets/images/sidebar/sidebar-bg-light.jpg"
+  `${process.env.REACT_APP_PUBLIC_URL}/assets/images/sidebar/sidebar-bg-dark.jpg`,
+  `${process.env.REACT_APP_PUBLIC_URL}/assets/images/sidebar/sidebar-bg-light.jpg`
 ];
 
 const Layout1Customizer = ({ settings, handleChange, handleControlChange }) => {

@@ -1,6 +1,6 @@
 import axios from "axios";
 import history from "history.js";
-import jwtAuthService from "../../services/jwtAuthService";
+import apiAuthService from "../../services/apiAuthService";
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
@@ -17,7 +17,7 @@ export function setUserData(user) {
 
 export function logoutUser() {
   return dispatch => {
-    jwtAuthService.logout();
+    apiAuthService.logout();
 
     history.push({
       pathname: "/session/signin"

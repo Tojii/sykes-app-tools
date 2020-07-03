@@ -1,5 +1,4 @@
-import jwtAuthService from "../../services/jwtAuthService";
-import FirebaseAuthService from "../../services/firebase/firebaseAuthService";
+import apiAuthService from "../../services/apiAuthService";
 import { setUserData } from "./UserActions";
 import history from "history.js";
 
@@ -14,7 +13,7 @@ export function loginWithEmailAndPassword({ email, password }) {
       type: LOGIN_LOADING
     });
 
-    jwtAuthService
+    apiAuthService
       .loginWithEmailAndPassword(email, password)
       .then(user => {
         dispatch(setUserData(user));

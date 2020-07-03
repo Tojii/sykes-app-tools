@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import SimpleForm from "./SimpleFormLeader";
+import Survey from './Survey'
 import Tour from "reactour";
 import "./styletour.css";
 
@@ -30,6 +31,7 @@ class SimpleFormTour extends Component {
     return (
       <div overflow="hidden">
         <SimpleForm/>
+        {/* <Survey /> */}
         <Tour
           onRequestClose={this.closeTour}
           steps={steps}

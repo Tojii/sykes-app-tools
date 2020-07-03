@@ -14,6 +14,7 @@ import configureStore from "./redux/Store";
 import Auth from "./auth/Auth";
 import MatxLayout from "./MatxLayout/MatxLayout";
 import AuthGuard from "./auth/AuthGuard";
+import { createBrowserHistory } from 'history';
 
 const { Store, Persistor } = configureStore();
 
@@ -24,7 +25,7 @@ const App = () => {
       <PersistGate loading={<Loading />} persistor={Persistor}>
         <MatxTheme>
           <Auth>
-            <Router basename={process.env.PUBLIC_URL} history={history}>
+            <Router history={history}>
               <AuthGuard>
                 <MatxLayout />
               </AuthGuard>

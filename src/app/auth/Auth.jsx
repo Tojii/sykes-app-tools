@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { setUserData } from "../redux/actions/UserActions";
-import jwtAuthService from "../services/jwtAuthService";
+import apiAuthService from "../services/apiAuthService";
 import localStorageService from "../services/localStorageService";
 import firebaseAuthService from "../services/firebase/firebaseAuthService";
 import history from "history.js";
@@ -19,15 +19,22 @@ class Auth extends Component {
     // this.props.setUserData(localStorageService.getItem("auth_user"));
     
     // Check current token is valid on page load/reload
-    //if (!localStorageService.getItem("auth_user"))
-    // this.checkJwtAuth();
+    // if (!localStorageService.getItem("auth_user"))
+    //  this.checkJwtAuth();
+
+    console.log("login", this.props.login);
+
+    if (!this.props.login.success)
+      history.push({
+        pathname: "/session/signin"
+      });
 
   }
 
   checkJwtAuth = () => {
     // You need to send token to your server to check token is valid
     // modify loginWithToken method in jwtService
-    jwtAuthService.loginWithToken().then(user => {
+    apiAuthService.loginWithToken().then(user => {
       // Valid token
       // Set user
       // this.props.setUserData(user);

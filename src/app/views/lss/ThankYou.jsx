@@ -11,7 +11,7 @@ const ThankYou = () => (
           <h4>Su respuesta ya fue registrada, gracias por haber contestado el survey.</h4>
         </Grid>
         <Grid item xs={12} sm={4} className="h-200vh">
-          <img src="/assets/images/illustrations/ThankYou.jpg" alt="" />
+          <img src={"./assets/images/illustrations/ThankYou.jpg"} alt="" />
         </Grid>
         <Grid item xs={12} sm={8}></Grid>
       </Grid>

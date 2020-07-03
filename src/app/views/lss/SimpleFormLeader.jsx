@@ -263,6 +263,12 @@ class SimpleForm extends Component {
       this.setState({ "disabled_supervisor": false });
     }
 
+    if (event.target.name === "supervisor_directo" && event.target.value !== "jefe-director") {
+      //this.setState({ "error_supervisor": false });
+      console.log("hellow");
+    }
+
+
     if (event.target.name === "supervisor_directo" && event.target.value !== "") {
       this.setState({ "error_supervisor": false });
     }
@@ -331,6 +337,9 @@ class SimpleForm extends Component {
                     {supervisor.name}
                   </MenuItem>
                 ))}
+                <MenuItem key="jefe-directo" value="Jefe-Directory">
+                    * No Aparece en la lisa 
+                </MenuItem>
               </Select>
               <FormHelperText hidden={!this.state.error_supervisor}>El campo es requerido</FormHelperText>
               <h7 style={{width: "calc(90% - 24px)", color: "#ffa420", display: "block"}}>Si su líder directo no aparece en la lista, seleccione: No aparece en la lista y proceda a ingresar el  nombre de su líder de manera manual en la opción que se habilita.</h7>

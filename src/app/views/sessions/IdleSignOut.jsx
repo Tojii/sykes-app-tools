@@ -2,43 +2,23 @@ import React, { Component } from "react";
 import IdleTimer from 'react-idle-timer';
 import { logoutUser } from "app/redux/actions/UserActions";
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
-
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import CircularProgressWithLabel from '../../../matx/components/CircularProgressWithLabel';
-
 import {
-  Card,
-  Checkbox,
-  FormControlLabel,
-  Grid,
   Button,
   withStyles,
-  CircularProgress
 } from "@material-ui/core";
-import Alert from '@material-ui/lab/Alert';
-import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { withRouter } from "react-router-dom";
-import { loginWithEmailAndPassword } from "../../redux/actions/LoginActions";
 
 const styles = theme => ({
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
-  },
-  
-  buttonProgress: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    marginTop: -12,
-    marginLeft: -12
   }
 });
 
@@ -66,10 +46,6 @@ class IdleSignOut extends Component {
     const { isTimedOut } = this.state;
     if (isTimedOut && this.props.login.success){
       this.setState({openDialog: true})
-      // setTimeout(() => {
-      //   if (this.state.isTimedOut)
-      //     this.handleSignOut();
-      // }, 30000);
     }
     else {
       this.idleTimer.current.reset();
@@ -88,7 +64,6 @@ class IdleSignOut extends Component {
 
   render() {
     let { classes } = this.props;
-
     return (
       <>
         <IdleTimer 
@@ -98,7 +73,7 @@ class IdleSignOut extends Component {
           element={ document }
           onActive={ this._onActive }
           onIdle={ this._onIdle }
-          timeout={150000}
+          timeout={1000 * 60 * parseInt(process.env.REACT_APP_IDLE_TIME_MIN)}
         />
         {
           <Dialog

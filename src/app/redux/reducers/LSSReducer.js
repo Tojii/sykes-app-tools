@@ -44,7 +44,6 @@ import {
         };
       }
       case GET_VALIDATE: {
-        console.log("reducer", action.data);
         return {
           ...state,
           hasAnswered: action.data,

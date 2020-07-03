@@ -22,7 +22,7 @@ const Home = () => (
                 </Button>
               </Grid>
               <Grid item xs={12} sm={4} className="h-200vh">
-                <img src="/assets/images/illustrations/teamwork.svg" alt="" />
+                <img src={"./assets/images/illustrations/teamwork.svg"} alt="" />
               </Grid>
               <Grid item xs={12} sm={8}></Grid>
             </Grid>

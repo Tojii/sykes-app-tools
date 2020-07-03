@@ -33,8 +33,8 @@ const styles = theme => ({
 
 class SignIn extends Component {
   state = {
-    email: "hernanale",
-    password: "Sykes2017",
+    email: "",
+    password: "",
     agreement: ""
   };
   handleChange = event => {
@@ -60,8 +60,8 @@ class SignIn extends Component {
             <Grid container>
               <Grid item lg={5} md={5} sm={5} xs={12}>
                 <div className={"p-32 flex flex-center flex-middle flex-column h-100 " + classes.logoWrapper }>
-                  <img className="mb-5" src="/assets/images/logo.png" alt="SYKES" />
-                  <img src="/assets/images/illustrations/dreamer.svg" alt="" />
+                  <img className="mb-5" src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/logo.png`} alt="SYKES" />
+                  <img src={`${process.env.REACT_APP_PUBLIC_URL}/assets/images/illustrations/dreamer.svg`} alt="" />
                 </div>
               </Grid>
               <Grid item lg={7} md={7} sm={7} xs={12}>
@@ -100,7 +100,6 @@ class SignIn extends Component {
                       label="I have read and agree to the terms of service."
                     /> */}
                     <div>
-                    {process.env.API_URL}
                     </div>
                     <div className="flex flex-middle mb-8">
                       <div className={classes.wrapper}>
