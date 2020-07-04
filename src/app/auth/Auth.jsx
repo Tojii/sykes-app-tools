@@ -22,8 +22,6 @@ class Auth extends Component {
     // if (!localStorageService.getItem("auth_user"))
     //  this.checkJwtAuth();
 
-    console.log("login", this.props.login);
-
     if (!this.props.login.success)
       history.push({
         pathname: "/session/signin"

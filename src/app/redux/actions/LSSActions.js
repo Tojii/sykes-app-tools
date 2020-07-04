@@ -32,32 +32,49 @@ export const getSupervisorAccount = account => {
   };
 };
 
-export const submitData = Data => {
-  console.log("data", {"Title": Data.title, "CuentaArea": Data.cuenta_area, "JefeDirecto": Data.supervisor_directo,
-  "JefeDirectoPersona": Data.username, "Posicion": Data.positions, "reunionesultimomes": Data.retroalimentacion_1, "OneOnOneUltimas2semanas": Data.retroalimentacion_2,
-  "AyudaMano": Data.retroalimentacion_3, "EventosVoluntariado": Data.retroalimentacion_4, "CimaDeConfianza": Data.CimaDeConfianza,
-  "SituacionesAdversas": Data.SituacionesAdversas, "Escuchar": Data.Escuchar, "Cooperacion": Data.Cooperacion,
-  "SituacionesConflictivas": Data.SituacionesConflictivas, "RelacionesInterpersonales": Data.RelacionesInterpersonales, "Guiar": Data.Guiar,
-  "Recursos": Data.Recursos, "Planes": Data.Planes, "Objetivos": Data.Objetivos, "Monitorea": Data.Monitorea,
-  "Responsabiliza": Data.Responsabiliza, "TomaEnCuentaOpinion": Data.TomaEnCuentaOpinion, "retroalimentacion": Data.retroalimentacion,
-  "conversaciones": Data.conversaciones, "estrategias": Data.estrategias, "balance": Data.balance,
-  "entendimiento": Data.entendimiento, "barreras": Data.barreras, "seguimiento": Data.seguimiento,
-  "perseverante": Data.perseverante, "general": Data.general, "Sugerencias": Data.sugerencia});
+export const submitData = data => {
+  // console.log("data", { "CuentaArea": Data.cuenta_area, "JefeDirecto": Data.supervisor_directo,
+  // "JefeDirectoPersona": Data.username, "Posicion": Data.positions, "reunionesultimomes": Data.retroalimentacion_1, "OneOnOneUltimas2semanas": Data.retroalimentacion_2,
+  // "AyudaMano": Data.retroalimentacion_3, "EventosVoluntariado": Data.retroalimentacion_4, "CimaDeConfianza": Data.CimaDeConfianza,
+  // "SituacionesAdversas": Data.SituacionesAdversas, "Escuchar": Data.Escuchar, "Cooperacion": Data.Cooperacion,
+  // "SituacionesConflictivas": Data.SituacionesConflictivas, "RelacionesInterpersonales": Data.RelacionesInterpersonales, "Guiar": Data.Guiar,
+  // "Recursos": Data.Recursos, "Planes": Data.Planes, "Objetivos": Data.Objetivos, "Monitorea": Data.Monitorea,
+  // "Responsabiliza": Data.Responsabiliza, "TomaEnCuentaOpinion": Data.TomaEnCuentaOpinion, "retroalimentacion": Data.retroalimentacion,
+  // "conversaciones": Data.conversaciones, "estrategias": Data.estrategias, "balance": Data.balance,
+  // "entendimiento": Data.entendimiento, "barreras": Data.barreras, "seguimiento": Data.seguimiento,
+  // "perseverante": Data.perseverante, "general": Data.general, "Sugerencias": Data.sugerencia});
   return async dispatch => {
     dispatch({
       type: LSS_LOADING
     });
     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    await axios.post(`${process.env.REACT_APP_API_URL}/survey`, {"Title": Data.title, "CuentaArea": Data.cuenta_area, "JefeDirecto": Data.supervisor_directo,
-    "JefeDirectoPersona": Data.username, "Posicion": Data.positions, "reunionesultimomes": Data.retroalimentacion_1, "OneOnOneUltimas2semanas": Data.retroalimentacion_2,
-    "AyudaMano": Data.retroalimentacion_3, "EventosVoluntariado": Data.retroalimentacion_4, "CimaDeConfianza": Data.CimaDeConfianza,
-    "SituacionesAdversas": Data.SituacionesAdversas, "Escuchar": Data.Escuchar, "Cooperacion": Data.Cooperacion,
-    "SituacionesConflictivas": Data.SituacionesConflictivas, "RelacionesInterpersonales": Data.RelacionesInterpersonales, "Guiar": Data.Guiar,
-    "Recursos": Data.Recursos, "Planes": Data.Planes, "Objetivos": Data.Objetivos, "Monitorea": Data.Monitorea,
-    "Responsabiliza": Data.Responsabiliza, "TomaEnCuentaOpinion": Data.TomaEnCuentaOpinion, "retroalimentacion": Data.retroalimentacion,
-    "conversaciones": Data.conversaciones, "estrategias": Data.estrategias, "balance": Data.balance,
-    "entendimiento": Data.entendimiento, "barreras": Data.barreras, "seguimiento": Data.seguimiento,
-    "perseverante": Data.perseverante, "general": Data.general, "Sugerencias": Data.sugerencia}).then(res => {
+    await axios.post(`${process.env.REACT_APP_API_URL}/survey`, data
+    // {
+    //   "CuentaArea": Data.cuenta_area, 
+    //   "JefeDirecto": Data.supervisor_directo,
+    //   "JefeDirectoPersona": Data.username, 
+    //   "Posicion": Data.positions, 
+    //   "reunionesultimomes": Data.retroalimentacion_1, 
+    //   "OneOnOneUltimas2semanas": Data.retroalimentacion_2,
+    //   "AyudaMano": Data.retroalimentacion_3, 
+    //   "EventosVoluntariado": Data.retroalimentacion_4, 
+    //   "CimaDeConfianza": Data.CimaDeConfianza,
+    //   "SituacionesAdversas": Data.SituacionesAdversas, 
+    //   "Escuchar": Data.Escuchar, 
+    //   "Cooperacion": Data.Cooperacion,
+    //   "SituacionesConflictivas": Data.SituacionesConflictivas, 
+    //   "RelacionesInterpersonales": Data.RelacionesInterpersonales, 
+    //   "Guiar": Data.Guiar,
+    //   "Recursos": Data.Recursos, 
+    //   "Planes": Data.Planes, 
+    //   "Objetivos": Data.Objetivos, 
+    //   "Monitorea": Data.Monitorea,
+    //   "Responsabiliza": Data.Responsabiliza, 
+    //   "TomaEnCuentaOpinion": Data.TomaEnCuentaOpinion, "retroalimentacion": Data.retroalimentacion,
+    // "conversaciones": Data.conversaciones, "estrategias": Data.estrategias, "balance": Data.balance,
+    // "entendimiento": Data.entendimiento, "barreras": Data.barreras, "seguimiento": Data.seguimiento,
+    // "perseverante": Data.perseverante, "general": Data.general, "Sugerencias": Data.sugerencia}
+    ).then(res => {
         dispatch({
         type: SUBMIT_DATA
         });

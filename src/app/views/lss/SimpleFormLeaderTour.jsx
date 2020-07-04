@@ -30,8 +30,8 @@ class SimpleFormTour extends Component {
     const accentColor = "#5cb7b7";
     return (
       <div overflow="hidden">
-        <SimpleForm/>
-        {/* <Survey /> */}
+        {/* <SimpleForm/> */}
+        <Survey />
         <Tour
           onRequestClose={this.closeTour}
           steps={steps}

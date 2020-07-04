@@ -71,7 +71,7 @@ class IdleSignOut extends Component {
           startOnMount={ true }
           ref={ this.idleTimer }
           element={ document }
-          onActive={ this._onActive }
+          onActive={ this.handleClose }
           onIdle={ this._onIdle }
           timeout={1000 * 60 * parseInt(process.env.REACT_APP_IDLE_TIME_MIN)}
         />

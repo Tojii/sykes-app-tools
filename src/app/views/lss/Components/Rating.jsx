@@ -20,7 +20,8 @@ const StyledRating = withStyles({
 
 const useStyles = makeStyles(theme => ({
     wrapper: {
-        minHeight: '62px'
+        minHeight: '62px',
+        textAlign: 'center'
     }
   }));
   
@@ -50,7 +51,7 @@ export function RatingField(props) {
         onChange={handleChange}
         onChangeActive={handleChangeActive}
         value={inputValue}
-        icon={<RemoveIcon fontSize="large" />}
+        icon={<RemoveIcon largeIcon="large" />}
         />
         <div mb={3}>{inputText}</div>
     </div>
