@@ -3,6 +3,7 @@ import {
     GET_SUPERVISOR_ACCOUNT,
     SUBMIT_DATA,
     GET_VALIDATE,
+    GET_JEFE_DIRECTO,
     LSS_LOADING
   } from "../actions/LSSActions";
   import localStorageService from "../../services/localStorageService";
@@ -11,6 +12,7 @@ import {
     user: {},
     accounts: [],
     supervisor_accounts: [],
+    jefes: [],
     hasAnswered: false,
     loading: false
   };
@@ -27,6 +29,13 @@ import {
         return {
           ...state,
           accounts: [...action.data],
+          loading: false
+        };
+      }
+      case GET_JEFE_DIRECTO: {
+        return {
+          ...state,
+          jefes: [...action.data],
           loading: false
         };
       }

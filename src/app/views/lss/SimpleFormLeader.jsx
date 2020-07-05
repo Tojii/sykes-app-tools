@@ -13,6 +13,7 @@ import {
   FormHelperText,
   Select,
   Box,
+  TextField,
   Checkbox
 } from "@material-ui/core";
 import PropTypes from "prop-types";
@@ -21,8 +22,10 @@ import Loading from "../../../matx/components/MatxLoadable/Loading";
 import {
   getAccount,
   getSupervisorAccount,
+  getJefeDirecto,
   submitData
 } from "../../redux/actions/LSSActions";
+import { AutocompleteField } from './Components/AutocompleteField';
 import MenuItem from '@material-ui/core/MenuItem';
 import RemoveIcon from '@material-ui/icons/Remove';
 import Rating from '@material-ui/lab/Rating';
@@ -134,12 +137,15 @@ class SimpleForm extends Component {
     retroalimentacion_2: "",
     retroalimentacion_3: "",
     retroalimentacion_4: "",
+    show_jefe_directo: false,
+    jefe_directo: "",
     disabled_button: false
   };
 
   componentDidMount() {
     // custom rule will have name 'isPasswordMatch'
     this.props.getAccount();
+    
     //this.props.getSupervisorAccount();
     // ValidatorForm.addValidationRule("isPasswordMatch", value => {
     //   if (value !== this.state.password) {
@@ -263,15 +269,21 @@ class SimpleForm extends Component {
       this.setState({ "disabled_supervisor": false });
     }
 
-    if (event.target.name === "supervisor_directo" && event.target.value !== "jefe-director") {
-      //this.setState({ "error_supervisor": false });
-      console.log("hellow");
-    }
-
-
     if (event.target.name === "supervisor_directo" && event.target.value !== "") {
       this.setState({ "error_supervisor": false });
+      if (event.target.value === "Jefe-Directory") {
+        this.setState({ "show_jefe_directo": true });
+      } else {
+        this.setState({ "show_jefe_directo": false });
+      }
     }
+
+    // if (event.target.name === "supervisor_directo" && event.target.value === "Jefe-Directory") {
+      
+      
+    //   console.log("hellow");
+    // }
+
     if (event.target.name === "positions" && event.target.value === "Indirect") {
       this.setState({ "retroalimentacion_1": "" });
       this.setState({ "retroalimentacion_2": "" });
@@ -306,10 +318,10 @@ class SimpleForm extends Component {
       4: 'Casi siempre',
       5: 'Siempre',
     };
-    let {accounts = [], supervisor_accounts = []} = this.props;
+    let {accounts = [], supervisor_accounts = [], jefes = []} = this.props;
 
     return (
-      console.log("loadingForm", this.props.loading),
+      console.log("loadingForm", jefes),
       this.props.loading ? <Loading /> :
       <div>
         <ValidatorForm
@@ -332,18 +344,38 @@ class SimpleForm extends Component {
             <FormControl className="form-control-leader" error={this.state.error_supervisor}>
               <InputLabel id="cuenta">Mi supervisor directo es *</InputLabel>         
               <Select labelId="cuenta" className="mr-24" name="supervisor_directo" disabled={this.state.disabled_supervisor} onChange={this.handleChange} required style={{width: "calc(90% - 24px)"}}>
+                <MenuItem key="jefe-directo" value="Jefe-Directory">
+                    * No aparece en la lisa 
+                </MenuItem>
                 {supervisor_accounts.map(supervisor => (
                   <MenuItem key={supervisor} value={supervisor.netLogin}>
                     {supervisor.name}
                   </MenuItem>
                 ))}
-                <MenuItem key="jefe-directo" value="Jefe-Directory">
-                    * No Aparece en la lisa 
-                </MenuItem>
               </Select>
               <FormHelperText hidden={!this.state.error_supervisor}>El campo es requerido</FormHelperText>
               <h7 style={{width: "calc(90% - 24px)", color: "#ffa420", display: "block"}}>Si su líder directo no aparece en la lista, seleccione: No aparece en la lista y proceda a ingresar el  nombre de su líder de manera manual en la opción que se habilita.</h7>
             </FormControl>
+
+            {this.state.show_jefe_directo === false ? null : (
+            <FormControl className="form-control-leader">
+              {/* <Autocomplete
+                value={this.state.jefe_directo}
+                onChange={(event, newValue) => {
+                  this.setState({ "jefe_directo": newValue });
+                }}
+                inputValue={this.state.input_jefe_directo}
+                onInputChange={(event, newInputValue) => {
+                  this.props.getJefeDirecto(newInputValue);
+                }}
+                id="controllable-states-demo"
+                options={jefes}
+                getOptionLabel={(option) => option.fullName}
+                renderInput={(params) => <TextField {...params} label="Jefe Directo *" />}
+              /> */}
+              <AutocompleteField name="jefe_directo" value={this.state.jefe_directo} 
+              onInputChange={this.props.getJefeDirecto} options={jefes.map(jefe => (jefe.fullName))} label="Jefe Directo *" />
+            </FormControl>)}
 
             <FormControl className="form-control-leader"  data-tut="tour_step1_posicion">
               <label style={{display: "inline-block"}}>Posición *</label>
@@ -1098,9 +1130,11 @@ class SimpleForm extends Component {
 
 const mapStateToProps = state => ({
   getAccount: PropTypes.func.isRequired,
+  getJefeDirecto: PropTypes.func.isRequired,
   getSupervisorAccount: PropTypes.func.isRequired,
   submitData: PropTypes.func.isRequired,
   accounts: state.lss.accounts,
+  jefes: state.lss.jefes,
   supervisor_accounts: state.lss.supervisor_accounts,
   user: state.user,
   loading: state.lss.loading
@@ -1108,7 +1142,7 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getAccount, getSupervisorAccount, submitData }
+  { getAccount, getSupervisorAccount, submitData, getJefeDirecto }
 )(SimpleForm);
 
 //export default SimpleForm;
