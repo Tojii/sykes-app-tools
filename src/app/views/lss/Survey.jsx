@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   getAccount,
   getSupervisorAccount,
+  getJefeDirecto,
   submitData
 } from "../../redux/actions/LSSActions";
 import {
@@ -22,15 +23,18 @@ import {
   FormControlLabel,
 } from "@material-ui/core";
 import { SimpleCard } from "matx";
+import { AutocompleteField } from './Components/AutocompleteField';
 import history from "history.js";
 import { Link } from 'react-router-dom';
 
 const Survey = () => {
   const dispatch = useDispatch();
   const accounts = useSelector(state=>state.lss.accounts);
+  const jefes = useSelector(state=>state.lss.jefes);
   const supervisor_accounts = useSelector(state=>state.lss.supervisor_accounts);
   const [isLoading, setIsLoading] = useState(false);
   const [showRetroalimentacionYSeguimiento, setShowRetroalimentacionYSeguimiento] = useState(false);
+  const [showJefeDirecto, setShowJefeDirecto] = useState(false);
 
   useEffect(() => {
     dispatch(getAccount());
@@ -202,6 +206,11 @@ const Survey = () => {
     handleFieldChange(event, setFieldValue);
   }
 
+  const handleJefeDirectoChange = (event, setFieldValue) => { 
+    setShowJefeDirecto(event.target.value === "Jefe-Directory");
+    handleFieldChange(event, setFieldValue);
+  }
+
   return (
     <Formik
         enableReinitialize
@@ -229,11 +238,9 @@ const Survey = () => {
                   <Grid item sm={6} xs={12}>
                     <FormControl className="form-control-leader" error={errors.JefeDirecto}>
                     <InputLabel id="JefeDirecto">Mi supervisor directo es *</InputLabel>         
-                    <Select labelId="JefeDirecto" className="mr-24" name="JefeDirecto" onChange={event => handleFieldChange(event, setFieldValue)}>
-                    <MenuItem key="jefe-directo-0" value="">
-                      </MenuItem>
-                      { !supervisor_accounts ? null : supervisor_accounts.map(supervisor => (
-                        <MenuItem key={`jefe-directo-${supervisor}`} value={supervisor.netLogin}>
+                    <Select labelId="JefeDirecto" className="mr-24" name="JefeDirecto" onChange={event => handleJefeDirectoChange(event, setFieldValue)}>
+                      {supervisor_accounts.map(supervisor => (
+                        <MenuItem key={`supervisor-${supervisor}`} value={supervisor.name}>
                           {supervisor.name}
                         </MenuItem>
                       ))}
@@ -246,7 +253,16 @@ const Survey = () => {
                   </FormControl> 
                     </Grid>
                   </Grid>
-                  <Grid spacing={5} container>
+                  <Grid spacing={10} container>
+                    {!showJefeDirecto ? null : (
+                      <Grid item sm={6} xs={12}>
+                        <FormControl className="form-control-leader">
+                          <AutocompleteField name="JefeDirecto" value={jefes.map(jefe => (jefe.fullName))} 
+                          onInputChange={getJefeDirecto} onChange={setFieldValue} options={jefes.map(jefe => (jefe.fullName))} label="Jefe Directo *" />
+                        </FormControl>
+                      </Grid>
+                      )
+                    }
                     <Grid item sm={6} xs={12}>
                       <label style={{display: "inline-block"}}>Posición *</label>
                       <RadioGroup
