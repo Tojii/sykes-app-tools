@@ -20,7 +20,7 @@ const StyledRating = withStyles({
 
 const useStyles = makeStyles(theme => ({
     wrapper: {
-        minHeight: '62px',
+        minHeight: '80px',
         textAlign: 'center'
     }
   }));
@@ -37,7 +37,7 @@ export function RatingField(props) {
     setInputValue(event.target.value);
     setInputText(rate[event.target.value]);
 
-    props.setFieldValue(props.name, event.target.value);
+    props.setFieldValue(props.name, rate[event.target.value]);
   };
 
   const handleChangeActive = (event, value) => {
@@ -46,12 +46,13 @@ export function RatingField(props) {
 
   return (
     <div className={classes.wrapper}>
-      <StyledRating
+      <Rating
         name={props.name}
         onChange={handleChange}
         onChangeActive={handleChangeActive}
         value={inputValue}
-        icon={<RemoveIcon largeIcon="large" />}
+        size="large"
+        icon={<RemoveIcon  style={{ fontSize: 52 }} />}
         />
         <div mb={3}>{inputText}</div>
     </div>

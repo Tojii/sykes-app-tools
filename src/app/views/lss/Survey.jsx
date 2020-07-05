@@ -31,7 +31,6 @@ const Survey = () => {
   const supervisor_accounts = useSelector(state=>state.lss.supervisor_accounts);
   const [isLoading, setIsLoading] = useState(false);
   const [showRetroalimentacionYSeguimiento, setShowRetroalimentacionYSeguimiento] = useState(false);
-  const rate = ["","Nunca","Casi nunca", "A veces", "Casi siempre", "Siempre"];
 
   useEffect(() => {
     dispatch(getAccount());
@@ -178,31 +177,9 @@ const Survey = () => {
   };
 
   const handleSubmit = async (values) => {
-    console.log("values", values);
     setIsLoading(true);
     const data = values
     //"JefeDirectoPersona": values.username, 
-    data.CimaDeConfianza = rate[data.CimaDeConfianza];
-    data.SituacionesAdversas = rate[data.SituacionesAdversas];
-    data.Escuchar = rate[data.Escuchar];
-    data.Cooperacion = rate[data.Cooperacion];
-    data.SituacionesConflictivas = rate[data.SituacionesConflictivas];
-    data.RelacionesInterpersonales = rate[data.RelacionesInterpersonales];
-    data.Guiar = rate[data.Guiar];
-    data.Recursos = rate[data.Recursos];
-    data.Planes = rate[data.Planes];
-    data.Objetivos = rate[data.Objetivos];
-    data.Monitorea = rate[data.Monitorea];
-    data.Responsabiliza = rate[data.Responsabiliza];
-    data.TomaEnCuentaOpinion = rate[data.TomaEnCuentaOpinion];
-    data.retroalimentacion = rate[data.retroalimentacion];
-    data.conversaciones = rate[data.conversaciones];
-    data.estrategias = rate[data.estrategias];
-    data.entendimiento = rate[data.entendimiento];
-    data.barreras = rate[data.barreras];
-    data.seguimiento = rate[data.seguimiento];
-    data.perseverante = rate[data.perseverante];
-    data.general = rate[data.general];
   
     console.log("values", data);
     // await dispatch(submitData(data));
@@ -253,16 +230,18 @@ const Survey = () => {
                     <FormControl className="form-control-leader" error={errors.JefeDirecto}>
                     <InputLabel id="JefeDirecto">Mi supervisor directo es *</InputLabel>         
                     <Select labelId="JefeDirecto" className="mr-24" name="JefeDirecto" onChange={event => handleFieldChange(event, setFieldValue)}>
-                      {supervisor_accounts.map(supervisor => (
-                        <MenuItem key={`supervisor-${supervisor}`} value={supervisor.netLogin}>
+                    <MenuItem key="jefe-directo-0" value="">
+                      </MenuItem>
+                      { !supervisor_accounts ? null : supervisor_accounts.map(supervisor => (
+                        <MenuItem key={`jefe-directo-${supervisor}`} value={supervisor.netLogin}>
                           {supervisor.name}
                         </MenuItem>
                       ))}
-                      <MenuItem key="jefe-directo" value="Jefe-Directory">
+                      <MenuItem key="jefe-directo" value="Jefe-Directo">
                           * No Aparece en la lisa 
                       </MenuItem>
                     </Select>
-                    <h7 style={{width: "calc(90% - 24px)", color: "#ffa420", display: "block"}}>Si su líder directo no aparece en la lista, seleccione: No aparece en la lista y proceda a ingresar el  nombre de su líder de manera manual en la opción que se habilita.</h7>
+                    <span style={{width: "calc(90% - 24px)", color: "#ffa420", display: "block"}}>Si su líder directo no aparece en la lista, seleccione: No aparece en la lista y proceda a ingresar el  nombre de su líder de manera manual en la opción que se habilita.</span>
                     {errors.JefeDirecto && touched.JefeDirecto ? <div  className="input-feedback">{errors.JefeDirecto}</div> : null}
                   </FormControl> 
                     </Grid>
@@ -288,8 +267,8 @@ const Survey = () => {
                           label="Indirect/Business Partners"
                           labelPlacement="end"
                         />
-                        <h7 style={{ width: "calc(70% - 24px)", color: "#ffa420", display: "block"}}>*Direct (Customer Service, Tech Support, Sales) </h7>
-                        <h7 style={{ width: "calc(70% - 24px)", color: "#ffa420", display: "block"}}>*Indirect/Business Partners (Human Capital, Performance Excellence, IT, Finance, Administration, Team Managers, SMEs, Supervisors, Temporary backups)</h7>
+                        <span style={{ width: "calc(70% - 24px)", color: "#ffa420", display: "block"}}>*Direct (Customer Service, Tech Support, Sales) </span>
+                        <span style={{ width: "calc(70% - 24px)", color: "#ffa420", display: "block"}}>*Indirect/Business Partners (Human Capital, Performance Excellence, IT, Finance, Administration, Team Managers, SMEs, Supervisors, Temporary backups)</span>
                         {errors.Posicion && touched.Posicion ? <div  className="input-feedback">{errors.Posicion}</div> : null}
                       </RadioGroup>
                     </Grid>
