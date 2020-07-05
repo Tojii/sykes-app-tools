@@ -44,6 +44,12 @@ class Layout1Sidenav extends Component {
     sidenavToggleChecked: false,
     hidden: true
   };
+  
+  componentDidMount() {
+    if (isMdScreen()) {
+      this.updateSidebarMode({ mode: "close" });
+    }
+  }
 
   componentWillMount() {
     // CLOSE SIDENAV ON ROUTE CHANGE ON MOBILE

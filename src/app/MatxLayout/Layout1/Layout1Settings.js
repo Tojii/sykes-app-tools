@@ -9,6 +9,7 @@ const Layout1Settings = {
   topbar: {
     show: true,
     fixed: true,
+    incognito: true,
     theme: 'purpleDark1' // View all valid theme colors inside MatxTheme/themeColors.js
   }
 }

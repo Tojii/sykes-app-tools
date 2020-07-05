@@ -28,6 +28,7 @@ const styles = theme => ({
 
 class Layout1Topbar extends Component {
   // state = {user: localStorage.getItem("user")};
+  // console.log(settings.layout1Settings)
 
   updateSidebarMode = sidebarSettings => {
     let { settings, setLayoutSettings } = this.props;

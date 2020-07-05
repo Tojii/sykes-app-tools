@@ -3,7 +3,8 @@ import { Icon } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import { isMdScreen } from '../../utils';
 
-const Breadcrumb = ({ routeSegments }) => {
+const Incognito = (props) => {
+  
   return (
     <div className="flex flex-middle position-relative">
       {routeSegments && !isMdScreen() ? (
@@ -37,4 +38,4 @@ const Breadcrumb = ({ routeSegments }) => {
   );
 };
 
-export default Breadcrumb;
+export default Incognito;
