@@ -10,6 +10,12 @@ export const navigations = [
     icon: "content_paste",
     badge: { value: "New", color: "secondary" },
   },
+  {
+    name: "Rembolso Educativo",
+    path: "/RembolsoEducativo",
+    icon: "monetization_on",
+    badge: { value: "New", color: "secondary" },
+  },
   // {
   //   name: "UI Kits",
   //   icon: "favorite",

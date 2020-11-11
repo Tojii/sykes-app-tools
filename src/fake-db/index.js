@@ -10,5 +10,6 @@ import "./db/list";
 import "./db/scrumBoard";
 import "./db/notification";
 import "./db/ecommerce";
+import "./db/rembolsosEducativos";
 
 Mock.onAny().passThrough();

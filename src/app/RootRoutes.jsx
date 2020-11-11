@@ -2,6 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import lssRoutes from './views/lss/LssRoutes';
+import reembolsoEducaitvoRoutes from './views/rembolsoeducativo/ReembolsoEducativoRoutes';
 
 import dashboardRoutes from "./views/dashboard/DashboardRoutes";
 import utilitiesRoutes from "./views/utilities/UtilitiesRoutes";
@@ -58,6 +59,7 @@ const errorRoute = [
 const routes = [
   ...sessionRoutes,
   ...lssRoutes,
+  ...reembolsoEducaitvoRoutes,
   // ...homeRoutes,
   // ...dashboardRoutes,
   // ...materialRoutes,
