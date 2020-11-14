@@ -16,30 +16,27 @@ const myApplications = [
         name: "Trilingual Technical Support Agent II for its Intel account",
         area: "Intel",
         status: "pending",
-        date: "21/12/2010 5:00:00 PM"
+        date: "21/12/2020 5:00:00 PM"
     },
     {
         id: 2,
         name: "Network Engineer II for the Sungard account",
         area: "Sungard",
         status: "denied",
-        date: "12/11/2010 5:00:00 PM"
+        date: "12/11/2020 5:00:00 PM"
     },
     {
         id: 3,
         name: "L2 Network Security Engineer for the OKTA account",
         area: "OKTA",
         status: "approved",
-        date: "12/11/2010 5:00:00 PM"
+        date: "12/11/2020 5:00:00 PM"
     }
 ]
 
 const GrowthOppTable = ({props}) => {
     const { history, match } = props
     const handleDetailsClick = (oppId) => {
-        console.log("Props", props);
-        console.log("History", props.history);
-        console.log("ID: ", oppId);
         history.push(`${match.path}/${oppId}`);
     }
 

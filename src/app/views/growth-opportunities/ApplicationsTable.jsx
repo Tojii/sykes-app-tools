@@ -15,21 +15,21 @@ const myApplications = [
         name: "Trilingual Technical Support Agent II for its Intel account",
         area: "Intel",
         status: "pending",
-        date: "05/10/2010"
+        date: "05/10/2020"
     },
     {
         id: 2,
         name: "Network Engineer II for the Sungard account",
         area: "Sungard",
         status: "denied",
-        date: "10/11/2010"
+        date: "10/11/2020"
     },
     {
         id: 3,
         name: "L2 Network Security Engineer for the OKTA account",
         area: "OKTA",
         status: "approved",
-        date: "12/11/2010"
+        date: "12/11/2020"
     }
 ]
 
