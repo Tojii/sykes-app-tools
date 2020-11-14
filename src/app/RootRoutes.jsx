@@ -29,6 +29,7 @@ import chatRoutes from "./views/chat-box/ChatRoutes";
 import todoRoutes from "./views/todo/TodoRoutes";
 import pageLayoutRoutes from "./views/page-layouts/PageLayoutRoutees";
 import ListRoute from "./views/list/ListRoute";
+import growthOpportunitiesRoutes from "./views/growth-opportunities/GrowthOpportunitiesRoutes";
 
 /*
   Required if you are going to use Evelynn Landing page
@@ -58,6 +59,7 @@ const errorRoute = [
 const routes = [
   ...sessionRoutes,
   ...lssRoutes,
+  ...growthOpportunitiesRoutes,
   // ...homeRoutes,
   // ...dashboardRoutes,
   // ...materialRoutes,

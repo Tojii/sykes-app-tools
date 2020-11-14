@@ -10,6 +10,11 @@ export const navigations = [
     icon: "content_paste",
     badge: { value: "New", color: "secondary" },
   },
+  {
+    name: "Growth Opportunities",
+    path: "/growth-opportunities",
+    icon: "content_paste",
+  },
   // {
   //   name: "UI Kits",
   //   icon: "favorite",
