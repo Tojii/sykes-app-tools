@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Grid,
     Table,
@@ -9,33 +9,20 @@ import {
     IconButton,
     Icon
 } from "@material-ui/core";
+import { getGrowthOpportunities } from "../../redux/actions/GrowthOpportunityActions"
+import { connect } from "react-redux";
 
-const myApplications = [
-    {
-        id: 1,
-        name: "Trilingual Technical Support Agent II for its Intel account",
-        area: "Intel",
-        status: "pending",
-        date: "21/12/2020 5:00:00 PM"
-    },
-    {
-        id: 2,
-        name: "Network Engineer II for the Sungard account",
-        area: "Sungard",
-        status: "denied",
-        date: "12/11/2020 5:00:00 PM"
-    },
-    {
-        id: 3,
-        name: "L2 Network Security Engineer for the OKTA account",
-        area: "OKTA",
-        status: "approved",
-        date: "12/11/2020 5:00:00 PM"
-    }
-]
+const GrowthOppTable = ({
+    growth_opportunities, 
+    getGrowthOpportunities, 
+    props
+}) => {
+    const { history,match } = props
 
-const GrowthOppTable = ({props}) => {
-    const { history, match } = props
+    useEffect(() =>{
+        getGrowthOpportunities();
+    }, []);
+    
     const handleDetailsClick = (oppId) => {
         history.push(`${match.path}/${oppId}`);
     }
@@ -53,7 +40,7 @@ const GrowthOppTable = ({props}) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        { myApplications.map(item => {
+                        { growth_opportunities.map(item => {
                             return (
                                 <TableRow key={ item.id }>
                                     <TableCell className="pl-sm-24">{ item.name }</TableCell>
@@ -77,4 +64,13 @@ const GrowthOppTable = ({props}) => {
     )
 }
 
-export default GrowthOppTable;
+const mapStateToProps = ({ growthReducer }) => {
+    const { growth_opportunities } = growthReducer;
+    return {
+        growth_opportunities,
+    };
+};
+
+export default connect(mapStateToProps, {
+    getGrowthOpportunities,
+})(GrowthOppTable);

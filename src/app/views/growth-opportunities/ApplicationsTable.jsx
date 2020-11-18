@@ -49,7 +49,7 @@ const ApplicationsTable = () => {
                     <TableBody>
                         { myApplications.map(item => {
                             return (
-                                <TableRow>
+                                <TableRow key={ item.id }>
                                     <TableCell className="p-sm-24">{ item.name }</TableCell>
                                     <TableCell className="pl-sm-24 capitalize">
                                         <small
