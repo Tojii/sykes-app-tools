@@ -15,12 +15,18 @@ const UserSchema = () =>
   });
 
 const UserForm = (props) => {
-    const { 
-        handleCloseCallback,
+    const {
         handleSubmitCallback,
         user,
         match,
+        history,
     } = props
+
+    const handleClose = () => {
+        console.log(props);
+        const path = match.params.opp_id ? `/growth-opportunities/${match.params.opp_id}` : "/"
+        history.push(path);
+    }
 
     return (
         <>
@@ -37,8 +43,6 @@ const UserForm = (props) => {
                 >
                     {({
                         handleSubmit,
-                        setFieldValue,
-                        setFieldTouched,
                         handleChange,
                         handleBlur,
                         values,
@@ -85,7 +89,7 @@ const UserForm = (props) => {
                                     className="ml-24"
                                     variant="contained"
                                     color="secondary"
-                                    onClick={() => handleCloseCallback}
+                                    onClick={handleClose}
                                 >
                                     Cancel
                                 </Button>

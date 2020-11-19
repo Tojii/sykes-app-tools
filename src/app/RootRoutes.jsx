@@ -30,6 +30,7 @@ import todoRoutes from "./views/todo/TodoRoutes";
 import pageLayoutRoutes from "./views/page-layouts/PageLayoutRoutees";
 import ListRoute from "./views/list/ListRoute";
 import growthOpportunitiesRoutes from "./views/growth-opportunities/GrowthOpportunitiesRoutes";
+import userRoutes from "./views/user/UserRoutes";
 
 /*
   Required if you are going to use Evelynn Landing page
@@ -60,6 +61,7 @@ const routes = [
   ...sessionRoutes,
   ...lssRoutes,
   ...growthOpportunitiesRoutes,
+  ...userRoutes,
   // ...homeRoutes,
   // ...dashboardRoutes,
   // ...materialRoutes,
