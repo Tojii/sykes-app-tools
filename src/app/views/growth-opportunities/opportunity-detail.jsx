@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Card,
     CardActions,
@@ -10,20 +10,22 @@ import {
     ListItem,
     Button
 } from "@material-ui/core";
+import { getGrowthOpportunity } from "../../redux/actions/GrowthOpportunityActions"
+import { connect } from "react-redux";
 
 const OpportunityDetail = (props) => {
-    const { history, match } = props
+    const { history, match, growth_opportunity, getGrowthOpportunity } = props
 
+    useEffect(() =>{
+        getGrowthOpportunity(match.params.opp_id);
+    }, []);
+    
     const handleApply = () => {
         history.push(`${match.url}/apply`);
     }
 
     const handleClose = () => {
         history.push('/growth-opportunities');
-    }
-
-    const handleCloseCallback = () => {
-        console.log('closed...')   
     }
 
     return (
@@ -36,7 +38,7 @@ const OpportunityDetail = (props) => {
                             <TableBody>
                                 <TableRow>
                                     <TableCell width={"25%"} className="pl-sm-24 border-none">OppeningID</TableCell>
-                                    <TableCell className="px-sm-24 border-none">JO101418</TableCell>
+                                    <TableCell className="px-sm-24 border-none">{ growth_opportunity.id }</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell width={"25%"} className="pl-sm-24 border-none">Job Position</TableCell>
@@ -105,4 +107,13 @@ const OpportunityDetail = (props) => {
     )
 }
 
-export default OpportunityDetail;
+const mapStateToProps = ({ growthReducer }) => {
+    const { growth_opportunity } = growthReducer;
+    return {
+        growth_opportunity,
+    };
+};
+
+export default connect(mapStateToProps, {
+    getGrowthOpportunity,
+})(OpportunityDetail);

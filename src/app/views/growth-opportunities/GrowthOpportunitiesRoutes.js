@@ -8,8 +8,8 @@ const OpportunityDetail = MatxLoadable({
   loader: () => import("./opportunity-detail")
 });
 
-const UserForm = MatxLoadable({
-  loader: () => import("./user-form")
+const Apply = MatxLoadable({
+  loader: () => import("./Apply")
 });
 
 const growthOpportunitiesRoutes = [
@@ -26,7 +26,7 @@ const growthOpportunitiesRoutes = [
   {
     exact: true,
     path: "/growth-opportunities/:opp_id/apply",
-    component: UserForm
+    component: Apply
   }
 ];
 

@@ -17,7 +17,7 @@ const GrowthOppTable = ({
     getGrowthOpportunities, 
     props
 }) => {
-    const { history,match } = props
+    const { history, match } = props
 
     useEffect(() =>{
         getGrowthOpportunities();
