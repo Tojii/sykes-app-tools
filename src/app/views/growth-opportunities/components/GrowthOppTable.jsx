@@ -9,7 +9,7 @@ import {
     IconButton,
     Icon
 } from "@material-ui/core";
-import { getGrowthOpportunities } from "../../redux/actions/GrowthOpportunityActions"
+import { getGrowthOpportunities } from "../../../redux/actions/GrowthOpportunityActions"
 import { connect } from "react-redux";
 
 const GrowthOppTable = ({

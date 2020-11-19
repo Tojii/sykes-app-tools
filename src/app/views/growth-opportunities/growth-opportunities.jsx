@@ -1,6 +1,6 @@
 import React from "react";
-import GrowthOppTable from "./GrowthOppTable.jsx"
-import ApplicationsTable from "./ApplicationsTable"
+import GrowthOppTable from "./components/GrowthOppTable"
+import ApplicationsTable from "./components/ApplicationsTable"
 import {
     Card,
     Grid,

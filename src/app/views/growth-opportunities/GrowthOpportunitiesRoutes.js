@@ -9,7 +9,7 @@ const OpportunityDetail = MatxLoadable({
 });
 
 const Apply = MatxLoadable({
-  loader: () => import("./Apply")
+  loader: () => import("./apply")
 });
 
 const growthOpportunitiesRoutes = [

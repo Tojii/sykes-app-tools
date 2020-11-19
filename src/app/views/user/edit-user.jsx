@@ -1,5 +1,5 @@
 import React from "react";
-import UserForm from "./UserForm"
+import UserForm from "./components/UserForm"
 
 const EditUser = (props) => {
     const { 

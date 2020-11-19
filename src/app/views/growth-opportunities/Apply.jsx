@@ -1,5 +1,5 @@
 import React from "react";
-import UserForm from "../user/UserForm"
+import UserForm from "../user/components/UserForm"
 
 const Apply = (props) => {
     const { 
