@@ -30,7 +30,6 @@ const UserForm = (props) => {
 
     return (
         <>
-            <Card className="m-sm-30">
             <Grid item lg={12}>
                 <h3 className="p-sm-24">Personal Information</h3>
                 <Formik
@@ -77,7 +76,7 @@ const UserForm = (props) => {
                                     errorMessages={["this field is required"]}
                                 />
                             </Grid>
-                            <div className="flex flex-space-start flex-middle mx-24 my-16">
+                            {/* <div className="flex flex-space-start flex-middle mx-24 my-16">
                                 <Button
                                     variant="contained"
                                     color="primary"
@@ -93,12 +92,11 @@ const UserForm = (props) => {
                                 >
                                     Cancel
                                 </Button>
-                            </div>
+                            </div> */}
                         </ValidatorForm>
                     )}
                 </Formik>
             </Grid>
-            </Card>
         </>
     )
 }

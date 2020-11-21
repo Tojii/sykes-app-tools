@@ -1,5 +1,6 @@
 import React from "react";
-import UserForm from "../user/components/UserForm"
+import { SimpleCard } from "matx";
+import ApplyStepper from "./components/ApplyStepper"
 
 const Apply = (props) => {
     const { 
@@ -9,9 +10,11 @@ const Apply = (props) => {
     } = props
 
     return (
-        <>
-            <UserForm {...props} />
-        </>
+        <div className="m-sm-30">
+            <SimpleCard title="Trilingual Technical Support Agent II for its Intel account">
+                <ApplyStepper {...props}/>
+            </SimpleCard>
+        </div>
     )
 }
 
