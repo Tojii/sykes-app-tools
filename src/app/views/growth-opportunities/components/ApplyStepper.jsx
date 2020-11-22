@@ -10,6 +10,7 @@ import {
 import UserForm from "../../user/components/UserForm";
 import ResumeStep from "./ResumeStep";
 import ScheduleStep from "./ScheduleStep";
+import ConfirmStep from "./ConfirmStep";
 
 function getSteps() {
   return ["Personal Information", "Validation", "Resume", "Schedule", "Confirm"];
@@ -26,7 +27,7 @@ function getStepContent(stepIndex, props) {
     case 3:
         return <ScheduleStep/>
     case 4:
-        return <div>Confirm</div>
+        return <ConfirmStep/>
       default:
         return "";
     }
@@ -34,7 +35,7 @@ function getStepContent(stepIndex, props) {
 
 const ApplyStepper = (props) => {
     const { history, match } = props
-    const [activeStep, setActiveStep] = useState(3);
+    const [activeStep, setActiveStep] = useState(0);
     const steps = getSteps();
 
     const handleNext = () => {

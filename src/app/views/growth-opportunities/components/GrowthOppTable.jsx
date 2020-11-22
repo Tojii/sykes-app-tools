@@ -9,12 +9,13 @@ import {
     IconButton,
     Icon
 } from "@material-ui/core";
-import { getGrowthOpportunities } from "../../../redux/actions/GrowthOpportunityActions"
+import { getGrowthOpportunities, setGrowthOpportunity } from "../../../redux/actions/GrowthOpportunityActions"
 import { connect } from "react-redux";
 
 const GrowthOppTable = ({
-    growth_opportunities, 
+    growth_opportunities,
     getGrowthOpportunities, 
+    setGrowthOpportunity, 
     props
 }) => {
     const { history, match } = props
@@ -23,8 +24,9 @@ const GrowthOppTable = ({
         getGrowthOpportunities();
     }, []);
     
-    const handleDetailsClick = (oppId) => {
-        history.push(`${match.path}/${oppId}`);
+    const handleDetailsClick = (item) => {
+        setGrowthOpportunity(item);
+        history.push(`${match.path}/${item.id}`);
     }
 
     return (
@@ -43,13 +45,13 @@ const GrowthOppTable = ({
                         { growth_opportunities.map(item => {
                             return (
                                 <TableRow key={ item.id }>
-                                    <TableCell className="pl-sm-24">{ item.name }</TableCell>
+                                    <TableCell className="pl-sm-24">{ item.title }</TableCell>
                                     <TableCell className="pl-sm-24">{ item.area }</TableCell>
-                                    <TableCell className="pl-sm-24">{ item.date }</TableCell>
+                                    <TableCell className="pl-sm-24">{ item.expirationDate }</TableCell>
                                     <TableCell align="center">
                                         <IconButton
                                             color="primary"
-                                            onClick={() => handleDetailsClick(item.id)}
+                                            onClick={() => handleDetailsClick(item)}
                                         >
                                         <Icon>chevron_right</Icon>
                                         </IconButton>
@@ -72,5 +74,6 @@ const mapStateToProps = ({ growthReducer }) => {
 };
 
 export default connect(mapStateToProps, {
-    getGrowthOpportunities,
+    getGrowthOpportunities, 
+    setGrowthOpportunity,
 })(GrowthOppTable);
