@@ -43,12 +43,12 @@ const App = () => {
   return (
     <AppContext.Provider value={{ routes }}>
       <Provider store={Store}>
-      <PersistGate loading={<Loading />} persistor={Persistor}>
-        <MatxTheme>
+        <PersistGate loading={<Loading />} persistor={Persistor}>
+          <MatxTheme>
             <Router history={history}>
-                <MatxLayout />
+              <MatxLayout />
             </Router>
-        </MatxTheme>
+          </MatxTheme>
         </PersistGate>
       </Provider>
     </AppContext.Provider>

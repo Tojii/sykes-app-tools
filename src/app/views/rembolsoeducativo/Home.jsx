@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
     IconButton,
     Table,
@@ -9,18 +10,22 @@ import {
     Icon,
     TablePagination,
     Button,
-    Card
+    Card,
+    MenuItem
   } from "@material-ui/core";
 import {getAllReembolsosEducativos} from "../../redux/actions/ReembolsoEducativoActions";
 import shortid from "shortid";
 import { useSelector, useDispatch } from 'react-redux';
+import { MatxMenu, MatxToolbarMenu, MatxSearchBox } from "matx";
 
-function Home() {
+const Home = () => {
     const rembolsos = useSelector(state => state.reembolsosEducativos.rembolsos);
     const dispatch = useDispatch();
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(0);
     
+    
+    console.log( "Process.env", `${process.env.REACT_APP_API_URL}`);
 
     useEffect(() => {
         dispatch(getAllReembolsosEducativos());
@@ -41,8 +46,11 @@ function Home() {
             <Button
                 className="mb-16"
                 variant="contained"
-                color="primary">
-                Nuevo
+                color="primary"
+                component={Link} to="/RembolsoEducativo/Form"
+                >
+                <Icon>add</Icon>
+                <span>Nuevo</span>
             </Button>
             <Card className="w-100 overflow-auto" elevation={6}>
                 <Table className="crud-table" style={{ whiteSpace: "pre", minWidth: "750px" }}>

@@ -33,6 +33,41 @@ const rembolsoDB = {
     ]
   };
 
+
+  const CategoriaDeEstudioDB = {
+    list: [
+      {
+        id: 1,
+        item: "Estudios Universitarios" 
+      },
+      {
+        id: 2,
+        item: "Certificación" 
+      },
+      {
+        id: 3,
+        item: "CISCO" 
+      },
+      {
+        id: 4,
+        item: "Idiomas" 
+      },
+      {
+        id: 5,
+        item: "Estudios Técnicos" 
+      },
+      {
+        id: 6,
+        item: "La Fod" 
+      },
+      {
+        id: 7,
+        item: "Otros" 
+      },
+    ]
+  };
+
+
   Mock.onGet("/api/reembolsoEducativo").reply(config => {
     const response = rembolsoDB.list;
     return [200, response];
@@ -45,8 +80,7 @@ const rembolsoDB = {
 
   Mock.onPost("/api/reembolsoEducativo/delete").reply(config => {
     let { id } = JSON.parse(config.data);
-    console.log(id);
-  
+
     const response = rembolsoDB.list.filter(
       re => re.id !== id
     );
@@ -54,4 +88,8 @@ const rembolsoDB = {
     return [200, response];
   });
   
+  Mock.onGet("/api/CategoriaDeEstudio").reply(config => {
+    const response = CategoriaDeEstudioDB.list;
+    return [200, response];
+  });
   
