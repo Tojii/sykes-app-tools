@@ -8,6 +8,7 @@ import EcommerceReducer from "./EcommerceReducer";
 import MantenimientoReducer from "./MantenimientoReducer";
 import LSSReducer from "./LSSReducer";
 import growthReducer from "./GrowthOpportunityReducer";
+import metricsReducer from "./MetricsReducer";
 import { persistStore } from 'redux-persist'
 
 
@@ -21,6 +22,7 @@ const appReducer = combineReducers({
   mantenimientos: MantenimientoReducer,
   lss: LSSReducer,
   growthReducer,
+  metricsReducer,
 });
 
 const RootReducer = (state, action) => {

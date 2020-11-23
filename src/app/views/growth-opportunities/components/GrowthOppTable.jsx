@@ -35,7 +35,7 @@ const GrowthOppTable = ({
                 <Table>
                     <TableHead color="primary">
                         <TableRow>
-                            <TableCell width={"50%"}className="pl-sm-24">Job Position</TableCell>
+                            <TableCell width={"50%"} className="pl-sm-24">Job Position</TableCell>
                             <TableCell className="pl-sm-24">Area</TableCell>
                             <TableCell className="pl-sm-24">Expiration Date</TableCell>
                             <TableCell align="center">Details</TableCell>

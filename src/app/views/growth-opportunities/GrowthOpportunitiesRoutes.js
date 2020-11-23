@@ -12,6 +12,10 @@ const Apply = MatxLoadable({
   loader: () => import("./apply")
 });
 
+const Metrics = MatxLoadable({
+  loader: () => import("./metrics")
+});
+
 const growthOpportunitiesRoutes = [
   {
     exact: true,
@@ -27,6 +31,11 @@ const growthOpportunitiesRoutes = [
     exact: true,
     path: "/growth-opportunities/:opp_id/apply",
     component: Apply
+  },
+  {
+    exact: true,
+    path: "/my-metrics",
+    component: Metrics
   }
 ];
 
