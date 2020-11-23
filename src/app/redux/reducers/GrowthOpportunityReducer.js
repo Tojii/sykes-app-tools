@@ -2,10 +2,11 @@ import {
     GET_GROWTH_OPPORTUNITIES,
     SET_GROWTH_OPPORTUNITY,
 } from "../actions/GrowthOpportunityActions";
+import localStorageService from "../../services/localStorageService"
 
 const INIT_STATE = {
     growth_opportunities: [],
-    growth_opportunity: {},
+    growth_opportunity: localStorageService.getItem('growth_detail') || {},
 };
 
 export default (state = INIT_STATE, action) => {

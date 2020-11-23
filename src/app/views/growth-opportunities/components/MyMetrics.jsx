@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
     Grid,
     Table,
@@ -6,6 +6,8 @@ import {
     TableCell,
     TableBody,
     makeStyles,
+    CardActions,
+    Button
 } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -22,11 +24,11 @@ const useStyles = makeStyles(theme => ({
   })
 );
 
-const MyMetrics = ({ metrics, history, match }) => {
+const MyMetrics = ({ metrics, history }) => {
     const classes = useStyles();
 
-    const handleCloseClick = (item) => {
-        history.push('/growth_opportunities');
+    const handleClose = () => {
+        history.push('/growth-opportunities');
     }
 
     return (
@@ -105,6 +107,15 @@ const MyMetrics = ({ metrics, history, match }) => {
                     </TableBody>
                 </Table>
             </Grid>
+            <CardActions style={{ justifyContent: 'flex-end' }}>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleClose()}
+                >
+                    Close
+                </Button>
+            </CardActions>
         </>
     )
 }
