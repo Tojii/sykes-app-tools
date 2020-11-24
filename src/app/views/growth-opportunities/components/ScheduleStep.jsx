@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, FormGroup, FormControlLabel, Switch } from "@material-ui/core";
 import {
     MuiPickersUtilsProvider,
@@ -6,20 +6,37 @@ import {
   } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
+import { connect } from "react-redux";
+import { setApplyData } from "../../../redux/actions/ApplyActions"
 
 const daysCount = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
 ];
 
-const ScheduleStep = () => {
-    const [days, setDays] = useState({});
+const ScheduleStep = (props) => {
+    const { apply, setApplyData } = props
+    console.log(props);
+    const [days, setDays] = useState({
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+        sunday: false,
+    });
     const [times, setTimes] = useState({});
+
+    useEffect(() => {
+        apply["workSchedule"] = buildSchedule();
+        setApplyData(apply);
+    }, [days])
 
     const handleDayChange = (day) => event => {
         setDays({...days, [day]: event.target.checked})
@@ -27,6 +44,14 @@ const ScheduleStep = () => {
 
     const handleTimeChange = (time) => value => {
         setTimes({...times, [time]: value})
+        apply[time] = value;
+        setApplyData(apply);
+    }
+
+    const buildSchedule = () => {
+        return Object.keys(days).map((day) => {
+            return (days[day] && day ) 
+        }).filter(Boolean).join(", ");
     }
 
     return (
@@ -39,12 +64,13 @@ const ScheduleStep = () => {
                         return (
                             <FormControlLabel
                                 key={index}
+                                className={"capitalize"}
                                 control={
                                     <Switch
                                         checked={days[day]}
                                         color="primary"
                                         onChange={handleDayChange(day)}
-                                        value={day}
+                                        value={days[day]}
                                     />}
                                 label={day}
                             />
@@ -59,8 +85,8 @@ const ScheduleStep = () => {
                         margin="none"
                         id="start-time"
                         label="Start Time"
-                        value={times["start"]}
-                        onChange={handleTimeChange("start")}
+                        value={times["startTime"]}
+                        onChange={handleTimeChange("startTime")}
                         KeyboardButtonProps={{
                             "aria-label": "change time"
                         }}
@@ -74,8 +100,8 @@ const ScheduleStep = () => {
                         margin="none"
                         id="end-time"
                         label="End Time"
-                        value={times["end"]}
-                        onChange={handleTimeChange("end")}
+                        value={times["endTime"]}
+                        onChange={handleTimeChange("endTime")}
                         KeyboardButtonProps={{
                             "aria-label": "change time"
                         }}
@@ -87,4 +113,13 @@ const ScheduleStep = () => {
     );
 }
 
-export default ScheduleStep;
+const mapStateToProps = ({ applyReducer }) => {
+    const { apply } = applyReducer;
+    return {
+        apply,
+    };
+};
+
+export default connect(mapStateToProps, {
+    setApplyData,
+})(ScheduleStep);
