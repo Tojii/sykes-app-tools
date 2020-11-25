@@ -7,20 +7,26 @@ import {
     Card,
 } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+import { setApplyData } from "../../../redux/actions/ApplyActions"
+import { connect } from "react-redux";
 
 const UserSchema = () =>
-  Yup.object().shape({
-    email: Yup.string().required("Email required"),
-    phone_number: Yup.string().required("Phone number required"),
-  });
+    Yup.object().shape({
+        email: Yup.string().required("Email required"),
+        phone_number: Yup.string().required("Phone number required"),
+    }
+);
 
 const UserForm = (props) => {
     const {
         handleSubmitCallback,
         user,
+        growth_detail,
         match,
         history,
     } = props
+
+    console.log("USER: ", props);
 
     const handleClose = () => {
         console.log(props);
@@ -30,12 +36,12 @@ const UserForm = (props) => {
 
     return (
         <>
-            <Grid item lg={12}>
+            <Grid item lg={11}>
                 <h3 className="p-sm-24">Personal Information</h3>
                 <Formik
                     initialValues={{ 
-                        email: "test@gmail" || "",
-                        phone_number: "88202414" || "",
+                        email: user.email || "",
+                        phone_number: user.phone || "",
                     }}
                     validationSchema={UserSchema()}
                     onSubmit={handleSubmitCallback}
@@ -49,7 +55,6 @@ const UserForm = (props) => {
                         touched,
                         isValid,
                         dirty,
-                        isSubmitting,
                     }) => (
                         <ValidatorForm onSubmit={handleSubmit}>
                             <Grid item xs={12}>
@@ -101,4 +106,14 @@ const UserForm = (props) => {
     )
 }
 
-export default UserForm;
+const mapStateToProps = ({ applyReducer }) => {
+    const { user, growth_detail } = applyReducer;
+    return {
+        user,
+        growth_detail
+    };
+};
+
+export default connect(mapStateToProps, {
+    setApplyData,
+})(UserForm);

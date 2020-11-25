@@ -1,9 +1,12 @@
 import { 
     SET_APPLY_DATA,
 } from "../actions/ApplyActions";
+import localStorageService from "../../services/localStorageService"
 
 const INIT_STATE = {
-    apply: {}
+    apply: {},
+    user: localStorageService.getItem('auth_user') || {},
+    growth_detail: localStorageService.getItem('growth_detail') || {},
 };
 
 export default (state = INIT_STATE, action) => {

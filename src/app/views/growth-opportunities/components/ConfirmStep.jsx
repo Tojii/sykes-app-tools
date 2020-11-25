@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import {
     Grid,
     Table,
-    TableHead,
     TableRow,
     TableCell,
     TableBody,
 } from "@material-ui/core";
+import { setApplyData } from "../../../redux/actions/ApplyActions"
+import { connect } from "react-redux";
 
-const ConfirmStep = () => {
+const ConfirmStep = (props) => {
+    const { apply, user, growth_detail } = props
     return (
         <>
             <Grid item lg={12} className="px-sm-24">
@@ -17,35 +19,35 @@ const ConfirmStep = () => {
                     <TableBody>
                         <TableRow>
                             <TableCell width={"35%"} className="pl-sm-24">Job Id:</TableCell>
-                            <TableCell className="pl-sm-24">1</TableCell>
+                            <TableCell className="pl-sm-24">{ growth_detail.openingId }</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell width={"35%"}className="pl-sm-24">Badge:</TableCell>
-                            <TableCell className="pl-sm-24">1234</TableCell>
+                            <TableCell className="pl-sm-24">{ user.badgeId }</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell width={"35%"}className="pl-sm-24">Employee name:</TableCell>
-                            <TableCell className="pl-sm-24">González Barrantes Gerald Josué</TableCell>
+                            <TableCell className="pl-sm-24">{ user.fullUserName }</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell width={"35%"}className="pl-sm-24">Email:</TableCell>
-                            <TableCell className="pl-sm-24">gerald@gmail.com</TableCell>
+                            <TableCell className="pl-sm-24">{ user.email }</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell width={"35%"}className="pl-sm-24">Phone:</TableCell>
-                            <TableCell className="pl-sm-24">88888888</TableCell>
+                            <TableCell className="pl-sm-24">{ user.phone }</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell width={"35%"}className="pl-sm-24">Work schedule:</TableCell>
-                            <TableCell className="pl-sm-24">Monday, Tuesday, Wednesday</TableCell>
+                            <TableCell className="pl-sm-24">{ apply.workSchedule }</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell width={"35%"}className="pl-sm-24">Start time:</TableCell>
-                            <TableCell className="pl-sm-24">8:00 AM</TableCell>
+                            <TableCell className="pl-sm-24">{ apply.startTime }</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell width={"35%"}className="pl-sm-24">End time:</TableCell>
-                            <TableCell className="pl-sm-24">5:00 PM</TableCell>
+                            <TableCell className="pl-sm-24">{ apply.endTime }</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -54,4 +56,15 @@ const ConfirmStep = () => {
     )
 }
 
-export default ConfirmStep;
+const mapStateToProps = ({ applyReducer }) => {
+    const { apply, user, growth_detail } = applyReducer;
+    return {
+        apply, 
+        user, 
+        growth_detail
+    };
+};
+
+export default connect(mapStateToProps, {
+    setApplyData,
+})(ConfirmStep);

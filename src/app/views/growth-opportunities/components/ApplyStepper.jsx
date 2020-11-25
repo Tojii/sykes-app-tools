@@ -11,6 +11,8 @@ import UserForm from "../../user/components/UserForm";
 import ResumeStep from "./ResumeStep";
 import ScheduleStep from "./ScheduleStep";
 import ConfirmStep from "./ConfirmStep";
+import { setApplyData } from "../../../redux/actions/ApplyActions"
+import { connect } from "react-redux";
 
 function getSteps() {
   return ["Personal Information", "Validation", "Resume", "Schedule", "Confirm"];
@@ -28,8 +30,8 @@ function getStepContent(stepIndex, props) {
         return <ScheduleStep/>
     case 4:
         return <ConfirmStep/>
-      default:
-        return "";
+    default:
+      return "";
     }
   }
 
@@ -48,6 +50,11 @@ const ApplyStepper = (props) => {
 
     const handleReset = () => {
         setActiveStep(0);
+    };
+
+    const handleSubmit = () => {
+      console.log("Submiting...", props.apply);
+      setActiveStep(prevActiveStep => prevActiveStep + 1);
     };
 
     const handleCancel = () => {
@@ -89,7 +96,7 @@ const ApplyStepper = (props) => {
                     className="ml-16 align-self-end"
                     variant="contained"
                     color="primary"
-                    onClick={handleNext}
+                    onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
                   >
                     {activeStep === steps.length - 1 ? "Finish" : "Next"}
                   </Button>
@@ -111,4 +118,15 @@ const ApplyStepper = (props) => {
       );
 }
 
-export default ApplyStepper;
+const mapStateToProps = ({ applyReducer }) => {
+  const { apply, user, growth_detail } = applyReducer;
+  return {
+      apply, 
+      user, 
+      growth_detail
+  };
+};
+
+export default connect(mapStateToProps, {
+  setApplyData,
+})(ApplyStepper);

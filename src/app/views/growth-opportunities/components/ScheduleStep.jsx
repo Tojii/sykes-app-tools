@@ -8,6 +8,7 @@ import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import { connect } from "react-redux";
 import { setApplyData } from "../../../redux/actions/ApplyActions"
+import format from "date-fns/format";
 
 const daysCount = [
     "monday",
@@ -31,12 +32,16 @@ const ScheduleStep = (props) => {
         saturday: false,
         sunday: false,
     });
-    const [times, setTimes] = useState({});
+    const [times, setTimes] = useState({
+        startTime: new Date(),
+        endTime: new Date(),
+    });
 
     useEffect(() => {
-        apply["workSchedule"] = buildSchedule();
+        buildScheduleDays();
+        buildScheduleTimes();
         setApplyData(apply);
-    }, [days])
+    }, [days, times])
 
     const handleDayChange = (day) => event => {
         setDays({...days, [day]: event.target.checked})
@@ -44,14 +49,18 @@ const ScheduleStep = (props) => {
 
     const handleTimeChange = (time) => value => {
         setTimes({...times, [time]: value})
-        apply[time] = value;
-        setApplyData(apply);
     }
 
-    const buildSchedule = () => {
-        return Object.keys(days).map((day) => {
+    const buildScheduleDays = () => {
+        apply["workSchedule"] = Object.keys(days).map((day) => {
             return (days[day] && day ) 
         }).filter(Boolean).join(", ");
+    }
+
+    const buildScheduleTimes = () => {
+        Object.keys(times).map((time) => {
+            apply[time] = format(times[time], "hh:mm a") 
+        })
     }
 
     return (

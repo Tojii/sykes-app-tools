@@ -3,11 +3,6 @@ import { SimpleCard } from "matx";
 import ApplyStepper from "./components/ApplyStepper"
 
 const Apply = (props) => {
-    const { 
-        user,
-        match,
-        history,
-    } = props
 
     return (
         <div className="m-sm-30">
