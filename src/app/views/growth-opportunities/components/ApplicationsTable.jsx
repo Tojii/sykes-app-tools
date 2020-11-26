@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Grid,
     Table,
@@ -8,32 +8,19 @@ import {
     TableBody,
 } from "@material-ui/core";
 import { classList } from "utils";
+import { getJobsApplied } from "../../../redux/actions/GrowthOpportunityActions"
+import { connect } from "react-redux";
 
-const myApplications = [
-    {
-        id: 1,
-        name: "Trilingual Technical Support Agent II for its Intel account",
-        area: "Intel",
-        status: "pending",
-        date: "05/10/2020"
-    },
-    {
-        id: 2,
-        name: "Network Engineer II for the Sungard account",
-        area: "Sungard",
-        status: "denied",
-        date: "10/11/2020"
-    },
-    {
-        id: 3,
-        name: "L2 Network Security Engineer for the OKTA account",
-        area: "OKTA",
-        status: "approved",
-        date: "12/11/2020"
-    }
-]
+const ApplicationsTable = ({
+    jobs_applied,
+    getJobsApplied,
+    props
+}) => {
 
-const ApplicationsTable = () => {
+
+    useEffect(() => {
+        getJobsApplied();
+    }, [])
     return (
         <>
             <Grid item lg={12}>
@@ -47,23 +34,22 @@ const ApplicationsTable = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        { myApplications.map(item => {
+                        { jobs_applied.map(item => {
                             return (
                                 <TableRow key={ item.id }>
-                                    <TableCell className="p-sm-24">{ item.name }</TableCell>
+                                    <TableCell className="p-sm-24">{ item.job }</TableCell>
                                     <TableCell className="pl-sm-24 capitalize">
                                         <small
                                         className={classList({
                                             "border-radius-4 text-white px-8 py-2": true,
-                                            "bg-primary": `${item.status}` === 'approved',
-                                            "bg-secondary": `${item.status}` === 'pending',
-                                            "bg-error": `${item.status}` === 'denied',
+                                            "bg-primary": `${item.status}` === 'Approved',
+                                            "bg-error": `${item.status}` === 'Denied',
                                         })}
                                     >
                                         { item.status }
                                         </small>
                                     </TableCell>
-                                    <TableCell className="pl-sm-24">{ item.date }</TableCell>
+                                    <TableCell className="pl-sm-24">{ item.created }</TableCell>
                                 </TableRow>
                             )
                         })}
@@ -74,4 +60,13 @@ const ApplicationsTable = () => {
     )
 }
 
-export default ApplicationsTable;
+const mapStateToProps = ({ growthReducer }) => {
+    const { jobs_applied } = growthReducer;
+    return {
+        jobs_applied,
+    };
+};
+
+export default connect(mapStateToProps, {
+    getJobsApplied,
+})(ApplicationsTable);

@@ -11,26 +11,26 @@ import { setApplyData } from "../../../redux/actions/ApplyActions"
 import format from "date-fns/format";
 
 const daysCount = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
 ];
 
 const ScheduleStep = (props) => {
     const { apply, setApplyData } = props
     console.log(props);
     const [days, setDays] = useState({
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false,
-        sunday: false,
+        Monday: false,
+        Tuesday: false,
+        Wednesday: false,
+        Thursday: false,
+        Friday: false,
+        Saturday: false,
+        Sunday: false,
     });
     const [times, setTimes] = useState({
         startTime: new Date(),
@@ -59,7 +59,7 @@ const ScheduleStep = (props) => {
 
     const buildScheduleTimes = () => {
         Object.keys(times).map((time) => {
-            apply[time] = format(times[time], "hh:mm a") 
+            apply[time] = format(times[time], "d/M/yyyy hh:mm a") 
         })
     }
 

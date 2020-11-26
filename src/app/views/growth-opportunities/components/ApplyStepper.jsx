@@ -11,7 +11,7 @@ import UserForm from "../../user/components/UserForm";
 import ResumeStep from "./ResumeStep";
 import ScheduleStep from "./ScheduleStep";
 import ConfirmStep from "./ConfirmStep";
-import { setApplyData } from "../../../redux/actions/ApplyActions"
+import { setApplyData, saveJobApplication } from "../../../redux/actions/ApplyActions"
 import { connect } from "react-redux";
 
 function getSteps() {
@@ -36,7 +36,14 @@ function getStepContent(stepIndex, props) {
   }
 
 const ApplyStepper = (props) => {
-    const { history, match } = props
+    const { 
+      history, 
+      match, 
+      apply, 
+      user, 
+      growth_detail, 
+      saveJobApplication 
+    } = props
     const [activeStep, setActiveStep] = useState(0);
     const steps = getSteps();
 
@@ -53,8 +60,17 @@ const ApplyStepper = (props) => {
     };
 
     const handleSubmit = () => {
-      console.log("Submiting...", props.apply);
-      setActiveStep(prevActiveStep => prevActiveStep + 1);
+      const payload = {
+        email: user.email,
+        phone: user.phone,
+        badge: user.badgeId,
+        fullUserName: user.fullUserName,
+        openingId: growth_detail.openingId,
+        job: growth_detail.title,
+        ...apply,
+      }
+      saveJobApplication(payload);
+      // setActiveStep(prevActiveStep => prevActiveStep + 1);
     };
 
     const handleCancel = () => {
@@ -128,5 +144,5 @@ const mapStateToProps = ({ applyReducer }) => {
 };
 
 export default connect(mapStateToProps, {
-  setApplyData,
+  setApplyData, saveJobApplication,
 })(ApplyStepper);

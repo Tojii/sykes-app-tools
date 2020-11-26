@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 
 const ConfirmStep = (props) => {
     const { apply, user, growth_detail } = props
+
     return (
         <>
             <Grid item lg={12} className="px-sm-24">

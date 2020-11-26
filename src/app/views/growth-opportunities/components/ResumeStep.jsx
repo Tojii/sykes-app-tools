@@ -1,7 +1,25 @@
 import React, { useState } from "react";
 import { Grid, Fab, Icon } from "@material-ui/core";
+import { setApplyData } from "../../../redux/actions/ApplyActions";
+import { connect } from "react-redux";
 
-const ResumeStep = () => {
+const ResumeStep = ({ apply, setApplyData, props }) => {
+
+    const handleFileSelect = (event) => {
+        let files = event.target.files;
+        for (const iterator of files) {
+            var reader = new FileReader();
+            reader.readAsDataURL(iterator);
+            reader.onload = function () {
+                apply['resume'] = reader.result
+                setApplyData(apply);
+            };
+            reader.onerror = function (error) {
+                console.log('Error: ', error);
+            };
+        }
+    };
+
     return (
         <>
             <Grid item lg={12} className="px-sm-24">
@@ -22,7 +40,7 @@ const ResumeStep = () => {
                 </label>
                 <input
                     className="display-none"
-                    onChange={() => {}}
+                    onChange={handleFileSelect}
                     id="upload-single-file"
                     type="file"
                 />
@@ -31,4 +49,13 @@ const ResumeStep = () => {
     );
 }
 
-export default ResumeStep;
+const mapStateToProps = ({ applyReducer }) => {
+    const { apply } = applyReducer;
+    return {
+        apply,
+    };
+};
+
+export default connect(mapStateToProps, {
+    setApplyData,
+})(ResumeStep);
