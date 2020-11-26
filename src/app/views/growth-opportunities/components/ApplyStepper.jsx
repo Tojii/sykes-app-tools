@@ -5,9 +5,10 @@ import {
   StepLabel,
   Step,
   Stepper,
-  CardActions
+  CardActions,
 } from "@material-ui/core";
 import UserForm from "../../user/components/UserForm";
+import ValidationStep from "./ValidationStep";
 import ResumeStep from "./ResumeStep";
 import ScheduleStep from "./ScheduleStep";
 import ConfirmStep from "./ConfirmStep";
@@ -17,23 +18,6 @@ import { connect } from "react-redux";
 function getSteps() {
   return ["Personal Information", "Validation", "Resume", "Schedule", "Confirm"];
 }
-
-function getStepContent(stepIndex, props) {
-    switch (stepIndex) {
-    case 0:
-        return <UserForm {...props}/>
-    case 1:
-        return <div>Validation</div>
-    case 2:
-        return <ResumeStep/>
-    case 3:
-        return <ScheduleStep/>
-    case 4:
-        return <ConfirmStep/>
-    default:
-      return "";
-    }
-  }
 
 const ApplyStepper = (props) => {
     const { 
@@ -46,6 +30,23 @@ const ApplyStepper = (props) => {
     } = props
     const [activeStep, setActiveStep] = useState(0);
     const steps = getSteps();
+
+    function getStepContent(stepIndex, props) {
+      switch (stepIndex) {
+      case 0:
+          return <UserForm {...props}/>
+      case 1:
+          return <ValidationStep handleCallback={handleNext}/>
+      case 2:
+          return <ResumeStep/>
+      case 3:
+          return <ScheduleStep/>
+      case 4:
+          return <ConfirmStep/>
+      default:
+        return "";
+      }
+    }
 
     const handleNext = () => {
         setActiveStep(prevActiveStep => prevActiveStep + 1);

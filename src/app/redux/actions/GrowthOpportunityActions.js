@@ -43,9 +43,8 @@ export const getGrowthOpportunities = () => dispatch => {
     })
 };
 
-export const getJobsApplied = () => dispatch => {
-    // const auth_user = localStorageService.getItem('auth_user');
-    // axios.get(`${process.env.REACT_APP_API_URL}/GrowthOpportunity/GetJobsApplied?badge=${auth_user.badgeId}`, config).then(res => {
+export const getJobsApplied = (badgeId) => dispatch => {
+    // axios.get(`${process.env.REACT_APP_API_URL}/GrowthOpportunity/GetJobsApplied?badge=${badgeId}`, config).then(res => {
         // console.log("RES: ", res);
     //   dispatch({
     //     type: GET_PRODUCT_LIST,

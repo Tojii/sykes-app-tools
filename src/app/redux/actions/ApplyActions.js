@@ -1,5 +1,9 @@
+import axios from "axios";
+import localStorageService from "../../services/localStorageService";
+
 export const SET_APPLY_DATA = "SET_APPLY_DATA";
 export const SAVE_JOB_APPLICATION = "SAVE_JOB_APPLICATION";
+export const SET_VALIDATIONS = "SET_VALIDATIONS";
 
 export const setApplyData = (payload) => dispatch => {
     dispatch({
@@ -8,8 +12,9 @@ export const setApplyData = (payload) => dispatch => {
     })
 };
 
+
 export const saveJobApplication = (payload) => dispatch => {
-    // axios.post(`${process.env.REACT_APP_API_URL}/GrowthOpportunity/GetJobOpenings`, payload, config).then(res => {
+    // axios.post(`${process.env.REACT_APP_API_URL}/GrowthOpportunity/SaveJobApplication`, payload, config).then(res => {
         // console.log("RES: ", res);
     //   dispatch({
     //     type: SAVE_JOB_APPLICATION,
@@ -19,5 +24,20 @@ export const saveJobApplication = (payload) => dispatch => {
     dispatch({
         type: SAVE_JOB_APPLICATION,
         payload: payload,
+    })
+};
+
+export const setValidations = (badgeId, jobId) => dispatch => {
+    // axios.post(`${process.env.REACT_APP_API_URL}/GrowthOpportunity/CallValidations?badgeId=${}&jobId=${jobId}`, payload, config).then(res => {
+        // console.log("RES: ", res);
+    //   dispatch({
+    //     type: SET_VALIDATIONS,
+    //     payload: res.data
+    //   });
+    // });
+    dispatch({
+        type: SET_VALIDATIONS,
+        payload: { badgeId: badgeId, jobId: jobId },
+        // payload: res.data,
     })
 };
