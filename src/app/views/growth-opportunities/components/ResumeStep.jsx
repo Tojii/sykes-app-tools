@@ -3,7 +3,7 @@ import { Grid, Fab, Icon } from "@material-ui/core";
 import { setApplyData } from "../../../redux/actions/ApplyActions";
 import { connect } from "react-redux";
 
-const ResumeStep = ({ apply, setApplyData, props }) => {
+const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
 
     const handleFileSelect = (event) => {
         let files = event.target.files;
@@ -13,6 +13,7 @@ const ResumeStep = ({ apply, setApplyData, props }) => {
             reader.onload = function () {
                 apply['resume'] = reader.result
                 setApplyData(apply);
+                setDisableNext(false)
             };
             reader.onerror = function (error) {
                 console.log('Error: ', error);

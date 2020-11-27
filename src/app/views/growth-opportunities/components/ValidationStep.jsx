@@ -5,16 +5,18 @@ import { connect } from "react-redux";
 
 const ResumeStep = ({
     user,
-    growth_detail,
     validations,
+    growth_opportunity,
     setValidations,
     handleCallback,
 }) => {
+
     const [validated, setValidated] = useState(validations);
+
     useEffect(() => {
-        // setTimeout(function() { 
-            !validations && setValidations(user.badgeId, growth_detail.openingId)
-        // }, 3000);
+        setTimeout(function() { 
+            !validations && setValidations(user.badgeId, growth_opportunity.openingId)
+        }, 3000);
     }, []);
 
     useEffect(() => {
@@ -44,12 +46,13 @@ const ResumeStep = ({
     );
 }
 
-const mapStateToProps = ({ applyReducer }) => {
-    const { user, growth_detail, validations } = applyReducer;
+const mapStateToProps = ({ applyReducer, growthReducer }) => {
+    const { user, validations } = applyReducer;
+    const { growth_opportunity } = growthReducer;
     return {
         user, 
-        growth_detail,
-        validations
+        validations, 
+        growth_opportunity
     };
 };
 

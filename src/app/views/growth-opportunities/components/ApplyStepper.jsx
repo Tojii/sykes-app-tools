@@ -24,25 +24,26 @@ const ApplyStepper = (props) => {
       history, 
       match, 
       apply, 
-      user, 
-      growth_detail, 
+      user,
+      growth_opportunity, 
       saveJobApplication 
     } = props
     const [activeStep, setActiveStep] = useState(0);
+    const [disableNext, setDisableNext] = useState(false);
     const steps = getSteps();
 
-    function getStepContent(stepIndex, props) {
+    function getStepContent(stepIndex) {
       switch (stepIndex) {
       case 0:
-          return <UserForm {...props}/>
+          return <UserForm setDisableNext={setDisableNext}/>
       case 1:
-          return <ValidationStep handleCallback={handleNext}/>
+          return <ValidationStep setDisableNext={setDisableNext} handleCallback={handleNext}/>
       case 2:
-          return <ResumeStep/>
+          return <ResumeStep setDisableNext={setDisableNext}/>
       case 3:
-          return <ScheduleStep/>
+          return <ScheduleStep setDisableNext={setDisableNext}/>
       case 4:
-          return <ConfirmStep/>
+          return <ConfirmStep setDisableNext={setDisableNext}/>
       default:
         return "";
       }
@@ -50,6 +51,7 @@ const ApplyStepper = (props) => {
 
     const handleNext = () => {
         setActiveStep(prevActiveStep => prevActiveStep + 1);
+        setDisableNext(true);
     };
 
     const handleBack = () => {
@@ -57,7 +59,7 @@ const ApplyStepper = (props) => {
     };
 
     const handleReset = () => {
-        setActiveStep(0);
+      history.push('/growth-opportunities');
     };
 
     const handleSubmit = () => {
@@ -66,12 +68,12 @@ const ApplyStepper = (props) => {
         phone: user.phone,
         badge: user.badgeId,
         fullUserName: user.fullUserName,
-        openingId: growth_detail.openingId,
-        job: growth_detail.title,
+        openingId: growth_opportunity.openingId,
+        job: growth_opportunity.title,
         ...apply,
       }
       saveJobApplication(payload);
-      // setActiveStep(prevActiveStep => prevActiveStep + 1);
+      setActiveStep(prevActiveStep => prevActiveStep + 1);
     };
 
     const handleCancel = () => {
@@ -90,11 +92,12 @@ const ApplyStepper = (props) => {
           <div>
             {activeStep === steps.length ? (
               <div>
-                <div className="flex flex-middle mb-16">
-                  <Icon>done</Icon> <span className="ml-8">Done</span>
-                </div>
+                <div className="text-center">
+                    <Icon color="primary" fontSize="large">{'done'}</Icon>
+                    <p>Application done!</p>
+                </div> 
                 <Button variant="contained" color="secondary" onClick={handleReset}>
-                  Reset
+                  Salir
                 </Button>
               </div>
             ) : (
@@ -113,6 +116,7 @@ const ApplyStepper = (props) => {
                     className="ml-16 align-self-end"
                     variant="contained"
                     color="primary"
+                    disabled={disableNext}
                     onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
                   >
                     {activeStep === steps.length - 1 ? "Finish" : "Next"}
@@ -135,12 +139,13 @@ const ApplyStepper = (props) => {
       );
 }
 
-const mapStateToProps = ({ applyReducer }) => {
-  const { apply, user, growth_detail } = applyReducer;
-  return {
+const mapStateToProps = ({ applyReducer, growthReducer }) => {
+  const { apply, user } = applyReducer;
+    const { growth_opportunity } = growthReducer;
+    return {
       apply, 
       user, 
-      growth_detail
+      growth_opportunity
   };
 };
 

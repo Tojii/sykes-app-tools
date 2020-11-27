@@ -21,8 +21,8 @@ const daysCount = [
 ];
 
 const ScheduleStep = (props) => {
-    const { apply, setApplyData } = props
-    console.log(props);
+    const { apply, setApplyData, setDisableNext } = props
+
     const [days, setDays] = useState({
         Monday: false,
         Tuesday: false,
@@ -32,6 +32,7 @@ const ScheduleStep = (props) => {
         Saturday: false,
         Sunday: false,
     });
+
     const [times, setTimes] = useState({
         startTime: new Date(),
         endTime: new Date(),
@@ -41,6 +42,7 @@ const ScheduleStep = (props) => {
         buildScheduleDays();
         buildScheduleTimes();
         setApplyData(apply);
+        apply['workSchedule'] !== "" ? setDisableNext(false) : setDisableNext(true)
     }, [days, times])
 
     const handleDayChange = (day) => event => {

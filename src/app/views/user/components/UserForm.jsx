@@ -20,18 +20,21 @@ const UserSchema = () =>
 const UserForm = (props) => {
     const {
         handleSubmitCallback,
+        setDisableNext,
         user,
-        growth_detail,
         match,
         history,
     } = props
 
-    console.log("USER: ", props);
-
     const handleClose = () => {
-        console.log(props);
         const path = match.params.opp_id ? `/growth-opportunities/${match.params.opp_id}` : "/"
         history.push(path);
+    }
+
+    const handleCustomChange = (e, setFieldValue, name) => {
+        if (e === "") setDisableNext(true);
+        else setDisableNext(false);
+        setFieldValue(name, e);
     }
 
     return (
@@ -49,19 +52,19 @@ const UserForm = (props) => {
                     {({
                         handleSubmit,
                         handleChange,
-                        handleBlur,
-                        values,
-                        errors,
+                        setFieldValue,
                         touched,
-                        isValid,
-                        dirty,
+                        values,
+                        errors
                     }) => (
                         <ValidatorForm onSubmit={handleSubmit}>
                             <Grid item xs={12}>
                                 <TextValidator
                                     className="w-100 mx-24 my-16"
                                     label="Email"
-                                    onChange={handleChange}
+                                    onChange={(e) => 
+                                        handleCustomChange(e.target.value, setFieldValue, 'email')
+                                    }
                                     type="text"
                                     name="email"
                                     value={values.email}
@@ -73,7 +76,9 @@ const UserForm = (props) => {
                                 <TextValidator
                                     className="w-100 mx-24 my-16"
                                     label="Phone number"
-                                    onChange={handleChange}
+                                    onChange={(e) => 
+                                        handleCustomChange(e.target.value, setFieldValue, 'phone_number')
+                                    }
                                     type="text"
                                     name="phone_number"
                                     value={values.phone_number}
@@ -81,7 +86,8 @@ const UserForm = (props) => {
                                     errorMessages={["this field is required"]}
                                 />
                             </Grid>
-                            {/* <div className="flex flex-space-start flex-middle mx-24 my-16">
+                            { history ?
+                            <div className="flex flex-space-start flex-middle mx-24 my-16">
                                 <Button
                                     variant="contained"
                                     color="primary"
@@ -97,7 +103,7 @@ const UserForm = (props) => {
                                 >
                                     Cancel
                                 </Button>
-                            </div> */}
+                            </div> : null }
                         </ValidatorForm>
                     )}
                 </Formik>
@@ -107,10 +113,9 @@ const UserForm = (props) => {
 }
 
 const mapStateToProps = ({ applyReducer }) => {
-    const { user, growth_detail } = applyReducer;
+    const { user } = applyReducer;
     return {
         user,
-        growth_detail
     };
 };
 

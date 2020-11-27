@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import {
     Grid,
     Table,
@@ -10,8 +10,11 @@ import { setApplyData } from "../../../redux/actions/ApplyActions"
 import { connect } from "react-redux";
 
 const ConfirmStep = (props) => {
-    const { apply, user, growth_detail } = props
+    const { apply, user, growth_opportunity, setDisableNext } = props
 
+    useEffect(() => {
+        setDisableNext(false);
+    }, [])
     return (
         <>
             <Grid item lg={12} className="px-sm-24">
@@ -20,7 +23,7 @@ const ConfirmStep = (props) => {
                     <TableBody>
                         <TableRow>
                             <TableCell width={"35%"} className="pl-sm-24">Job Id:</TableCell>
-                            <TableCell className="pl-sm-24">{ growth_detail.openingId }</TableCell>
+                            <TableCell className="pl-sm-24">{ growth_opportunity.openingId }</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell width={"35%"}className="pl-sm-24">Badge:</TableCell>
@@ -57,12 +60,13 @@ const ConfirmStep = (props) => {
     )
 }
 
-const mapStateToProps = ({ applyReducer }) => {
-    const { apply, user, growth_detail } = applyReducer;
+const mapStateToProps = ({ applyReducer, growthReducer }) => {
+    const { apply, user } = applyReducer;
+    const { growth_opportunity } = growthReducer;
     return {
         apply, 
         user, 
-        growth_detail
+        growth_opportunity
     };
 };
 

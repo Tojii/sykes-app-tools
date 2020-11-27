@@ -8,7 +8,6 @@ import localStorageService from "../../services/localStorageService"
 const INIT_STATE = {
     apply: {},
     user: localStorageService.getItem('auth_user') || {},
-    growth_detail: localStorageService.getItem('growth_detail') || {},
     validations: null,
 };
 
