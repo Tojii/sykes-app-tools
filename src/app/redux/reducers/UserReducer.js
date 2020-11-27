@@ -1,12 +1,13 @@
 import {
   SET_USER_DATA,
   REMOVE_USER_DATA,
-  USER_LOGGED_OUT
+  USER_LOGGED_OUT,
+  UPDATER_USER_DATA,
 } from "../actions/UserActions";
 import localStorageService from "../../services/localStorageService";
 
 const initialState = {
-  // user: {},
+  user: {},
 };
 
 const userReducer = function(state = initialState, action) {
@@ -24,6 +25,12 @@ const userReducer = function(state = initialState, action) {
     }
     case USER_LOGGED_OUT: {
       return state;
+    }
+    case UPDATER_USER_DATA: {
+      return {
+        ...state,
+        user: action.data
+      };
     }
     default: {
       return state;

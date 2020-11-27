@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 const UserSchema = () =>
     Yup.object().shape({
         email: Yup.string().required("Email required"),
-        phone_number: Yup.string().required("Phone number required"),
+        phone: Yup.string().required("Phone number required"),
     }
 );
 
@@ -37,6 +37,14 @@ const UserForm = (props) => {
         setFieldValue(name, e);
     }
 
+    const onSubmit = (values) => {
+        const payload = {
+            ...values,
+            badge: user.badgeId
+        }
+        handleSubmitCallback(payload);
+    }
+
     return (
         <>
             <Grid item lg={11}>
@@ -44,10 +52,10 @@ const UserForm = (props) => {
                 <Formik
                     initialValues={{ 
                         email: user.email || "",
-                        phone_number: user.phone || "",
+                        phone: user.phone || "",
                     }}
                     validationSchema={UserSchema()}
-                    onSubmit={handleSubmitCallback}
+                    onSubmit={onSubmit}
                 >
                     {({
                         handleSubmit,
@@ -77,11 +85,11 @@ const UserForm = (props) => {
                                     className="w-100 mx-24 my-16"
                                     label="Phone number"
                                     onChange={(e) => 
-                                        handleCustomChange(e.target.value, setFieldValue, 'phone_number')
+                                        handleCustomChange(e.target.value, setFieldValue, 'phone')
                                     }
                                     type="text"
-                                    name="phone_number"
-                                    value={values.phone_number}
+                                    name="phone"
+                                    value={values.phone}
                                     validators={["required"]}
                                     errorMessages={["this field is required"]}
                                 />
