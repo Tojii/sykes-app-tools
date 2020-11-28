@@ -2,6 +2,10 @@ import React from "react";
 import UserForm from "./components/UserForm"
 import { updateUserData } from "../../redux/actions/UserActions"
 import { connect } from "react-redux";
+import {
+    Card,
+    Grid,
+} from "@material-ui/core";
 
 const EditUser = (props) => {
     const {
@@ -17,7 +21,11 @@ const EditUser = (props) => {
 
     return (
         <>
-            <UserForm handleSubmitCallback={handleSubmitCallback} {...props} />
+            <Card className="m-sm-30">
+                <Grid container>
+                    <UserForm handleSubmitCallback={handleSubmitCallback} {...props} />
+                </Grid>
+            </Card>
         </>
     )
 }

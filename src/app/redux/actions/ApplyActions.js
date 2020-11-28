@@ -5,6 +5,10 @@ export const SET_APPLY_DATA = "SET_APPLY_DATA";
 export const SAVE_JOB_APPLICATION = "SAVE_JOB_APPLICATION";
 export const SET_VALIDATIONS = "SET_VALIDATIONS";
 
+const config = {
+    // Add headers
+}
+
 export const setApplyData = (payload) => dispatch => {
     dispatch({
         type: SET_APPLY_DATA,

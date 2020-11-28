@@ -32,8 +32,8 @@ const UserForm = (props) => {
     }
 
     const handleCustomChange = (e, setFieldValue, name) => {
-        if (e === "") setDisableNext(true);
-        else setDisableNext(false);
+        if (e === "" && setDisableNext) setDisableNext(true);
+        else if (setDisableNext) setDisableNext(false);
         setFieldValue(name, e);
     }
 
