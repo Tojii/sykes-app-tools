@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
-    Grid,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
     IconButton,
-    Icon
+    Icon, 
+    Tooltip,
 } from "@material-ui/core";
+import DashboardIcon from "@material-ui/icons/Dashboard";
 import { getGrowthOpportunities, setGrowthOpportunity } from "../../../redux/actions/GrowthOpportunityActions"
 import { connect } from "react-redux";
+import MUIDataTable from "mui-datatables";
 
 const GrowthOppTable = ({
     growth_opportunities,
@@ -29,39 +26,52 @@ const GrowthOppTable = ({
         history.push(`${match.path}/${item.id}`);
     }
 
+    const handleMyMetricsClick = () => {
+        history.push(`my-metrics`);
+    }
+
+    const buildDetailButton = (item) => {
+        return (
+            <>
+                <IconButton
+                    color="primary"
+                    onClick={() => handleDetailsClick(item)}
+                >
+                <Icon>chevron_right</Icon>
+                </IconButton>
+            </>
+        )
+    }
+
+    const buildData = growth_opportunities.map(item => {
+        return [item.title, item.area, item.expirationDate, buildDetailButton(item)]
+    })
+
+    const columns = ["Job Position", "Area", "Expiration Date", "Details"]
+
+        
+    const options = {
+        customToolbar: () => {
+            return (
+                <>
+                    <Tooltip title={"My metrics"}>
+                        <IconButton>
+                            <DashboardIcon onClick={handleMyMetricsClick}/>
+                        </IconButton>
+                    </Tooltip>
+                </>
+            );
+        }
+    };
+
     return (
         <>
-            <Grid item lg={12}>
-                <Table>
-                    <TableHead color="primary">
-                        <TableRow>
-                            <TableCell width={"50%"} className="pl-sm-24">Job Position</TableCell>
-                            <TableCell className="pl-sm-24">Area</TableCell>
-                            <TableCell className="pl-sm-24">Expiration Date</TableCell>
-                            <TableCell align="center">Details</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        { growth_opportunities.map(item => {
-                            return (
-                                <TableRow key={ item.id }>
-                                    <TableCell className="pl-sm-24">{ item.title }</TableCell>
-                                    <TableCell className="pl-sm-24">{ item.area }</TableCell>
-                                    <TableCell className="pl-sm-24">{ item.expirationDate }</TableCell>
-                                    <TableCell align="center">
-                                        <IconButton
-                                            color="primary"
-                                            onClick={() => handleDetailsClick(item)}
-                                        >
-                                        <Icon>chevron_right</Icon>
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            )
-                        })}
-                    </TableBody>
-                </Table>
-            </Grid>
+            <MUIDataTable
+                title={"Growth opportunities"}
+                data={buildData}
+                columns={columns}
+                options={options}
+            />
         </>
     )
 }
