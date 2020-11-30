@@ -47,7 +47,7 @@ export const submitData = Data => {
   // "entendimiento": Data.entendimiento, "barreras": Data.barreras, "seguimiento": Data.seguimiento,
   // "perseverante": Data.perseverante, "general": Data.general, "Sugerencias": Data.sugerencia});
   return async dispatch => {
-    console.log(Data);
+    console.log("datos lss action",Data);
     dispatch({
       type: LSS_LOADING
     });
@@ -55,30 +55,30 @@ export const submitData = Data => {
     axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     await axios.post(`${process.env.REACT_APP_API_URL}/Survey`, 
     {
-      "CuentaArea": Data.cuenta_area, 
-      "JefeDirecto": Data.supervisor_directo,
-      "JefeDirectoPersona": Data.username, 
-      "Posicion": Data.positions, 
-      "reunionesultimomes": Data.retroalimentacion_1, 
-      "OneOnOneUltimas2semanas": Data.retroalimentacion_2,
-      "AyudaMano": Data.retroalimentacion_3, 
-      "EventosVoluntariado": Data.retroalimentacion_4, 
-      "CimaDeConfianza": Data.CimaDeConfianza,
-      "SituacionesAdversas": Data.SituacionesAdversas, 
-      "Escuchar": Data.Escuchar, 
-      "Cooperacion": Data.Cooperacion,
-      "SituacionesConflictivas": Data.SituacionesConflictivas, 
-      "RelacionesInterpersonales": Data.RelacionesInterpersonales, 
-      "Guiar": Data.Guiar,
-      "Recursos": Data.Recursos, 
-      "Planes": Data.Planes, 
-      "Objetivos": Data.Objetivos, 
-      "Monitorea": Data.Monitorea,
-      "Responsabiliza": Data.Responsabiliza, 
-      "TomaEnCuentaOpinion": Data.TomaEnCuentaOpinion, "retroalimentacion": Data.retroalimentacion,
+      "cuentaArea": Data.CuentaArea, 
+      "jefeDirecto": Data.JefeDirecto,
+      "jefeDirectoPersona": Data.username, 
+      "posicion": Data.Posicion, 
+      "reunionesultimomes": Data.reunionesultimomes, 
+      "oneOnOneUltimas2semanas": Data.OneOnOneUltimas2semanas,
+      "ayudaMano": Data.AyudaMano, 
+      "eventosVoluntariado": Data.EventosVoluntariado, 
+      "cimaDeConfianza": Data.CimaDeConfianza,
+      "situacionesAdversas": Data.SituacionesAdversas, 
+      "escuchar": Data.Escuchar, 
+      "cooperacion": Data.Cooperacion,
+      "situacionesConflictivas": Data.SituacionesConflictivas, 
+      "relacionesInterpersonales": Data.RelacionesInterpersonales, 
+      "guiar": Data.Guiar,
+      "recursos": Data.Recursos, 
+      "planes": Data.Planes, 
+      "objetivos": Data.Objetivos, 
+      "monitorea": Data.Monitorea,
+      "responsabiliza": Data.Responsabiliza, 
+      "tomaEnCuentaOpinion": Data.TomaEnCuentaOpinion, "retroalimentacion": Data.retroalimentacion,
     "conversaciones": Data.conversaciones, "estrategias": Data.estrategias, "balance": Data.balance,
     "entendimiento": Data.entendimiento, "barreras": Data.barreras, "seguimiento": Data.seguimiento,
-    "perseverante": Data.perseverante, "general": Data.general, "Sugerencias": Data.sugerencia}
+    "perseverante": Data.perseverante, "general": Data.general, "sugerencias": Data.Sugerencias}
     ).then(res => {
         dispatch({
         type: SUBMIT_DATA
