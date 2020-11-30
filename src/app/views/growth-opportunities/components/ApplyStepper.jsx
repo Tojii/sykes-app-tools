@@ -70,6 +70,7 @@ const ApplyStepper = (props) => {
         phone: user.phone,
         badge: user.badgeId,
         fullName: user.fullUserName,
+        id: growth_opportunity.id,
         openingId: growth_opportunity.openingId,
         job: growth_opportunity.title,
         ...apply,
