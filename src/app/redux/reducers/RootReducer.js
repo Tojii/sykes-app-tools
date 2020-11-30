@@ -7,6 +7,8 @@ import NotificationReducer from "./NotificationReducer";
 import EcommerceReducer from "./EcommerceReducer";
 import MantenimientoReducer from "./MantenimientoReducer";
 import LSSReducer from "./LSSReducer";
+//import ReembolsosEducativosReducer from "./ReembolsoEducativoReducer";
+import RaftReducer from "./RaftReducer";
 import { persistStore } from 'redux-persist'
 
 
@@ -18,7 +20,9 @@ const appReducer = combineReducers({
   notification: NotificationReducer,
   ecommerce: EcommerceReducer,
   mantenimientos: MantenimientoReducer,
-  lss: LSSReducer
+  lss: LSSReducer,
+  //reembolsosEducativos: ReembolsosEducativosReducer,
+  raft: RaftReducer
 });
 
 const RootReducer = (state, action) => {
