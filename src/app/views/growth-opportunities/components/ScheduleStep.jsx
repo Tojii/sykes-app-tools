@@ -24,18 +24,18 @@ const ScheduleStep = (props) => {
     const { apply, setApplyData, setDisableNext } = props
 
     const [days, setDays] = useState({
-        Monday: false,
-        Tuesday: false,
-        Wednesday: false,
-        Thursday: false,
-        Friday: false,
+        Monday: true,
+        Tuesday: true,
+        Wednesday: true,
+        Thursday: true,
+        Friday: true,
         Saturday: false,
         Sunday: false,
     });
 
     const [times, setTimes] = useState({
-        startTime: new Date(),
-        endTime: new Date(),
+        startTime: new Date().setHours(8, 0, 0),
+        endTime: new Date().setHours(17, 0, 0),
     });
 
     useEffect(() => {
