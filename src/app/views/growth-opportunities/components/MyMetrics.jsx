@@ -68,8 +68,7 @@ const MyMetrics = ({ metrics, history }) => {
                                     <h6 className="m-0 mt-4 text-primary font-weight-500">
                                         English Level
                                     </h6>
-                                    <small className="text-muted">28/11/2020</small>
-                                    {/* <small className="text-muted">{ metrics.englishScoreCurrentDate || "no level"}</small> */}
+                                    <small className="text-muted">{ metrics.englishScoreCurrentDate || "no level"}</small>
                                     </div>
                                 </div>
                             </Card>
@@ -88,10 +87,8 @@ const MyMetrics = ({ metrics, history }) => {
                                     </h5>
                                 </div>
                                 <div className="pt-16 flex flex-middle">
-                                    <h4 className="m-0 text-muted flex-grow-1">Type</h4>
-                                    {/* <h2 className="m-0 text-muted flex-grow-1">{ metrics.warningCurrentType || "" }</h2> */}
-                                    <span className="font-size-13 text-warning ml-4">20/11/2020</span>
-                                    {/* <span className="font-size-13 text-warning ml-4">{ metrics.warningCurrentDate || "no warnings" }</span> */}
+                                    <h2 className="m-0 text-muted flex-grow-1">{ metrics.warningCurrentType || "" }</h2>
+                                    <span className="font-size-13 text-warning ml-4">{ metrics.warningCurrentDate || "no warnings" }</span>
                                 </div>
                             </Card>
                         </Grid>

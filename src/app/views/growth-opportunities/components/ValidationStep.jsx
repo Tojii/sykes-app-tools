@@ -14,9 +14,7 @@ const ResumeStep = ({
     const [validated, setValidated] = useState(validations);
 
     useEffect(() => {
-        setTimeout(function() { 
-            !validations && setValidations(user.badgeId, growth_opportunity.openingId)
-        }, 3000);
+        !validations && setValidations(user.badgeId, growth_opportunity.openingId)
     }, []);
 
     useEffect(() => {

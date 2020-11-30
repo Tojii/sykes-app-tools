@@ -10,90 +10,29 @@ const config = {
 }
 
 export const getGrowthOpportunities = () => dispatch => {
-    // axios.get(`${process.env.REACT_APP_API_URL}/GrowthOpportunity/GetJobOpenings`, config).then(res => {
-        // console.log("RES: ", res);
-    //   dispatch({
-    //     type: GET_PRODUCT_LIST,
-    //     payload: res.data
-    //   });
-    // });
-    const payload = [
-        {
-            id: "1431",
-            openingId: "JO101361",
-            title: "Trilingual Technical Support Agent II for its Intel account",
-            area: "Intel",
-            startDate: "10/26/2020 9:00:00 PM",
-            expirationDate: "11/30/2020 11:00:00 PM",
-            description: "Description from api request"
-        },
-        {
-            id: "1498",
-            openingId: "JO101425",
-            title: "Wide Area Network (WAN) Engineer L2 for the Unitas Global account",
-            area: "Unitas Global",
-            startDate: "9/21/2020 6:00:00 PM",
-            expirationDate: "11/27/2020 11:00:00 PM",
-            description: "Description from api request"
-        }
-    ]
-    dispatch({
-        type: GET_GROWTH_OPPORTUNITIES,
-        payload: payload,
-    })
+    axios.defaults.headers.common["x-api-key"] = `7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH-F013C`;
+    axios.defaults.headers.common["Access-Control-Allow-Origin"] = 'http://localhost:3000';
+    // axios.defaults.headers.common["Authorization"] = `Bearer ${localStorageService.getItem('jwt_token')}`;
+    axios.defaults.headers.common["Authorization"] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjE3NzE3IiwidXNlcm5hbWUiOiJIRVJOQU5BTEUiLCJmdWxsbmFtZSI6IkhFUk5BTkRFWiBWQVJHQVMgQUxWQVJPIEVOUklRVUUiLCJiYWRnZSI6IjUzNjYyIiwiZW1haWwiOiJ0ZXN0OUBnbWFpbC5jb20iLCJwaG9uZSI6Ijg4ODg4ODgwIiwiZXhwIjoxNjA2NzQ5NTM2LCJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJ0b2ppaS5jb20ifQ.YdhTul8XEoRf7ejbz4Az2sPQX_CYy5dYEV-bzB62RZw`
+    axios.get(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/GetJobOpenings`).then(res => {
+        dispatch({
+            type: GET_GROWTH_OPPORTUNITIES,
+            payload: res.data
+        });
+    });
 };
 
 export const getJobsApplied = () => dispatch => {
-    // const auth_user = localStorageService.getItem('user');
-    // axios.get(`${process.env.REACT_APP_API_URL}/GrowthOpportunity/GetJobsApplied?badge=${auth_user.badgeId}`, config).then(res => {
-        // console.log("RES: ", res);
-    //   dispatch({
-    //     type: GET_PRODUCT_LIST,
-    //     payload: res.data
-    //   });
-    // });
-    const payload = [
-        {
-            "id": 224,
-            "created": "8/7/2020 9:32:16 PM",
-            "openingId": "JO101374",
-            "job": "Temporary Customer Advocacy Coaches for Capital One Retail Bank.",
-            "badge": "53662",
-            "fullName": "",
-            "workSchedule": "Monday, Tuesday, Wednesday, Thursday, Friday",
-            "startTime": "8/7/2020 2:00:00 PM",
-            "endTime": "8/7/2020 11:00:00 PM",
-            "status": "Approved"
-        },
-        {
-            "id": 225,
-            "created": "8/7/2020 11:55:07 PM",
-            "openingId": "JO101371",
-            "job": "L2 Network Security Engineer for OKTA",
-            "badge": "53662",
-            "fullName": "",
-            "workSchedule": "Monday, Tuesday, Wednesday, Thursday, Friday",
-            "startTime": "8/7/2020 2:00:00 PM",
-            "endTime": "8/7/2020 11:00:00 PM",
-            "status": "Approved"
-        },
-        {
-            "id": 230,
-            "created": "8/8/2020 1:56:49 AM",
-            "openingId": "JO101378",
-            "job": "CRT (Customer Resolution Team) Associates for Capital One",
-            "badge": "53662",
-            "fullName": "HERNANDEZ VARGAS ALVARO ENRIQUE",
-            "workSchedule": "Monday, Tuesday, Wednesday, Thursday, Friday",
-            "startTime": "8/7/2020 12:00:00 PM",
-            "endTime": "8/7/2020 10:00:00 PM",
-            "status": "Approved"
-        }
-    ]
-    dispatch({
+    axios.defaults.headers.common["x-api-key"] = `7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH-F013C`;
+    axios.defaults.headers.common["Access-Control-Allow-Origin"] = 'http://localhost:3000';
+    axios.defaults.headers.common["Authorization"] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjE3NzE3IiwidXNlcm5hbWUiOiJIRVJOQU5BTEUiLCJmdWxsbmFtZSI6IkhFUk5BTkRFWiBWQVJHQVMgQUxWQVJPIEVOUklRVUUiLCJiYWRnZSI6IjUzNjYyIiwiZW1haWwiOiJ0ZXN0OUBnbWFpbC5jb20iLCJwaG9uZSI6Ijg4ODg4ODgwIiwiZXhwIjoxNjA2NzQ5NTM2LCJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJ0b2ppaS5jb20ifQ.YdhTul8XEoRf7ejbz4Az2sPQX_CYy5dYEV-bzB62RZw`
+    const auth_user = localStorageService.getItem('auth_user');
+    axios.get(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/GetJobsApplied?badge=${auth_user.badgeId}`).then(res => {
+      dispatch({
         type: GET_JOBS_APPLIED,
-        payload: payload,
-    })
+        payload: res.data
+      });
+    });
 };
 
 export const setGrowthOpportunity = (payload) => dispatch => {

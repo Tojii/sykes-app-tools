@@ -25,6 +25,7 @@ const ApplyStepper = (props) => {
       match, 
       apply, 
       user,
+      validations,
       growth_opportunity, 
       saveJobApplication 
     } = props
@@ -64,13 +65,15 @@ const ApplyStepper = (props) => {
 
     const handleSubmit = () => {
       const payload = {
+        created: new Date(),
         email: user.email,
         phone: user.phone,
         badge: user.badgeId,
-        fullUserName: user.fullUserName,
+        fullName: user.fullUserName,
         openingId: growth_opportunity.openingId,
         job: growth_opportunity.title,
         ...apply,
+        ...validations,
       }
       saveJobApplication(payload);
       setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -140,12 +143,13 @@ const ApplyStepper = (props) => {
 }
 
 const mapStateToProps = ({ applyReducer, growthReducer }) => {
-  const { apply, user } = applyReducer;
+  const { apply, user, validations } = applyReducer;
     const { growth_opportunity } = growthReducer;
     return {
-      apply, 
-      user, 
-      growth_opportunity
+      apply,
+      user,
+      validations,
+      growth_opportunity,
   };
 };
 
