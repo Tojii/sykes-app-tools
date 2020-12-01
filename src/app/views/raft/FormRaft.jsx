@@ -1,21 +1,12 @@
 import React, { useState, Component, useRef } from "react";
-import axios from "axios";
 import {
   Button,
-  Grid,
-  FormControlLabel,
-  Switch,
   Card
 } from "@material-ui/core";
-import { Link } from 'react-router-dom';
-import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import { makeStyles } from '@material-ui/core/styles';
 import {addRaft} from "../../redux/actions/RaftActions";
 import { useSelector, useDispatch } from 'react-redux';
@@ -25,10 +16,6 @@ const useStyles = makeStyles({
       marginLeft: "25%",
       width: "50%",
       marginTop: "3%",
-    },
-    selectvalidator: {
-        width: "100%",
-        marginTop: "3%",
     },
     formcard: {
       marginLeft: "25%",
@@ -71,31 +58,21 @@ const FormRaft = () => {
         });
         console.log("change", event.target.value);
         if(name == "identificationNumber"){
-            if(event.target.value.length > 8) {
+            if(event.target.value.length == 9 || event.target.value.length == 11 || event.target.value.length == 12 || event.target.value.length == 18 || event.target.value.length == 25) {
                 fetch(`https://sykescostaricahr.com/RegistroCivil/api/PadronElectoral?Cedula=${event.target.value}`).then(response => {
                    return response.json();
-                   }).then((res) => {
-                       console.log(res);
-                       setRaftForm({
-                        ...raftform,
-                        [name]: value,
-                        ["firstName"]: res.data[0].FirstName,
-                        ["lastName"]: res.data[0].LastName1,
-                        ["secondLastName"]: res.data[0].LastName2,
-                        ["secondName"]: res.data[0].SecondName,
-                      });
-                   }).catch((err) => console.error('Problem fetching my IP', err))
-               }
-        }
-    };
-
-    const handleChangeCedula = (event) => {
-        if(event.target.value.length > 8) {
-         fetch(`https://sykescostaricahr.com/RegistroCivil/api/PadronElectoral?Cedula=${event.target.value}`).then(response => {
-            return response.json();
-            }).then((res) => {
-                console.log(res);
-            }).catch((err) => console.error('Problem fetching my IP', err))
+                }).then((res) => {
+                    console.log(res);
+                    setRaftForm({
+                    ...raftform,
+                    [name]: value,
+                    ["firstName"]: res.data[0].FirstName,
+                    ["lastName"]: res.data[0].LastName1,
+                    ["secondLastName"]: res.data[0].LastName2,
+                    ["secondName"]: res.data[0].SecondName,
+                    });
+                }).catch((err) => console.error('Problem fetching my IP', err))
+            }
         }
     };
     
@@ -121,7 +98,7 @@ const FormRaft = () => {
         isExternalreference: true,
         paymentMethod: "Money",
         workType: "",
-        resumeUrl: null 
+        resumeUrl: "" 
     });
     const classes = useStyles();
 
@@ -139,8 +116,8 @@ const FormRaft = () => {
                         name="badge"
                         disabled={true}
                         value={raftform.badge}
-                        validators={["required","maxStringLength:50"]}
-                        errorMessages={["Este campo es requerido", "Máximo 50 carácteres"]}
+                        validators={["required","maxStringLength:5"]}
+                        errorMessages={["Este campo es requerido", "Máximo 5 carácteres"]}
                     />
                     <TextValidator
                         className={classes.textvalidator}
@@ -150,8 +127,8 @@ const FormRaft = () => {
                         name="fullName"
                         disabled={true}
                         value={raftform.fullName}
-                        validators={["required","maxStringLength:50"]}
-                        errorMessages={["Este campo es requerido", "Máximo 50 carácteres"]}
+                        validators={["required","maxStringLength:150"]}
+                        errorMessages={["Este campo es requerido", "Máximo 150 carácteres"]}
                     />
                     <TextValidator
                         className={classes.textvalidator}
@@ -161,7 +138,7 @@ const FormRaft = () => {
                         name="personalEmail"
                         value={raftform.personalEmail}
                         validators={["required", "matchRegexp:^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+([a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+(;[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+([a-z0-9](?:[a-z0-9-]*[a-z0-9])?))*$"]}
-                        errorMessages={["requerido", "Correo no válido"]} 
+                        errorMessages={["Este campo es requerido", "Correo no válido"]} 
                     />
                     <TextValidator
                         className={classes.textvalidator}
@@ -170,8 +147,8 @@ const FormRaft = () => {
                         type="text"
                         name="personalPhone"
                         value={raftform.personalPhone}
-                        validators={["required"]}
-                        errorMessages={["Este campo es requerido"]}
+                        validators={["required","isNumber","maxStringLength:8"]}
+                        errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 8 carácteres"]}
                     />
                     <TextValidator
                         className={classes.textvalidator}
@@ -187,6 +164,7 @@ const FormRaft = () => {
                         className={classes.textvalidator}
                         label="6. Friend's first name:*"
                         onChange={handleChange}
+                        disabled={true}
                         type="text"
                         name="firstName"
                         value={raftform.firstName}
@@ -197,6 +175,7 @@ const FormRaft = () => {
                         className={classes.textvalidator}
                         label="7. Friend's middle name:"
                         onChange={handleChange}
+                        disabled={true}
                         type="text"
                         name="secondName"
                         value={raftform.secondName}
@@ -207,6 +186,7 @@ const FormRaft = () => {
                         className={classes.textvalidator}
                         label="8. Friend's first surname:*"
                         onChange={handleChange}
+                        disabled={true}
                         type="text"
                         name="lastName"
                         value={raftform.lastName}
@@ -217,6 +197,7 @@ const FormRaft = () => {
                         className={classes.textvalidator}
                         label="9. Friend's second surname:"
                         onChange={handleChange}
+                        disabled={true}
                         type="text"
                         name="secondLastName"
                         value={raftform.secondLastName}
@@ -230,8 +211,8 @@ const FormRaft = () => {
                         type="text"
                         name="phone"
                         value={raftform.phone}
-                        validators={["required"]}
-                        errorMessages={["Este campo es requerido"]}
+                        validators={["required","isNumber","maxStringLength:8"]}
+                        errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 8 carácteres"]}
                     />
                     <TextValidator
                         className={classes.textvalidator}
@@ -240,8 +221,8 @@ const FormRaft = () => {
                         type="text"
                         name="candidateEmail"
                         value={raftform.candidateEmail}
-                        validators={["required"]}
-                        errorMessages={["Este campo es requerido"]}
+                        validators={["required", "matchRegexp:^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+([a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+(;[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+([a-z0-9](?:[a-z0-9-]*[a-z0-9])?))*$"]}
+                        errorMessages={["Este campo es requerido", "Correo no válido"]}
                     />
                     <SelectValidator 
                         label="12. Friend's english level:*" 
@@ -349,7 +330,7 @@ const FormRaft = () => {
                     </SelectValidator>                   
                     <FormControl className={classes.textvalidator}>
                         <label className={classes.filelabel} id="Resume">18. Resume(applicable formats: .doc, .docx, .pdf) (Max 2MB)*</label>
-                        <Input type="file" name="resumeUrl"/>                                 
+                        <Input type="file" name="resume"/>                                 
                     </FormControl>                  
                     <div className={classes.sectionbutton}>
                         <Button variant="contained" color="primary" type="submit">

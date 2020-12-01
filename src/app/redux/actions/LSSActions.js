@@ -14,10 +14,10 @@ export const getAccount = () => {
     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
     axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     await axios.get(`${process.env.REACT_APP_API_URL}/account`).then(res => {
-        dispatch({
-        type: GET_ACCOUNT,
-        data: res.data
-        });
+      dispatch({
+      type: GET_ACCOUNT,
+      data: res.data
+      });
     })
   };
 };
@@ -27,10 +27,10 @@ export const getSupervisorAccount = account => {
     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
     axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     await axios.get(`${process.env.REACT_APP_API_URL}/supervisor?account=${account}`).then(res => {
-        dispatch({
-        type: GET_SUPERVISOR_ACCOUNT,
-        data: res.data
-        });
+      dispatch({
+      type: GET_SUPERVISOR_ACCOUNT,
+      data: res.data
+      });
     })
   };
 };
@@ -76,14 +76,15 @@ export const submitData = Data => {
       "monitorea": Data.Monitorea,
       "responsabiliza": Data.Responsabiliza, 
       "tomaEnCuentaOpinion": Data.TomaEnCuentaOpinion, "retroalimentacion": Data.retroalimentacion,
-    "conversaciones": Data.conversaciones, "estrategias": Data.estrategias, "balance": Data.balance,
-    "entendimiento": Data.entendimiento, "barreras": Data.barreras, "seguimiento": Data.seguimiento,
-    "perseverante": Data.perseverante, "general": Data.general, "sugerencias": Data.Sugerencias}
+      "conversaciones": Data.conversaciones, "estrategias": Data.estrategias, "balance": Data.balance,
+      "entendimiento": Data.entendimiento, "barreras": Data.barreras, "seguimiento": Data.seguimiento,
+      "perseverante": Data.perseverante, "general": Data.general, "sugerencias": Data.Sugerencias
+    }
     ).then(res => {
-        dispatch({
-        type: SUBMIT_DATA
-        });
-        console.log(res.data)
+      dispatch({
+      type: SUBMIT_DATA
+      });
+      console.log(res.data)
     })
   };
 };
@@ -96,10 +97,10 @@ export const getValidation = username => {
     axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
     await axios.get(`${process.env.REACT_APP_API_URL}/Survey?username=${username}`).then(res => {
-        dispatch({
-        type: GET_VALIDATE,
-        data: res.data
-        });
+      dispatch({
+      type: GET_VALIDATE,
+      data: res.data
+      });
     })
   };
 };
@@ -109,10 +110,10 @@ export const getJefeDirecto = criteria => {
     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
     axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     await axios.get(`${process.env.REACT_APP_API_URL}/user?criteria=` + criteria).then(res => {
-        dispatch({
-        type: GET_JEFE_DIRECTO,
-        data: res.data
-        });
+      dispatch({
+      type: GET_JEFE_DIRECTO,
+      data: res.data
+      });
     })
   };
 };

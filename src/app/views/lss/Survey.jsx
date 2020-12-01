@@ -203,7 +203,6 @@ const Survey = () => {
     await dispatch(submitData(data));
     history.push('/lss/thankyou');
     setIsLoading(false);
-
   };
 
   const handleFieldChange = (event, setFieldValue) => { 
