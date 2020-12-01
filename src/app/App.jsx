@@ -38,4 +38,22 @@ const App = () => {
   );
 };
 
+
+// const App = () => {
+//   return (
+//     <AppContext.Provider value={{ routes }}>
+//       <Provider store={Store}>
+//         <PersistGate loading={<Loading />} persistor={Persistor}>
+//           <MatxTheme>
+//             <Router history={history}>
+//               <MatxLayout />
+//             </Router>
+//           </MatxTheme>
+//         </PersistGate>
+//       </Provider>
+//     </AppContext.Provider>
+//   );
+// };
+
+
 export default App;
