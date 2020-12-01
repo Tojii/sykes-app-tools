@@ -10,6 +10,7 @@ import {
     Button
 } from "@material-ui/core";
 import { connect } from "react-redux";
+import ReactHtmlParser from 'react-html-parser';
 
 const OpportunityDetail = (props) => {
     const { history, match, growth_opportunity } = props
@@ -51,7 +52,7 @@ const OpportunityDetail = (props) => {
                                         Description
                                     </TableCell>
                                     <TableCell className="px-sm-24 border-none" style={{ verticalAlign: 'top' }}>
-                                        {growth_opportunity.description}
+                                        { ReactHtmlParser(growth_opportunity.description) }
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
