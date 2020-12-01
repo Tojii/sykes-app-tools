@@ -9,11 +9,12 @@ const config = {
     headers: {
         "x-api-key": '7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH-F013C',
         "Access-Control-Allow-Origin": 'http://localhost:3000',
-        "Authorization": `Bearer ${ localStorageService.getItem('auth_user').token }`
+        "Authorization": `Bearer ${ localStorageService.getItem('jwt_token') }`
     }
 }
 
 export const getGrowthOpportunities = () => dispatch => {
+    console.log("CONFIG: ", config);
     axios.get(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/GetJobOpenings`, config).then(res => {
         dispatch({
             type: GET_GROWTH_OPPORTUNITIES,
