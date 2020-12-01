@@ -18,42 +18,42 @@ import { createBrowserHistory } from 'history';
 
 const { Store, Persistor } = configureStore();
 
-// const App = () => {
-//   return (
-//     <AppContext.Provider value={{ routes }}>
-//       <Provider store={Store}>
-//       <PersistGate loading={<Loading />} persistor={Persistor}>
-//         <MatxTheme>
-//           <Auth>
-//             <Router history={history}>
-//               <AuthGuard>
-//                 <MatxLayout />
-//               </AuthGuard>
-//             </Router>
-//           </Auth>
-//         </MatxTheme>
-//         </PersistGate>
-//       </Provider>
-//     </AppContext.Provider>
-//   );
-// };
-
-
 const App = () => {
   return (
     <AppContext.Provider value={{ routes }}>
       <Provider store={Store}>
-        <PersistGate loading={<Loading />} persistor={Persistor}>
-          <MatxTheme>
+      <PersistGate loading={<Loading />} persistor={Persistor}>
+        <MatxTheme>
+          <Auth>
             <Router history={history}>
-              <MatxLayout />
+              <AuthGuard>
+                <MatxLayout />
+              </AuthGuard>
             </Router>
-          </MatxTheme>
+          </Auth>
+        </MatxTheme>
         </PersistGate>
       </Provider>
     </AppContext.Provider>
   );
 };
+
+
+// const App = () => {
+//   return (
+//     <AppContext.Provider value={{ routes }}>
+//       <Provider store={Store}>
+//         <PersistGate loading={<Loading />} persistor={Persistor}>
+//           <MatxTheme>
+//             <Router history={history}>
+//               <MatxLayout />
+//             </Router>
+//           </MatxTheme>
+//         </PersistGate>
+//       </Provider>
+//     </AppContext.Provider>
+//   );
+// };
 
 
 export default App;

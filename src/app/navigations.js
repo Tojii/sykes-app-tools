@@ -4,6 +4,12 @@ export const navigations = [
   //   path: "/dashboard/analytics",
   //   icon: "dashboard"
   // },
+
+  {
+    name: "Inicio",
+    path: "/Inicio",
+    icon: "content_paste",
+  },
   {
     name: "LSS",
     path: "/lss",
@@ -12,9 +18,18 @@ export const navigations = [
   },
   {
     name: "Rembolso Educativo",
-    path: "/RembolsoEducativo",
     icon: "monetization_on",
-    badge: { value: "New", color: "secondary" },
+    children:[{
+      name: "Lista de Reembolsos",
+      path: "/ReembolsoEducativo/ListaReembolsos",
+      iconText: "A"
+    },
+    {
+      name: "Detalle de Reembolsos",
+      path: "/ReembolsoEducativo/Detalle",
+      iconText: "A"
+    }   
+    ]
   },
   // {
   //   name: "UI Kits",

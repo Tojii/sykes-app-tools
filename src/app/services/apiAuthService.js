@@ -25,7 +25,7 @@ class apiAuthService {
       password: password
     }
 
-    axios.defaults.headers.common["X-API-Key"] = `${process.env.REACT_APP_API_URL}`
+    axios.defaults.headers.common["X-API-Key"] = `${process.env.REACT_APP_X_API_KEY}`
     return axios.post(`${process.env.REACT_APP_API_URL}/Authenticate`, parameters).then(response => {
       // Login successful
       // Save token
