@@ -28,6 +28,11 @@ import history from "history.js";
 import { Link } from 'react-router-dom';
 import { Breadcrumb, ConfirmationDialog } from "matx";
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 const Survey = () => {
   const dispatch = useDispatch();
   const accounts = useSelector(state=>state.lss.accounts);
@@ -502,14 +507,35 @@ const Survey = () => {
                   <span className="pl-8 capitalize">Save</span>
                   </Button>
               </Grid>
-              {shouldOpenConfirmationDialog && (
-                <ConfirmationDialog
-                  open={shouldOpenConfirmationDialog}
-                  onConfirmDialogClose={handleDialogClose}
-                  onYesClick={handleConfirm(values)}
-                  text="¿Desea enviar sus respuestas para el líder Ernesto Castellanos?"
-                />
-              )}
+              
+                <Dialog
+                open={shouldOpenConfirmationDialog}
+                onClose={() => setShouldOpenConfirmationDialog(false)}
+                aria-labelledby="confirm-dialog"
+                >
+                <DialogTitle id="confirm-dialog">{"Confirmación"}</DialogTitle>
+                <DialogContent>{`¿Desea enviar sus respuestas para el líder ${values.JefeDirecto}?`}</DialogContent>
+                <DialogActions>
+                  <Button
+                    variant="contained"
+                    onClick={() => setShouldOpenConfirmationDialog(false)}
+                    color="secondary"
+                  >
+                    No
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      setShouldOpenConfirmationDialog(false);
+                      handleConfirm(values);
+                    }}
+                    color="primary"
+                  >
+                    Sí
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              
             </Form>
         )}
     </Formik>
