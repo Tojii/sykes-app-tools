@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Formik } from 'formik';
 import * as Yup from "yup";
 import {
@@ -10,13 +10,6 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { setApplyData } from "../../../redux/actions/ApplyActions"
 import { connect } from "react-redux";
 
-const UserSchema = () =>
-    Yup.object().shape({
-        email: Yup.string().required("Email required"),
-        phone: Yup.string().required("Phone number required"),
-    }
-);
-
 const UserForm = (props) => {
     const {
         handleSubmitCallback,
@@ -26,20 +19,48 @@ const UserForm = (props) => {
         history,
     } = props
 
+    const [form_user, setUserForm] = useState(user);
+
     const handleClose = () => {
         const path = match.params.opp_id ? `/growth-opportunities/${match.params.opp_id}` : "/"
         history.push(path);
     }
 
-    const handleCustomChange = (e, setFieldValue, name) => {
-        if (e === "" && setDisableNext) setDisableNext(true);
-        else if (setDisableNext) setDisableNext(false);
-        setFieldValue(name, e);
+    const handleCustomChange = (event) => {
+        let value = event.target.value
+        setUserForm({...form_user, [event.target.name]: value});
     }
 
-    const onSubmit = (values) => {
+    const handlePhoneError = () => {
+        if (form_user.phone === "") return "this field is required"
+        else if (form_user.phone.length < 8) return "this field is too short"
+        return ""
+    }
+
+    const handleEmailError = () => {
+        if (form_user.email === "") return "this field is required"
+        return ""
+    }
+
+    const handleNext = () => {
+        if (!setDisableNext) return false;
+        if (form_user.phone.length < 8 || form_user.email === "") return setDisableNext(true)
+        setDisableNext(false);
+    }
+
+    const handleValid = () => {
+        return (form_user.phone.length < 8 || form_user.email === "")
+    }
+
+    useEffect(() => {
+        handleNext();
+        handleValid();
+    }, [form_user]);
+
+    const onSubmit = () => {
         const payload = {
-            ...values,
+            phone: form_user.phone,
+            email: form_user.email,
             badge: user.badgeId
         }
         handleSubmitCallback(payload);
@@ -49,72 +70,55 @@ const UserForm = (props) => {
         <>
             <Grid item lg={11}>
                 <h3 className="p-sm-24">Personal Information</h3>
-                <Formik
-                    initialValues={{ 
-                        email: user.email || "",
-                        phone: user.phone || "",
-                    }}
-                    validationSchema={UserSchema()}
-                    onSubmit={onSubmit}
-                >
-                    {({
-                        handleSubmit,
-                        handleChange,
-                        setFieldValue,
-                        touched,
-                        values,
-                        errors
-                    }) => (
-                        <ValidatorForm onSubmit={handleSubmit}>
-                            <Grid item xs={12}>
-                                <TextValidator
-                                    className="w-100 mx-24 my-16"
-                                    label="Email"
-                                    onChange={(e) => 
-                                        handleCustomChange(e.target.value, setFieldValue, 'email')
-                                    }
-                                    type="text"
-                                    name="email"
-                                    value={values.email}
-                                    validators={["required"]}
-                                    errorMessages={["this field is required"]}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextValidator
-                                    className="w-100 mx-24 my-16"
-                                    label="Phone number"
-                                    onChange={(e) => 
-                                        handleCustomChange(e.target.value, setFieldValue, 'phone')
-                                    }
-                                    type="text"
-                                    name="phone"
-                                    value={values.phone}
-                                    validators={["required"]}
-                                    errorMessages={["this field is required"]}
-                                />
-                            </Grid>
-                            { history ?
-                            <div className="flex flex-space-start flex-middle mx-24 my-16">
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    type="submit"
-                                >
-                                    Save
-                                </Button>
-                                <Button
-                                    className="ml-24"
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={handleClose}
-                                >
-                                    Cancel
-                                </Button>
-                            </div> : null }
-                        </ValidatorForm>
-                    )}
-                </Formik>
+                <ValidatorForm onSubmit={onSubmit}>
+                    <Grid item xs={12}>
+                        <TextValidator
+                            className="w-100 mx-24 my-16"
+                            label="Email"
+                            onChange={handleCustomChange}
+                            type="email"
+                            name="email"
+                            value={form_user.email}
+                            validators={["required", "isEmail"]}
+                            errorMessages={["this field is required", "invalid email format"]}
+                            error={form_user.email === ""}
+                            helperText={handleEmailError()}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextValidator
+                            className="w-100 mx-24 my-16"
+                            label="Phone number"
+                            onChange={handleCustomChange}
+                            type="text"
+                            name="phone"
+                            value={form_user.phone}
+                            validators={["required"]}
+                            errorMessages={["this field is required"]}
+                            error={ handlePhoneError().length > 0 }
+                            helperText={ handlePhoneError() }
+                        />
+                    </Grid>
+                    { history ?
+                    <div className="flex flex-space-start flex-middle mx-24 my-16">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            disabled={handleValid()}
+                        >
+                            Save
+                        </Button>
+                        <Button
+                            className="ml-24"
+                            variant="contained"
+                            color="secondary"
+                            onClick={handleClose}
+                        >
+                            Cancel
+                        </Button>
+                    </div> : null }
+                </ValidatorForm>
             </Grid>
         </>
     )
