@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { CircularProgress, Icon } from "@material-ui/core";
 import { setApplyData, setValidations } from "../../../redux/actions/ApplyActions";
 import { connect } from "react-redux";
-import { validate } from "@babel/types";
 
 const ResumeStep = ({
     user,
