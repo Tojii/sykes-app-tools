@@ -29,7 +29,6 @@ const userReducer = function(state = initialState, action) {
     case UPDATER_USER_DATA: {
       return {
         ...state,
-        user: action.data
       };
     }
     default: {

@@ -41,9 +41,8 @@ export function logoutUser() {
 
 export const updateUserData = (payload) => dispatch => {
   axios.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, payload, config).then(res => {
-    dispatch({
-      type: UPDATER_USER_DATA,
-      payload: res.data
+    history.push({
+      pathname: "/"
     });
   });
 }

@@ -14,7 +14,6 @@ const config = {
 }
 
 export const getGrowthOpportunities = () => dispatch => {
-    console.log("CONFIG: ", config);
     axios.get(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/GetJobOpenings`, config).then(res => {
         dispatch({
             type: GET_GROWTH_OPPORTUNITIES,
