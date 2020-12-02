@@ -5,9 +5,7 @@ import { connect } from "react-redux";
 import MUIDataTable from "mui-datatables";
 
 const ApplicationsTable = ({
-    jobs_applied,
-    getJobsApplied,
-    props
+    jobs_applied
 }) => {
 
     const buildStatusLabel = (item) => {
@@ -32,10 +30,6 @@ const ApplicationsTable = ({
 
     const columns = ["Job Position", "Status", "Application Date"]
 
-    useEffect(() => {
-        getJobsApplied();
-    }, [])
-
     return (
         <>
             <MUIDataTable
@@ -55,5 +49,4 @@ const mapStateToProps = ({ growthReducer }) => {
 };
 
 export default connect(mapStateToProps, {
-    getJobsApplied,
 })(ApplicationsTable);

@@ -5,21 +5,16 @@ import {
     Tooltip,
 } from "@material-ui/core";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import { getGrowthOpportunities, setGrowthOpportunity } from "../../../redux/actions/GrowthOpportunityActions"
+import { setGrowthOpportunity } from "../../../redux/actions/GrowthOpportunityActions"
 import { connect } from "react-redux";
 import MUIDataTable from "mui-datatables";
 
 const GrowthOppTable = ({
     growth_opportunities,
-    getGrowthOpportunities, 
     setGrowthOpportunity, 
     props
 }) => {
     const { history, match } = props
-
-    useEffect(() =>{
-        getGrowthOpportunities();
-    }, []);
     
     const handleDetailsClick = (item) => {
         setGrowthOpportunity(item);
@@ -84,6 +79,5 @@ const mapStateToProps = ({ growthReducer }) => {
 };
 
 export default connect(mapStateToProps, {
-    getGrowthOpportunities, 
     setGrowthOpportunity,
 })(GrowthOppTable);
