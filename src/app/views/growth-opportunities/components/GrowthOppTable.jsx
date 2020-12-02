@@ -50,8 +50,8 @@ const GrowthOppTable = ({
             return (
                 <>
                     <Tooltip title={"My metrics"}>
-                        <IconButton>
-                            <DashboardIcon onClick={handleMyMetricsClick}/>
+                        <IconButton onClick={handleMyMetricsClick}>
+                            <DashboardIcon/>
                         </IconButton>
                     </Tooltip>
                 </>
