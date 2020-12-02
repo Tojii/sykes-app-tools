@@ -40,7 +40,9 @@ export function logoutUser() {
 }
 
 export const updateUserData = (payload) => dispatch => {
+  const auth_user = localStorageService.getItem('auth_user');
   axios.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, payload, config).then(res => {
+    localStorageService.setItem('auth_user', {...auth_user, ...payload});
     history.push({
       pathname: "/"
     });
