@@ -10,12 +10,12 @@ export const navigations = [
     path: "/Inicio",
     icon: "content_paste",
   },
-  {
-    name: "LSS",
-    path: "/lss",
-    icon: "content_paste",
-    badge: { value: "New", color: "secondary" },
-  },
+  // {
+  //   name: "LSS",
+  //   path: "/lss",
+  //   icon: "content_paste",
+  //   badge: { value: "New", color: "secondary" },
+  // },
   {
     name: "Rembolso Educativo",
     icon: "monetization_on",

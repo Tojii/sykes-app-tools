@@ -60,8 +60,8 @@ const RefoundDetails = () => {
           },
           pagination: {
             next: "Siguente",
-            previous: "Regreasr",
-            rowsPerPage: "Filas por pagina:",
+            previous: "Regresar",
+            rowsPerPage: "Filas por página:",
             displayRows: "de",
           },
           toolbar: {
@@ -74,7 +74,7 @@ const RefoundDetails = () => {
           filter: {
             all: "TODAS",
             title: "FILTRADAS",
-            reset: "RESET",
+            reset: "ELIMINAR FILTROS",
           },
           viewColumns: {
             title: "Mostar Colmnas",
