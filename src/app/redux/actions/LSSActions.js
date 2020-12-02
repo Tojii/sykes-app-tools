@@ -1,6 +1,7 @@
 import axios from "axios";
 import history from "history.js";
 import jwtAuthService from "../../services/apiAuthService";
+import localStorageService from "../../services/localStorageService";
 
 export const GET_ACCOUNT = "GET_ACCOUNT";
 export const GET_SUPERVISOR_ACCOUNT = "GET_SUPERVISOR_ACCOUNT";
@@ -9,10 +10,18 @@ export const SUBMIT_DATA = "SUBMIT_DATA";
 export const GET_VALIDATE = "GET_VALIDATE";
 export const LSS_LOADING = "LSS_LOADING";
 
+const config = {
+  headers: {
+      "x-api-key": '7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH-F013C',
+      // "Access-Control-Allow-Origin": 'http://localhost:3000',
+      "Authorization": `Bearer ${ localStorageService.getItem('jwt_token') }`
+  }
+}
+
 export const getAccount = () => {
   return async dispatch => {
-    axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    await axios.get(`${process.env.REACT_APP_API_URL}/account`).then(res => {
+    // axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorageService.getItem("jwt_token");
+    await axios.get(`${process.env.REACT_APP_API_URL}/account`, config).then(res => {
         dispatch({
         type: GET_ACCOUNT,
         data: res.data
@@ -23,8 +32,8 @@ export const getAccount = () => {
 
 export const getSupervisorAccount = account => {
   return async dispatch => { 
-    axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    await axios.get(`${process.env.REACT_APP_API_URL}/supervisor?account=${account}`).then(res => {
+    // axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorageService.getItem("jwt_token");
+    await axios.get(`${process.env.REACT_APP_API_URL}/supervisor?account=${account}`, config).then(res => {
         dispatch({
         type: GET_SUPERVISOR_ACCOUNT,
         data: res.data
@@ -48,7 +57,7 @@ export const submitData = Data => {
     dispatch({
       type: LSS_LOADING
     });
-    axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+    // axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorageService.getItem("jwt_token");
     await axios.post(`${process.env.REACT_APP_API_URL}/survey`, 
     {
       "CuentaArea": Data.cuenta_area, 
@@ -74,7 +83,8 @@ export const submitData = Data => {
       "TomaEnCuentaOpinion": Data.TomaEnCuentaOpinion, "retroalimentacion": Data.retroalimentacion,
     "conversaciones": Data.conversaciones, "estrategias": Data.estrategias, "balance": Data.balance,
     "entendimiento": Data.entendimiento, "barreras": Data.barreras, "seguimiento": Data.seguimiento,
-    "perseverante": Data.perseverante, "general": Data.general, "Sugerencias": Data.sugerencia}
+    "perseverante": Data.perseverante, "general": Data.general, "Sugerencias": Data.sugerencia},
+    config
     ).then(res => {
         dispatch({
         type: SUBMIT_DATA
@@ -88,8 +98,8 @@ export const getValidation = username => {
     dispatch({
       type: LSS_LOADING
     });
-    axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    await axios.get(`${process.env.REACT_APP_API_URL}/survey?username=${username}`).then(res => {
+    // axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorageService.getItem("jwt_token");
+    await axios.get(`${process.env.REACT_APP_API_URL}/survey?username=${username}`, config).then(res => {
         dispatch({
         type: GET_VALIDATE,
         data: res.data
@@ -100,7 +110,7 @@ export const getValidation = username => {
 
 export const getJefeDirecto = criteria => {
   return async dispatch => {
-    axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+    axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorageService.getItem("jwt_token");
     await axios.get(`${process.env.REACT_APP_API_URL}/user?criteria=` + criteria).then(res => {
         dispatch({
         type: GET_JEFE_DIRECTO,

@@ -11,7 +11,7 @@ export const UPDATER_USER_DATA = "UPDATER_USER_DATA";
 const config = {
   headers: {
       "x-api-key": '7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH-F013C',
-      "Access-Control-Allow-Origin": 'http://localhost:3000',
+      // "Access-Control-Allow-Origin": 'http://localhost:3000',
       "Authorization": `Bearer ${ localStorageService.getItem('jwt_token') }`
   }
 }
