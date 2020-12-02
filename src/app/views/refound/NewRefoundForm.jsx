@@ -33,19 +33,19 @@ import Loading from "../../../matx/components/MatxLoadable/Loading";
 import MuiAlert from '@material-ui/lab/Alert';
 
 function getSteps() {
-  return ["Categoria del Curso", "Datos del Curso", "Archivos Adjuntos"];
+  return ["Categoría del Curso", "Datos del Curso", "Archivos Adjuntos"];
 }
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export const  UNIVERSITY_STUDIES = "ESTUDIOS UNIVERSITARIOS";
-export const  CERTIFICATION = "CERTIFICACIÓN";
-export const  CISCO = "CISCO";
-export const  LANGUAGES = "IDIOMAS";
-export const  TECHNICAL_STUDIES = "ESTUDIOS TÉCNICOS";
-export const  OTHERS = "OTROS";
+export const UNIVERSITY_STUDIES = "ESTUDIOS UNIVERSITARIOS";
+export const CERTIFICATION = "CERTIFICACIÓN";
+export const CISCO = "CISCO";
+export const LANGUAGES = "IDIOMAS";
+export const TECHNICAL_STUDIES = "ESTUDIOS TÉCNICOS";
+export const OTHERS = "OTROS";
 
 const NewRefoundForm = () => {
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ const NewRefoundForm = () => {
   const studiesCatergory = useSelector(state => state.refound.studiesCatergory);
   const universityInstitutes = useSelector(state => state.refound.universityInstitutes);
   const ciscoAcademies = useSelector(state => state.refound.ciscoAcademies);
-  const techStudiesCenter =  useSelector(state => state.refound.techStudiesCenter);
+  const techStudiesCenter = useSelector(state => state.refound.techStudiesCenter);
   const languageAcademies = useSelector(state => state.refound.languageAcademies);
   const certifications = useSelector(state => state.refound.certifications);
   const saveRefound = useSelector(state => state.refound.saveRefound);
@@ -61,16 +61,20 @@ const NewRefoundForm = () => {
   const steps = getSteps();
   const isLoading = useSelector(state => state.refound.loading);
   const [isError, setError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
   const [isErrorUpload, setIsErrorUpload] = useState(false);
-  const [isErrorSaveRefound, setisErrorSaveRefound] = useState(false);
   const [errorMessage, setErrorMessage] = useState([]);
   const [files, setFiles] = useState([]);
-  const [submitMessage, setSubmitMessage] = useState([]);
-  let date = new Date();
-  
+  const [open, setOpen] = useState({
+    startDate : false,
+    endDate: false,
+    certificationDate: false
+  });
+
   const [form, setForm] = useState({
-    badge:user.badge, //'42553',,
+    badge: user.badge, //'42553',,
     name: user.fullname,
+    exchangeRate: '',
     studiesCategory: '',
     universityInstitute: '',
     techStudiesCenter: '',
@@ -80,9 +84,9 @@ const NewRefoundForm = () => {
     others: '',
     course: '',
     invoiceNumber: '',
-    certificationDate: new Date(),
-    startDate: new Date(),
-    endDate: date.setDate(date.getDate()+1),
+    certificationDate: null, //new Date(),
+    startDate: null, //new Date(),
+    endDate: null, //date.setDate(date.getDate()+1),
     email: ''
   });
 
@@ -91,22 +95,45 @@ const NewRefoundForm = () => {
     dispatch(getStudiesCatergory());
   }, []);
 
-  function validateEmail (email) {
+  const validateEmail = (email) => {
     const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return regexp.test(email);
   }
 
   const handleChange = (event) => {
     event.persist();
-    if(event.target.name == "email"){
-        if(!validateEmail(event.target.value)){
-          setError(true);
-          setErrorMessage(errorMessage => ({...errorMessage, email: "*Se debe ingresar el correo en formato correcto"}));
-        }else{
-          setError(false);
-          setErrorMessage(errorMessage => ({...errorMessage, email: null}));
-        }
+    if (event.target.name == "email") {
+      if (!validateEmail(event.target.value)) {
+        setEmailError(true);
+        setErrorMessage(errorMessage => ({ ...errorMessage, email: "*Se debe ingresar el correo en formato correcto" }));
+      } else {
+        setEmailError(false);
+        setErrorMessage(errorMessage => ({ ...errorMessage, email: null }));
+      }
     }
+
+    if (event.target.name == "course" && event.target.value != "") {
+      setErrorMessage(errorMessage => ({ ...errorMessage, course: "" }));
+    }
+
+    if (event.target.name == "invoiceNumber" && event.target.value != "") {
+      setErrorMessage(errorMessage => ({ ...errorMessage, invoiceNumber: "" }));
+    }
+
+    if (isError) {
+
+      if ((event.target.name == "universityInstitute" || event.target.name == "certification" ||
+        event.target.name == "ciscoAcademy" || event.target.name == "languajeCenter" || event.target.name == "techStudiesCenter") && event.target.value != "") {
+        setError(false);
+        setErrorMessage(errorMessage => ({ ...errorMessage, customFormControl: "" }));
+      }
+
+      if (event.target.name == "others" && event.target.value != null) {
+        setError(false);
+        setErrorMessage(errorMessage => ({ ...errorMessage, others: "" }));
+      }
+    }
+
     setForm({
       ...form,
       [event.target.name]: event.target.value,
@@ -116,49 +143,42 @@ const NewRefoundForm = () => {
   const ValidateSelect = () => {
     switch (form.studiesCategory.toUpperCase()) {
       case UNIVERSITY_STUDIES:
-        if(form.universityInstitute == "" || form.universityInstitute == undefined ){
+        if (form.universityInstitute == "" || form.universityInstitute == undefined) {
           setError(true);
-          setErrorMessage(errorMessage => ({...errorMessage, customFormControl:"*Se debe seleccionar una Insitución Universitaria"})); 
-          return true;
+          setErrorMessage(errorMessage => ({ ...errorMessage, customFormControl: "*Se debe seleccionar una Insitución Universitaria" }));
         }
         break;
       case CERTIFICATION:
-        if(form.certification == "" || form.certification == undefined ){
+        if (form.certification == "" || form.certification == undefined) {
           setError(true);
-          setErrorMessage(errorMessage => ({...errorMessage, customFormControl:"*Se debe seleccionar un centro de Certificación"})); 
-          return true;
+          setErrorMessage(errorMessage => ({ ...errorMessage, customFormControl: "*Se debe seleccionar un centro de Certificación" }));
         }
         break;
       case CISCO:
-        if(form.ciscoAcademy == "" || form.ciscoAcademy == undefined ){
+        if (form.ciscoAcademy == "" || form.ciscoAcademy == undefined) {
           setError(true);
-          setErrorMessage(errorMessage => ({...errorMessage, customFormControl:"*Se debe seleccionar una academia de CISCO"})); 
-          return true;
+          setErrorMessage(errorMessage => ({ ...errorMessage, customFormControl: "*Se debe seleccionar una academia de CISCO" }));
         }
         break;
       case LANGUAGES:
-        if(form.languajeCenter == "" || form.languajeCenter == undefined ){
+        if (form.languajeCenter == "" || form.languajeCenter == undefined) {
           setError(true);
-          setErrorMessage(errorMessage => ({...errorMessage, customFormControl:"*Se debe seleccionar un centro de Idiomas"})); 
-          return true;
+          setErrorMessage(errorMessage => ({ ...errorMessage, customFormControl: "*Se debe seleccionar un centro de Idiomas" }));
         }
         break;
       case TECHNICAL_STUDIES:
-        if(form.techStudiesCenter == "" || form.techStudiesCenter == undefined ){
+        if (form.techStudiesCenter == "" || form.techStudiesCenter == undefined) {
           setError(true);
-          setErrorMessage(errorMessage => ({...errorMessage, customFormControl:"*Se debe seleccionar un centro de estudios técnico"})); 
-          return true;
+          setErrorMessage(errorMessage => ({ ...errorMessage, customFormControl: "*Se debe seleccionar un centro de estudios técnico" }));
         }
         break;
       case OTHERS:
-        if(form.others == "" || form.others == undefined ){
+        if (form.others == "" || form.others == undefined) {
           setError(true);
-          setErrorMessage(errorMessage => ({...errorMessage, others:"*Se debe ingresar un valor"})); 
-          return true;
+          setErrorMessage(errorMessage => ({ ...errorMessage, others: "*Se debe ingresar un valor" }));
         }
         break;
       default:
-        return false;
         break;
     }
 
@@ -166,28 +186,42 @@ const NewRefoundForm = () => {
 
   const handleNext = () => {
     let isErrorValidation = false;
-    if(activeStep == 1){
-      
-      isErrorValidation = ValidateSelect();
+    if (activeStep == 1) {
 
-      if(form.course == "" || form.course == undefined ){
+      ValidateSelect();
+
+      if (form.course == "" || form.course == undefined) {
         isErrorValidation = true;
-        setErrorMessage(errorMessage => ({...errorMessage, course:"*Se debe ingresar el nombre del curso"}));   
+        setErrorMessage(errorMessage => ({ ...errorMessage, course: "*Se debe ingresar el nombre del curso" }));
       }
 
-      if(form.invoiceNumber == "" || form.invoiceNumber == undefined ){
-        isErrorValidation = true;  
-        setErrorMessage(errorMessage => ({...errorMessage, invoiceNumber:"*Se debe ingresar una factura válida"}));
-      }
-
-      if(form.email == "" || form.email == undefined){
+      if (form.invoiceNumber == "" || form.invoiceNumber == undefined) {
         isErrorValidation = true;
-        setErrorMessage(errorMessage => ({...errorMessage, email:"*Se debe ingresar el correo en formato correcto"}));
+        setErrorMessage(errorMessage => ({ ...errorMessage, invoiceNumber: "*Se debe ingresar una factura válida" }));
       }
-      
+
+      if (form.email == "" || form.email == undefined) {
+        isErrorValidation = true;
+        setErrorMessage(errorMessage => ({ ...errorMessage, email: "*Se debe ingresar el correo en formato correcto" }));
+      }
+
+      if (form.studiesCategory.toUpperCase() == CERTIFICATION) {
+        if (form.certificationDate == null) {
+          isErrorValidation = true;
+          setErrorMessage(errorMessage => ({ ...errorMessage, certificationDate: "*Se debe seleccionar la fecha de certificación" }));
+        }
+      } else {
+        if (form.startDate == null) {
+          isErrorValidation = true;
+          setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*Se debe seleccionar la fecha de inicio" }));
+        }
+        if (form.endDate == null) {
+          isErrorValidation = true;
+          setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "*Se debe seleccionar la fecha de finalización" }));
+        }
+      }
     }
-     
-    if (!isErrorValidation) {
+    if (!isErrorValidation && !isError && !emailError) {
       setActiveStep(prevActiveStep => prevActiveStep + 1);
     } else {
       return;
@@ -196,20 +230,29 @@ const NewRefoundForm = () => {
   };
 
   const handleBack = () => {
-    setActiveStep(prevActiveStep =>prevActiveStep - 1);
-    
-    if(activeStep == 1){
+    setActiveStep(prevActiveStep => prevActiveStep - 1);
+
+    if (activeStep == 1) {
       setForm({
         ...form,
+        studiesCategory: '',
         universityInstitute: '',
         techStudiesCenter: '',
         languajeCenter: '',
         certification: '',
         ciscoAcademy: '',
         others: '',
-      })
+        course: '',
+        invoiceNumber: '',
+        certificationDate: null,
+        startDate: null,
+        endDate: null,
+        email: ''
+      });
     };
     setError(false);
+    setEmailError(false);
+    setFiles([]);
     setErrorMessage([]);
   };
 
@@ -226,29 +269,31 @@ const NewRefoundForm = () => {
       others: '',
       course: '',
       invoiceNumber: '',
-      certificationDate: '',
-      startDate: new Date(),
-      endDate: new Date(),
+      certificationDate: null,
+      startDate: null,
+      endDate: null,
       email: ''
     });
     setError(false);
+    setEmailError(false);
+    setFiles([]);
     setErrorMessage([]);
   };
 
   const handleSubmit = async () => {
-    if(files.length <= 0 ){
+    if (files.length <= 0) {
       setIsErrorUpload(true);
-      setErrorMessage(errorMessage => ({...errorMessage, files:"*Se debe seleccionar al menos un archivo"}));   
+      setErrorMessage(errorMessage => ({ ...errorMessage, files: "*Se debe seleccionar al menos un archivo" }));
       return;
     }
     setActiveStep(steps.length);
     await dispatch(SaveRefund(form, files));
-    
+
     // if(saveRefound != null){
     //   if(saveRefound.success == true){
     //     console.log("saveRefound Inside", saveRefound)
     //     setSubmitMessage({message:"¡Guardado existosamente!"});
-        
+
     //   }else{
     //     setisErrorSaveRefound(true);
     //     setSubmitMessage({message:"¡Se produjo un error, por favor vuelva a intentarlo!"})
@@ -256,14 +301,26 @@ const NewRefoundForm = () => {
     // }
   }
 
-  const handleDateChangeStartDate = date => {  
+  const handleDateChangeStartDate = date => {
+    if (date != null) {
+      setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
+    }
+
     setForm({
       ...form,
       startDate: date,
+      // endDate: newDate.setDate(newDate.getDate() + 1),
     });
+
+    console.log("endDate", form.endDate);
   };
 
   const handleDateChangeEndDate = date => {
+    
+    if (date != null) {
+      setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "", endDate: "" }));
+    }
+
     setForm({
       ...form,
       endDate: date,
@@ -271,12 +328,16 @@ const NewRefoundForm = () => {
   };
 
   const handleDateChangeCertificationDate = date => {
+    if (date != null) {
+      setErrorMessage(errorMessage => ({ ...errorMessage, certificationDate: "" }));
+    }
+
     setForm({
       ...form,
       certificationDate: date,
     });
   };
-  const CustomFormControl = (props) => (  
+  const CustomFormControl = (props) => (
     <FormControl className="form-control-leader mt-24 mr-24" error={isError}>
       <InputLabel id={`input-${props.id}`}>{props.label}</InputLabel>
       <Select labelId={`label-${props.id}`} onChange={event => handleChange(event)}
@@ -291,7 +352,7 @@ const NewRefoundForm = () => {
         ))}
       </Select>
       <FormHelperText>
-              {errorMessage.customFormControl}
+        {errorMessage.customFormControl}
       </FormHelperText>
     </FormControl>
   );
@@ -299,28 +360,28 @@ const NewRefoundForm = () => {
   const handleSelectCategory = () => {
     switch (form.studiesCategory.toUpperCase()) {
       case UNIVERSITY_STUDIES:
-      return (
-           <CustomFormControl label="Institución Universitaria *" id="universityInstitute" value={form.universityInstitute} dataArray={universityInstitutes} />
+        return (
+          <CustomFormControl label="Institución Universitaria *" id="universityInstitute" value={form.universityInstitute} dataArray={universityInstitutes} />
         );
       case CERTIFICATION:
         return (
-          <CustomFormControl label="Centros de certificación *" id="certification" value={form.certification} dataArray={certifications}/>
+          <CustomFormControl label="Centros de certificación *" id="certification" value={form.certification} dataArray={certifications} />
         );
       case CISCO:
         return (
-          <CustomFormControl label="Academia CISCO *" id="ciscoAcademy" value={form.ciscoAcademy} dataArray={ciscoAcademies}/>
+          <CustomFormControl label="Academia CISCO *" id="ciscoAcademy" value={form.ciscoAcademy} dataArray={ciscoAcademies} />
         );
       case LANGUAGES:
         return (
-          <CustomFormControl label="Centros de Idiomas *" id="languajeCenter" value={form.languajeCenter} dataArray={languageAcademies}/>
+          <CustomFormControl label="Centros de Idiomas *" id="languajeCenter" value={form.languajeCenter} dataArray={languageAcademies} />
         );
       case TECHNICAL_STUDIES:
         return (
-          <CustomFormControl label="Centro de estudios técnico *" id="techStudiesCenter" value={form.techStudiesCenter} dataArray={techStudiesCenter}/>
+          <CustomFormControl label="Centro de estudios técnico *" id="techStudiesCenter" value={form.techStudiesCenter} dataArray={techStudiesCenter} />
         );
       case OTHERS:
         return (
-          <TextField name="others" value={form.others} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Otros" onChange={event => handleChange(event)} 
+          <TextField name="others" value={form.others} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Otros" onChange={event => handleChange(event)}
             error={!!errorMessage.others}
             helperText={errorMessage.others}
           />
@@ -335,11 +396,11 @@ const NewRefoundForm = () => {
       case 0:
         return (
           <div className="mb-24">
-            <TextField name="bagde" value={form.badge} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Bagde"
+            <TextField name="bagde" value={form.badge} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Badge" disabled variant="filled"
               InputProps={{
                 readOnly: true,
               }} />
-            <TextField name="nombre" value={form.name} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Nombre"
+            <TextField name="nombre" value={form.name} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Nombre" disabled variant="filled"
               InputProps={{
                 readOnly: true,
               }}
@@ -361,7 +422,7 @@ const NewRefoundForm = () => {
               </Select>
             </FormControl>
             <div className="Message">
-                <p>Seleccione una categoría de Estudio.</p>
+              <p>Seleccione una categoría de Estudio.</p>
             </div>
           </div>
         );
@@ -390,72 +451,111 @@ const NewRefoundForm = () => {
             />
 
             {form.studiesCategory.toUpperCase() != CERTIFICATION ?
-            <div>
-            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-              <KeyboardDatePicker
-                className="mr-24 mt-24"
-                style={{ width: "calc(50% - 24px)" }}
-                margin="none"
-                id="mui-pickers-date"
-                label="Fecha de Inicio*"
-                inputVariant="standard"
-                type="text"
-                autoOk={true}
-                value={form.startDate}
-                name="startDate"
-                onChange={handleDateChangeStartDate}
-                format="dd/MM/yyyy"
-                KeyboardButtonProps={{
-                  "aria-label": "change date"
-                }}
-              />
-            </MuiPickersUtilsProvider>
+              <div>
+                {/* <TextField
+                  id="date"
+                  label="Fecha de Inicio*"
+                  type="date"
+                  value={form.startDate}
+                  name="startDate"
+                  className="mr-24 mt-24" 
+                  style={{ width: "calc(50% - 24px)" }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={!!errorMessage.startDate}
+                  helperText={errorMessage.startDate}
+                  onChange={handleDateChangeStartDate}
+                /> */}
 
-            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-              <KeyboardDatePicker
-                className="mr-24 mt-24"
-                style={{ width: "calc(50% - 24px)" }}
-                margin="none"
-                id="mui-pickers-date"
-                label="Fecha de Finalización*"
-                inputVariant="standard"
-                type="text"
-                autoOk={true}
-                value={form.endDate}
-                name="endDate"
-                onChange={handleDateChangeEndDate}
-                format="dd/MM/yyyy"
-                KeyboardButtonProps={{
-                  "aria-label": "change date"
-                }}
-                minDate= {new Date().setDate(form.startDate.getDate()+1)}
-              />
-            </MuiPickersUtilsProvider>
-            </div> : 
-            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-              <KeyboardDatePicker
-                className="mr-24 mt-24"
-                style={{ width: "calc(50% - 24px)" }}
-                margin="none"
-                id="mui-pickers-date"
-                label="Fecha de Certificación*"
-                inputVariant="standard"
-                type="text"
-                autoOk={true}
-                value={form.certificationDate}
-                name="endDate"
-                onChange={handleDateChangeCertificationDate}
-                format="dd/MM/yyyy"
-                KeyboardButtonProps={{
-                  "aria-label": "change date"
-                }}
-              />
-            </MuiPickersUtilsProvider>
+                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
+                  <KeyboardDatePicker
+                    cancelLabel="CANCELAR"
+                    error={!!errorMessage.startDate}
+                    helperText={errorMessage.startDate}
+                    open={open.startDate}
+                    onClick={() => setOpen({ ...open, startDate: true })}
+                    onClose={() => setOpen({ ...open, startDate: false })}
+                    className="mr-24 mt-24"
+                    style={{ width: "calc(50% - 24px)" }}
+                    margin="none"
+                    id="mui-pickers-date"
+                    label="Fecha de Inicio*"
+                    inputVariant="standard"
+                    type="text"
+                    autoOk={true}
+                    value={form.startDate}
+                    name="startDate"
+                    onChange={handleDateChangeStartDate}
+
+                    format="dd/MM/yyyy"
+                    KeyboardButtonProps={{
+                      "aria-label": "change date"
+                    }}
+                    readOnly = {true}
+                  />
+                </MuiPickersUtilsProvider>
+
+                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
+                  <KeyboardDatePicker
+                    cancelLabel="CANCELAR"
+                    error={!!errorMessage.endDate}
+                    helperText={errorMessage.endDate}
+                    open = {open.endDate}
+                    onClick={form.startDate !=  null? () => setOpen({...open, endDate: true}) :() => setOpen({...open, endDate: false}) }
+                    onClose = { () => setOpen({...open, endDate: false})}
+                    className="mr-24 mt-24"
+                    style={{ width: "calc(50% - 24px)" }}
+                    margin="none"
+                    id="mui-pickers-date"
+                    label="Fecha de Finalización*"
+                    inputVariant="standard"
+                    type="text"
+                    autoOk={true}
+                    value={form.endDate}
+                    name="endDate"
+                    onChange={handleDateChangeEndDate}
+                    format="dd/MM/yyyy"
+                    KeyboardButtonProps={{
+                      "aria-label": "change date"
+                    }}
+                    minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000 ) : null}
+                    disabled={!form.startDate}
+                    readOnly = {true}
+                  />
+                </MuiPickersUtilsProvider>
+              </div> :
+              <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
+                <KeyboardDatePicker
+                  cancelLabel="CANCELAR"
+                  error={!!errorMessage.certificationDate}
+                  helperText={errorMessage.certificationDate}
+                  open = {open.certificationDate}
+                  onClick={()=>setOpen({...open, certificationDate: true})}
+                  onClose = {()=>setOpen({...open, certificationDate: false})}
+                  className="mr-24 mt-24"
+                  style={{ width: "calc(50% - 24px)" }}
+                  margin="none"
+                  id="mui-pickers-date"
+                  label="Fecha de Certificación*"
+                  inputVariant="standard"
+                  type="text"
+                  autoOk={true}
+                  value={form.certificationDate}
+                  name="certificationDate"
+                  onChange={handleDateChangeCertificationDate}
+                  format="dd/MM/yyyy"
+                  KeyboardButtonProps={{
+                    "aria-label": "change date"
+                  }}
+                  readOnly = {true}
+                />
+              </MuiPickersUtilsProvider>
             }
           </div>
         );
       case 2:
-        return <UploadForm files={files} setFiles= {setFiles} isError={isErrorUpload} setErrorMessage={setIsErrorUpload} errorMessage={errorMessage.files} />
+        return <UploadForm files={files} setFiles={setFiles} isError={isErrorUpload} setErrorMessage={setIsErrorUpload} errorMessage={errorMessage.files} />
       default:
         return "";
     }
@@ -465,7 +565,7 @@ const NewRefoundForm = () => {
     <div>
       {isLoading ? <Loading /> :
         <div className="m-sm-30">
-          <SimpleCard title="Horizontal Stepper">
+          <SimpleCard title="Nuevo reembolso educativo">
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map(label => (
                 <Step key={label}>
@@ -477,7 +577,7 @@ const NewRefoundForm = () => {
               {activeStep === steps.length ? (
                 <div className="">
                   <div className="d-flex justify-content-center mb-16">
-                    <Alert severity={!saveRefound.succes ? "success": "warning"}>
+                    <Alert severity={!saveRefound.succes ? "success" : "warning"}>
                       {!saveRefound.succes ? "¡Guardado existosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
                     </Alert>
                   </div>

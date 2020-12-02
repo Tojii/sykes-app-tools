@@ -51,14 +51,18 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
     let list = [];
 
     for (const iterator of filesList) {  
-      if (iterator.size/1024/1024 > 1) {
-        setOpen({open: true, message: `¡El archivo ${iterator.name}  tiene un peso mayor de 1 MB!`});
+      if(iterator.type == "application/pdf" || iterator.type == "image/png" || 
+      iterator.type == "image/jpeg" || iterator.type == "image/jpg"){
+        if (iterator.size/1024/1024 > 1) {
+          setOpen({open:true, message: `¡El archivo ${iterator.name}  tiene un peso mayor de 1 MB por lo que no se puede guardar!`});
+        }else{
+          list.push({
+            file: iterator,
+          });
+        }
       }else{
-        list.push({
-          file: iterator,
-        });
+        setOpen({open:true, message:`¡El archivo ${iterator.name} no tiene el formato correcto!`});
       }
-      
     }
     setFiles((item)=>[...item, ...list]);
   };

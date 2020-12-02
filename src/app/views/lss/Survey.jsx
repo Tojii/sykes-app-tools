@@ -209,6 +209,7 @@ const Survey = () => {
   const handleJefeDirectoChange = (event, setFieldValue) => { 
     setShowJefeDirecto(event.target.value === "Jefe-Directory");
     handleFieldChange(event, setFieldValue);
+    
   }
 
   return (

@@ -30,21 +30,37 @@ export const SaveRefund = (Data, Files) =>{
   var formData = new FormData();
   formData.append('badge', Data.badge);
   formData.append('name', Data.name);
-  formData.append('exchangeRate', Data.name);
+  formData.append('exchangeRate', Data.exchangeRate);
   formData.append('studiesCategory', Data.studiesCategory);
   formData.append('course', Data.course);
   formData.append('invoiceNumber', Data.invoiceNumber);
-  formData.append('techincalStudiesCenter', Data.techincalStudiesCenter);
+  formData.append('techincalStudiesCenter', Data.techStudiesCenter);
   formData.append('languajeCenter', Data.languajeCenter);
   formData.append('ciscoAcademy', Data.ciscoAcademy);
   formData.append('universityInstitute', Data.universityInstitute);
   formData.append('certification', Data.certification);
   formData.append('others', Data.others);
   formData.append('email', Data.email);
-  formData.append('startDate', format(Data.startDate, 'dd/MM/yyyy kk:mm:ss'));
-  formData.append('endDate', format(Data.endDate, 'dd/MM/yyyy kk:mm:ss'));
-  formData.append('certificationDate', format(Data.certificationDate, 'dd/MM/yyyy kk:mm:ss'));
+  
+  if(Data.startDate != null){
+    console.log((format(Data.startDate, 'P p')).toString());
+    formData.append('startDate', (format(Data.startDate, 'P p')).toString());
+  }else{
+    formData.append('startDate', Data.startDate);
+  }
 
+  if(Data.endDate != null){
+    formData.append('endDate', (format(Data.endDate, 'P p')).toString());
+  }else{
+    formData.append('endDate', Data.endDate);
+  }
+  
+  if(Data.certificationDate){
+    formData.append('certificationDate', (format(Data.certificationDate, 'P p')).toString());
+  }else{
+    formData.append('certificationDate', Data.certificationDate);
+  }
+  
   if(Files.length > 0){
     Files.forEach(item => {
       formData.append('files', item.file);

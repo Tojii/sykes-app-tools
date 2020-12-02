@@ -4,11 +4,14 @@ import {
     Icon,
     Button,
     Card,
+    Tooltip,
+    IconButton,
 } from "@material-ui/core";
 import { GetRefoundListByUser } from "../../redux/actions/RefoundActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import MUIDataTable from "mui-datatables";
+import AddIcon from "@material-ui/icons/Add";
 
 const Home = () => {
     const summary = useSelector(state => state.refound.summary);
@@ -16,6 +19,18 @@ const Home = () => {
     const isLoading  = useSelector(state => state.refound.loading);
     const user = useSelector(state => state.user);
     
+    const addButton = () => {
+        return (
+            <React.Fragment>
+              <Tooltip title={"Nuevo"}>
+                <IconButton component={Link} to="/ReembolsoEducativo/Nuevo">
+                  <AddIcon/>
+                </IconButton>
+              </Tooltip>
+            </React.Fragment>
+        );
+    }
+
     const columns = [
         {
          name: "id",
@@ -80,6 +95,9 @@ const Home = () => {
         selectableRowsHeader: false,
         selectableRowsOnClick: false,
         print:false,
+        customToolbar: () => {
+            return (addButton());
+        },
         textLabels: {
           body: {
             noMatch: "Disculpas, no se encontraron registros",
@@ -88,7 +106,7 @@ const Home = () => {
           },
           pagination: {
             next: "Siguente",
-            previous: "Regreasr",
+            previous: "Regresar",
             rowsPerPage: "Filas por pagina:",
             displayRows: "de",
           },
@@ -102,7 +120,7 @@ const Home = () => {
           filter: {
             all: "TODAS",
             title: "FILTRADAS",
-            reset: "RESET",
+            reset: "ELIMINAR FILTROS",
           },
           viewColumns: {
             title: "Mostar Colmnas",
@@ -124,15 +142,6 @@ const Home = () => {
         <div>
             { isLoading ? <Loading /> : 
                 <div className="m-sm-30">
-                    <Button
-                        className="mb-16"
-                        variant="contained"
-                        color="primary"
-                        component={Link} to="/ReembolsoEducativo/Nuevo"
-                    >
-                        <Icon>add</Icon>
-                        <span>Nuevo</span>
-                    </Button>
                     <Card className="w-100 overflow-auto" elevation={6}>
                         <MUIDataTable
                             title={"Lista de Reembolsos"}
