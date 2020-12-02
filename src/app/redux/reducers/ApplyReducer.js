@@ -16,7 +16,7 @@ export default (state = INIT_STATE, action) => {
         case SET_APPLY_DATA:
             return { ...state, apply: action.payload };
         case SAVE_JOB_APPLICATION:
-            return { ...state, apply: action.payload };
+            return { ...state };
         case SET_VALIDATIONS:
             return { ...state, validations: action.payload };  
         default:
