@@ -221,6 +221,10 @@ const Survey = () => {
 
   const handleJefeDirectoChange = (event, setFieldValue) => { 
     setShowJefeDirecto(event.target.value === "Jefe-Directory");
+    if (event.target.value === "Jefe-Directory") {
+      event.target.value = "";
+    }
+    console.log("jefedirecto", event.target.value);
     handleFieldChange(event, setFieldValue);
   }
 
@@ -269,9 +273,10 @@ const Survey = () => {
                   <Grid spacing={10} container>
                     {!showJefeDirecto ? null : (
                       <Grid item sm={6} xs={12}>
+                        {console.log("jefes auto",jefes)}
                         <FormControl className="form-control-leader">
                           <AutocompleteField name="JefeDirecto" value={jefes.map(jefe => (jefe.fullName))} 
-                          onInputChange={getJefeDirecto} onChange={setFieldValue} options={jefes.map(jefe => (jefe.fullName))} label="Jefe Directo *" />
+                          onInputChange={getJefeDirecto} onChange={setFieldValue} options={jefes == [] ? [""] : jefes.map(jefe => (jefe.fullName != null ? jefe.fullName : ""))} label="Jefe Directo *" />
                         </FormControl>
                       </Grid>
                       )

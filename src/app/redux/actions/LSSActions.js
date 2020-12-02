@@ -106,14 +106,21 @@ export const getValidation = username => {
 };
 
 export const getJefeDirecto = criteria => {
-  return async dispatch => {
-    axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
-    await axios.get(`${process.env.REACT_APP_API_URL}/user?criteria=` + criteria).then(res => {
-      dispatch({
-      type: GET_JEFE_DIRECTO,
-      data: res.data
+    return async dispatch => {
+      axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+      axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
+      await axios.get(`${process.env.REACT_APP_API_URL}/user?criteria=` + criteria).then(res => {
+        console.log("axios then", res.data)
+        dispatch({
+        type: GET_JEFE_DIRECTO,
+        data: res.data != [] ? res.data : ""
+        });
+      }).catch(function(error){
+        console.log("Error", error);
+        dispatch({
+          type: GET_JEFE_DIRECTO,
+          data: ""
+        });
       });
-    })
-  };
+    };
 };

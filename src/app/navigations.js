@@ -10,12 +10,12 @@ export const navigations = [
     icon: "content_paste",
     badge: { value: "New", color: "secondary" },
   },
-  {
-    name: "Raft",
-    path: "/Raft",
-    icon: "person_add_alt_1",
-    badge: { value: "New", color: "secondary" },
-  }, 
+  // {
+  //   name: "Raft",
+  //   path: "/Raft",
+  //   icon: "person_add_alt_1",
+  //   badge: { value: "New", color: "secondary" },
+  // }, 
   // {
   //   name: "UI Kits",
   //   icon: "favorite",
