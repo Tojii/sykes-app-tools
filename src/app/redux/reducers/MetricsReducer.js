@@ -3,7 +3,7 @@ import {
 } from "../actions/MetricsActions";
 
 const INIT_STATE = {
-    metrics: {},
+    metrics: null,
 };
 
 export default (state = INIT_STATE, action) => {

@@ -37,16 +37,16 @@ const MyMetrics = ({ metrics, history }) => {
     return (
         <>
             <Grid container spacing={1}>
-            <Grid item lg={12} md={12} sm={12} xs={12}>
-                    <Grid container spacing={2} md={12} className="m-24">
-                        <Grid item xs={3} md={3}>
-                            <Card className="play-card p-sm-24 bg-paper" elevation={6}>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <Grid container spacing={2} className="m-24">
+                        <Grid item xs={11} md={3}>
+                            <Card className="play-card p-sm-24 bg-paper h-100" elevation={6}>
                                 <div className="flex flex-middle">
                                     <p className="m-0" style={{
                                         fontSize: "44px",
                                         opacity: 0.6,
                                         color: 'primary'
-                                    }}>5</p>
+                                    }}>{ metrics.tenure_in_Months || ""}</p>
                                     <div className="ml-12">
                                     <h6 className="m-0 mt-4 text-primary font-weight-500">
                                         Tenure
@@ -56,25 +56,25 @@ const MyMetrics = ({ metrics, history }) => {
                                 </div>
                             </Card>
                         </Grid>
-                        <Grid item xs={3} md={3}>
-                            <Card className="play-card p-sm-24 bg-paper" elevation={6}>
+                        <Grid item xs={11} md={3}>
+                            <Card className="play-card p-sm-24 bg-paper h-100" elevation={6}>
                                 <div className="flex flex-middle">
                                     <p className="m-0" style={{
                                         fontSize: "44px",
                                         opacity: 0.6,
                                         color: 'primary'
-                                    }}>{ metrics.englishScoreCurrent || ""}</p>
+                                    }}>{ metrics.final_Score || ""}</p>
                                     <div className="ml-12">
                                     <h6 className="m-0 mt-4 text-primary font-weight-500">
                                         English Level
                                     </h6>
-                                    <small className="text-muted">{ metrics.englishScoreCurrentDate || "no level"}</small>
+                                    <small className="text-muted">{ metrics.fecha_de_Evaluacion || ""}</small>
                                     </div>
                                 </div>
                             </Card>
                         </Grid>
-                        <Grid item xs={5} md={5}>
-                            <Card elevation={3} className="p-16">
+                        <Grid item xs={11} md={5}>
+                            <Card elevation={3} className="p-16 h-100">
                                 <div className="flex flex-middle">
                                     <Fab
                                     size="medium"
@@ -82,21 +82,42 @@ const MyMetrics = ({ metrics, history }) => {
                                     >
                                     <Icon className="text-warning">warning</Icon>
                                     </Fab>
-                                    <h5 className="font-weight-500 text-warning m-0 ml-12">
-                                    Warnings
-                                    </h5>
+                                    <div>
+                                        <h6 className="font-weight-500 text-warning m-0 ml-12">
+                                            Warnings
+                                        </h6>
+                                        <h3 className="font-weight-500 m-0 ml-12">
+                                            { 
+                                                metrics.eWarning_Action == "Verbal" 
+                                                    ? "N/A"
+                                                    : metrics.eWarning_Action || ""
+                                            }
+                                        </h3>
+                                    </div>
                                 </div>
                                 <div className="pt-16 flex flex-middle">
-                                    <h2 className="m-0 text-muted flex-grow-1">{ metrics.warningCurrentType || "" }</h2>
-                                    <span className="font-size-13 text-warning ml-4">{ metrics.warningCurrentDate || "no warnings" }</span>
+                                    <h3 className="m-0 text-muted flex-grow-1">
+                                        { 
+                                            metrics.dA_Category == "Verbal" 
+                                                ? "N/A"
+                                                : metrics.dA_Category || ""
+                                        }
+                                    </h3>
+                                    <span className="font-size-13 text-warning ml-4">
+                                        { 
+                                            metrics.eWarning_Date == "Verbal" 
+                                                ? "N/A"
+                                                : metrics.eWarning_Date || ""
+                                        }
+                                    </span>
                                 </div>
                             </Card>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item lg={12} md={12} sm={12} xs={12}>
-                    <Grid container spacing={2} md={12} className="mx-24">
-                        <Grid item lg={11} md={11} sm={11}>
+                    <Grid container spacing={2} className="mx-24">
+                        <Grid item xs={11} md={11}>
                             <Card elevation={3} className="p-44">
                                 <h4>Your current metrics</h4>
                                 <Table>
@@ -111,25 +132,25 @@ const MyMetrics = ({ metrics, history }) => {
                                     <TableBody>
                                         <TableRow>
                                             <TableCell className="pl-sm-24">PA1</TableCell>
-                                            <TableCell className="pl-sm-24">{0}</TableCell>
-                                            <TableCell className="pl-sm-24">{""}</TableCell>
-                                            <TableCell className="pl-sm-24">{""}</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_1 || ""}</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_1_Period || ""}</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_1_Year || ""}</TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell className="pl-sm-24">PA2</TableCell>
-                                            <TableCell className="pl-sm-24">{0}</TableCell>
-                                            <TableCell className="pl-sm-24">{""}</TableCell>
-                                            <TableCell className="pl-sm-24">{""}</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_2 || ""}</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_2_Period || ""}</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_2_Year || ""}</TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell className="pl-sm-24">PA3</TableCell>
-                                            <TableCell className="pl-sm-24">{0}</TableCell>
-                                            <TableCell className="pl-sm-24">{""}</TableCell>
-                                            <TableCell className="pl-sm-24">{""}</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_3 || ""}</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_3_Period || ""}</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_3_Year || ""}</TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell className="pl-sm-24">PA Overall</TableCell>
-                                            <TableCell colSpan={3} align={"center"} className="pl-sm-24">{ metrics.paCurrent }</TableCell>
+                                            <TableCell colSpan={3} align={"center"} className="pl-sm-24">{ metrics.last_3_Months_Average || "" }</TableCell>
                                         </TableRow>
                                     </TableBody>
                                 </Table>
@@ -137,7 +158,15 @@ const MyMetrics = ({ metrics, history }) => {
                         </Grid>
                     </Grid>
                 </Grid>
-                
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <Grid container spacing={2} className="m-24">
+                        <Button 
+                            variant="contained" 
+                            color="secondary"
+                            onClick={handleClose}
+                        >Close</Button>
+                    </Grid>
+                </Grid>
             </Grid>
         </>
     )

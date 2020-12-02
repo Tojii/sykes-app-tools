@@ -6,9 +6,9 @@ import {
 import localStorageService from "../../services/localStorageService"
 
 const INIT_STATE = {
-    growth_opportunities: [],
+    growth_opportunities: null,
     growth_opportunity: localStorageService.getItem('growth_detail') || {},
-    jobs_applied: [],
+    jobs_applied: null,
 };
 
 export default (state = INIT_STATE, action) => {

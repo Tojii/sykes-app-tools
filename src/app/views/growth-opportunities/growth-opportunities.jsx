@@ -23,8 +23,9 @@ const GrowthOpportunities = (props) => {
     }, [])
 
     return (
-        (growth_opportunities.length <= 0 || jobs_applied.length <= 0 ) ? <Loading /> :
-            <>
+        (!growth_opportunities || !jobs_applied ) 
+            ? <Loading /> 
+            : <>
                 <Card className="m-sm-30">
                     <Grid container>
                         <GrowthOppTable props={props}/>
