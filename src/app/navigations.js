@@ -5,10 +5,30 @@ export const navigations = [
   //   icon: "dashboard"
   // },
   {
-    name: "LSS",
-    path: "/lss",
+    name: "Inicio",
+    path: "/Inicio",
     icon: "content_paste",
-    badge: { value: "New", color: "secondary" },
+  },
+  // {
+  //   name: "LSS",
+  //   path: "/lss",
+  //   icon: "content_paste",
+  //   badge: { value: "New", color: "secondary" },
+  // },
+  {
+    name: "Rembolso Educativo",
+    icon: "monetization_on",
+    children:[{
+      name: "Lista de Reembolsos",
+      path: "/ReembolsoEducativo/ListaReembolsos",
+      iconText: "A"
+    },
+    {
+      name: "Detalle de Reembolsos",
+      path: "/ReembolsoEducativo/Detalle",
+      iconText: "A"
+    }   
+    ]
   },
   // {
   //   name: "Raft",
