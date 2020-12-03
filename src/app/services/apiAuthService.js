@@ -2,13 +2,6 @@ import axios from "axios";
 import jwtDecode from 'jwt-decode';
 import localStorageService from "./localStorageService";
 
-const config = {
-  headers: {
-    "x-api-key": '7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH-F013C',
-    // "Access-Control-Allow-Origin": 'http://localhost:3000',
-  }
-}
-
 class apiAuthService {
 
   // Dummy user object just for the demo
@@ -31,13 +24,14 @@ class apiAuthService {
       username: email,
       password: password
     }
-
-    return axios.post(`${process.env.REACT_APP_API_URL}/authenticate`, parameters, config).then(response => {
+    axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
+    return axios.post(`${process.env.REACT_APP_API_URL}/authenticate`, parameters).then(response => {
       // Login successful
       // Save token
       this.setSession(response.data.token);
       // Set user
-      this.setUser(response.data);
+      this.setUser(response.data.token);
+
       return jwtDecode(response.data.token);
     });
   };
@@ -65,8 +59,9 @@ class apiAuthService {
   // Set token to all http request header, so you don't need to attach everytime
   setSession = token => {
     if (token) {
-      localStorageService.setItem("jwt_token", token);
+      localStorage.setItem("jwt_token", token);
       axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+      axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     } else {
       localStorage.removeItem("jwt_token");
       delete axios.defaults.headers.common["Authorization"];
