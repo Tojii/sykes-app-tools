@@ -43,7 +43,6 @@ export const SaveRefund = (Data, Files) =>{
   formData.append('email', Data.email);
   
   if(Data.startDate != null){
-    console.log((format(Data.startDate, 'P p')).toString());
     formData.append('startDate', (format(Data.startDate, 'P p')).toString());
   }else{
     formData.append('startDate', Data.startDate);

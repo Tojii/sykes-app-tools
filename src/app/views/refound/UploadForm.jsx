@@ -3,6 +3,7 @@ import { Fab, Icon, Card, Grid, Divider, Button } from "@material-ui/core";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
+import WarningIcon from '@material-ui/icons/Warning';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -50,20 +51,29 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
     let filesList = event.target.files;
     let list = [];
 
-    for (const iterator of filesList) {  
+    for (const iterator of filesList) {
       if(iterator.type == "application/pdf" || iterator.type == "image/png" || 
       iterator.type == "image/jpeg" || iterator.type == "image/jpg"){
-        if (iterator.size/1024/1024 > 1) {
-          setOpen({open:true, message: `¡El archivo ${iterator.name}  tiene un peso mayor de 1 MB por lo que no se puede guardar!`});
+        console.log("FILES", files);
+        let item = files.find(x=> x.file.name == iterator.name);
+        console.log("Item FilesSelect", item);
+        if(item == null || item == undefined){
+          if (iterator.size/1024/1024 > 1) {
+            setOpen({open:true, message: `¡El archivo ${iterator.name}  tiene un peso mayor de 1 MB por lo que no se puede guardar!`});
+          }else{
+            list.push({
+              file: iterator,
+            });
+          }
         }else{
-          list.push({
-            file: iterator,
-          });
+          setOpen({open:true, message: `¡El archivo ${iterator.name} ya se encuentra en la lista!`});
         }
+        
       }else{
         setOpen({open:true, message:`¡El archivo ${iterator.name} no tiene el formato correcto!`});
       }
     }
+
     setFiles((item)=>[...item, ...list]);
   };
 
@@ -82,13 +92,21 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
     for (const iterator of filesList) {
       if(iterator.type == "application/pdf" || iterator.type == "image/png" || 
       iterator.type == "image/jpeg" || iterator.type == "image/jpg"){
-        if (iterator.size/1024/1024 > 1) {
-          setOpen({open:true, message: `¡El archivo ${iterator.name}  tiene un peso mayor de 1 MB por lo que no se puede guardar!`});
+        console.log("FILES", files);
+        let item = files.find(x=> x.file.name == iterator.name);
+        console.log("Item Drop", item);
+        if(item == null || item == undefined){
+          if (iterator.size/1024/1024 > 1) {
+            setOpen({open:true, message: `¡El archivo ${iterator.name}  tiene un peso mayor de 1 MB por lo que no se puede guardar!`});
+          }else{
+            list.push({
+              file: iterator,
+            });
+          }
         }else{
-          list.push({
-            file: iterator,
-          });
+          setOpen({open:true, message: `¡El archivo ${iterator.name} ya se encuentra en la lista!`});
         }
+        
       }else{
         setOpen({open:true, message:`¡El archivo ${iterator.name} no tiene el formato correcto!`});
       }
@@ -254,6 +272,7 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
               <Snackbar open={open.open} autoHideDuration={6000} onClose={handleClose}
                 anchorOrigin={anchor}
               >
+                
               <Alert onClose={handleClose} severity="warning">
                   {open.message}
               </Alert>

@@ -23,25 +23,22 @@ const Home = () => {
     }, []);
 
     return (
-        <Grid container spacing={3}>
-            <Grid item lg={8} md={8} sm={12} xs={12}>
-                <Carousel>
-                    {images.map((image, index) => (
-                        <Card className="h-100 px-24 card" key={index}>
-                            <CardContent className="testimonial1__card-content">
-                                <div className="pb-16">
-                                    <img
-                                        className="p-0 m-0 pb-24 pt-16"
-                                        src={image.imageUrl}
-                                        alt={`key-${images.imageName}`}
-                                    />
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </Carousel>
-            </Grid>
-        </Grid>
+        <Carousel>
+        {images.map((image, index) => (
+                    <div key={index} className="pb-16">
+                        <img
+                            className="p-0 m-0 pb-24 pt-16"
+                            src={image.imageUrl}
+                            alt={`key-${images.imageName}`}
+                        />
+                    </div>
+            // <Card className="h-100 px-24 card" key={index}>
+            //     <CardContent className="testimonial1__card-content">
+                    
+            //     </CardContent>
+            // </Card>
+        ))}
+    </Carousel>
     )
 }
 

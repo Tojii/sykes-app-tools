@@ -23,7 +23,8 @@ import {
 import UploadForm from "./UploadForm";
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker
+  KeyboardDatePicker,
+  DatePicker 
 } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -65,12 +66,7 @@ const NewRefoundForm = () => {
   const [isErrorUpload, setIsErrorUpload] = useState(false);
   const [errorMessage, setErrorMessage] = useState([]);
   const [files, setFiles] = useState([]);
-  const [open, setOpen] = useState({
-    startDate : false,
-    endDate: false,
-    certificationDate: false
-  });
-
+  
   const [form, setForm] = useState({
     badge: user.badge, //'42553',,
     name: user.fullname,
@@ -84,9 +80,9 @@ const NewRefoundForm = () => {
     others: '',
     course: '',
     invoiceNumber: '',
-    certificationDate: null, //new Date(),
-    startDate: null, //new Date(),
-    endDate: null, //date.setDate(date.getDate()+1),
+    certificationDate: null, //new Date(),//null, 
+    startDate: null, //new Date(),  
+    endDate: null, //new Date().setDate(new Date().getDate() + 1), //null,
     email: ''
   });
 
@@ -288,46 +284,29 @@ const NewRefoundForm = () => {
     }
     setActiveStep(steps.length);
     await dispatch(SaveRefund(form, files));
-
-    // if(saveRefound != null){
-    //   if(saveRefound.success == true){
-    //     console.log("saveRefound Inside", saveRefound)
-    //     setSubmitMessage({message:"¡Guardado existosamente!"});
-
-    //   }else{
-    //     setisErrorSaveRefound(true);
-    //     setSubmitMessage({message:"¡Se produjo un error, por favor vuelva a intentarlo!"})
-    //   } 
-    // }
   }
 
   const handleDateChangeStartDate = date => {
     if (date != null) {
       setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
     }
-
     setForm({
       ...form,
       startDate: date,
-      // endDate: newDate.setDate(newDate.getDate() + 1),
     });
-
-    console.log("endDate", form.endDate);
   };
 
   const handleDateChangeEndDate = date => {
-    
     if (date != null) {
       setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "", endDate: "" }));
     }
-
     setForm({
       ...form,
       endDate: date,
     });
   };
 
-  const handleDateChangeCertificationDate = date => {
+ const handleDateChangeCertificationDate = date => {
     if (date != null) {
       setErrorMessage(errorMessage => ({ ...errorMessage, certificationDate: "" }));
     }
@@ -337,6 +316,7 @@ const NewRefoundForm = () => {
       certificationDate: date,
     });
   };
+
   const CustomFormControl = (props) => (
     <FormControl className="form-control-leader mt-24 mr-24" error={isError}>
       <InputLabel id={`input-${props.id}`}>{props.label}</InputLabel>
@@ -452,103 +432,50 @@ const NewRefoundForm = () => {
 
             {form.studiesCategory.toUpperCase() != CERTIFICATION ?
               <div>
-                {/* <TextField
-                  id="date"
-                  label="Fecha de Inicio*"
-                  type="date"
-                  value={form.startDate}
-                  name="startDate"
-                  className="mr-24 mt-24" 
-                  style={{ width: "calc(50% - 24px)" }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  error={!!errorMessage.startDate}
-                  helperText={errorMessage.startDate}
-                  onChange={handleDateChangeStartDate}
-                /> */}
-
                 <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-                  <KeyboardDatePicker
+                  <DatePicker
+                    className="mr-24 mt-24"
+                    style={{ width: "calc(50% - 24px)" }}
                     cancelLabel="CANCELAR"
                     error={!!errorMessage.startDate}
                     helperText={errorMessage.startDate}
-                    open={open.startDate}
-                    onClick={() => setOpen({ ...open, startDate: true })}
-                    onClose={() => setOpen({ ...open, startDate: false })}
-                    className="mr-24 mt-24"
-                    style={{ width: "calc(50% - 24px)" }}
-                    margin="none"
-                    id="mui-pickers-date"
-                    label="Fecha de Inicio*"
-                    inputVariant="standard"
-                    type="text"
-                    autoOk={true}
-                    value={form.startDate}
-                    name="startDate"
-                    onChange={handleDateChangeStartDate}
-
                     format="dd/MM/yyyy"
-                    KeyboardButtonProps={{
-                      "aria-label": "change date"
-                    }}
-                    readOnly = {true}
+                    label="Fecha de Inicio*"
+                    value={form.startDate}
+                    name="endDate"
+                    onChange={handleDateChangeStartDate}    
                   />
                 </MuiPickersUtilsProvider>
-
-                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-                  <KeyboardDatePicker
+                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}> 
+                  <DatePicker
+                    className="mr-24 mt-24"
+                    style={{ width: "calc(50% - 24px)" }}
                     cancelLabel="CANCELAR"
                     error={!!errorMessage.endDate}
                     helperText={errorMessage.endDate}
-                    open = {open.endDate}
-                    onClick={form.startDate !=  null? () => setOpen({...open, endDate: true}) :() => setOpen({...open, endDate: false}) }
-                    onClose = { () => setOpen({...open, endDate: false})}
-                    className="mr-24 mt-24"
-                    style={{ width: "calc(50% - 24px)" }}
-                    margin="none"
-                    id="mui-pickers-date"
+                    format="dd/MM/yyyy"
                     label="Fecha de Finalización*"
-                    inputVariant="standard"
-                    type="text"
-                    autoOk={true}
                     value={form.endDate}
                     name="endDate"
                     onChange={handleDateChangeEndDate}
-                    format="dd/MM/yyyy"
-                    KeyboardButtonProps={{
-                      "aria-label": "change date"
-                    }}
-                    minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000 ) : null}
+                    minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000) : null}
                     disabled={!form.startDate}
-                    readOnly = {true}
                   />
                 </MuiPickersUtilsProvider>
               </div> :
               <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-                <KeyboardDatePicker
+                <DatePicker
+                  className="mr-24 mt-24"
+                  style={{ width: "calc(50% - 24px)" }}
                   cancelLabel="CANCELAR"
                   error={!!errorMessage.certificationDate}
                   helperText={errorMessage.certificationDate}
-                  open = {open.certificationDate}
-                  onClick={()=>setOpen({...open, certificationDate: true})}
-                  onClose = {()=>setOpen({...open, certificationDate: false})}
-                  className="mr-24 mt-24"
-                  style={{ width: "calc(50% - 24px)" }}
-                  margin="none"
-                  id="mui-pickers-date"
+                  format="dd/MM/yyyy"
                   label="Fecha de Certificación*"
-                  inputVariant="standard"
-                  type="text"
-                  autoOk={true}
                   value={form.certificationDate}
                   name="certificationDate"
                   onChange={handleDateChangeCertificationDate}
-                  format="dd/MM/yyyy"
-                  KeyboardButtonProps={{
-                    "aria-label": "change date"
-                  }}
-                  readOnly = {true}
+                  minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000) : null}
                 />
               </MuiPickersUtilsProvider>
             }
