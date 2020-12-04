@@ -23,7 +23,6 @@ const appReducer = combineReducers({
   ecommerce: EcommerceReducer,
   mantenimientos: MantenimientoReducer,
   lss: LSSReducer,
-  //reembolsosEducativos: ReembolsosEducativosReducer,
   raft: RaftReducer,
   refound: RefoundsReducer,
   common: CommonReducer

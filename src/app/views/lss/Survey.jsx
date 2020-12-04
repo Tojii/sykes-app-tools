@@ -226,6 +226,7 @@ const Survey = () => {
     }
     console.log("jefedirecto", event.target.value);
     handleFieldChange(event, setFieldValue);
+    
   }
 
   return (

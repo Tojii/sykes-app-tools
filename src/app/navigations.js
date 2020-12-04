@@ -4,6 +4,7 @@ export const navigations = [
   //   path: "/dashboard/analytics",
   //   icon: "dashboard"
   // },
+
   {
     name: "Inicio",
     path: "/Inicio",

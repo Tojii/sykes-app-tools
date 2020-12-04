@@ -9,7 +9,7 @@ function Form() {
                 <Breadcrumb
                 routeSegments={[
                 { name: "Lista reembolsos Educativos", path: "/ReembolsoEducativo/ListaReembolsos" },
-                { name: "Nuevo", path: "/ReembolsoEducativo/Nuevo" }
+                { name: "Nuevo" }
                 ]}
             />
             </div>

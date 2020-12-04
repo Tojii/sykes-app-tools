@@ -47,7 +47,7 @@ const redirectRoute = [
   {
     path: "/",
     exact: true,
-    component: () => <Redirect to="/Inicio"/>
+    component: () => <Redirect to="/Inicio" />
     // component: () => <Redirect to="/dashboard/analytics" />
   }
 ];
