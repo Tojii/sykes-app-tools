@@ -2,7 +2,9 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import lssRoutes from './views/lss/LssRoutes';
-import raftRoutes from './views/raft/RaftRoutes';
+//import raftRoutes from './views/raft/RaftRoutes';
+import refoundRoutes from './views/refound/refoundRoutes';
+import sykesHomeRoutes from './views/sykesHome/sykesHomeRoutes';
 
 import dashboardRoutes from "./views/dashboard/DashboardRoutes";
 import utilitiesRoutes from "./views/utilities/UtilitiesRoutes";
@@ -47,7 +49,7 @@ const redirectRoute = [
   {
     path: "/",
     exact: true,
-    component: () => <Redirect to="/lss" />
+    component: () => <Redirect to="/Inicio" />
     // component: () => <Redirect to="/dashboard/analytics" />
   }
 ];
@@ -60,10 +62,12 @@ const errorRoute = [
 
 const routes = [
   ...sessionRoutes,
-  ...lssRoutes,
+  ...refoundRoutes,
+  ...sykesHomeRoutes,
   ...growthOpportunitiesRoutes,
   ...userRoutes,
-  ...raftRoutes,
+  //...lssRoutes,
+  //...raftRoutes,
   // ...homeRoutes,
   // ...dashboardRoutes,
   // ...materialRoutes,
