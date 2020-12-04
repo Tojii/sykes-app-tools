@@ -3,11 +3,9 @@ import {
     SAVE_JOB_APPLICATION,
     SET_VALIDATIONS,
 } from "../actions/ApplyActions";
-import localStorageService from "../../services/localStorageService"
 
 const INIT_STATE = {
     apply: {},
-    user: localStorageService.getItem('auth_user') || {},
     validations: null,
 };
 

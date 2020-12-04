@@ -14,6 +14,7 @@ import ScheduleStep from "./ScheduleStep";
 import ConfirmStep from "./ConfirmStep";
 import { setApplyData, saveJobApplication } from "../../../redux/actions/ApplyActions"
 import { connect } from "react-redux";
+import format from "date-fns/format";
 
 function getSteps() {
   return ["Personal Information", "Validation", "Resume", "Schedule", "Confirm"];
@@ -65,11 +66,11 @@ const ApplyStepper = (props) => {
 
     const handleSubmit = () => {
       const payload = {
-        created: new Date(),
+        created: format(new Date(), "d/M/yyyy hh:mm a"),
         email: user.email,
         phone: user.phone,
-        badge: user.badgeId,
-        fullName: user.fullUserName,
+        badge: user.badge,
+        fullName: user.fullname,
         id: growth_opportunity.id,
         openingId: growth_opportunity.openingId,
         job: growth_opportunity.title,
@@ -143,8 +144,8 @@ const ApplyStepper = (props) => {
       );
 }
 
-const mapStateToProps = ({ applyReducer, growthReducer }) => {
-  const { apply, user, validations } = applyReducer;
+const mapStateToProps = ({ applyReducer, growthReducer, user }) => {
+  const { apply, validations } = applyReducer;
     const { growth_opportunity } = growthReducer;
     return {
       apply,

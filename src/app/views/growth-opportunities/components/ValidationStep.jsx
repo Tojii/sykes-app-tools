@@ -15,7 +15,7 @@ const ResumeStep = ({
     const [validated, setValidated] = useState(validations);
 
     useEffect(() => {
-        !validations && setValidations(user.badgeId, growth_opportunity.openingId)
+        !validations && setValidations(user.badge, growth_opportunity.openingId)
     }, []);
 
     useEffect(() => {
@@ -47,8 +47,8 @@ const ResumeStep = ({
     );
 }
 
-const mapStateToProps = ({ applyReducer, growthReducer }) => {
-    const { user, validations } = applyReducer;
+const mapStateToProps = ({ applyReducer, growthReducer, user }) => {
+    const { validations } = applyReducer;
     const { growth_opportunity } = growthReducer;
     return {
         user, 

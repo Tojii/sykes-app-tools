@@ -124,8 +124,7 @@ const UserForm = (props) => {
     )
 }
 
-const mapStateToProps = ({ applyReducer }) => {
-    const { user } = applyReducer;
+const mapStateToProps = ({ user }) => {
     return {
         user,
     };

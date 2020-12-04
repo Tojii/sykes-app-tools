@@ -27,11 +27,11 @@ const ConfirmStep = (props) => {
                         </TableRow>
                         <TableRow>
                             <TableCell width={"35%"}className="pl-sm-24">Badge:</TableCell>
-                            <TableCell className="pl-sm-24">{ user.badgeId }</TableCell>
+                            <TableCell className="pl-sm-24">{ user.badge }</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell width={"35%"}className="pl-sm-24">Employee name:</TableCell>
-                            <TableCell className="pl-sm-24">{ user.fullUserName }</TableCell>
+                            <TableCell className="pl-sm-24">{ user.fullname }</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell width={"35%"}className="pl-sm-24">Email:</TableCell>
@@ -60,8 +60,8 @@ const ConfirmStep = (props) => {
     )
 }
 
-const mapStateToProps = ({ applyReducer, growthReducer }) => {
-    const { apply, user } = applyReducer;
+const mapStateToProps = ({ applyReducer, growthReducer, user }) => {
+    const { apply } = applyReducer;
     const { growth_opportunity } = growthReducer;
     return {
         apply, 
