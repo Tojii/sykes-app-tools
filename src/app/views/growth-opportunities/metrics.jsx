@@ -5,10 +5,10 @@ import { getMetrics } from "../../redux/actions/MetricsActions"
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 
 const Metrics = (props) => {
-    const { history, metrics, getMetrics } = props;
+    const { history, metrics, getMetrics, user } = props;
 
     useEffect(() =>{
-        getMetrics();
+        getMetrics(user.badge);
     }, []);
 
     return (
@@ -20,10 +20,11 @@ const Metrics = (props) => {
     )
 }
 
-const mapStateToProps = ({ metricsReducer }) => {
+const mapStateToProps = ({ metricsReducer, user }) => {
     const { metrics } = metricsReducer;
     return {
         metrics,
+        user
     };
 };
 

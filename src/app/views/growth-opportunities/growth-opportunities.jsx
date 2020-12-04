@@ -14,12 +14,13 @@ const GrowthOpportunities = (props) => {
         growth_opportunities,
         getGrowthOpportunities, 
         jobs_applied,
-        getJobsApplied 
+        getJobsApplied,
+        user
     } = props
 
     useEffect(() => {
         getGrowthOpportunities();
-        getJobsApplied();
+        getJobsApplied(user.badge);
     }, [])
 
     return (
@@ -40,11 +41,12 @@ const GrowthOpportunities = (props) => {
     )
 }
 
-const mapStateToProps = ({ growthReducer }) => {
+const mapStateToProps = ({ growthReducer, user }) => {
     const { growth_opportunities, jobs_applied } = growthReducer;
     return {
         growth_opportunities,
-        jobs_applied
+        jobs_applied,
+        user,
     };
 };
 
