@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { getGrowthOpportunity } from "app/redux/actions/GrowthOpportunityActions";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 
-const Apply = (props) => {
+const ApplySteps = (props) => {
 
     useEffect(() => {
         props.getGrowthOpportunity();
@@ -32,4 +32,4 @@ const mapStateToProps = ({ growthReducer }) => {
 
 export default connect(mapStateToProps, {
     getGrowthOpportunity
-})(Apply);
+})(ApplySteps);

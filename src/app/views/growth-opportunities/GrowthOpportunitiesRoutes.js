@@ -8,8 +8,8 @@ const OpportunityDetail = MatxLoadable({
   loader: () => import("./opportunity-detail")
 });
 
-const Apply = MatxLoadable({
-  loader: () => import("./apply")
+const ApplySteps = MatxLoadable({
+  loader: () => import("./apply-steps")
 });
 
 const Metrics = MatxLoadable({
@@ -30,7 +30,7 @@ const growthOpportunitiesRoutes = [
   {
     exact: true,
     path: "/growth-opportunities/:opp_id/apply",
-    component: Apply
+    component: ApplySteps
   },
   {
     exact: true,
