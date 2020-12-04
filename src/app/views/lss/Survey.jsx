@@ -26,6 +26,12 @@ import { SimpleCard } from "matx";
 import { AutocompleteField } from './Components/AutocompleteField';
 import history from "history.js";
 import { Link } from 'react-router-dom';
+import { Breadcrumb, ConfirmationDialog } from "matx";
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const Survey = () => {
   const dispatch = useDispatch();
@@ -35,6 +41,7 @@ const Survey = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showRetroalimentacionYSeguimiento, setShowRetroalimentacionYSeguimiento] = useState(false);
   const [showJefeDirecto, setShowJefeDirecto] = useState(false);
+  const [shouldOpenConfirmationDialog, setShouldOpenConfirmationDialog] = useState(false);
 
   useEffect(() => {
     dispatch(getAccount());
@@ -180,17 +187,23 @@ const Survey = () => {
       })
   };
 
-  const handleSubmit = async (values) => {
+  const handleDialogClose = () => {
+    setShouldOpenConfirmationDialog(false);
+  }
+
+  const handleSubmit = (values) => {
+    setShouldOpenConfirmationDialog(true); 
+  }
+
+  const handleConfirm = async (values) => {
     setIsLoading(true);
     const data = values
     //"JefeDirectoPersona": values.username, 
-  
-    console.log("values", data);
-    // await dispatch(submitData(data));
-    // history.push('/lss/thankyou');
-
+    console.log("values submit", data);
+    await dispatch(submitData(data));
+    history.push('/lss/thankyou');
     setIsLoading(false);
-  }
+  };
 
   const handleFieldChange = (event, setFieldValue) => { 
     setFieldValue([event.target.name], event.target.value);
@@ -208,6 +221,10 @@ const Survey = () => {
 
   const handleJefeDirectoChange = (event, setFieldValue) => { 
     setShowJefeDirecto(event.target.value === "Jefe-Directory");
+    if (event.target.value === "Jefe-Directory") {
+      event.target.value = "";
+    }
+    console.log("jefedirecto", event.target.value);
     handleFieldChange(event, setFieldValue);
   }
 
@@ -244,7 +261,7 @@ const Survey = () => {
                           {supervisor.name}
                         </MenuItem>
                       ))}
-                      <MenuItem key="jefe-directo" value="Jefe-Directo">
+                      <MenuItem key="jefe-directo" value="Jefe-Directory">
                           * No Aparece en la lisa 
                       </MenuItem>
                     </Select>
@@ -256,9 +273,10 @@ const Survey = () => {
                   <Grid spacing={10} container>
                     {!showJefeDirecto ? null : (
                       <Grid item sm={6} xs={12}>
+                        {console.log("jefes auto",jefes)}
                         <FormControl className="form-control-leader">
                           <AutocompleteField name="JefeDirecto" value={jefes.map(jefe => (jefe.fullName))} 
-                          onInputChange={getJefeDirecto} onChange={setFieldValue} options={jefes.map(jefe => (jefe.fullName))} label="Jefe Directo *" />
+                          onInputChange={getJefeDirecto} onChange={setFieldValue} options={jefes == [] ? [""] : jefes.map(jefe => (jefe.fullName != null ? jefe.fullName : ""))} label="Jefe Directo *" />
                         </FormControl>
                       </Grid>
                       )
@@ -493,6 +511,35 @@ const Survey = () => {
                   <span className="pl-8 capitalize">Save</span>
                   </Button>
               </Grid>
+              
+                <Dialog
+                open={shouldOpenConfirmationDialog}
+                onClose={() => setShouldOpenConfirmationDialog(false)}
+                aria-labelledby="confirm-dialog"
+                >
+                <DialogTitle id="confirm-dialog">{"Confirmación"}</DialogTitle>
+                <DialogContent>{`¿Desea enviar sus respuestas para el líder ${values.JefeDirecto}?`}</DialogContent>
+                <DialogActions>
+                  <Button
+                    variant="contained"
+                    onClick={() => setShouldOpenConfirmationDialog(false)}
+                    color="secondary"
+                  >
+                    No
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      setShouldOpenConfirmationDialog(false);
+                      handleConfirm(values);
+                    }}
+                    color="primary"
+                  >
+                    Sí
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              
             </Form>
         )}
     </Formik>

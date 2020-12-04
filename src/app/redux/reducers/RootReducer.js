@@ -10,6 +10,8 @@ import LSSReducer from "./LSSReducer";
 import growthReducer from "./GrowthOpportunityReducer";
 import metricsReducer from "./MetricsReducer";
 import applyReducer from "./ApplyReducer";
+//import ReembolsosEducativosReducer from "./ReembolsoEducativoReducer";
+import RaftReducer from "./RaftReducer";
 import { persistStore } from 'redux-persist'
 
 
@@ -25,6 +27,8 @@ const appReducer = combineReducers({
   growthReducer,
   metricsReducer,
   applyReducer,
+  //reembolsosEducativos: ReembolsosEducativosReducer,
+  raft: RaftReducer
 });
 
 const RootReducer = (state, action) => {

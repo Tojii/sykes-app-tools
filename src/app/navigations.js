@@ -16,6 +16,12 @@ export const navigations = [
     icon: "content_paste",
   },
   // {
+  //   name: "Raft",
+  //   path: "/Raft",
+  //   icon: "person_add_alt_1",
+  //   badge: { value: "New", color: "secondary" },
+  // }, 
+  // {
   //   name: "UI Kits",
   //   icon: "favorite",
   //   badge: { value: "30+", color: "secondary" },

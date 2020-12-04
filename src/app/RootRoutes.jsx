@@ -2,6 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import lssRoutes from './views/lss/LssRoutes';
+import raftRoutes from './views/raft/RaftRoutes';
 
 import dashboardRoutes from "./views/dashboard/DashboardRoutes";
 import utilitiesRoutes from "./views/utilities/UtilitiesRoutes";
@@ -62,6 +63,7 @@ const routes = [
   ...lssRoutes,
   ...growthOpportunitiesRoutes,
   ...userRoutes,
+  ...raftRoutes,
   // ...homeRoutes,
   // ...dashboardRoutes,
   // ...materialRoutes,
