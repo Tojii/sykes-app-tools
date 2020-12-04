@@ -39,13 +39,19 @@ const GrowthOppTable = ({
     }
 
     const buildData = growth_opportunities.map(item => {
-        return [item.title, item.area, item.expirationDate, buildDetailButton(item)]
+        return [
+            <p className="m-0 pl-16">{ item.title}</p>,
+            <p className="m-0 pl-16">{ item.area }</p>, 
+            <p className="m-0 pl-16">{ item.expirationDate }</p>,
+            buildDetailButton(item)
+        ]
     })
 
     const columns = ["Job Position", "Area", "Expiration Date", "Details"]
 
         
     const options = {
+        selectableRows: "none",
         customToolbar: () => {
             return (
                 <>
