@@ -61,7 +61,7 @@ const UserForm = (props) => {
         const payload = {
             phone: form_user.phone,
             email: form_user.email,
-            badge: user.badgeId
+            badge: user.badge
         }
         handleSubmitCallback(payload);
     }
