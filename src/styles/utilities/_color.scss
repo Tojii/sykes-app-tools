@@ -111,9 +111,16 @@
 .text-green {
   color: #4cb050 !important;
 }
+.text-warning {
+  color: #ff9805 !important;
+}
+.bg-light-warning {
+  background: rgba($color: #ff9805, $alpha: 0.5) !important;
+}
 .text-error {
   color: $error !important;
 }
+
 
 .gray-on-hover {
   transition: background 250ms ease;

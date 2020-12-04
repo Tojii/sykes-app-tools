@@ -139,6 +139,12 @@ class Layout1Topbar extends Component {
                     <Icon> settings </Icon>
                     <span className="pl-16"> Settings </span>
                   </MenuItem> */}
+                  <MenuItem style={{ minWidth: 185 }}>
+                    <Link className="flex flex-middle" to="/user">
+                      <Icon> person </Icon>
+                      <span className="pl-16"> Edit user </span>
+                    </Link>
+                  </MenuItem>
                   <MenuItem
                     onClick={this.handleSignOut}
                     className="flex flex-middle"
