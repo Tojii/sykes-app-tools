@@ -10,8 +10,6 @@ const Home = () => {
     const dispatch = useDispatch();
     //const images = useSelector(state => state.common.images);
 
-    console.log("Images", images);
-
     const images = [
         { imageUrl: "https://images.freeimages.com/images/large-previews/058/computer-abbreviations-4-1242020.jpg" },
         { imageUrl: "https://media.istockphoto.com/photos/programming-source-code-abstract-background-picture-id1047259374" },

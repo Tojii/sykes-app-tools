@@ -273,6 +273,7 @@ const NewRefoundForm = () => {
     setError(false);
     setEmailError(false);
     setFiles([]);
+    
     setErrorMessage([]);
   };
 
@@ -502,15 +503,20 @@ const NewRefoundForm = () => {
             </Stepper>
             <div>
               {activeStep === steps.length ? (
-                <div className="">
-                  <div className="d-flex justify-content-center mb-16">
-                    <Alert severity={!saveRefound.succes ? "success" : "warning"}>
-                      {!saveRefound.succes ? "¡Guardado existosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
+                <div>
+                  {saveRefound != null ? 
+                  <div>
+                    <div className="d-flex justify-content-center mb-16">
+                    <Alert variant="outlined" severity={!saveRefound.success == false ? "success" : "error"}>
+                      {!saveRefound.success == false ? "¡Guardado existosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
                     </Alert>
                   </div>
                   <Button variant="contained" color="secondary" onClick={handleReset}>
                     Volver a nuevo
                   </Button>
+                  
+                  </div> 
+                  : <div><p>Hello from here</p></div>}
                 </div>
               ) : (
                   <div>

@@ -8,7 +8,7 @@ export const navigations = [
   {
     name: "Inicio",
     path: "/Inicio",
-    icon: "content_paste",
+    icon: "home_icon",
   },
   // {
   //   name: "LSS",
@@ -17,8 +17,8 @@ export const navigations = [
   //   badge: { value: "New", color: "secondary" },
   // },
   {
-    name: "Rembolso Educativo",
-    icon: "monetization_on",
+    name: "Reembolso Educativo",
+    icon: "attach_money_icon",
     children:[{
       name: "Lista de Reembolsos",
       path: "/ReembolsoEducativo/ListaReembolsos",

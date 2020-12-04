@@ -6,6 +6,7 @@ export const SAVE_REFOUND = "SAVE_REFOUND";
 export const RE_LOADING = "RE_LOADING";
 export const GET_INFORMATION_LISTS = "GET_INFORMATION_LISTS";
 export const GET_STUDIES_CATEGORY = "GET_STUDIES_CATEGORY";
+export const CLEAN_SAVEREFOUND =  "CLEAN_SAVEREFOUND";
 
 export const GetRefoundListByUser = (badgeId) => {
   return async dispatch =>{
@@ -74,14 +75,15 @@ export const SaveRefund = (Data, Files) =>{
 
   return async dispatch => {
         dispatch({
+          type: CLEAN_SAVEREFOUND
+        });    
+        dispatch({
             type: RE_LOADING
           });
         axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
         axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
         await axios.post(`${process.env.REACT_APP_API_URL}/api/Refund/SaveRefund`,formData, config 
           ).then((res => {
-          //console.log("Params", params);
-          console.log("Submit form", res.data);
           dispatch({
                 type: SAVE_REFOUND,
                 data: res.data,

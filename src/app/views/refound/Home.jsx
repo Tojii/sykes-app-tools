@@ -107,7 +107,7 @@ const Home = () => {
           pagination: {
             next: "Siguente",
             previous: "Regresar",
-            rowsPerPage: "Filas por pagina:",
+            rowsPerPage: "Filas por página:",
             displayRows: "de",
           },
           toolbar: {
@@ -115,7 +115,7 @@ const Home = () => {
             downloadCsv: "Descargar CSV",
             //print: "Imprimir",
             viewColumns: "Ver Columnas",
-            filterTable: "Filtar tabla",
+            filterTable: "Filtrar tabla",
           },
           filter: {
             all: "TODAS",

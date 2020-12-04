@@ -54,23 +54,21 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
     for (const iterator of filesList) {
       if(iterator.type == "application/pdf" || iterator.type == "image/png" || 
       iterator.type == "image/jpeg" || iterator.type == "image/jpg"){
-        console.log("FILES", files);
         let item = files.find(x=> x.file.name == iterator.name);
-        console.log("Item FilesSelect", item);
         if(item == null || item == undefined){
           if (iterator.size/1024/1024 > 1) {
-            setOpen({open:true, message: `¡El archivo ${iterator.name}  tiene un peso mayor de 1 MB por lo que no se puede guardar!`});
+            setOpen({open:true, message: `¡Uno o mas archivos tienen un peso mayor de 1 MB!`});
           }else{
             list.push({
               file: iterator,
             });
           }
         }else{
-          setOpen({open:true, message: `¡El archivo ${iterator.name} ya se encuentra en la lista!`});
+          setOpen({open:true, message: `¡Ya existe un archivo con este nombre!`});
         }
         
       }else{
-        setOpen({open:true, message:`¡El archivo ${iterator.name} no tiene el formato correcto!`});
+        setOpen({open:true, message:`¡Uno o mas archivos no tienen el tipo correcto!`});
       }
     }
 
@@ -92,23 +90,21 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
     for (const iterator of filesList) {
       if(iterator.type == "application/pdf" || iterator.type == "image/png" || 
       iterator.type == "image/jpeg" || iterator.type == "image/jpg"){
-        console.log("FILES", files);
         let item = files.find(x=> x.file.name == iterator.name);
-        console.log("Item Drop", item);
         if(item == null || item == undefined){
           if (iterator.size/1024/1024 > 1) {
-            setOpen({open:true, message: `¡El archivo ${iterator.name}  tiene un peso mayor de 1 MB por lo que no se puede guardar!`});
+            setOpen({open:true, message: `¡Uno o mas archivos tienen un peso mayor de 1 MB!`});
           }else{
             list.push({
               file: iterator,
             });
           }
         }else{
-          setOpen({open:true, message: `¡El archivo ${iterator.name} ya se encuentra en la lista!`});
+          setOpen({open:true, message: `¡Ya existe un archivo con este nombre!`});
         }
         
       }else{
-        setOpen({open:true, message:`¡El archivo ${iterator.name} no tiene el formato correcto!`});
+        setOpen({open:true, message:`¡Uno o mas archivos no tienen el tipo correcto!`});
       }
     }
 

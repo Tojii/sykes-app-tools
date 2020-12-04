@@ -69,7 +69,7 @@ const RefoundDetails = () => {
             downloadCsv: "Descargar CSV",
             //print: "Imprimir",
             viewColumns: "Ver Columnas",
-            filterTable: "Filtar tabla",
+            filterTable: "Filtrar tabla",
           },
           filter: {
             all: "TODAS",

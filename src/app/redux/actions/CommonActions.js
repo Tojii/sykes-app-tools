@@ -11,7 +11,6 @@ export const GetImages = () => {
       axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
       axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
       await axios.get(`${process.env.REACT_APP_API_URL}/api/Common/GetImages`).then(res => {
-        console.log("Res", res.data);  
         dispatch({
           type: GET_IMAGES,
           data: res.data
