@@ -31,8 +31,19 @@ export function logoutUser() {
 }
 
 export const updateUserData = (payload) => dispatch => {
+  var formData = new FormData();
+  formData.append('badge', payload.badge);
+  formData.append('email', payload.email);
+  formData.append('phone', payload.phone);
+
+  const config = {
+    headers: {
+        'content-type': 'multipart/form-data',
+    }
+  }
+
   axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-  axios.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, payload).then(res => {
+  axios.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, formData, config).then(res => {
     history.push({
       pathname: "/"
     });
