@@ -66,7 +66,7 @@ const ApplyStepper = (props) => {
 
     const handleSubmit = () => {
       const payload = {
-        created: format(new Date(), "d/M/yyyy hh:mm a"),
+        created: format(new Date(), "P p").toString(),
         email: user.email,
         phone: user.phone,
         badge: user.badge,

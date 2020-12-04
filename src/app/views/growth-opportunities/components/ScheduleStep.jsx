@@ -61,7 +61,7 @@ const ScheduleStep = (props) => {
 
     const buildScheduleTimes = () => {
         Object.keys(times).map((time) => {
-            apply[time] = format(times[time], "d/M/yyyy hh:mm a") 
+            apply[time] = format(times[time], "P p").toString()
         })
     }
 
