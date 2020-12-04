@@ -1,20 +1,11 @@
 import axios from "axios";
 import history from "history.js";
 import apiAuthService from "../../services/apiAuthService";
-import localStorageService from "../../services/localStorageService";
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
 export const USER_LOGGED_OUT = "USER_LOGGED_OUT";
-export const UPDATER_USER_DATA = "UPDATER_USER_DATA";
-
-const config = {
-  headers: {
-      "x-api-key": '7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH-F013C',
-      // "Access-Control-Allow-Origin": 'http://localhost:3000',
-      "Authorization": `Bearer ${ localStorageService.getItem('jwt_token') }`
-  }
-}
+export const UPDATE_USER_DATA = "UPDATE_USER_DATA";
 
 export function setUserData(user) {
   return dispatch => {
@@ -40,9 +31,8 @@ export function logoutUser() {
 }
 
 export const updateUserData = (payload) => dispatch => {
-  const auth_user = localStorageService.getItem('auth_user');
-  axios.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, payload, config).then(res => {
-    localStorageService.setItem('auth_user', {...auth_user, ...payload});
+  axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
+  axios.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, payload).then(res => {
     history.push({
       pathname: "/"
     });

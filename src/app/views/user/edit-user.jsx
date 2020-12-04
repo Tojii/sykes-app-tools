@@ -9,9 +9,6 @@ import {
 
 const EditUser = (props) => {
     const {
-        match,
-        history,
-        user,
         updateUserData,
     } = props
 
