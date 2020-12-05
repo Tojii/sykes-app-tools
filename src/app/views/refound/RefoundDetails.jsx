@@ -57,6 +57,7 @@ const RefoundDetails = () => {
         selectableRowsHeader: false,
         selectableRowsOnClick: false,
         print:false,
+        download: false,
         textLabels: {
           body: {
             noMatch: "Disculpas, no se encontraron registros",
