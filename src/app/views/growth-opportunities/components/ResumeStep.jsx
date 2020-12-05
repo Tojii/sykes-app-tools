@@ -29,6 +29,7 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                 setApplyData(apply);
             }else{
                 setFile({})
+                setShowError(false);
                 setDisableNext(true);
                 setErrorMessage(errorMessage => ({...errorMessage, type:"Invalid format file"}))
             }
