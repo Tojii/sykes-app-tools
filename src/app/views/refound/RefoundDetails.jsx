@@ -8,6 +8,7 @@ import {
     Button,
     Card,
 } from "@material-ui/core";
+import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 
 const RefoundDetails = () => {
     const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
@@ -18,6 +19,10 @@ const RefoundDetails = () => {
     useEffect(() => {
         dispatch(GetRefoundListByUser(user.badge));
     }, []);
+
+    const getMuiTheme = () =>
+    createMuiTheme({
+    });
 
     const columns = [
         {
@@ -91,12 +96,14 @@ const RefoundDetails = () => {
         <div className="m-sm-30">
             { isLoading ? <Loading /> :  
                     <Card className="w-100 overflow-auto" elevation={6}>
-                        <MUIDataTable
-                            title={`Lista de Reembolsos ${employeeRefunds.length > 0 ? employeeRefunds[0].anio : "" }`}
-                            data={employeeRefunds.length > 0 ? employeeRefunds[0].balanceCategories : [] }
-                            columns={columns}
-                            options={options}
-                        />
+                        <MuiThemeProvider theme={getMuiTheme()}>
+                          <MUIDataTable  className="w-100"
+                              title={`Lista de Reembolsos ${employeeRefunds.length > 0 ? employeeRefunds[0].anio : "" }`}
+                              data={employeeRefunds.length > 0 ? employeeRefunds[0].balanceCategories : [] }
+                              columns={columns}
+                              options={options}
+                          />
+                        </MuiThemeProvider>
                     </Card>
             }
         </div>

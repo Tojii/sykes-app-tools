@@ -3,6 +3,7 @@ import MyMetrics from './components/MyMetrics';
 import { connect } from "react-redux";
 import { getMetrics } from "../../redux/actions/MetricsActions"
 import Loading from "../../../matx/components/MatxLoadable/Loading";
+import { Breadcrumb } from "matx";
 
 const Metrics = (props) => {
     const { history, metrics, getMetrics, user } = props;
@@ -14,7 +15,17 @@ const Metrics = (props) => {
     return (
         metrics ?
         <>
-            <MyMetrics metrics={metrics} history={history}/>
+            <div className="m-sm-30">
+                <div className="mb-sm-30">
+                    <Breadcrumb
+                    routeSegments={[
+                    { name: "Growth Opportunities", path: "/growth-opportunities" },
+                    { name: "Metrics", path: "/my-metrics" },                
+                    ]}
+                />
+                </div>
+                <MyMetrics metrics={metrics} history={history}/>
+            </div>
         </>
         : <Loading />
     )
