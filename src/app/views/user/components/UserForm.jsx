@@ -7,7 +7,9 @@ import {
     Card,
 } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import { setApplyData } from "../../../redux/actions/ApplyActions"
+import { setApplyData } from "../../../redux/actions/ApplyActions";
+import { setUserData } from "../../../redux/actions/UserActions";
+import { validateEmail } from '../../../../utils';
 import { connect } from "react-redux";
 
 const UserForm = (props) => {
@@ -24,11 +26,6 @@ const UserForm = (props) => {
     
     const [form_user, setUserForm] = useState(user);
 
-    const validateEmail = (email) => {
-        const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return regexp.test(email);
-      }
-    
     const handleClose = () => {
         const path = match.params.opp_id ? `/growth-opportunities/${match.params.opp_id}` : "/"
         history.push(path);
@@ -37,6 +34,22 @@ const UserForm = (props) => {
     const handleCustomChange = (event) => {
         let value = event.target.value
         setUserForm({...form_user, [event.target.name]: value});
+    }
+
+    const handleUserEmail = (event) => {
+        if (event.target.value !== "" || validateEmail(event.target.value))
+        {
+            user.email = event.target.value;
+            setUserData(user);
+        }
+    }
+
+    const handleUserPhone = (event) => {
+        if (event.target.value !== "" || event.target.value.length < 8)
+        {
+            user.phone = event.target.value;
+            setUserData(user);
+        }
     }
 
     const handlePhoneError = () => {
@@ -89,6 +102,7 @@ const UserForm = (props) => {
                             className="w-100 mx-24 my-16"
                             label="Email"
                             onChange={handleCustomChange}
+                            onBlur={handleUserEmail}
                             type="email"
                             name="email"
                             value={form_user.email}
