@@ -52,8 +52,12 @@ const ApplyStepper = (props) => {
     }
 
     const handleNext = () => {
-        setActiveStep(prevActiveStep => prevActiveStep + 1);
+        console.log("Apply Stepper, HandleNext", disableNext);
+        if(!disableNext){
+          setActiveStep(prevActiveStep => prevActiveStep + 1);
+        }
         setDisableNext(true);
+        
     };
 
     const handleBack = () => {

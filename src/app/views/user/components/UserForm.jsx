@@ -21,6 +21,11 @@ const UserForm = (props) => {
 
     const [form_user, setUserForm] = useState(user);
 
+    const validateEmail = (email) => {
+        const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regexp.test(email);
+      }
+    
     const handleClose = () => {
         const path = match.params.opp_id ? `/growth-opportunities/${match.params.opp_id}` : "/"
         history.push(path);
@@ -32,24 +37,25 @@ const UserForm = (props) => {
     }
 
     const handlePhoneError = () => {
-        if (form_user.phone === "") return "this field is required"
-        else if (form_user.phone.length < 8) return "this field is too short"
+        if (form_user.phone === "") return "This field is required"
+        else if (form_user.phone.length < 8) return "This field is too short"
         return ""
     }
 
     const handleEmailError = () => {
-        if (form_user.email === "") return "this field is required"
+        if (form_user.email === "") return "This field is required"
         return ""
     }
 
     const handleNext = () => {
         if (!setDisableNext) return false;
-        if (form_user.phone.length < 8 || form_user.email === "") return setDisableNext(true)
+        if (form_user.phone.length < 8 || form_user.email === "" || !validateEmail(form_user.email))
+        return setDisableNext(true)
         setDisableNext(false);
     }
 
     const handleValid = () => {
-        return (form_user.phone.length < 8 || form_user.email === "")
+        return (form_user.phone.length < 8 || form_user.email === "" || !validateEmail(form_user.email))
     }
 
     useEffect(() => {
@@ -70,7 +76,7 @@ const UserForm = (props) => {
         <>
             <Grid item lg={11}>
                 <h3 className="p-sm-24">Personal Information</h3>
-                <ValidatorForm onSubmit={onSubmit}>
+                <ValidatorForm    onSubmit={onSubmit}>
                     <Grid item xs={12}>
                         <TextValidator
                             className="w-100 mx-24 my-16"
@@ -80,7 +86,7 @@ const UserForm = (props) => {
                             name="email"
                             value={form_user.email}
                             validators={["required", "isEmail"]}
-                            errorMessages={["this field is required", "invalid email format"]}
+                            errorMessages={["This field is required", "Invalid email format"]}
                             error={form_user.email === ""}
                             helperText={handleEmailError()}
                         />
@@ -94,7 +100,7 @@ const UserForm = (props) => {
                             name="phone"
                             value={form_user.phone}
                             validators={["required"]}
-                            errorMessages={["this field is required"]}
+                            errorMessages={["This field is required"]}
                             error={ handlePhoneError().length > 0 }
                             helperText={ handlePhoneError() }
                         />

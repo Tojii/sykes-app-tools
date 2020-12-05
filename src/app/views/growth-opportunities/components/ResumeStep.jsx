@@ -2,22 +2,36 @@ import React, { useState } from "react";
 import { Grid, Fab, Icon, Card, Divider } from "@material-ui/core";
 import { setApplyData } from "../../../redux/actions/ApplyActions";
 import { connect } from "react-redux";
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
 
 const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
 
     const [showError, setShowError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState([]);
     const [file, setFile] = useState({});
 
     const handleFileSelect = (event) => {
         let files = event.target.files;
         for (const iterator of files) {
-            let invalid = iterator.size > 2000000
-            setFile(iterator)
-            setShowError(invalid);
-            setDisableNext(invalid);
-            apply['resume'] = iterator
-            setFile(iterator)
-            setApplyData(apply);
+            if (iterator.type == "application/msword" || iterator.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+                iterator.type == "application/pdf") {
+                setErrorMessage([])
+                let invalid = iterator.size > 2000000
+                setFile(iterator)
+                setShowError(invalid);
+                setDisableNext(invalid);
+                apply['resume'] = iterator
+                setFile(iterator)
+                setApplyData(apply);
+            }else{
+                setFile({})
+                setDisableNext(true);
+                setErrorMessage(errorMessage => ({...errorMessage, type:"Invalid format file"}))
+            }
         }
     };
 
@@ -86,7 +100,18 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                         </Grid>
                     </Grid>
                 </div>
+                
+                         
           </Card>
+            {errorMessage.type ?
+                <div className="d-flex justify-content-center mb-16">
+                    <Alert variant="outlined" severity="error">
+                        {errorMessage.type}
+                    </Alert>
+                </div>
+                :
+                <div></div>
+            }  
         </>
     );
 }
