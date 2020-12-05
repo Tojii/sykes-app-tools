@@ -3,11 +3,17 @@ import {
     IconButton,
     Icon, 
     Tooltip,
+    Card
 } from "@material-ui/core";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import { setGrowthOpportunity } from "../../../redux/actions/GrowthOpportunityActions"
 import { connect } from "react-redux";
 import MUIDataTable from "mui-datatables";
+import {
+    createMuiTheme,
+    MuiThemeProvider,
+    withStyles
+} from "@material-ui/core/styles";
 
 const GrowthOppTable = ({
     growth_opportunities,
@@ -25,6 +31,11 @@ const GrowthOppTable = ({
         history.push(`my-metrics`);
     }
 
+    const getMuiTheme = () =>
+    createMuiTheme({
+     
+    });
+
     const buildDetailButton = (item) => {
         return (
             <>
@@ -40,18 +51,38 @@ const GrowthOppTable = ({
 
     const buildData = growth_opportunities.map(item => {
         return [
-            <p className="m-0 pl-16">{ item.title}</p>,
-            <p className="m-0 pl-16">{ item.area }</p>, 
-            <p className="m-0 pl-16">{ item.expirationDate }</p>,
+            item.title,
+            item.area, 
+            item.expirationDate,
             buildDetailButton(item)
         ]
     })
 
-    const columns = ["Job Position", "Area", "Expiration Date", "Details"]
+    const columns = [ 
+       {
+        name: "Job Position",
+       },
+       {
+        name: "Area",
+       },
+       {
+        name: "Expiration Date",
+       },
+       {
+        name: "Details",
+        options: {
+            filter: false
+        }
+       },
+    ]
 
         
     const options = {
-        selectableRows: "none",
+        selectableRowsHideCheckboxes: true,
+        selectableRowsHeader: false,
+        selectableRowsOnClick: false,
+        download: false,
+        print: false,      
         customToolbar: () => {
             return (
                 <>
@@ -67,12 +98,14 @@ const GrowthOppTable = ({
 
     return (
         <>
-            <MUIDataTable
-                title={"Growth opportunities"}
-                data={buildData}
-                columns={columns}
-                options={options}
-            />
+            <MuiThemeProvider theme={getMuiTheme()}>
+                <MUIDataTable className="w-100"
+                    title={"Growth opportunities"}
+                    data={buildData}
+                    columns={columns}
+                    options={options}
+                />
+            </MuiThemeProvider>
         </>
     )
 }

@@ -8,6 +8,7 @@ export const getMetrics = (badge) => dispatch => {
         type: GET_METRICS,
         payload: res.data
       });
+      console.log(res.data)
     });
 };
 

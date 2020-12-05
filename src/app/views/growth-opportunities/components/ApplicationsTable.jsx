@@ -3,6 +3,11 @@ import { classList } from "utils";
 import { getJobsApplied } from "../../../redux/actions/GrowthOpportunityActions"
 import { connect } from "react-redux";
 import MUIDataTable from "mui-datatables";
+import {
+    createMuiTheme,
+    MuiThemeProvider,
+    withStyles
+} from "@material-ui/core/styles";
 
 const ApplicationsTable = ({
     jobs_applied
@@ -24,19 +29,35 @@ const ApplicationsTable = ({
         )
     }
 
+    const getMuiTheme = () =>
+    createMuiTheme({
+     
+    });
+
     const buildData = jobs_applied.map(item => {
         return [item.job, buildStatusLabel(item), item.created, ]
-    })
+    });
+
+    const options = {
+        selectableRowsHideCheckboxes: true,
+        selectableRowsHeader: false,
+        selectableRowsOnClick: false,
+        download: false,
+        print: false, 
+    };
 
     const columns = ["Job Position", "Status", "Application Date"]
 
     return (
         <>
-            <MUIDataTable
-                title={"My applications"}
-                data={buildData}
-                columns={columns}
-            />
+            <MuiThemeProvider theme={getMuiTheme()}>
+                <MUIDataTable className="w-100"
+                    title={"My applications"}
+                    data={buildData}
+                    columns={columns}
+                    options={options}
+                />
+            </MuiThemeProvider>
         </>
     )
 }

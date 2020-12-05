@@ -95,6 +95,8 @@ const Home = () => {
         selectableRowsHeader: false,
         selectableRowsOnClick: false,
         print:false,
+        download: false,
+        vertical: true,
         customToolbar: () => {
             return (addButton());
         },
@@ -105,7 +107,7 @@ const Home = () => {
             columnHeaderTooltip: column => `Ordenar por ${column.label}`
           },
           pagination: {
-            next: "Siguente",
+            next: "Siguiente",
             previous: "Regresar",
             rowsPerPage: "Filas por página:",
             displayRows: "de",
@@ -123,7 +125,7 @@ const Home = () => {
             reset: "ELIMINAR FILTROS",
           },
           viewColumns: {
-            title: "Mostar Colmnas",
+            title: "Mostrar Columnas",
             titleAria: "Show/Hide Table Columns",
           },
           selectedRows: {
