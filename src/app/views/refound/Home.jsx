@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import MUIDataTable from "mui-datatables";
 import AddIcon from "@material-ui/icons/Add";
+import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 
 const Home = () => {
     const summary = useSelector(state => state.refound.summary);
@@ -30,6 +31,10 @@ const Home = () => {
             </React.Fragment>
         );
     }
+
+    const getMuiTheme = () =>
+    createMuiTheme({
+    });
 
     const columns = [
         {
@@ -145,12 +150,14 @@ const Home = () => {
             { isLoading ? <Loading /> : 
                 <div className="m-sm-30">
                     <Card className="w-100 overflow-auto" elevation={6}>
-                        <MUIDataTable
-                            title={"Lista de Reembolsos"}
-                            data={summary}
-                            columns={columns}
-                            options={options}
-                        />
+                        <MuiThemeProvider theme={getMuiTheme()}>
+                          <MUIDataTable  className="w-100"
+                              title={"Lista de Reembolsos"}
+                              data={summary}
+                              columns={columns}
+                              options={options}
+                          />
+                        </MuiThemeProvider>
                     </Card>
                 </div>
             }

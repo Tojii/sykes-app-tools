@@ -9,11 +9,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import { setGrowthOpportunity } from "../../../redux/actions/GrowthOpportunityActions"
 import { connect } from "react-redux";
 import MUIDataTable from "mui-datatables";
-import {
-    createMuiTheme,
-    MuiThemeProvider,
-    withStyles
-} from "@material-ui/core/styles";
+import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 
 const GrowthOppTable = ({
     growth_opportunities,
@@ -33,7 +29,6 @@ const GrowthOppTable = ({
 
     const getMuiTheme = () =>
     createMuiTheme({
-     
     });
 
     const buildDetailButton = (item) => {
