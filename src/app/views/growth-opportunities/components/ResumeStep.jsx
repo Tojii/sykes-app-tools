@@ -51,7 +51,7 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                         <span>Upload File</span>
                         </div>
                     </Fab>
-                    <p>Applicable formats: .doc, .docx, .pdf. Max sise: 2MB</p>
+                    <p>Applicable formats: .doc, .docx, .pdf. Max size: 2MB</p>
                 </label>
                 <input
                     className="display-none"

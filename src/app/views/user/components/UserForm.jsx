@@ -14,6 +14,8 @@ const UserForm = (props) => {
     const {
         handleSubmitCallback,
         setDisableNext,
+        setApplyData,
+        apply,
         user,
         match,
         history,
@@ -70,6 +72,10 @@ const UserForm = (props) => {
             email: form_user.email,
             badge: user.badge
         }
+        // apply['phone'] = form_user.phone;
+        // apply['email'] = form_user.email;
+        // apply['badge'] = user.badge;
+        // setApplyData(apply);
         handleSubmitCallback(payload);
     }
 
@@ -131,9 +137,11 @@ const UserForm = (props) => {
     )
 }
 
-const mapStateToProps = ({ user }) => {
+const mapStateToProps = ({ user, applyReducer }) => {
+    const { apply } = applyReducer;
     return {
         user,
+        apply,
     };
 };
 
