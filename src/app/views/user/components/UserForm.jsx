@@ -19,13 +19,18 @@ const UserForm = (props) => {
         history,
     } = props
 
-    
+
     const [form_user, setUserForm] = useState(user);
 
     const validateEmail = (email) => {
         const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return regexp.test(email);
       }
+
+    const validatePhone = (phone) => {
+        const regexp = 	/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{2})$/
+        return regexp.test(phone)
+    }
     
     const handleClose = () => {
         const path = match.params.opp_id ? `/growth-opportunities/${match.params.opp_id}` : "/"
@@ -40,6 +45,7 @@ const UserForm = (props) => {
     const handlePhoneError = () => {
         if (form_user.phone === "") return "This field is required"
         else if (form_user.phone.length < 8) return "This field is too short"
+        else if(!validatePhone(form_user.phone)) return "Phone number invalid format"
         return ""
     }
 
@@ -50,13 +56,15 @@ const UserForm = (props) => {
 
     const handleNext = () => {
         if (!setDisableNext) return false;
-        if (form_user.phone.length < 8 || form_user.email === "" || !validateEmail(form_user.email))
+        if (form_user.phone.length < 8 || !validatePhone(form_user.phone) || form_user.email === "" || !validateEmail(form_user.email))
         return setDisableNext(true)
         setDisableNext(false);
     }
 
     const handleValid = () => {
-        return (form_user.phone.length < 8 || form_user.email === "" || !validateEmail(form_user.email))
+        console.log("validate Phone",!validatePhone(form_user.phone));
+        console.log("validate Email",!validateEmail(form_user.email));
+        return (form_user.phone.length < 8 || !validatePhone(form_user.phone) ||  form_user.email === "" || !validateEmail(form_user.email))
     }
 
     useEffect(() => {
