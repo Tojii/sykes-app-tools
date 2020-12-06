@@ -83,8 +83,6 @@ const UserForm = (props) => {
     }
 
     const handleValid = () => {
-        console.log("validate Phone",!validatePhone(form_user.phone));
-        console.log("validate Email",!validateEmail(form_user.email));
         return (form_user.phone.length < 8 || !validatePhone(form_user.phone) ||  form_user.email === "" || !validateEmail(form_user.email))
     }
 
