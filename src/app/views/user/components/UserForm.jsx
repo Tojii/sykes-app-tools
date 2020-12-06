@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from 'react-redux'
 import { Formik } from 'formik';
 import * as Yup from "yup";
 import {
@@ -7,19 +8,22 @@ import {
     Card,
 } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import { setApplyData } from "../../../redux/actions/ApplyActions"
+import { setApplyData } from "../../../redux/actions/ApplyActions";
+import { setUserData } from "../../../redux/actions/UserActions";
+import { validateEmail } from '../../../../utils';
 import { connect } from "react-redux";
 
 const UserForm = (props) => {
     const {
         handleSubmitCallback,
         setDisableNext,
+        setApplyData,
+        apply,
         user,
         match,
         history,
     } = props
-
-
+    const dispatch = useDispatch();
     const [form_user, setUserForm] = useState(user);
 
     const validateEmail = (email) => {
@@ -31,7 +35,7 @@ const UserForm = (props) => {
         const regexp = 	/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{2})$/
         return regexp.test(phone)
     }
-    
+
     const handleClose = () => {
         const path = match.params.opp_id ? `/growth-opportunities/${match.params.opp_id}` : "/"
         history.push(path);
@@ -40,6 +44,23 @@ const UserForm = (props) => {
     const handleCustomChange = (event) => {
         let value = event.target.value
         setUserForm({...form_user, [event.target.name]: value});
+    }
+
+    const handleUserEmail = (event) => {
+        if (event.target.value !== "" || validateEmail(event.target.value))
+        {
+            user.email = event.target.value;
+            dispatch(setUserData(user));
+        }
+    }
+
+    const handleUserPhone = (event) => {
+        if (event.target.value !== "" || event.target.value.length < 8)
+        {
+            user.phone = event.target.value;
+            dispatch(setUserData(user));
+
+        }
     }
 
     const handlePhoneError = () => {
@@ -78,6 +99,10 @@ const UserForm = (props) => {
             email: form_user.email,
             badge: user.badge
         }
+        // apply['phone'] = form_user.phone;
+        // apply['email'] = form_user.email;
+        // apply['badge'] = user.badge;
+        // setApplyData(apply);
         handleSubmitCallback(payload);
     }
 
@@ -91,6 +116,7 @@ const UserForm = (props) => {
                             className="w-100 mx-24 my-16"
                             label="Email"
                             onChange={handleCustomChange}
+                            onBlur={handleUserEmail}
                             type="email"
                             name="email"
                             value={form_user.email}
@@ -105,6 +131,7 @@ const UserForm = (props) => {
                             className="w-100 mx-24 my-16"
                             label="Phone number"
                             onChange={handleCustomChange}
+                            onBlur={handleUserPhone}
                             type="text"
                             name="phone"
                             value={form_user.phone}
@@ -139,9 +166,11 @@ const UserForm = (props) => {
     )
 }
 
-const mapStateToProps = ({ user }) => {
+const mapStateToProps = ({ user, applyReducer }) => {
+    const { apply } = applyReducer;
     return {
         user,
+        apply,
     };
 };
 

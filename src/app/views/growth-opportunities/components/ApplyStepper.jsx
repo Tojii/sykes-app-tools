@@ -39,7 +39,7 @@ const ApplyStepper = (props) => {
       case 0:
           return <UserForm setDisableNext={setDisableNext}/>
       case 1:
-          return <ValidationStep setDisableNext={setDisableNext} handleCallback={handleNext}/>
+          return <ValidationStep setDisableNext={setDisableNext} handleCallback={handleNextValidation}/>
       case 2:
           return <ResumeStep setDisableNext={setDisableNext}/>
       case 3:
@@ -57,6 +57,11 @@ const ApplyStepper = (props) => {
         }
         setDisableNext(true);
         
+    };
+
+    const handleNextValidation = () => {
+      setActiveStep(prevActiveStep => prevActiveStep + 1);
+      setDisableNext(true);
     };
 
     const handleBack = () => {
