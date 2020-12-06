@@ -4,10 +4,9 @@ import {
   USER_LOGGED_OUT,
   UPDATE_USER_DATA,
 } from "../actions/UserActions";
-import localStorageService from "../../services/localStorageService";
 
 const initialState = {
-  // user: {},
+  user: null,
 };
 
 const userReducer = function(state = initialState, action) {

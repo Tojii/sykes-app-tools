@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from 'react-redux'
 import { Formik } from 'formik';
 import * as Yup from "yup";
 import {
@@ -22,8 +23,7 @@ const UserForm = (props) => {
         match,
         history,
     } = props
-
-    
+    const dispatch = useDispatch();
     const [form_user, setUserForm] = useState(user);
 
     const handleClose = () => {
@@ -40,7 +40,7 @@ const UserForm = (props) => {
         if (event.target.value !== "" || validateEmail(event.target.value))
         {
             user.email = event.target.value;
-            setUserData(user);
+            dispatch(setUserData(user));
         }
     }
 
@@ -48,7 +48,8 @@ const UserForm = (props) => {
         if (event.target.value !== "" || event.target.value.length < 8)
         {
             user.phone = event.target.value;
-            setUserData(user);
+            dispatch(setUserData(user));
+
         }
     }
 
@@ -117,6 +118,7 @@ const UserForm = (props) => {
                             className="w-100 mx-24 my-16"
                             label="Phone number"
                             onChange={handleCustomChange}
+                            onBlur={handleUserPhone}
                             type="text"
                             name="phone"
                             value={form_user.phone}
