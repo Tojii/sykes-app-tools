@@ -12,7 +12,6 @@ export const LSS_LOADING = "LSS_LOADING";
 export const getAccount = () => {
   return async dispatch => {
     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     await axios.get(`${process.env.REACT_APP_API_URL}/account`).then(res => {
       dispatch({
       type: GET_ACCOUNT,
@@ -25,7 +24,6 @@ export const getAccount = () => {
 export const getSupervisorAccount = account => {
   return async dispatch => { 
     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     await axios.get(`${process.env.REACT_APP_API_URL}/supervisor?account=${account}`).then(res => {
       dispatch({
       type: GET_SUPERVISOR_ACCOUNT,
@@ -52,7 +50,6 @@ export const submitData = Data => {
       type: LSS_LOADING
     });
     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     await axios.post(`${process.env.REACT_APP_API_URL}/Survey`, 
     {
       "cuentaArea": Data.CuentaArea, 
@@ -94,7 +91,6 @@ export const getValidation = username => {
     dispatch({
       type: LSS_LOADING
     });
-    axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
     await axios.get(`${process.env.REACT_APP_API_URL}/Survey?username=${username}`).then(res => {
       dispatch({
@@ -108,7 +104,6 @@ export const getValidation = username => {
 export const getJefeDirecto = criteria => {
     return async dispatch => {
       axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-      axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
       await axios.get(`${process.env.REACT_APP_API_URL}/user?criteria=` + criteria).then(res => {
         console.log("axios then", res.data)
         dispatch({

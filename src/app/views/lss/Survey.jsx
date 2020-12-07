@@ -87,6 +87,7 @@ const Survey = () => {
             .required('Requerido'),
         JefeDirecto: yup
             .string()
+            .nullable()
             .required('Requerido'),
         Posicion: yup
             .string()
@@ -378,7 +379,7 @@ const Survey = () => {
                             row
                           >
                             <FormControlLabel
-                              value="Si"
+                              value="Yes"
                               control={<Radio color="primary" />}
                               label="Si"
                               labelPlacement="end"
@@ -401,7 +402,7 @@ const Survey = () => {
                               row
                             >
                               <FormControlLabel
-                                value="Si"
+                                value="Yes"
                                 control={<Radio color="primary" />}
                                 label="Si"
                                 labelPlacement="end"
@@ -433,7 +434,7 @@ const Survey = () => {
                 </SimpleCard>
                 <div className="py-12" />
                 <SimpleCard title="Colaboración y trabajo en equipo">
-                  <SurveyRating label="Muestra habilidad para guiar y dirigir un grupo en la consecución de objetivos y metas conjuntas. *" name="Cooperacion" setFieldValue={setFieldValue} errors={errors} touched={touched} />
+                  <SurveyRating label="Fomenta el trabajo en equipo e incentiva la cooperación. *" name="Cooperacion" setFieldValue={setFieldValue} errors={errors} touched={touched} />
                   <SurveyRating label="Maneja y resuelve de forma efectiva situaciones conflictivas. *" name="SituacionesConflictivas" setFieldValue={setFieldValue} errors={errors} touched={touched} />
                   <SurveyRating label="Cultiva y mantiene relaciones interpersonales positivas y equitativas. *" name="RelacionesInterpersonales" setFieldValue={setFieldValue} errors={errors} touched={touched} />
                 </SimpleCard>
