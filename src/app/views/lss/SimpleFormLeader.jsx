@@ -345,7 +345,7 @@ class SimpleForm extends Component {
               <InputLabel id="cuenta">Mi supervisor directo es *</InputLabel>         
               <Select labelId="cuenta" className="mr-24" name="supervisor_directo" disabled={this.state.disabled_supervisor} onChange={this.handleChange} required style={{width: "calc(90% - 24px)"}}>
                 <MenuItem key="jefe-directo" value="Jefe-Directory">
-                    * No aparece en la lisa 
+                    * No aparece en la lista 
                 </MenuItem>
                 {supervisor_accounts.map(supervisor => (
                   <MenuItem key={supervisor} value={supervisor.netLogin}>
