@@ -24,7 +24,7 @@ class apiAuthService {
       username: email,
       password: password
     }
-    axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
+    //axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     return axios.post(`${process.env.REACT_APP_API_URL}/authenticate`, parameters).then(response => {
       // Login successful
       // Save token
@@ -61,7 +61,7 @@ class apiAuthService {
     if (token) {
       localStorage.setItem("jwt_token", token);
       axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-      axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
+      //axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     } else {
       localStorage.removeItem("jwt_token");
       delete axios.defaults.headers.common["Authorization"];
