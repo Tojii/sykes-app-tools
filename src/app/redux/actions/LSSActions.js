@@ -1,6 +1,7 @@
 import axios from "axios";
 import history from "history.js";
 import jwtAuthService from "../../services/apiAuthService";
+import apiAuthService from "../../services/apiAuthService";
 
 export const GET_ACCOUNT = "GET_ACCOUNT";
 export const GET_SUPERVISOR_ACCOUNT = "GET_SUPERVISOR_ACCOUNT";
@@ -8,6 +9,23 @@ export const GET_JEFE_DIRECTO = "GET_JEFE_DIRECTO"
 export const SUBMIT_DATA = "SUBMIT_DATA";
 export const GET_VALIDATE = "GET_VALIDATE";
 export const LSS_LOADING = "LSS_LOADING";
+export const LSS_LOGGED_OUT = "LSS_LOGGED_OUT"
+
+const axiosInstance = axios.create();
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    //if (error.response.status === 401) {
+        apiAuthService.logout(); 
+        history.push({
+          pathname: "/session/signin"
+        });
+    //}
+
+    return Promise.reject(error);
+  }
+)
 
 export const getAccount = () => {
   return async dispatch => {
@@ -91,13 +109,17 @@ export const getValidation = username => {
     dispatch({
       type: LSS_LOADING
     });
-    axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    await axios.get(`${process.env.REACT_APP_API_URL}/Survey?username=${username}`).then(res => {
+    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+    await axiosInstance.get(`${process.env.REACT_APP_API_URL}/Survey?username=${username}`).then(res => {
       dispatch({
       type: GET_VALIDATE,
       data: res.data
       });
+      console.log("status", res.status)
     })
+    .catch((error) => {
+      console.log("error!!")
+    });
   };
 };
 
