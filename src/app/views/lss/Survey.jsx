@@ -263,7 +263,7 @@ const Survey = () => {
                         </MenuItem>
                       ))}
                       <MenuItem key="jefe-directo" value="Jefe-Directory">
-                          * No Aparece en la lisa 
+                          * No aparece en la lista 
                       </MenuItem>
                     </Select>
                     <span style={{width: "calc(90% - 24px)", color: "#ffa420", display: "block"}}>Si su líder directo no aparece en la lista, seleccione: No aparece en la lista y proceda a ingresar el  nombre de su líder de manera manual en la opción que se habilita.</span>
