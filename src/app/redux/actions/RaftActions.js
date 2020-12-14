@@ -2,13 +2,17 @@ import axios from "axios";
 
 export const GET_RAFT_BY_BADGE = "GET_RAFT_BY_BADGE";
 export const GET_RAFT_BY_RAFID = "GET_RAFT_BY_RAFID";
+export const GET_ACADEMIC_GRADES = "GET_ACADEMIC_GRADES";
+export const GET_ENGLISH_LEVEL = "GET_ENGLISH_LEVEL";
+export const GET_PAYMENT_METHOD = "GET_PAYMENT_METHOD";
+export const GET_POSITIONS = "GET_POSITIONS"
 export const RE_LOADING = "RE_LOADING";
 export const ADD_RAFT = "ADD_RAFT";
 
 export const getAllRaft = (user) => {
   return async dispatch =>{
     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
+    //axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     // axios.defaults.headers.common["Access-Control-Allow-Origin"] = '*';
     // axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET, POST';
     // axios.defaults.headers.common["Content-Type"] = "application/json";
@@ -25,6 +29,86 @@ export const getAllRaft = (user) => {
   } 
 };
 
+export const getAcademicGrades = () => {
+  return async dispatch => {
+     dispatch({
+         type: RE_LOADING
+       });
+     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+     await axios.get(`${process.env.REACT_APP_API_URL}/api/Raft/GetAcademicGrades`).then((res => {
+         dispatch({
+             type: GET_ACADEMIC_GRADES,
+             data: res.data
+         });
+     }));
+ }
+}
+
+export const getPaymentMethod = () => {
+  return async dispatch => {
+     dispatch({
+         type: RE_LOADING
+       });
+     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+     await axios.get(`${process.env.REACT_APP_API_URL}/api/Raft/GetPaymentMethods`).then((res => {
+         dispatch({
+             type: GET_PAYMENT_METHOD,
+             data: res.data
+         });
+     }));
+ }
+}
+
+export const getPositions = () => {
+  return async dispatch => {
+     dispatch({
+         type: RE_LOADING
+       });
+     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+     await axios.get(`${process.env.REACT_APP_API_URL}/api/Raft/GetPositions`).then((res => {
+          let nuevoObjeto = {}
+          //Recorremos el arreglo 
+          res.data.forEach( x => {
+          //Si la ciudad no existe en nuevoObjeto entonces
+          //la creamos e inicializamos el arreglo de profesionales. 
+          if( !nuevoObjeto.hasOwnProperty(x.catetegory)){
+              nuevoObjeto[x.catetegory] = {
+              posiciones: []
+              }
+          }
+          
+          //Agregamos los datos de profesionales. 
+              nuevoObjeto[x.catetegory].posiciones.push({
+              title: x.title,
+              locationPreference: x.locationPreference
+              })
+          
+          })
+         dispatch({
+             type: GET_POSITIONS,
+             data: nuevoObjeto
+         });
+         console.log("positions", nuevoObjeto)
+     }));
+ }
+}
+
+
+export const getEnglishLevel = () => {
+  return async dispatch => {
+     dispatch({
+         type: RE_LOADING
+       });
+     axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+     await axios.get(`${process.env.REACT_APP_API_URL}/api/Raft/GetEnglishLevels`).then((res => {
+         dispatch({
+             type: GET_ENGLISH_LEVEL,
+             data: res.data
+         });
+     }));
+ }
+}
+
 export const getByIdRaft = rafid =>{
      return async dispatch => {
         dispatch({
@@ -32,7 +116,7 @@ export const getByIdRaft = rafid =>{
           });
         axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
         axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/Raft/GetbyIdRaft?idRaft=${rafid}`).then((res => {
+        await axios.get(`${process.env.REACT_APP_API_URL}/api/Raft/GetbyIdRaft?idRaft=${rafid}`).then((res => {
             dispatch({
                 type: GET_RAFT_BY_RAFID,
                 data: res.data
