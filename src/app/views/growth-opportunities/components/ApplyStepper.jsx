@@ -13,7 +13,8 @@ import ResumeStep from "./ResumeStep";
 import ScheduleStep from "./ScheduleStep";
 import ConfirmStep from "./ConfirmStep";
 import { setApplyData, saveJobApplication } from "../../../redux/actions/ApplyActions"
-import { connect } from "react-redux";
+import { updateUserData } from "../../../redux/actions/UserActions"
+import { connect, useDispatch } from "react-redux";
 import format from "date-fns/format";
 
 function getSteps() {
@@ -28,11 +29,13 @@ const ApplyStepper = (props) => {
       user,
       validations,
       growth_opportunity, 
-      saveJobApplication 
+      saveJobApplication,
     } = props
+    const dispatch = useDispatch();  
     const [activeStep, setActiveStep] = useState(0);
     const [disableNext, setDisableNext] = useState(false);
     const steps = getSteps();
+
 
     function getStepContent(stepIndex) {
       switch (stepIndex) {
@@ -56,7 +59,14 @@ const ApplyStepper = (props) => {
           setActiveStep(prevActiveStep => prevActiveStep + 1);
         }
         setDisableNext(true);
-        
+        if (activeStep == 0) {
+          const payloadUser = {
+            email: user.email,
+            phone: user.phone,
+            badge: user.badge,
+          }
+          dispatch(updateUserData(payloadUser));
+        }
     };
 
     const handleNextValidation = () => {
@@ -110,7 +120,7 @@ const ApplyStepper = (props) => {
                     <p>Application done!</p>
                 </div> 
                 <Button variant="contained" color="secondary" onClick={handleReset}>
-                  Salir
+                  Close
                 </Button>
               </div>
             ) : (

@@ -16,20 +16,22 @@ export const navigations = [
   //   icon: "content_paste",
   //   badge: { value: "New", color: "secondary" },
   // },
-  {
+  { 
     name: "Reembolso Educativo",
     icon: "attach_money_icon",
-    children:[{
-      name: "Lista de Reembolsos",
-      path: "/ReembolsoEducativo/ListaReembolsos",
-      iconText: "A"
-    },
-    {
-      name: "Detalle de Reembolsos",
-      path: "/ReembolsoEducativo/Detalle",
-      iconText: "A"
-    }   
-    ]
+    path: "/ReembolsoEducativo/ListaReembolsos",
+    // children:[
+    // {
+    //   name: "Lista de Reembolsos",
+    //   path: "/ReembolsoEducativo/ListaReembolsos",
+    //   iconText: "LR"
+    // },
+    // {
+    //   name: "Detalle de Reembolsos",
+    //   path: "/ReembolsoEducativo/Detalle",
+    //   iconText: "DR"
+    // }   
+    // ]
   },
   {
     name: "Growth Opportunities",

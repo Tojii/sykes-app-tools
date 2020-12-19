@@ -79,7 +79,7 @@ const UserForm = (props) => {
         if (!setDisableNext) return false;
         if (form_user.phone.length < 8 || !validatePhone(form_user.phone) || form_user.email === "" || !validateEmail(form_user.email))
         return setDisableNext(true)
-        setDisableNext(false);
+        setDisableNext(false); 
     }
 
     const handleValid = () => {
@@ -102,6 +102,9 @@ const UserForm = (props) => {
         // apply['badge'] = user.badge;
         // setApplyData(apply);
         handleSubmitCallback(payload);
+        history.push({
+            pathname: "/"
+          });
     }
 
     return (
@@ -109,7 +112,7 @@ const UserForm = (props) => {
             <Grid item lg={11}>
                 <h3 className="p-sm-24">Personal Information</h3>
                 <ValidatorForm    onSubmit={onSubmit}>
-                    <Grid item xs={12}>
+                    <Grid item xs={6}>
                         <TextValidator
                             className="w-100 mx-24 my-16"
                             label="Email"
@@ -124,7 +127,7 @@ const UserForm = (props) => {
                             helperText={handleEmailError()}
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={6}>
                         <TextValidator
                             className="w-100 mx-24 my-16"
                             label="Phone number"

@@ -3,13 +3,17 @@ import {
     IconButton,
     Icon, 
     Tooltip,
-    Card
+    Card,
+    Button,
+    makeStyles
 } from "@material-ui/core";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import { setGrowthOpportunity } from "../../../redux/actions/GrowthOpportunityActions"
 import { connect } from "react-redux";
 import MUIDataTable from "mui-datatables";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import MyMetrics from '../metrics';
+import { string } from "yup";
 
 const GrowthOppTable = ({
     growth_opportunities,
@@ -17,6 +21,7 @@ const GrowthOppTable = ({
     props
 }) => {
     const { history, match } = props
+    const [shouldOpenMetricsDialog, setShouldOpenMetricsDialog] = useState(false);
     
     const handleDetailsClick = (item) => {
         setGrowthOpportunity(item);
@@ -24,8 +29,14 @@ const GrowthOppTable = ({
     }
 
     const handleMyMetricsClick = () => {
-        history.push(`my-metrics`);
+        // history.push(`my-metrics`);
+        //return (<MyMetrics/>);
+        setShouldOpenMetricsDialog(true);
     }
+
+    const handleDialogClose = () => {
+        setShouldOpenMetricsDialog(false);
+      };
 
     const getMuiTheme = () =>
     createMuiTheme({
@@ -35,6 +46,7 @@ const GrowthOppTable = ({
         return (
             <>
                 <IconButton
+                    size="small"
                     color="primary"
                     onClick={() => handleDetailsClick(item)}
                 >
@@ -42,6 +54,25 @@ const GrowthOppTable = ({
                 </IconButton>
             </>
         )
+    }
+
+    const addButton = () => {
+        return (
+            <React.Fragment>
+              <Tooltip title={"Metrics"}>
+                <Button
+                  onClick={handleMyMetricsClick}
+                  //component={Link} to="/ReembolsoEducativo/Nuevo"
+                  variant="contained"
+                  color="primary"
+                  //className={classes.button}
+                  startIcon={<DashboardIcon/>}
+                >
+                  Metrics
+                </Button>
+              </Tooltip>
+            </React.Fragment>
+        );
     }
 
     const buildData = growth_opportunities.map(item => {
@@ -78,29 +109,27 @@ const GrowthOppTable = ({
         selectableRowsOnClick: false,
         download: false,
         print: false,      
-        customToolbar: () => {
-            return (
-                <>
-                    <Tooltip title={"My metrics"}>
-                        <IconButton onClick={handleMyMetricsClick}>
-                            <DashboardIcon/>
-                        </IconButton>
-                    </Tooltip>
-                </>
-            );
-        }
     };
 
     return (
         <>
-            <MuiThemeProvider theme={getMuiTheme()}>
-                <MUIDataTable className="w-100"
-                    title={"Growth opportunities"}
-                    data={buildData}
-                    columns={columns}
-                    options={options}
+            {shouldOpenMetricsDialog && (
+                <MyMetrics
+                handleClose={handleDialogClose}
+                open={shouldOpenMetricsDialog}
+                //uid={this.state.uid}
                 />
-            </MuiThemeProvider>
+            )}
+            <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+                <MuiThemeProvider theme={getMuiTheme()}>
+                    <MUIDataTable className="w-100" 
+                        title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Growth opportunities</h4></div>}
+                        data={buildData}
+                        columns={columns}
+                        options={options}
+                    />
+                </MuiThemeProvider>
+            </Card>
         </>
     )
 }

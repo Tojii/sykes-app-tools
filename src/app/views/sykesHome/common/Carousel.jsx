@@ -33,7 +33,7 @@ export const Carousel = (props) => {
     allowSlidePrev: true,
     slidesPerView: 1,
     spaceBetween: 32,
-    width: 400,
+    width: 1320,
 
     autoplay: {
       delay: 5000,
@@ -42,13 +42,46 @@ export const Carousel = (props) => {
 
     breakpoints: {
       // when window width is <= 480px
+      360: {
+        slidesPerView: 1,
+        spaceBetween: 0,
+        width: 300,
+      },
+      420: {
+        slidesPerView: 1,
+        spaceBetween: 0,
+        width: 320,
+      },
       480: {
         slidesPerView: 1,
-        spaceBetween: 0
+        spaceBetween: 0,
+        width: 390,
+      },
+      540: {
+        slidesPerView: 1,
+        spaceBetween: 0,
+        width: 450,
+      },
+      768: {
+        slidesPerView: 1,
+        width: 680,
       },
       // when window width is <= 640px
-      768: {
-        slidesPerView: 1
+      1024: {
+        slidesPerView: 1,
+        width: 950,
+      },
+      1280: {
+        slidesPerView: 1,
+        width: 940,
+      },
+      1920: {
+        slidesPerView: 1,
+        width: 1560,
+      },
+      2560: {
+        slidesPerView: 1,
+        width: 2260,
       }
     },
 
@@ -76,7 +109,7 @@ export const Carousel = (props) => {
       <div className="container">
         <Card className={classes.root + "m-5"}>
         <CardContent className="">
-          <div className="w-50">
+          <div className="w-100">
             <div className="swiper-container mx-28">
               <div className="swiper-wrapper">
                 {Children.map(children, (child, index) => (

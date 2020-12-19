@@ -4,6 +4,7 @@ import { getJobsApplied } from "../../../redux/actions/GrowthOpportunityActions"
 import { connect } from "react-redux";
 import MUIDataTable from "mui-datatables";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { Card } from "@material-ui/core";
 
 const ApplicationsTable = ({
     jobs_applied
@@ -41,18 +42,37 @@ const ApplicationsTable = ({
         print: false, 
     };
 
-    const columns = ["Job Position", "Status", "Application Date"]
+    const columns = [
+        {
+            name: "Job Position"
+        },
+        {
+            name:"Status",
+            options: {
+                filter: false
+            }
+        },
+        {
+            name:"Application Date",
+            options: {
+                sort: true,
+                sortDirection: 'desc',
+            }
+        }
+    ]
 
     return (
         <>
-            <MuiThemeProvider theme={getMuiTheme()}>
-                <MUIDataTable className="w-100"
-                    title={"My applications"}
-                    data={buildData}
-                    columns={columns}
-                    options={options}
-                />
-            </MuiThemeProvider>
+            <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+                <MuiThemeProvider theme={getMuiTheme()}>
+                    <MUIDataTable className="w-100" 
+                        title={"My applications"}
+                        data={buildData}
+                        columns={columns}
+                        options={options}
+                    />
+                </MuiThemeProvider>
+            </Card>
         </>
     )
 }

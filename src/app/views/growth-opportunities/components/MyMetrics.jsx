@@ -24,6 +24,12 @@ const useStyles = makeStyles(theme => ({
     spanRow: {
         background: 'white',
     },
+    metricsModal: {
+        overflow: "hidden",
+        [theme.breakpoints.down("xs")]: {
+            overflow: "unset",
+        },
+    }
   })
 );
 
@@ -36,7 +42,7 @@ const MyMetrics = ({ metrics, history }) => {
 
     return (
         <>
-            <Grid container spacing={1}>
+            <Grid className={classes.metricsModal} container md={12} xs={11} spacing={1}>
                 <Grid item lg={12} md={12} sm={12} xs={12}>
                     <Grid container spacing={2} className="m-24">
                         <Grid item xs={11} md={3}>
@@ -68,20 +74,21 @@ const MyMetrics = ({ metrics, history }) => {
                                     <h6 className="m-0 mt-4 text-primary font-weight-500">
                                         English Level
                                     </h6>
-                                    <small className="text-muted">{ metrics.fecha_de_Evaluacion || ""}</small>
+                                    <small className="text-muted">{ metrics.fecha_de_Evaluacion ? new Date(metrics.fecha_de_Evaluacion).toLocaleDateString() : ""}</small>
+                                    {console.log()}
                                     </div>
                                 </div>
                             </Card>
                         </Grid>
                         <Grid item xs={11} md={5}>
-                            <Card elevation={3} className="p-16 h-100">
+                            <Card elevation={3} className="play-card p-sm-24 bg-paper h-100">
                                 <div className="flex flex-middle">
-                                    <Fab
+                                    {/* <Fab
                                     size="medium"
                                     className="bg-light-warning circle-44 box-shadow-none"
-                                    >
+                                    > */}
                                     <Icon className="text-warning">warning</Icon>
-                                    </Fab>
+                                    {/* </Fab> */}
                                     <div>
                                         <h6 className="font-weight-500 text-warning m-0 ml-12">
                                             Warnings
@@ -90,7 +97,7 @@ const MyMetrics = ({ metrics, history }) => {
                                             { 
                                                 metrics.eWarning_Action == "Verbal" 
                                                     ? "N/A"
-                                                    : metrics.eWarning_Action || ""
+                                                    : metrics.eWarning_Action || "N/A"
                                             }
                                         </h3>
                                     </div>
@@ -132,25 +139,25 @@ const MyMetrics = ({ metrics, history }) => {
                                     <TableBody>
                                         <TableRow>
                                             <TableCell className="pl-sm-24">PA1</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_1 || ""}</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_1_Period || ""}</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_1_Year || ""}</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_1 ? (metrics.evA_1 > 0 ? metrics.evA_1 : "") : "" }</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_1_Period || "" }</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_1_Year || "" }</TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell className="pl-sm-24">PA2</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_2 || ""}</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_2_Period || ""}</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_2_Year || ""}</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_2 ? (metrics.evA_2 > 0 ? metrics.evA_2 : "") : "" }</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_2_Period || "" }</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_2_Year || "" }</TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell className="pl-sm-24">PA3</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_3 || ""}</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_3_Period || ""}</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_3_Year || ""}</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_3 ? (metrics.evA_3 > 0 ? metrics.evA_3 : "") : "" }</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_3_Period || "" }</TableCell>
+                                            <TableCell className="pl-sm-24">{ metrics.evA_3_Year || "" }</TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell className="pl-sm-24">PA Overall</TableCell>
-                                            <TableCell colSpan={3} align={"center"} className="pl-sm-24">{ metrics.last_3_Months_Average || "" }</TableCell>
+                                            <TableCell colSpan={3} align={"center"} className="pl-sm-24">{ metrics.last_3_Months_Average ? (metrics.last_3_Months_Average > 0 ? metrics.last_3_Months_Average : "") : "" }</TableCell>
                                         </TableRow>
                                     </TableBody>
                                 </Table>
@@ -158,7 +165,7 @@ const MyMetrics = ({ metrics, history }) => {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item lg={12} md={12} sm={12} xs={12}>
+                {/* <Grid item lg={12} md={12} sm={12} xs={12}>
                     <Grid container spacing={2} className="m-24">
                         <Button 
                             variant="contained" 
@@ -166,7 +173,7 @@ const MyMetrics = ({ metrics, history }) => {
                             onClick={handleClose}
                         >Close</Button>
                     </Grid>
-                </Grid>
+                </Grid> */}
             </Grid>
         </>
     )

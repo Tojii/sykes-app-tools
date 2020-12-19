@@ -44,7 +44,7 @@ class MatxVerticalNav extends Component {
                   );
                 }
               })()}
-              <span className="text-middle pl-20 item-text">{item.name}</span>
+              <span style={{paddingLeft:"15px"}} className="text-middle item-text">{item.name}</span>
               <div className="mx-auto"></div>
               {item.badge && (
                 <div className={`badge bg-${item.badge.color}`}>

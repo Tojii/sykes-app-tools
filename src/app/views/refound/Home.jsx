@@ -6,35 +6,109 @@ import {
     Card,
     Tooltip,
     IconButton,
+    Grid,
+    Dialog
 } from "@material-ui/core";
 import { GetRefoundListByUser } from "../../redux/actions/RefoundActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import MUIDataTable from "mui-datatables";
 import AddIcon from "@material-ui/icons/Add";
+import DetailsIcon from "@material-ui/icons/ReorderSharp";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import DetalleTable from "./RefoundDetails";
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
+import history from "history.js";
+
+const styles = (theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+});
+
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
 
 const Home = () => {
+    const dispatch = useDispatch();  
     const summary = useSelector(state => state.refound.summary);
-    const dispatch = useDispatch();
     const isLoading  = useSelector(state => state.refound.loading);
     const user = useSelector(state => state.user);
+    const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(false);
+    
+    const handleDetailsClick = () => {
+      setShouldOpenDetailsDialog(true);
+    }
+
+    const handleClose = () => {
+      setShouldOpenDetailsDialog(false);
+    }
     
     const addButton = () => {
         return (
             <React.Fragment>
               <Tooltip title={"Nuevo"}>
-                <IconButton component={Link} to="/ReembolsoEducativo/Nuevo">
+                {/* <IconButton component={Link} to="/ReembolsoEducativo/Nuevo">
                   <AddIcon/>
-                </IconButton>
+                </IconButton> */}
+                <Button
+                  component={Link} to="/ReembolsoEducativo/Nuevo"
+                  variant="contained"
+                  color="primary"
+                  //className={classes.button}
+                  startIcon={<AddIcon />}
+                >
+                  Nuevo
+                </Button>
               </Tooltip>
             </React.Fragment>
         );
     }
 
+    const addButtonDetails = () => {
+      return (
+          <React.Fragment>
+            <Tooltip title={"Detalles"}>
+              {/* <IconButton component={Link} to="/ReembolsoEducativo/Nuevo">
+                <AddIcon/>
+              </IconButton> */}
+              <Button
+                onClick={handleDetailsClick}
+                variant="contained"
+                color="primary"
+                //className={classes.button}
+                startIcon={<DetailsIcon />}
+              >
+                Detalles
+              </Button>
+            </Tooltip>
+          </React.Fragment>
+      );
+  }
+
     const getMuiTheme = () =>
     createMuiTheme({
-    });
+    })
 
     const columns = [
         {
@@ -102,9 +176,6 @@ const Home = () => {
         print:false,
         download: false,
         vertical: true,
-        customToolbar: () => {
-            return (addButton());
-        },
         textLabels: {
           body: {
             noMatch: "Disculpas, no se encontraron registros",
@@ -149,10 +220,11 @@ const Home = () => {
         <div>
             { isLoading ? <Loading /> : 
                 <div className="m-sm-30">
-                    <Card className="w-100 overflow-auto" elevation={6}>
+                    <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                         <MuiThemeProvider theme={getMuiTheme()}>
                           <MUIDataTable  className="w-100"
-                              title={"Lista de Reembolsos"}
+                              //title={"Lista de Reembolsos"}
+                               title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; {addButtonDetails()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Lista de Reembolsos</h4></div>}
                               data={summary}
                               columns={columns}
                               options={options}
@@ -161,6 +233,20 @@ const Home = () => {
                     </Card>
                 </div>
             }
+             <Dialog maxWidth="md" onClose={handleClose} open={shouldOpenDetailsDialog}>
+                <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+                
+                 </DialogTitle>
+                {/* <div className="mb-sm-30">
+                    <Breadcrumb
+                    routeSegments={[
+                    { name: "Growth Opportunities", path: "/growth-opportunities" },
+                    { name: "Metrics", path: "/my-metrics" },                
+                    ]}
+                />
+                </div> */}
+                <DetalleTable/>
+            </Dialog>
         </div>
     )
 }

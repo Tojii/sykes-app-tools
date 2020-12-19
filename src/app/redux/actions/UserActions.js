@@ -42,11 +42,12 @@ export const updateUserData = (payload) => dispatch => {
         'content-type': 'multipart/form-data',
     }
   }
-
+  console.log("formdata", formData)
   axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
   axios.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, formData, config).then(res => {
-    history.push({
-      pathname: "/"
+    dispatch({
+      type: UPDATE_USER_DATA,
+      data: res.data
     });
   });
 }

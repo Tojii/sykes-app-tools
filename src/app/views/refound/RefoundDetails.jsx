@@ -7,6 +7,7 @@ import {
     Icon,
     Button,
     Card,
+    Grid
 } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 
@@ -58,6 +59,10 @@ const RefoundDetails = () => {
         selectableRowsOnClick: false,
         print:false,
         download: false,
+        pagination: false,
+        filter: false,
+        viewColumns: false,
+        search: false,
         textLabels: {
           body: {
             noMatch: "Disculpas, no se encontraron registros",
@@ -95,18 +100,36 @@ const RefoundDetails = () => {
       }
     return (
         <div className="m-sm-30">
-            { isLoading ? <Loading /> :  
-                    <Card className="w-100 overflow-auto" elevation={6}>
-                        <MuiThemeProvider theme={getMuiTheme()}>
-                          <MUIDataTable  className="w-100"
-                              title={`Lista de Reembolsos ${employeeRefunds.length > 0 ? employeeRefunds[0].anio : "" }`}
-                              data={employeeRefunds.length > 0 ? employeeRefunds[0].balanceCategories : [] }
-                              columns={columns}
-                              options={options}
-                          />
-                        </MuiThemeProvider>
-                    </Card>
-            }
+          <Grid container spacing={2}>
+            <Grid item md={12} xs={12}>
+              { isLoading ? <Loading /> :  
+                      <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+                          <MuiThemeProvider theme={getMuiTheme()}>
+                            <MUIDataTable  className="w-100"
+                                title={`Lista de Reembolsos ${employeeRefunds.length > 0 ? employeeRefunds[0].anio : "" }`}
+                                data={employeeRefunds.length > 0 ? employeeRefunds[0].balanceCategories : [] }
+                                columns={columns}
+                                options={options}
+                            />
+                          </MuiThemeProvider>
+                      </Card>
+              }
+            </Grid>
+            <Grid item md={12} xs={12}>
+              { isLoading ? <Loading /> :  
+                      <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+                          <MuiThemeProvider theme={getMuiTheme()}>
+                            <MUIDataTable  className="w-100"
+                                title={`Lista de Reembolsos ${employeeRefunds.length > 0 ? employeeRefunds[1].anio : "" }`}
+                                data={employeeRefunds.length > 0 ? employeeRefunds[1].balanceCategories : [] }
+                                columns={columns}
+                                options={options}
+                            />
+                          </MuiThemeProvider>
+                      </Card>
+              }
+            </Grid>
+          </Grid>
         </div>
     )
 }
