@@ -278,9 +278,20 @@ const NewRefoundForm = () => {
   };
 
   const handleSubmit = async () => {
+    console.log("save files", files);
+    var sizes = 0;
+    for (var i = 0; files.length > i; i++){
+      sizes = sizes + files[i].file.size;
+    } 
+    console.log(sizes);
     if (files.length <= 0) {
       setIsErrorUpload(true);
       setErrorMessage(errorMessage => ({ ...errorMessage, files: "*Se debe seleccionar al menos un archivo" }));
+      return;
+    }
+    if (sizes > 1000000) {
+      setIsErrorUpload(true);
+      setErrorMessage(errorMessage => ({ ...errorMessage, files: "*Los archivos adjuntos superan el máximo permitido de 1MB." }));
       return;
     }
     setActiveStep(steps.length);
