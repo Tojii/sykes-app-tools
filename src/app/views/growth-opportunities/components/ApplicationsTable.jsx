@@ -54,10 +54,7 @@ const ApplicationsTable = ({
         },
         {
             name:"Application Date",
-            options: {
-                sort: true,
-                sortDirection: 'desc',
-            }
+            
         }
     ]
 

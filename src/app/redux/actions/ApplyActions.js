@@ -6,6 +6,8 @@ import history from "history.js";
 export const SET_APPLY_DATA = "SET_APPLY_DATA";
 export const SAVE_JOB_APPLICATION = "SAVE_JOB_APPLICATION";
 export const SET_VALIDATIONS = "SET_VALIDATIONS";
+export const RE_LOADING = "RE_LOADING";
+export const SET_ERROR = "SET_ERROR";
 
 const axiosInstance = axios.create();
 
@@ -13,6 +15,7 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     //if (error.response.status === 401) {
+        setLoading();
         apiAuthService.logout(); 
         history.push({
           pathname: "/session/signin"
@@ -30,6 +33,12 @@ export const setApplyData = (payload) => dispatch => {
     })
 };
 
+export const setLoading = () => dispatch => {
+    console.log("error")
+    dispatch({
+        type: SET_ERROR,
+    })
+};
 
 export const saveJobApplication = (payload) => dispatch => {
     console.log("save Jobs", payload);
@@ -78,7 +87,9 @@ export const saveJobApplication = (payload) => dispatch => {
             'content-type': 'multipart/form-data',
         }
     }
-
+    dispatch({
+        type: RE_LOADING
+    });
     axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
     axiosInstance.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/SaveJobApplication`, formData, config).then(res => {
         console.log("RES: ", res);
@@ -95,5 +106,6 @@ export const setValidations = (badge, jobId) => dispatch => {
             type: SET_VALIDATIONS,
             payload: res.data
         });
+        console.log("validacion", res.data)
     });
 };

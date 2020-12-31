@@ -178,7 +178,7 @@ const Home = () => {
         vertical: true,
         textLabels: {
           body: {
-            noMatch: "Disculpas, no se encontraron registros",
+            noMatch: "Lo sentimos, no se encontraron registros",
             toolTip: "Sort",
             columnHeaderTooltip: column => `Ordenar por ${column.label}`
           },

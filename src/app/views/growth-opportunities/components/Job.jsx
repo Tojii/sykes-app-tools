@@ -11,11 +11,16 @@ import {
 } from "@material-ui/core";
 import { connect } from "react-redux";
 import ReactHtmlParser from 'react-html-parser';
+import { setLoading } from "../../../redux/actions/ApplyActions";
 
 const Job = (props) => {
-    const { history, match, growth_opportunity } = props
+    const { history, match, growth_opportunity, apply, setLoading } = props
     
     const handleApply = () => {
+        setLoading();
+        apply["backResume"] = false;
+        apply["backSchedule"] = false;
+        apply["backvalidation"] = false;
         history.push(`${match.url}/apply`);
     }
 
@@ -88,11 +93,13 @@ const Job = (props) => {
     )
 }
 
-const mapStateToProps = ({ growthReducer }) => {
+const mapStateToProps = ({ growthReducer, applyReducer }) => {
     const { growth_opportunity } = growthReducer;
+    const { apply } = applyReducer;
     return {
         growth_opportunity,
+        apply,
     };
 };
 
-export default connect(mapStateToProps, null)(Job);
+export default connect(mapStateToProps, {setLoading})(Job);

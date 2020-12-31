@@ -1,43 +1,87 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Fab, Icon, Card, Divider } from "@material-ui/core";
 import { setApplyData } from "../../../redux/actions/ApplyActions";
 import { connect } from "react-redux";
 import MuiAlert from '@material-ui/lab/Alert';
+import { makeStyles } from '@material-ui/core/styles';
+import Snackbar from '@material-ui/core/Snackbar';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
+
+const useStyles = makeStyles((theme) => ({
+root: {
+    width: '100%',
+    '& > * + *': {
+    marginTop: theme.spacing(2),
+    },
+},
+}));
 
 const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
 
     const [showError, setShowError] = useState(false);
     const [errorMessage, setErrorMessage] = useState([]);
     const [file, setFile] = useState({});
+    const classes = useStyles();
+
+    const [open, setOpen] = useState(false);
+
+    const anchor = {
+        vertical: 'bottom',
+        horizontal: 'right',
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+    useEffect(() => {
+        if(apply.backResume && apply.resume != undefined) {
+            if(!apply.fileMessage) {setDisableNext(false)};
+            setFile(apply.resume)
+            apply['backResume'] = false;
+        }
+    }, [])
 
     const handleFileSelect = (event) => {
         let files = event.target.files;
         for (const iterator of files) {
             if (iterator.type == "application/msword" || iterator.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
                 iterator.type == "application/pdf") {
-                setErrorMessage([])
                 let invalid = iterator.size > 2000000
+                if(invalid){ 
+                    setErrorMessage(errorMessage => ({...errorMessage, type:"The file exceeds the allowed size"})) 
+                    apply['fileMessage'] = true
+                    apply['resume'] = iterator
+                    setOpen(true)
+                } else {
+                    apply['resume'] = iterator
+                    apply['fileMessage'] = false
+                    setErrorMessage([])
+                    setOpen(false)
+                }
                 setFile(iterator)
                 setShowError(invalid);
                 setDisableNext(invalid);
-                apply['resume'] = iterator
+               
                 setFile(iterator)
                 setApplyData(apply);
             }else{
-                setFile({})
+                setFile(iterator)
                 setShowError(false);
                 setDisableNext(true);
                 setErrorMessage(errorMessage => ({...errorMessage, type:"Invalid format file"}))
+                apply['resume'] = iterator
+                apply['fileMessage'] = true
+                setOpen(true)
             }
         }
     };
 
     return (
-        <>
+        <>  
             <Grid item lg={12} className="px-sm-24 text-center">
                 <h3>Adjuntar currículum</h3>
                 <label htmlFor="upload-single-file">
@@ -60,6 +104,7 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                     id="upload-single-file"
                     type="file"
                     accept=".doc, .docx, .pdf"
+                    //value={}
                 />
             </Grid>
             <Card className="mb-24" elevation={2}>
@@ -75,7 +120,7 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                   Nombre
                 </Grid>
                 <Grid item lg={6} md={6}>
-                  Estado
+                  Tamaño
                 </Grid>
               </Grid>
             </div>
@@ -89,30 +134,37 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                         direction="row"
                     >
                         <Grid item lg={6} md={6} sm={12} xs={12}>
-                            {file.name}
+                            {file.size ? (
+                                <div className="flex flex-middle">
+                                    {file.name}
+                                    </div>
+                            ) : "No file attached" }
                         </Grid>
                         <Grid item lg={6} md={6} sm={12} xs={12}>
-                            {showError ? (
+                            {file.size ? (
                                 <div className="flex flex-middle">
-                                    <Icon color="error">error</Icon>
-                                    <p className="px-16">El archivo supera el tamaño permitido</p>
+                                    {(file.size / 1024 / 1024).toFixed(1)} MB
                                 </div>
-                            ) : file.size && <Icon color="primary">check</Icon> }
+                            ) : "" }
                         </Grid>
                     </Grid>
                 </div>
+            {errorMessage.type ?
+            <div className={classes.root}>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}
+                anchorOrigin={anchor}
+            >
                 
+            <Alert onClose={handleClose} severity="warning">
+                {errorMessage.type}
+            </Alert>
+            </Snackbar>
+            </div>
+            :
+            <div></div>
+            }  
                          
           </Card>
-            {errorMessage.type ?
-                <div className="d-flex justify-content-center mb-16">
-                    <Alert variant="outlined" severity="error">
-                        {errorMessage.type}
-                    </Alert>
-                </div>
-                :
-                <div></div>
-            }  
         </>
     );
 }

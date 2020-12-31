@@ -3,6 +3,7 @@ import { Grid, FormGroup, FormControlLabel, Switch } from "@material-ui/core";
 import {
     MuiPickersUtilsProvider,
     KeyboardTimePicker,
+    TimePicker
   } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -39,10 +40,24 @@ const ScheduleStep = (props) => {
     });
 
     useEffect(() => {
+        if(apply.backSchedule && apply.workSchedule != undefined) {
+            let backdays = days;
+            if(!apply.workSchedule.includes("Monday")){ backdays["Monday"] = false }
+            if(!apply.workSchedule.includes("Tuesday")){ backdays["Tuesday"] = false }
+            if(!apply.workSchedule.includes("Wednesday")){ backdays["Wednesday"] = false }
+            if(!apply.workSchedule.includes("Thursday")){ backdays["Thursday"] = false }
+            if(!apply.workSchedule.includes("Friday")){ backdays["Friday"] = false }
+            if(apply.workSchedule.includes("Saturday")){ backdays["Saturday"] = true }
+            if(apply.workSchedule.includes("Sunday")){ backdays["Sunday"] = true }
+            setTimes({startTime: apply.startTimeBack, endTime: apply.endTimeBack});
+            setDays({...backdays})
+            apply['backSchedule'] = false;
+        }
         buildScheduleDays();
         buildScheduleTimes();
         setApplyData(apply);
         apply['workSchedule'] !== "" ? setDisableNext(false) : setDisableNext(true)
+        console.log("report", apply.startTime)
     }, [days, times])
 
     const handleDayChange = (day) => event => {
@@ -61,8 +76,10 @@ const ScheduleStep = (props) => {
 
     const buildScheduleTimes = () => {
         Object.keys(times).map((time) => {
-            apply[time] = format(times[time], "p").toString()
+            apply[time] = format(times[time], "p").toString();
         })
+        apply["startTimeBack"] = times.startTime;
+        apply["endTimeBack"] = times.endTime;
     }
 
     return (
@@ -91,31 +108,31 @@ const ScheduleStep = (props) => {
             </Grid>
             <Grid item lg={6} className="p-sm-24">
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardTimePicker
+                    <TimePicker
                         className="mb-16 w-100"
                         margin="none"
                         id="start-time"
                         label="Start Time"
                         value={times["startTime"]}
                         onChange={handleTimeChange("startTime")}
-                        KeyboardButtonProps={{
-                            "aria-label": "change time"
-                        }}
+                        // KeyboardButtonProps={{
+                        //     "aria-label": "change time"
+                        // }}
                     />
                 </MuiPickersUtilsProvider>
             </Grid>
             <Grid item lg={6} className="p-sm-24">
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardTimePicker
+                    <TimePicker
                         className="mb-16 w-100"
                         margin="none"
                         id="end-time"
                         label="End Time"
                         value={times["endTime"]}
                         onChange={handleTimeChange("endTime")}
-                        KeyboardButtonProps={{
-                            "aria-label": "change time"
-                        }}
+                        // KeyboardButtonProps={{
+                        //     "aria-label": "change time"
+                        // }}
                     />
                 </MuiPickersUtilsProvider>
             </Grid>

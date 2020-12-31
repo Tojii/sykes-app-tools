@@ -32,6 +32,7 @@ import { format } from 'date-fns';
 import es from "date-fns/locale/es";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import MuiAlert from '@material-ui/lab/Alert';
+import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 
 function getSteps() {
   return ["Categoría del Curso", "Datos del Curso", "Archivos Adjuntos"];
@@ -66,6 +67,7 @@ const NewRefoundForm = () => {
   const [isErrorUpload, setIsErrorUpload] = useState(false);
   const [errorMessage, setErrorMessage] = useState([]);
   const [files, setFiles] = useState([]);
+  const [open, setOpen] = useState(false);
   
   const [form, setForm] = useState({
     badge: user.badge, //'42553',,
@@ -278,12 +280,12 @@ const NewRefoundForm = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("save files", files);
+    //console.log("save files", files);
     var sizes = 0;
     for (var i = 0; files.length > i; i++){
       sizes = sizes + files[i].file.size;
     } 
-    console.log(sizes);
+    //console.log(sizes);
     if (files.length <= 0) {
       setIsErrorUpload(true);
       setErrorMessage(errorMessage => ({ ...errorMessage, files: "*Se debe seleccionar al menos un archivo" }));
@@ -296,6 +298,7 @@ const NewRefoundForm = () => {
     }
     setActiveStep(steps.length);
     await dispatch(SaveRefund(form, files));
+    setOpen(true);
   }
 
   const handleDateChangeStartDate = date => {
@@ -502,6 +505,7 @@ const NewRefoundForm = () => {
 
   return (
     <div>
+      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={"Success!"} message={(saveRefound != null && !saveRefound.success) == false ? "¡Guardado existosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
       {isLoading ? <Loading /> :
         <div className="m-sm-30">
           <SimpleCard title="Nuevo reembolso educativo">
@@ -522,12 +526,12 @@ const NewRefoundForm = () => {
                       {!saveRefound.success == false ? "¡Guardado existosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
                     </Alert>
                   </div>
-                  <Button variant="contained" color="secondary" onClick={handleReset}>
+                  {/* <Button variant="contained" color="secondary" onClick={handleReset}>
                     Volver a nuevo
-                  </Button>
+                  </Button> */}
                   
                   </div> 
-                  : <div><p>Hello from here</p></div>}
+                  : <div></div>}
                 </div>
               ) : (
                   <div>
@@ -541,12 +545,13 @@ const NewRefoundForm = () => {
                       >
                         Regresar
                       </Button>
+                      
                       <Button
                         className="ml-16"
                         variant="contained"
                         color="primary"
                         onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
-                        disabled={form.studiesCategory ? false : true}
+                        disabled={(activeStep !== steps.length - 1 && form.studiesCategory) ? false : ((activeStep === steps.length - 1 && files.length !== 0) ? false : true)}
                       >
                         {activeStep === steps.length - 1 ? "Finalizar" : "Siguiente"}
                       </Button>
