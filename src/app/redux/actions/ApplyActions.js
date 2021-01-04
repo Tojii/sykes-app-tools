@@ -96,6 +96,7 @@ export const saveJobApplication = (payload) => dispatch => {
         dispatch({
             type: SAVE_JOB_APPLICATION,
         });
+        if (payload.refresh) {window.location.reload();}
     });
 };
 

@@ -102,6 +102,7 @@ const ApplyStepper = (props) => {
         id: growth_opportunity.id,
         openingId: growth_opportunity.openingId,
         job: growth_opportunity.title,
+        refresh: false,
         ...apply,
         ...validations,
       }
@@ -118,7 +119,7 @@ const ApplyStepper = (props) => {
         <div>
           {isLoading ? <Loading /> :
           <div>
-            <ValidationModal idioma={"Ingles"} path={"/growth-opportunities"} state={"Success!"} message={ "Application done!"} setOpen={setOpen} open={open} />
+            <ValidationModal idioma={"Ingles"} save={() => {}} path={"/growth-opportunities"} state={"Success!"} message={ "Application done!"} setOpen={setOpen} open={open} />
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map(label => (
                 <Step key={label}>

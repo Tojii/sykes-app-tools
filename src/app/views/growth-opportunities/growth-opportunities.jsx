@@ -15,7 +15,8 @@ const GrowthOpportunities = (props) => {
         getGrowthOpportunities, 
         jobs_applied,
         getJobsApplied,
-        user
+        user,
+        loading
     } = props
 
     useEffect(() => {
@@ -24,7 +25,7 @@ const GrowthOpportunities = (props) => {
     }, [])
 
     return (
-        (!growth_opportunities || !jobs_applied ) 
+        (!growth_opportunities || !jobs_applied || loading ) 
             ? <Loading /> 
             : <>
                 <Card className="m-sm-30">
@@ -41,12 +42,14 @@ const GrowthOpportunities = (props) => {
     )
 }
 
-const mapStateToProps = ({ growthReducer, user }) => {
+const mapStateToProps = ({ growthReducer, user, applyReducer }) => {
     const { growth_opportunities, jobs_applied } = growthReducer;
+    const { loading } = applyReducer;
     return {
         growth_opportunities,
         jobs_applied,
         user,
+        loading,
     };
 };
 

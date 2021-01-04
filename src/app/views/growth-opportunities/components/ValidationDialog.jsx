@@ -32,6 +32,7 @@ export default function DraggableDialog(props) {
 
   const handleModal = () => {
     props.setOpen(false);
+    props.save();
     history.push({
         pathname: props.path
     });

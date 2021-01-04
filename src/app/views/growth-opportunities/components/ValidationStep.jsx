@@ -29,26 +29,30 @@ const ResumeStep = ({
                 setOpen(false);
             }
             else{ 
-                const payload = {
-                    created: format(new Date(), "P p").toString(),
-                    email: user.email,
-                    phone: user.phone,
-                    badge: user.badge,
-                    fullName: user.fullname,
-                    id: growth_opportunity.id,
-                    openingId: growth_opportunity.openingId,
-                    job: growth_opportunity.title,
-                    resume: null,
-                    workSchedule: "Monday, Tuesday, Wednesday, Thursday, Friday",
-                    startTime: "8:00 AM",
-                    endTime: "5:00 PM",
-                    ...validations,
-                }
-                saveJobApplication(payload);
                 setOpen(true);
             }
         }
     }, [validations]);
+    
+    const saveJob = () => {
+        const payload = {
+            created: format(new Date(), "P p").toString(),
+            email: user.email,
+            phone: user.phone,
+            badge: user.badge,
+            fullName: user.fullname,
+            id: growth_opportunity.id,
+            openingId: growth_opportunity.openingId,
+            job: growth_opportunity.title,
+            resume: null,
+            workSchedule: "Monday, Tuesday, Wednesday, Thursday, Friday",
+            startTime: "8:00 AM",
+            endTime: "5:00 PM",
+            refresh: true,
+            ...validations,
+        }
+        saveJobApplication(payload);
+    } 
 
     const handleNextStep = () => {
         setDisableNext(false);
@@ -61,7 +65,7 @@ const ResumeStep = ({
 
     return (
         <>
-            <ValidationModal idioma={"Ingles"} path={"/growth-opportunities"} state={"Error!"} message={(validations != null) ? validations.message : "Lo sentimos, pero el usuario actual no puede aplicar a este job"} setOpen={setOpen} open={open} />
+            <ValidationModal idioma={"Ingles"} path={"/growth-opportunities"} save={saveJob} state={"Error!"} message={(validations != null) ? validations.message : "Lo sentimos, pero el usuario actual no puede aplicar a este job"} setOpen={setOpen} open={open} />
             { validations != null ? (
                 //console.log("approved",validations.approvedFinal),
                 validations.approvedFinal ?

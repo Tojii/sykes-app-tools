@@ -505,7 +505,7 @@ const NewRefoundForm = () => {
 
   return (
     <div>
-      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={"Success!"} message={(saveRefound != null && !saveRefound.success) == false ? "¡Guardado existosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
+      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={"Success!"} save={() => {}} message={(saveRefound != null && !saveRefound.success) == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
       {isLoading ? <Loading /> :
         <div className="m-sm-30">
           <SimpleCard title="Nuevo reembolso educativo">
@@ -523,7 +523,7 @@ const NewRefoundForm = () => {
                   <div>
                     <div className="d-flex justify-content-center mb-16">
                     <Alert variant="outlined" severity={!saveRefound.success == false ? "success" : "error"}>
-                      {!saveRefound.success == false ? "¡Guardado existosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
+                      {!saveRefound.success == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
                     </Alert>
                   </div>
                   {/* <Button variant="contained" color="secondary" onClick={handleReset}>
