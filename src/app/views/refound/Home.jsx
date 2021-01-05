@@ -196,9 +196,9 @@ const Home = () => {
             filterTable: "Filtrar tabla",
           },
           filter: {
-            all: "TODAS",
-            title: "FILTRADAS",
-            reset: "ELIMINAR FILTROS",
+            all: "Todas",
+            title: "Filtradas",
+            reset: "Eliminar filtros",
           },
           viewColumns: {
             title: "Mostrar Columnas",

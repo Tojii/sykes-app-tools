@@ -31,6 +31,7 @@ export const getGrowthOpportunities = () => dispatch => {
             type: GET_GROWTH_OPPORTUNITIES,
             payload: res.data
         });
+        console.log("action job opening", res.data)
     });
 };
 

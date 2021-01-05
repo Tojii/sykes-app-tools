@@ -7,7 +7,7 @@ export const SET_APPLY_DATA = "SET_APPLY_DATA";
 export const SAVE_JOB_APPLICATION = "SAVE_JOB_APPLICATION";
 export const SET_VALIDATIONS = "SET_VALIDATIONS";
 export const RE_LOADING = "RE_LOADING";
-export const SET_ERROR = "SET_ERROR";
+export const SET_LOADING = "SET_ERROR";
 
 const axiosInstance = axios.create();
 
@@ -34,9 +34,9 @@ export const setApplyData = (payload) => dispatch => {
 };
 
 export const setLoading = () => dispatch => {
-    console.log("error")
+    //console.log("error")
     dispatch({
-        type: SET_ERROR,
+        type: SET_LOADING,
     })
 };
 

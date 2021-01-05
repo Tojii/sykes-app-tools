@@ -68,6 +68,7 @@ const NewRefoundForm = () => {
   const [errorMessage, setErrorMessage] = useState([]);
   const [files, setFiles] = useState([]);
   const [open, setOpen] = useState(false);
+  const [finish, setFinish] = useState(false);
   
   const [form, setForm] = useState({
     badge: user.badge, //'42553',,
@@ -291,11 +292,12 @@ const NewRefoundForm = () => {
       setErrorMessage(errorMessage => ({ ...errorMessage, files: "*Se debe seleccionar al menos un archivo" }));
       return;
     }
-    if (sizes > 1000000) {
+    if (sizes > 1048576) {
       setIsErrorUpload(true);
       setErrorMessage(errorMessage => ({ ...errorMessage, files: "*Los archivos adjuntos superan el máximo permitido de 1MB." }));
       return;
     }
+    console.log(sizes)
     setActiveStep(steps.length);
     await dispatch(SaveRefund(form, files));
     setOpen(true);
@@ -308,6 +310,7 @@ const NewRefoundForm = () => {
     setForm({
       ...form,
       startDate: date,
+      endDate: null,
     });
   };
 
@@ -497,7 +500,7 @@ const NewRefoundForm = () => {
           </div>
         );
       case 2:
-        return <UploadForm files={files} setFiles={setFiles} isError={isErrorUpload} setErrorMessage={setIsErrorUpload} errorMessage={errorMessage.files} />
+        return <UploadForm files={files} setFinish={setFinish} setFiles={setFiles} isError={isErrorUpload} setErrorMessage={setIsErrorUpload} errorMessage={errorMessage.files} />
       default:
         return "";
     }
@@ -505,7 +508,7 @@ const NewRefoundForm = () => {
 
   return (
     <div>
-      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={"Success!"} save={() => {}} message={(saveRefound != null && !saveRefound.success) == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
+      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={(saveRefound != null && !saveRefound.success) == false ? "Success!" : "Error!"} save={() => {}} message={(saveRefound != null && !saveRefound.success) == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
       {isLoading ? <Loading /> :
         <div className="m-sm-30">
           <SimpleCard title="Nuevo reembolso educativo">
@@ -545,13 +548,13 @@ const NewRefoundForm = () => {
                       >
                         Regresar
                       </Button>
-                      
+                      {console.log("message", errorMessage)}
                       <Button
                         className="ml-16"
                         variant="contained"
                         color="primary"
                         onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
-                        disabled={(activeStep !== steps.length - 1 && form.studiesCategory) ? false : ((activeStep === steps.length - 1 && files.length !== 0) ? false : true)}
+                        disabled={(activeStep !== steps.length - 1 && form.studiesCategory) ? false : ((activeStep === steps.length - 1 && files.length !== 0 && finish) ? false : true)}
                       >
                         {activeStep === steps.length - 1 ? "Finalizar" : "Siguiente"}
                       </Button>

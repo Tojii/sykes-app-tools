@@ -48,18 +48,13 @@ const UserForm = (props) => {
 
     const handleUserEmail = (event) => {
         if (event.target.value !== "" || validateEmail(event.target.value))
-        {
-            user.email = event.target.value;
-            dispatch(setUserData(user));
+        { 
         }
     }
 
     const handleUserPhone = (event) => {
         if (event.target.value !== "" || event.target.value.length < 8)
-        {
-            user.phone = event.target.value;
-            dispatch(setUserData(user));
-
+        {       
         }
     }
 
@@ -79,6 +74,9 @@ const UserForm = (props) => {
         if (!setDisableNext) return false;
         if (form_user.phone.length < 8 || !validatePhone(form_user.phone) || form_user.email === "" || !validateEmail(form_user.email))
         return setDisableNext(true)
+        user.email = form_user.email;
+        user.phone = form_user.phone;
+        dispatch(setUserData(user));
         setDisableNext(false); 
     }
 
@@ -97,6 +95,10 @@ const UserForm = (props) => {
             email: form_user.email,
             badge: user.badge
         }
+        user.email = form_user.email;
+        user.phone = form_user.phone;
+        dispatch(setUserData(user));
+        
         // apply['phone'] = form_user.phone;
         // apply['email'] = form_user.email;
         // apply['badge'] = user.badge;
@@ -105,7 +107,7 @@ const UserForm = (props) => {
         history.push({
             pathname: "/"
           });
-    }
+    } 
 
     return (
         <>

@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
+const UploadForm  = ({setFinish, files, setFiles, isError, errorMessage}) => {
   const classes = useStyles();
   const [params, setParams] = useState(
       {
@@ -50,6 +50,12 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
  const handleFileSelect = event => {
     let filesList = event.target.files;
     let list = [];
+    let sizes = 0;
+    setFinish(true);
+
+    if (files.length !== 0) {for (const iterator of files) {
+      sizes = sizes + iterator.file.size;
+    }}
 
     for (const iterator of filesList) {
       if(iterator.type == "application/pdf" || iterator.type == "image/png" || 
@@ -66,12 +72,16 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
         }else{
           setOpen({open:true, message: `¡Ya existe un archivo con este nombre!`});
         }
-        
+        sizes = sizes + iterator.size;
       }else{
         setOpen({open:true, message:`¡Uno o mas archivos no tienen el tipo correcto!`});
       }
     }
-
+    console.log("size", sizes)
+    if (sizes > 1048576) {
+      setOpen({open:true, message:`*Los archivos adjuntos superan el máximo permitido de 1MB.`});
+      setFinish(false);
+    }
     setFiles((item)=>[...item, ...list]);
   };
 
@@ -86,6 +96,12 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
    
     let filesList = event.dataTransfer.files;
     let list = [];  
+    let sizes = 0;
+    setFinish(true);
+
+    if (files.length !== 0) {for (const iterator of files) {
+      sizes = sizes + iterator.file.size;
+    }}
 
     for (const iterator of filesList) {
       if(iterator.type == "application/pdf" || iterator.type == "image/png" || 
@@ -102,12 +118,16 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
         }else{
           setOpen({open:true, message: `¡Ya existe un archivo con este nombre!`});
         }
-        
+        sizes = sizes + iterator.size;
       }else{
         setOpen({open:true, message:`¡Uno o mas archivos no tienen el tipo correcto!`});
       }
     }
-
+    console.log("size", sizes)
+    if (sizes > 1048576) {
+      setOpen({open:true, message:`*Los archivos adjuntos superan el máximo permitido de 1MB.`});
+      setFinish(false);
+    }
     setParams({ ...params, dragClass: "" });
     setFiles((item)=>[...item, ...list]);
     return false;
@@ -118,15 +138,30 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
   };
 
   const handleSingleRemove = index => {
-    
+    let sizes = 0;
     let filesList = [...files];
     filesList.splice(index, 1);
     setFiles([...filesList]);
+    if(filesList.length === 0) {
+      setFinish(false);
+    } else {
+      for (const iterator of filesList) {
+        sizes = sizes + iterator.file.size;
+      }
+      if (sizes > 1048576) {
+        setOpen({open:true, message:`*Los archivos adjuntos superan el máximo permitido de 1MB.`});
+        setFinish(false);
+      } else {
+        setOpen({open:false, message:""});
+        setFinish(true);
+      }
+    }
 
   };
 
   const handleAllRemove = () => {
     setFiles([]);
+    setFinish(false);
   };
 
     let isEmpty = files.length === 0;
@@ -256,13 +291,13 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
                 <p>Favor seleccionar todos los archivos a la vez y dar click en Open. El peso máximo permitido para archivos adjuntos es 1MB.</p>
             </div>
 
-            <div>
+            {/* <div>
                 {isError ? 
                   <div className="Message">
                      <Alert severity="warning">{errorMessage}</Alert>
                   </div>
                 :""}
-            </div>
+            </div> */}
 
             <div className={classes.root}>
               <Snackbar open={open.open} autoHideDuration={6000} onClose={handleClose}

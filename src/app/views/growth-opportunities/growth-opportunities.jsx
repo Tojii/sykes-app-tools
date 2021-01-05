@@ -25,7 +25,9 @@ const GrowthOpportunities = (props) => {
     }, [])
 
     return (
-        (!growth_opportunities || !jobs_applied || loading ) 
+        <>
+        {console.log(loading)}
+        {(!growth_opportunities || !jobs_applied || loading ) 
             ? <Loading /> 
             : <>
                 <Card className="m-sm-30">
@@ -38,7 +40,8 @@ const GrowthOpportunities = (props) => {
                         <ApplicationsTable jobs_applied={jobs_applied}/>
                     </Grid>
                 </Card>
-            </>
+            </>}
+    </>
     )
 }
 

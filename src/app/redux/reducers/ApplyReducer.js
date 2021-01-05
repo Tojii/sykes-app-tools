@@ -3,7 +3,7 @@ import {
     SAVE_JOB_APPLICATION,
     SET_VALIDATIONS,
     RE_LOADING,
-    SET_ERROR,
+    SET_LOADING,
 } from "../actions/ApplyActions";
 
 const INIT_STATE = {
@@ -16,8 +16,8 @@ export default (state = INIT_STATE, action) => {
     switch (action.type) {
         case RE_LOADING: 
             return {...state, loading: true };
-        case SET_ERROR: 
-            return {...state, loading: false };
+        case SET_LOADING: 
+            return {...state, loading: false, validations: null };
         case SET_APPLY_DATA:
             return { ...state, apply: action.payload, loading: false };
         case SAVE_JOB_APPLICATION:
@@ -25,6 +25,6 @@ export default (state = INIT_STATE, action) => {
         case SET_VALIDATIONS:
             return { ...state, validations: action.payload, loading: false };  
         default:
-            return { ...state };
+            return { ...state, loading: false };
      }
 };

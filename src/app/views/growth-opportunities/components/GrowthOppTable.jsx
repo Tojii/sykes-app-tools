@@ -14,6 +14,7 @@ import MUIDataTable from "mui-datatables";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import MyMetrics from '../metrics';
 import { string } from "yup";
+import moment from "moment";
 
 const GrowthOppTable = ({
     growth_opportunities,
@@ -22,6 +23,7 @@ const GrowthOppTable = ({
 }) => {
     const { history, match } = props
     const [shouldOpenMetricsDialog, setShouldOpenMetricsDialog] = useState(false);
+    const SPACED_DATE_FORMAT = "DD/MM/YYYY hh:mm:ss"; 
     
     const handleDetailsClick = (item) => {
         setGrowthOpportunity(item);
@@ -93,6 +95,12 @@ const GrowthOppTable = ({
        },
        {
         name: "Expiration Date",
+        options: {
+            filter: true,
+            sort: true,
+            // customBodyRender: value =>
+            // moment(new Date(value)).format(SPACED_DATE_FORMAT)
+        }
        },
        {
         name: "Details",
@@ -120,6 +128,7 @@ const GrowthOppTable = ({
                 //uid={this.state.uid}
                 />
             )}
+            {console.log("growth data", buildData)}
             <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                 <MuiThemeProvider theme={getMuiTheme()}>
                     <MUIDataTable className="w-100" 
