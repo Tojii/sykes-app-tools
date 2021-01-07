@@ -56,7 +56,7 @@ const Home = () => {
     const isLoading  = useSelector(state => state.refound.loading);
     const user = useSelector(state => state.user);
     const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(false);
-    const SPACED_DATE_FORMAT = "DD-MM-YYYY HH:mm:ss"; 
+    const SPACED_DATE_FORMAT = "YYYY/MM/DD";  
     
     const handleDetailsClick = () => {
       setShouldOpenDetailsDialog(true);
@@ -159,9 +159,8 @@ const Home = () => {
             options: {
              filter: true,
              sort: true,
-            //  customBodyRender: value =>
-            //  moment(new Date(value)).format(SPACED_DATE_FORMAT),
-             
+             customBodyRender: value =>
+             (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""
             }
         },
         {
@@ -170,6 +169,8 @@ const Home = () => {
             options: {
              filter: true,
              sort: true,
+             customBodyRender: value =>
+             (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""
             }
         }
     ]

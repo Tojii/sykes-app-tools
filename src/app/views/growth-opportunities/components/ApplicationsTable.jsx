@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import MUIDataTable from "mui-datatables";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import { Card } from "@material-ui/core";
+import moment from "moment";
 
 const ApplicationsTable = ({
     jobs_applied
@@ -29,6 +30,7 @@ const ApplicationsTable = ({
     const getMuiTheme = () =>
     createMuiTheme({
     });
+    const SPACED_DATE_FORMAT = "YYYY/MM/DD"; 
 
     const buildData = jobs_applied.map(item => {
         return [item.job, buildStatusLabel(item), item.created, ]
@@ -54,6 +56,12 @@ const ApplicationsTable = ({
         },
         {
             name:"Application Date",
+            options: {
+                filter: true,
+                sort: true,
+                customBodyRender: value =>
+                (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""           
+            }
             
         }
     ]

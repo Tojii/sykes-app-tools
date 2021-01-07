@@ -98,8 +98,8 @@ const GrowthOppTable = ({
         options: {
             filter: true,
             sort: true,
-            // customBodyRender: value =>
-            // moment(new Date(value)).format(SPACED_DATE_FORMAT)
+            customBodyRender: value =>
+            (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""
             // customFilterListRender: value =>
             // moment(new Date(value)).format(SPACED_DATE_FORMAT),
             // customFilterListOptions: {
