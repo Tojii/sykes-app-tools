@@ -9,6 +9,7 @@ import {
 const INIT_STATE = {
     apply: {},
     validations: null,
+    saveApplication: null,
     loading: false
 };
 
@@ -21,7 +22,7 @@ export default (state = INIT_STATE, action) => {
         case SET_APPLY_DATA:
             return { ...state, apply: action.payload, loading: false };
         case SAVE_JOB_APPLICATION:
-            return { ...state, loading: false };
+            return { ...state, saveApplication: action.payload, loading: false };
         case SET_VALIDATIONS:
             return { ...state, validations: action.payload, loading: false };  
         default:

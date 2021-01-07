@@ -54,26 +54,25 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                 if(invalid){ 
                     setErrorMessage(errorMessage => ({...errorMessage, type:"The file exceeds the allowed size"})) 
                     apply['fileMessage'] = true
-                    apply['resume'] = iterator
+                    apply['resume'] = {}
                     setOpen(true)
+                    setFile({})
                 } else {
                     apply['resume'] = iterator
                     apply['fileMessage'] = false
                     setErrorMessage([])
                     setOpen(false)
+                    setFile(iterator)
                 }
-                setFile(iterator)
                 setShowError(invalid);
                 setDisableNext(invalid);
-               
-                setFile(iterator)
                 setApplyData(apply);
             }else{
-                setFile(iterator)
+                setFile({})
                 setShowError(false);
                 setDisableNext(true);
                 setErrorMessage(errorMessage => ({...errorMessage, type:"Invalid format file"}))
-                apply['resume'] = iterator
+                apply['resume'] = {}
                 apply['fileMessage'] = true
                 setOpen(true)
             }

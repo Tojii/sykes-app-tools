@@ -32,6 +32,7 @@ const ApplyStepper = (props) => {
       validations,
       growth_opportunity, 
       saveJobApplication,
+      saveApplication
     } = props
     const dispatch = useDispatch();  
     const isLoading = useSelector(state => state.applyReducer.loading);
@@ -92,7 +93,7 @@ const ApplyStepper = (props) => {
       history.push('/growth-opportunities');
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
       const payload = {
         created: format(new Date(), "P p").toString(),
         email: user.email,
@@ -106,7 +107,7 @@ const ApplyStepper = (props) => {
         ...apply,
         ...validations,
       }
-      saveJobApplication(payload);
+      await saveJobApplication(payload);
       setActiveStep(prevActiveStep => prevActiveStep + 1);
       setOpen(true);
     };
@@ -118,8 +119,8 @@ const ApplyStepper = (props) => {
     return (
         <div>
           {isLoading ? <Loading /> :
-          <div>
-            <ValidationModal idioma={"Ingles"} save={() => {}} path={"/growth-opportunities"} state={"Success!"} message={ "Application done!"} setOpen={setOpen} open={open} />
+          <div>     
+            <ValidationModal idioma={"Ingles"} save={() => {}} path={"/growth-opportunities"} state={(saveApplication != null && !saveApplication.succces) == false ? "Success!" : "Error!"} message={(saveApplication != null && !saveApplication.succces) == false ? "Application done!" : "An error occurred, please try again!"} setOpen={setOpen} open={open} />
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map(label => (
                 <Step key={label}>
@@ -131,8 +132,8 @@ const ApplyStepper = (props) => {
               {activeStep === steps.length ? (
                 <div>
                   <div className="text-center">
-                      <Icon color="primary" fontSize="large">{'done'}</Icon>
-                      <p>Application done!</p>
+                      <Icon color="primary" fontSize="large">{(saveApplication != null && !saveApplication.succces) == false ? 'done' : 'error'}</Icon>
+                      {(saveApplication != null && !saveApplication.succces) == false ? <p>Application done!</p> : <p>"An error occurred, please try again!"</p> }
                   </div> 
                   {/* <Button variant="contained" color="secondary" onClick={handleReset}>
                     Close
@@ -179,13 +180,14 @@ const ApplyStepper = (props) => {
 }
 
 const mapStateToProps = ({ applyReducer, growthReducer, user }) => {
-  const { apply, validations } = applyReducer;
+  const { apply, validations, saveApplication } = applyReducer;
     const { growth_opportunity } = growthReducer;
     return {
       apply,
       user,
       validations,
       growth_opportunity,
+      saveApplication
   };
 };
 

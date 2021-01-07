@@ -23,7 +23,7 @@ const GrowthOppTable = ({
 }) => {
     const { history, match } = props
     const [shouldOpenMetricsDialog, setShouldOpenMetricsDialog] = useState(false);
-    const SPACED_DATE_FORMAT = "DD/MM/YYYY hh:mm:ss"; 
+    const SPACED_DATE_FORMAT = "YYYY/MM/DD"; 
     
     const handleDetailsClick = (item) => {
         setGrowthOpportunity(item);
@@ -100,6 +100,16 @@ const GrowthOppTable = ({
             sort: true,
             // customBodyRender: value =>
             // moment(new Date(value)).format(SPACED_DATE_FORMAT)
+            // customFilterListRender: value =>
+            // moment(new Date(value)).format(SPACED_DATE_FORMAT),
+            // customFilterListOptions: {
+            //     render: v => moment(new Date(v)).format(SPACED_DATE_FORMAT)
+            //   },
+            // filterOptions: {
+            //     renderValue: v => moment(new Date(v)).format(SPACED_DATE_FORMAT)
+            // },
+            
+           
         }
        },
        {

@@ -81,6 +81,7 @@ export const saveJobApplication = (payload) => dispatch => {
     formData.append('TenureRequired', payload.tenureRequired);
     formData.append('EnglishRequired', payload.englishRequired);
     formData.append('ApprovedFinal', payload.approvedFinal);
+    //formData.append('ApprovedFinal', false);
 
     const config = {
         headers: {
@@ -95,9 +96,28 @@ export const saveJobApplication = (payload) => dispatch => {
         console.log("RES: ", res);
         dispatch({
             type: SAVE_JOB_APPLICATION,
+            payload: res.data
         });
         if (payload.refresh) {window.location.reload();}
-    });
+    })
+    .catch((error) => {
+        // Error
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the 
+            // browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+    }); 
 };
 
 export const setValidations = (badge, jobId) => dispatch => {
@@ -107,6 +127,24 @@ export const setValidations = (badge, jobId) => dispatch => {
             type: SET_VALIDATIONS,
             payload: res.data
         });
-        console.log("validacion", res.data)
-    });
+        //console.log("validacion", res.data)
+    })
+    .catch((error) => {
+        // Error
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the 
+            // browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+    }); 
 };

@@ -21,6 +21,7 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import history from "history.js";
+import moment from "moment"
 
 const styles = (theme) => ({
   root: {
@@ -55,6 +56,7 @@ const Home = () => {
     const isLoading  = useSelector(state => state.refound.loading);
     const user = useSelector(state => state.user);
     const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(false);
+    const SPACED_DATE_FORMAT = "DD-MM-YYYY HH:mm:ss"; 
     
     const handleDetailsClick = () => {
       setShouldOpenDetailsDialog(true);
@@ -157,6 +159,9 @@ const Home = () => {
             options: {
              filter: true,
              sort: true,
+            //  customBodyRender: value =>
+            //  moment(new Date(value)).format(SPACED_DATE_FORMAT),
+             
             }
         },
         {
@@ -176,6 +181,7 @@ const Home = () => {
         print:false,
         download: false,
         vertical: true,
+        customSort: (data, colIndex, order) => { return data.sort((a, b) => { if (colIndex === 5 || colIndex === 6) { return (new Date(a.data[colIndex]) < new Date(b.data[colIndex]) ? -1: 1 ) * (order === 'desc' ? 1 : -1); } else { return (a.data[colIndex] < b.data[colIndex] ? -1: 1 ) * (order === 'desc' ? 1 : -1); } }); },
         textLabels: {
           body: {
             noMatch: "Lo sentimos, no se encontraron registros",
