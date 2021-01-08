@@ -221,11 +221,11 @@ const Home = () => {
 
     useEffect(() => {
         dispatch(GetRefoundListByUser(user.badge));
-    }, []);
+    }, [user]);
 
     return (
         <div>
-            { isLoading ? <Loading /> : 
+            { (!summary || isLoading) ? <Loading /> : 
                 <div className="m-sm-30">
                     <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                         <MuiThemeProvider theme={getMuiTheme()}>
