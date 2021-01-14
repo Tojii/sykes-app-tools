@@ -71,8 +71,8 @@ const NewRefoundForm = () => {
   const [finish, setFinish] = useState(false);
   
   const [form, setForm] = useState({
-    badge: user.badge, //'42553',,
-    name: user.fullname,
+    // badge: user.badge, //'42553',,
+    // name: user.fullname,
     exchangeRate: '',
     studiesCategory: '',
     universityInstitute: '',
@@ -92,7 +92,12 @@ const NewRefoundForm = () => {
   useEffect(() => {
     dispatch(GetIformationLists(user.badge));
     dispatch(getStudiesCatergory());
-  }, []);
+    // setForm({
+    //   ...form,
+    //   badge: user.badge, //'42553',,
+    //   name: user.fullname,
+    // });
+  }, [user]);
 
   const validateEmail = (email) => {
     const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -297,9 +302,9 @@ const NewRefoundForm = () => {
       setErrorMessage(errorMessage => ({ ...errorMessage, files: "*Los archivos adjuntos superan el máximo permitido de 1MB." }));
       return;
     }
-    console.log(sizes)
+    //console.log(sizes)
     setActiveStep(steps.length);
-    await dispatch(SaveRefund(form, files));
+    await dispatch(SaveRefund(form, files, user.badge, user.fullname));
     setOpen(true);
   }
 
@@ -393,18 +398,19 @@ const NewRefoundForm = () => {
     switch (stepIndex) {
       case 0:
         return (
+          (isLoading || !user) ? <Loading /> :
           <div className="mb-24">
-            <TextField name="bagde" value={form.badge} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Badge" disabled variant="filled"
+            <TextField name="bagde" value={user.badge} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Badge" disabled variant="filled"
               InputProps={{
                 readOnly: true,
               }} />
-            <TextField name="nombre" value={form.name} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Nombre" disabled variant="filled"
+            <TextField name="nombre" value={user.fullname} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Nombre" disabled variant="filled"
               InputProps={{
                 readOnly: true,
               }}
             />
             <FormControl className="form-control-leader mt-24">
-              <InputLabel id="CategoriaEstudio">Categoría de estudio *</InputLabel>
+              <InputLabel id="CategoriaEstudio">Categoría de Estudio *</InputLabel>
               <Select labelId="CategoriaEstudio" onChange={event => handleChange(event)}
                 value={form.studiesCategory}
                 name="studiesCategory"
@@ -420,7 +426,7 @@ const NewRefoundForm = () => {
               </Select>
             </FormControl>
             <div className="Message">
-              <p>Seleccione una categoría de Estudio.</p>
+              <p>Seleccione una categoría de estudio.</p>
             </div>
           </div>
         );
@@ -509,9 +515,9 @@ const NewRefoundForm = () => {
   return (
     <div>
       <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={(saveRefound != null && !saveRefound.success) == false ? "Success!" : "Error!"} save={() => {}} message={(saveRefound != null && !saveRefound.success) == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
-      {isLoading ? <Loading /> :
+      {(isLoading || !user) ? <Loading /> :
         <div className="m-sm-30">
-          <SimpleCard title="Nuevo reembolso educativo">
+          <SimpleCard title="Nuevo Reembolso Educativo">
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map(label => (
                 <Step key={label}>
@@ -548,7 +554,7 @@ const NewRefoundForm = () => {
                       >
                         Regresar
                       </Button>
-                      {console.log("message", errorMessage)}
+                      
                       <Button
                         className="ml-16"
                         variant="contained"

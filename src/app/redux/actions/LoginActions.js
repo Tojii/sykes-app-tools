@@ -20,7 +20,7 @@ export function loginWithEmailAndPassword({ email, password }) {
       .loginWithEmailAndPassword(email, password)
       .then(user => {
         dispatch(setUserData(user));
-        console.log("history",history)
+        //console.log("history",history)
         if (history.location.prev) {
           history.push({
             pathname: history.location.pathname != history.location.prev ? history.location.prev : "/"

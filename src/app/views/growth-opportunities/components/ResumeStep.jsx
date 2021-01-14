@@ -48,7 +48,7 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
     const handleFileSelect = (event) => {
         let files = event.target.files;
         for (const iterator of files) {
-            console.log("tipo", iterator.type)
+            //console.log("tipo", iterator.type)
             if (iterator.type == "application/msword" || iterator.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
                 iterator.type == "application/pdf" || iterator.name.includes('.docx') || iterator.name.includes('.doc')) {
                 let invalid = iterator.size > 2000000

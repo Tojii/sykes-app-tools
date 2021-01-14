@@ -60,24 +60,28 @@ const UploadForm  = ({setFinish, files, setFiles, isError, errorMessage}) => {
     for (const iterator of filesList) {
       if(iterator.type == "application/pdf" || iterator.type == "image/png" || 
       iterator.type == "image/jpeg" || iterator.type == "image/jpg"){
-        let item = files.find(x=> x.file.name == iterator.name);
-        if(item == null || item == undefined){
-          if (iterator.size/1024/1024 > 1) {
-            setOpen({open:true, message: `¡Uno o mas archivos tienen un peso mayor de 1 MB!`});
+        if(iterator.name.includes('.jfif') || iterator.name.includes('.pjp') || iterator.name.includes('.pjpeg')) {
+          setOpen({open:true, message:`¡Uno o mas archivos no tienen el tipo correcto!`});
+        } else {
+          let item = files.find(x=> x.file.name == iterator.name);
+          if(item == null || item == undefined){
+            if (iterator.size/1024/1024 > 1) {
+              setOpen({open:true, message: `¡Uno o mas archivos tienen un peso mayor de 1 MB!`});
+            }else{
+              list.push({
+                file: iterator,
+              });
+            }
           }else{
-            list.push({
-              file: iterator,
-            });
+            setOpen({open:true, message: `¡Ya existe un archivo con este nombre!`});
           }
-        }else{
-          setOpen({open:true, message: `¡Ya existe un archivo con este nombre!`});
+          sizes = sizes + iterator.size;
         }
-        sizes = sizes + iterator.size;
       }else{
         setOpen({open:true, message:`¡Uno o mas archivos no tienen el tipo correcto!`});
       }
     }
-    console.log("size", sizes)
+    //console.log("size", sizes)
     if (sizes > 1048576) {
       setOpen({open:true, message:`*Los archivos adjuntos superan el máximo permitido de 1MB.`});
       setFinish(false);
@@ -106,24 +110,28 @@ const UploadForm  = ({setFinish, files, setFiles, isError, errorMessage}) => {
     for (const iterator of filesList) {
       if(iterator.type == "application/pdf" || iterator.type == "image/png" || 
       iterator.type == "image/jpeg" || iterator.type == "image/jpg"){
-        let item = files.find(x=> x.file.name == iterator.name);
-        if(item == null || item == undefined){
-          if (iterator.size/1024/1024 > 1) {
-            setOpen({open:true, message: `¡Uno o mas archivos tienen un peso mayor de 1 MB!`});
+        if(iterator.name.includes('.jfif') || iterator.name.includes('.pjp') || iterator.name.includes('.pjpeg')) {
+          setOpen({open:true, message:`¡Uno o mas archivos no tienen el tipo correcto!`});
+        } else {
+          let item = files.find(x=> x.file.name == iterator.name);
+          if(item == null || item == undefined){
+            if (iterator.size/1024/1024 > 1) {
+              setOpen({open:true, message: `¡Uno o mas archivos tienen un peso mayor de 1 MB!`});
+            }else{
+              list.push({
+                file: iterator,
+              });
+            }
           }else{
-            list.push({
-              file: iterator,
-            });
+            setOpen({open:true, message: `¡Ya existe un archivo con este nombre!`});
           }
-        }else{
-          setOpen({open:true, message: `¡Ya existe un archivo con este nombre!`});
+          sizes = sizes + iterator.size;
         }
-        sizes = sizes + iterator.size;
       }else{
         setOpen({open:true, message:`¡Uno o mas archivos no tienen el tipo correcto!`});
       }
     }
-    console.log("size", sizes)
+    //console.log("size", sizes)
     if (sizes > 1048576) {
       setOpen({open:true, message:`*Los archivos adjuntos superan el máximo permitido de 1MB.`});
       setFinish(false);

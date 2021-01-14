@@ -21,12 +21,11 @@ const GrowthOpportunities = (props) => {
 
     useEffect(() => {
         getGrowthOpportunities();
-        getJobsApplied(user.badge);
-    }, [])
+        if (user) {getJobsApplied(user.badge);}
+    }, [user])
 
     return (
         <>
-        {console.log(loading)}
         {(!growth_opportunities || !jobs_applied || loading ) 
             ? <Loading /> 
             : <>

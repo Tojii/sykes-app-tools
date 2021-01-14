@@ -33,7 +33,7 @@ export const GetImages = () => {
           type: GET_IMAGES,
           data: res.data
           });
-        console.log("imagenes",res.data)
+        //console.log("imagenes",res.data)
       })
       .catch((error) => {
         // Error

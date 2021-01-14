@@ -41,11 +41,11 @@ export const GetRefoundListByUser = (badgeId) => {
   } 
 };
 
-export const SaveRefund = (Data, Files) =>{
+export const SaveRefund = (Data, Files, badge, fullname) =>{
   
   var formData = new FormData();
-  formData.append('badge', Data.badge);
-  formData.append('name', Data.name);
+  formData.append('badge', badge);
+  formData.append('name', fullname);
   formData.append('exchangeRate', Data.exchangeRate);
   formData.append('studiesCategory', Data.studiesCategory);
   formData.append('course', Data.course);

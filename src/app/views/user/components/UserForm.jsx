@@ -12,6 +12,7 @@ import { setApplyData } from "../../../redux/actions/ApplyActions";
 import { setUserData } from "../../../redux/actions/UserActions";
 import { validateEmail } from '../../../../utils';
 import { connect } from "react-redux";
+import Loading from "../../../../matx/components/MatxLoadable/Loading";
 
 const UserForm = (props) => {
     const {
@@ -59,20 +60,20 @@ const UserForm = (props) => {
     }
 
     const handlePhoneError = () => {
-        if (form_user.phone === "") return "This field is required"
+        if (form_user.phone === "" || form_user.phone === undefined) return "This field is required"
         else if (form_user.phone.length < 8) return "This field is too short"
         else if(!validatePhone(form_user.phone)) return "Phone number invalid format"
         return ""
     }
 
     const handleEmailError = () => {
-        if (form_user.email === "") return "This field is required"
+        if (form_user.email === "" || form_user.email === undefined) return "This field is required"
         return ""
     }
 
     const handleNext = () => {
         if (!setDisableNext) return false;
-        if (form_user.phone.length < 8 || !validatePhone(form_user.phone) || form_user.email === "" || !validateEmail(form_user.email))
+        if (form_user.phone === undefined || form_user.email === undefined || form_user.phone.length < 8 || !validatePhone(form_user.phone) || form_user.email === "" || !validateEmail(form_user.email))
         return setDisableNext(true)
         user.email = form_user.email;
         user.phone = form_user.phone;
@@ -81,13 +82,16 @@ const UserForm = (props) => {
     }
 
     const handleValid = () => {
-        return (form_user.phone.length < 8 || !validatePhone(form_user.phone) ||  form_user.email === "" || !validateEmail(form_user.email))
+        return (form_user.phone === undefined || form_user.email === undefined || form_user.phone.length < 8 || !validatePhone(form_user.phone) ||  form_user.email === "" || !validateEmail(form_user.email))
     }
 
     useEffect(() => {
         handleNext();
         handleValid();
-    }, [form_user]);
+        if (form_user.phone === undefined || form_user.email === undefined) {
+            setUserForm(user)
+        }
+    }, [user]);
 
     const onSubmit = () => {
         const payload = {
@@ -111,6 +115,7 @@ const UserForm = (props) => {
 
     return (
         <>
+            {(form_user.phone === undefined || form_user.email === undefined) ? <Loading/> :
             <Grid item lg={11}>
                 <h3 className="p-sm-24">Personal Information</h3>
                 <ValidatorForm    onSubmit={onSubmit}>
@@ -125,7 +130,7 @@ const UserForm = (props) => {
                             value={form_user.email}
                             validators={["required", "isEmail"]}
                             errorMessages={["This field is required", "Invalid email format"]}
-                            error={form_user.email === ""}
+                            error={form_user.email === "" || form_user.email === undefined}
                             helperText={handleEmailError()}
                         />
                     </Grid>
@@ -165,6 +170,7 @@ const UserForm = (props) => {
                     </div> : null }
                 </ValidatorForm>
             </Grid>
+            }
         </>
     )
 }

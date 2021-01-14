@@ -118,7 +118,7 @@ const ApplyStepper = (props) => {
 
     return (
         <div>
-          {isLoading ? <Loading /> :
+          {(isLoading || user.phone === undefined || user.email === undefined) ? <Loading /> :  
           <div>     
             <ValidationModal idioma={"Ingles"} save={() => {}} path={"/growth-opportunities"} state={(saveApplication != null && !saveApplication.succces) == false ? "Success!" : "Error!"} message={(saveApplication != null && !saveApplication.succces) == false ? "Application done!" : "An error occurred, please try again!"} setOpen={setOpen} open={open} />
             <Stepper activeStep={activeStep} alternativeLabel>

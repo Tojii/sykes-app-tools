@@ -28,7 +28,7 @@ class apiAuthService {
     return axios.post(`${process.env.REACT_APP_API_URL}/authenticate`, parameters).then(response => {
       // Login successful
       // Save token
-      console.log("Login", response);
+      //console.log("Login", response);
       this.setSession(response.data.token);
       // Set user
       this.setUser(response.data.token);

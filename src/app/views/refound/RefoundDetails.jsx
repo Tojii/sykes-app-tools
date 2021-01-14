@@ -40,6 +40,8 @@ const RefoundDetails = () => {
             options: {
              filter: true,
              sort: true,
+             customBodyRender: value =>
+                (value != null && value != undefined && value != "") ? ("$" + value) : "$0"
             }
         },
         {
@@ -48,6 +50,8 @@ const RefoundDetails = () => {
             options: {
              filter: true,
              sort: true,
+             customBodyRender: value =>
+             (value != null && value != undefined && value != "") ? ("$" + value) : "$0"
             }
         },
        

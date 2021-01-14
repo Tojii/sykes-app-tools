@@ -138,7 +138,6 @@ const GrowthOppTable = ({
                 //uid={this.state.uid}
                 />
             )}
-            {console.log("growth data", buildData)}
             <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                 <MuiThemeProvider theme={getMuiTheme()}>
                     <MUIDataTable className="w-100" 

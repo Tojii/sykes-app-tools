@@ -57,7 +57,7 @@ const ScheduleStep = (props) => {
         buildScheduleTimes();
         setApplyData(apply);
         apply['workSchedule'] !== "" ? setDisableNext(false) : setDisableNext(true)
-        console.log("report", apply.startTime)
+        //console.log("report", apply.startTime)
     }, [days, times])
 
     const handleDayChange = (day) => event => {

@@ -75,7 +75,6 @@ const MyMetrics = ({ metrics, history }) => {
                                         English Level
                                     </h6>
                                     <small className="text-muted">{ metrics.fecha_de_Evaluacion ? new Date(metrics.fecha_de_Evaluacion).toLocaleDateString() : ""}</small>
-                                    {console.log()}
                                     </div>
                                 </div>
                             </Card>

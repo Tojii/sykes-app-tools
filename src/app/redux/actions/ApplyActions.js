@@ -42,7 +42,7 @@ export const setLoading = () => dispatch => {
 };
 
 export const saveJobApplication = (payload) => dispatch => {
-    console.log("save Jobs", payload);
+    //console.log("save Jobs", payload);
     var formData = new FormData();
     formData.append('email', payload.email);
     formData.append('phone', payload.phone);
@@ -94,7 +94,7 @@ export const saveJobApplication = (payload) => dispatch => {
     });
     axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
     axiosInstance.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/SaveJobApplication`, formData, config).then(res => {
-        console.log("RES: ", res);
+        //console.log("RES: ", res);
         dispatch({
             type: SAVE_JOB_APPLICATION,
             payload: res.data
