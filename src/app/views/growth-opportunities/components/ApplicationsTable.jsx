@@ -6,6 +6,7 @@ import MUIDataTable from "mui-datatables";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import { Card } from "@material-ui/core";
 import moment from "moment";
+import CustomFooter from '../../muidatatable/CustomFooter';
 
 const ApplicationsTable = ({
     jobs_applied
@@ -30,7 +31,7 @@ const ApplicationsTable = ({
     const getMuiTheme = () =>
     createMuiTheme({
     });
-    const SPACED_DATE_FORMAT = "YYYY/MM/DD"; 
+    const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
 
     const buildData = jobs_applied.map(item => {
         return [item.job, buildStatusLabel(item), item.created, ]
@@ -42,6 +43,18 @@ const ApplicationsTable = ({
         selectableRowsOnClick: false,
         download: false,
         print: false, 
+        customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage, textLabels) => {
+            return (
+              <CustomFooter
+                count={count}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                changeRowsPerPage={changeRowsPerPage}
+                changePage={changePage}
+                textLabels={textLabels}
+              />
+            );
+          },
     };
 
     const columns = [

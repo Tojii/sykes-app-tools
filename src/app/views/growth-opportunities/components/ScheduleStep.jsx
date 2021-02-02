@@ -85,7 +85,7 @@ const ScheduleStep = (props) => {
     return (
         <>
         <Grid container>
-            <Grid item lg={12} className="px-sm-24">
+            <Grid item lg={12} md={12} sm={12} xs={6} className="px-sm-24">
                 <h3>Schedule</h3>
                     <FormGroup row>
                     {daysCount.map((day, index) => {
@@ -106,7 +106,7 @@ const ScheduleStep = (props) => {
                     })}
                     </FormGroup>
             </Grid>
-            <Grid item lg={6} className="p-sm-24">
+            <Grid item lg={6} md={6} sm={6} xs={12} className="p-sm-24">
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <TimePicker
                         className="mb-16 w-100"
@@ -121,7 +121,7 @@ const ScheduleStep = (props) => {
                     />
                 </MuiPickersUtilsProvider>
             </Grid>
-            <Grid item lg={6} className="p-sm-24">
+            <Grid item lg={6} md={6} sm={6} xs={12} className="p-sm-24">
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <TimePicker
                         className="mb-16 w-100"

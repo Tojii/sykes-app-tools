@@ -7,9 +7,27 @@ export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
 export const USER_LOGGED_OUT = "USER_LOGGED_OUT";
 export const UPDATE_USER_DATA = "UPDATE_USER_DATA";
 
+const axiosInstance = axios.create();
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    //if (error.response.status === 401) {
+        apiAuthService.logout(); 
+        history.state = history.location.pathname;
+        history.push({
+          pathname: "/session/signin"
+        });
+    //}
+
+    return Promise.reject(error);
+  }
+)
+
 export const setUserData = user => dispatch => {
-  axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-  axios.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, user).then(res => {
+  //console.log("entré",user)
+  axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
+  axiosInstance.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, user).then(res => {
     dispatch({
       type: SET_USER_DATA,
       data: user
@@ -32,6 +50,7 @@ export function logoutUser() {
 }
 
 export const updateUserData = (payload) => dispatch => {
+  //console.log("entré",payload)
   var formData = new FormData();
   formData.append('badge', payload.badge);
   formData.append('email', payload.email);
@@ -43,8 +62,8 @@ export const updateUserData = (payload) => dispatch => {
     }
   }
   //console.log("formdata", formData)
-  axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-  axios.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, formData, config).then(res => {
+  axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
+  axiosInstance.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, formData, config).then(res => {
     dispatch({
       type: UPDATE_USER_DATA,
       data: res.data

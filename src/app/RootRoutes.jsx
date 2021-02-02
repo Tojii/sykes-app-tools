@@ -2,7 +2,8 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import lssRoutes from './views/lss/LssRoutes';
-//import raftRoutes from './views/raft/RaftRoutes';
+import raftRoutes from './views/raft/RaftRoutes';
+import ventasRoutes from './views/venta-activos/VentasRoutes';
 import refoundRoutes from './views/refound/refoundRoutes';
 import sykesHomeRoutes from './views/sykesHome/sykesHomeRoutes';
 
@@ -66,6 +67,7 @@ const routes = [
   ...sykesHomeRoutes,
   ...growthOpportunitiesRoutes,
   ...userRoutes,
+  //...ventasRoutes,
   //...lssRoutes,
   //...raftRoutes,
   // ...homeRoutes,

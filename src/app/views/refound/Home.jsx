@@ -22,6 +22,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import history from "history.js";
 import moment from "moment"
+import CustomFooter from '../muidatatable/CustomFooter';
 
 const styles = (theme) => ({
   root: {
@@ -56,7 +57,7 @@ const Home = () => {
     const isLoading  = useSelector(state => state.refound.loading);
     const user = useSelector(state => state.user);
     const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(false);
-    const SPACED_DATE_FORMAT = "YYYY/MM/DD";  
+    const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
     
     const handleDetailsClick = () => {
       setShouldOpenDetailsDialog(true);
@@ -183,6 +184,18 @@ const Home = () => {
         download: false,
         vertical: true,
         customSort: (data, colIndex, order) => { return data.sort((a, b) => { if (colIndex === 5 || colIndex === 6) { return (new Date(a.data[colIndex]) < new Date(b.data[colIndex]) ? -1: 1 ) * (order === 'desc' ? 1 : -1); } else { return (a.data[colIndex] < b.data[colIndex] ? -1: 1 ) * (order === 'desc' ? 1 : -1); } }); },
+        customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage, textLabels) => {
+          return (
+            <CustomFooter
+              count={count}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              changeRowsPerPage={changeRowsPerPage}
+              changePage={changePage}
+              textLabels={textLabels}
+            />
+          );
+        },
         textLabels: {
           body: {
             noMatch: "Lo sentimos, no se encontraron registros",

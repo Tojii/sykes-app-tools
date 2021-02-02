@@ -29,6 +29,9 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down("xs")]: {
             overflow: "unset",
         },
+    },
+    gridtext: {
+        wordWrap: "break-word"
     }
   })
 );
@@ -123,8 +126,8 @@ const MyMetrics = ({ metrics, history }) => {
                 </Grid>
                 <Grid item lg={12} md={12} sm={12} xs={12}>
                     <Grid container spacing={2} className="mx-24">
-                        <Grid item xs={11} md={11}>
-                            <Card elevation={3} className="p-44">
+                        <Grid item xs={12} md={11}>
+                            <Card elevation={3} className="play-card p-sm-24 bg-paper h-100">
                                 <h4>Your current metrics</h4>
                                 <Table>
                                     <TableHead>
@@ -137,26 +140,26 @@ const MyMetrics = ({ metrics, history }) => {
                                     </TableHead>
                                     <TableBody>
                                         <TableRow>
-                                            <TableCell className="pl-sm-24">PA1</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_1 ? (metrics.evA_1 > 0 ? metrics.evA_1 : "") : "" }</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_1_Period || "" }</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_1_Year || "" }</TableCell>
+                                            <TableCell className={classes.gridtext + " pl-sm-24"}>PA1</TableCell>
+                                            <TableCell className={classes.gridtext + " pl-sm-24"}>{ metrics.evA_1 ? (metrics.evA_1 > 0 ? metrics.evA_1 : "") : "" }</TableCell>
+                                            <TableCell className={classes.gridtext + " pl-sm-24"}>{ metrics.evA_1_Period || "" }</TableCell>
+                                            <TableCell className={classes.gridtext + " pl-sm-24"}>{ metrics.evA_1_Year || "" }</TableCell>
                                         </TableRow>
                                         <TableRow>
-                                            <TableCell className="pl-sm-24">PA2</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_2 ? (metrics.evA_2 > 0 ? metrics.evA_2 : "") : "" }</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_2_Period || "" }</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_2_Year || "" }</TableCell>
+                                            <TableCell className={classes.gridtext + " pl-sm-24"}>PA2</TableCell>
+                                            <TableCell className={classes.gridtext + " pl-sm-24"}>{ metrics.evA_2 ? (metrics.evA_2 > 0 ? metrics.evA_2 : "") : "" }</TableCell>
+                                            <TableCell className={classes.gridtext + " pl-sm-24"}>{ metrics.evA_2_Period || "" }</TableCell>
+                                            <TableCell className={classes.gridtext + " pl-sm-24"}>{ metrics.evA_2_Year || "" }</TableCell>
                                         </TableRow>
                                         <TableRow>
-                                            <TableCell className="pl-sm-24">PA3</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_3 ? (metrics.evA_3 > 0 ? metrics.evA_3 : "") : "" }</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_3_Period || "" }</TableCell>
-                                            <TableCell className="pl-sm-24">{ metrics.evA_3_Year || "" }</TableCell>
+                                            <TableCell className={classes.gridtext + " pl-sm-24"}>PA3</TableCell>
+                                            <TableCell className={classes.gridtext + " pl-sm-24"}>{ metrics.evA_3 ? (metrics.evA_3 > 0 ? metrics.evA_3 : "") : "" }</TableCell>
+                                            <TableCell className={classes.gridtext + " pl-sm-24"}>{ metrics.evA_3_Period || "" }</TableCell>
+                                            <TableCell className={classes.gridtext + " pl-sm-24"}>{ metrics.evA_3_Year || "" }</TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell className="pl-sm-24">PA Overall</TableCell>
-                                            <TableCell colSpan={3} align={"center"} className="pl-sm-24">{ metrics.last_3_Months_Average ? (metrics.last_3_Months_Average > 0 ? metrics.last_3_Months_Average : "") : "" }</TableCell>
+                                            <TableCell colSpan={3} align={"center"} className={classes.gridtext + " pl-sm-24"}>{ metrics.last_3_Months_Average ? (metrics.last_3_Months_Average > 0 ? metrics.last_3_Months_Average : "") : "" }</TableCell>
                                         </TableRow>
                                     </TableBody>
                                 </Table>

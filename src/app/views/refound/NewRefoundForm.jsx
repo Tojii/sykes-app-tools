@@ -33,6 +33,7 @@ import es from "date-fns/locale/es";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import MuiAlert from '@material-ui/lab/Alert';
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
+import { makeStyles } from '@material-ui/core/styles';
 
 function getSteps() {
   return ["Categoría del Curso", "Datos del Curso", "Archivos Adjuntos"];
@@ -41,6 +42,38 @@ function getSteps() {
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+const useStyles = makeStyles({
+  textvalidator: {
+     "@media (min-width: 0px)": {
+          marginLeft: "2%",
+          width: "96%",
+          //marginTop: "3%",
+      },
+      "@media (min-width: 1024px)": {
+          marginLeft: "2%",
+          width: "46%",
+      }
+  },
+  formcard: {
+      "@media (min-width: 1023px)": {
+          marginLeft: "0%",
+          width: "100%",
+      },
+      "@media (min-width: 1024px)": {
+          marginLeft: "25%",
+          width: "50%",
+      }
+   
+  },
+  sectionbutton: {
+      marginLeft: "25%",
+      width: "50%",
+      marginTop: "3%",
+      marginBottom: "2%",
+      textAlign: "center"
+  },
+});
 
 export const UNIVERSITY_STUDIES = "ESTUDIOS UNIVERSITARIOS";
 export const CERTIFICATION = "CERTIFICACIÓN";
@@ -69,6 +102,7 @@ const NewRefoundForm = () => {
   const [files, setFiles] = useState([]);
   const [open, setOpen] = useState(false);
   const [finish, setFinish] = useState(false);
+  const classes = useStyles();
   
   const [form, setForm] = useState({
     // badge: user.badge, //'42553',,
@@ -341,7 +375,7 @@ const NewRefoundForm = () => {
   };
 
   const CustomFormControl = (props) => (
-    <FormControl className="form-control-leader mt-24 mr-24" error={isError}>
+    <FormControl className={classes.textvalidator + " form-control-leader mt-24 mr-24"} error={isError}>
       <InputLabel id={`input-${props.id}`}>{props.label}</InputLabel>
       <Select labelId={`label-${props.id}`} onChange={event => handleChange(event)}
         value={props.value}
@@ -400,16 +434,16 @@ const NewRefoundForm = () => {
         return (
           (isLoading || !user) ? <Loading /> :
           <div className="mb-24">
-            <TextField name="bagde" value={user.badge} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Badge" disabled variant="filled"
+            <TextField name="bagde" value={user.badge} className={classes.textvalidator + " mr-24 mt-24"} label="Badge" disabled variant="filled"
               InputProps={{
                 readOnly: true,
               }} />
-            <TextField name="nombre" value={user.fullname} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Nombre" disabled variant="filled"
+            <TextField name="nombre" value={user.fullname} className={classes.textvalidator + " mr-24 mt-24"} label="Nombre" disabled variant="filled"
               InputProps={{
                 readOnly: true,
               }}
             />
-            <FormControl className="form-control-leader mt-24">
+            <FormControl className={classes.textvalidator + " form-control-leader mt-24"}>
               <InputLabel id="CategoriaEstudio">Categoría de Estudio *</InputLabel>
               <Select labelId="CategoriaEstudio" onChange={event => handleChange(event)}
                 value={form.studiesCategory}
@@ -425,7 +459,7 @@ const NewRefoundForm = () => {
                 ))}
               </Select>
             </FormControl>
-            <div className="Message">
+            <div className={classes.textvalidator + " Message"}>
               <p>Seleccione una categoría de estudio.</p>
             </div>
           </div>
@@ -435,19 +469,19 @@ const NewRefoundForm = () => {
           <div className="mb-24">
             {handleSelectCategory()}
 
-            <TextField className="mr-24 mt-24"
-              style={{ width: "calc(50% - 24px)" }} label="Nombre de la materia o curso*" name="course" value={form.course} onChange={event => handleChange(event)}
+            <TextField className={classes.textvalidator + " mr-24 mt-24"}
+              label="Nombre de la materia o curso*" name="course" value={form.course} onChange={event => handleChange(event)}
               error={!!errorMessage.course}
               helperText={errorMessage.course}
             />
 
-            <TextField className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Factura*"
+            <TextField className={classes.textvalidator + " mr-24 mt-24"} label="Factura*"
               name="invoiceNumber" value={form.invoiceNumber} onChange={event => handleChange(event)}
               error={!!errorMessage.invoiceNumber}
               helperText={errorMessage.invoiceNumber}
             />
 
-            <TextField className="mr-24 mt-24 " style={{ width: "calc(50% - 24px)" }} label="Correo Electrónico*"
+            <TextField className={classes.textvalidator + " mr-24 mt-24"} label="Correo Electrónico*"
               name="email" value={form.email}
               onChange={event => handleChange(event)}
               error={!!errorMessage.email}
@@ -458,8 +492,7 @@ const NewRefoundForm = () => {
               <div>
                 <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
                   <DatePicker
-                    className="mr-24 mt-24"
-                    style={{ width: "calc(50% - 24px)" }}
+                    className={classes.textvalidator + " mr-24 mt-24"}
                     cancelLabel="CANCELAR"
                     error={!!errorMessage.startDate}
                     helperText={errorMessage.startDate}
@@ -472,8 +505,7 @@ const NewRefoundForm = () => {
                 </MuiPickersUtilsProvider>
                 <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}> 
                   <DatePicker
-                    className="mr-24 mt-24"
-                    style={{ width: "calc(50% - 24px)" }}
+                    className={classes.textvalidator + " mr-24 mt-24"}
                     cancelLabel="CANCELAR"
                     error={!!errorMessage.endDate}
                     helperText={errorMessage.endDate}
@@ -489,8 +521,7 @@ const NewRefoundForm = () => {
               </div> :
               <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
                 <DatePicker
-                  className="mr-24 mt-24"
-                  style={{ width: "calc(50% - 24px)" }}
+                  className={classes.textvalidator + " mr-24 mt-24"}
                   cancelLabel="CANCELAR"
                   error={!!errorMessage.certificationDate}
                   helperText={errorMessage.certificationDate}

@@ -22,7 +22,8 @@ class apiAuthService {
   loginWithEmailAndPassword = (email, password) => {
     const parameters = {
       username: email,
-      password: password
+      password: password,
+      force: true
     }
     axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     return axios.post(`${process.env.REACT_APP_API_URL}/authenticate`, parameters).then(response => {

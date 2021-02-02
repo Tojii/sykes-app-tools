@@ -1,3 +1,23 @@
+// import React, { useState, useEffect } from "react";
+// import { Grid, Fab, Icon, Card, Divider } from "@material-ui/core";
+// import { connect } from "react-redux";
+// import MuiAlert from '@material-ui/lab/Alert';
+// import { makeStyles } from '@material-ui/core/styles';
+// import Snackbar from '@material-ui/core/Snackbar';
+
+// const ResumeStep = ({ user }) => {return user}
+// const mapStateToProps = ({ user }) => {
+//   return {
+//       user,
+//   };
+// };
+
+// export default connect(mapStateToProps, {
+  
+// })(ResumeStep);
+
+// const usuario = ResumeStep();
+
 export const navigations = [
   // {
   //   name: "Dashboard",
@@ -38,11 +58,44 @@ export const navigations = [
     path: "/growth-opportunities",
     icon: "content_paste",
   },
+  // { 
+  //   name: "Venta de Activos",
+  //   icon: "laptop",
+  //   children:[
+  //   {
+  //     name: "Ventas Home",
+  //     path: "/VentasHome",
+  //     iconText: "AC"
+  //   },
+  //   {
+  //     name: "Administración de Campaña",
+  //     path: "/Ventas/Campaign",
+  //     iconText: "AC"
+  //   },
+  //   {
+  //     name: "Administración de Inventario",
+  //     path: "/Ventas/Inventario",
+  //     iconText: "AI"
+  //   },
+  //   // {
+  //   //   name: "Consulta de Compras",
+  //   //   path: "/",
+  //   //   iconText: "CC"
+  //   // },
+  //   // {
+  //   //   name: "Consulta de Inventario",
+  //   //   path: "/",
+  //   //   iconText: "CI"
+  //   // },
+  //   ]
+     
+  // },
   // {
   //   name: "Raft",
   //   path: "/Raft",
   //   icon: "person_add_alt_1",
-  //   badge: { value: "New", color: "secondary" },
+  //   display: "none"
+    
   // }, 
   // {
   //   name: "UI Kits",

@@ -1,4 +1,4 @@
-import React, { useState, Component, useRef } from "react";
+import React, { useState, Component, useRef, useEffect } from "react";
 import {
   Button,
   Card
@@ -8,7 +8,7 @@ import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
-import {addRaft} from "../../redux/actions/RaftActions";
+import {addRaft, getAcademicGrades, getEnglishLevel, getPaymentMethod, getPositions} from "../../redux/actions/RaftActions";
 import { useSelector, useDispatch } from 'react-redux';
 
 const useStyles = makeStyles({
@@ -42,12 +42,40 @@ const useStyles = makeStyles({
 const FormRaft = () => {
     
     const user = useSelector(state => state.user);
+    const academiclist = useSelector(state => state.raft.academicgrades);
+    const englishlevel = useSelector(state => state.raft.englishlevel);
+    const paymentmethods = useSelector(state => state.raft.paymentmethods);
+    const positions = useSelector(state => state.raft.positions)
     const dispatch = useDispatch();
     
     const handleFormSubmit = async () => {
         console.log("submit")
         await dispatch(addRaft(raftform));
     };
+
+    useEffect(() => {
+        async function fetchAcademy() {
+            // You can await here
+            await dispatch(getAcademicGrades());
+        }
+        async function fetchEnglish() {
+            // You can await here
+            await dispatch(getEnglishLevel());
+        }
+        async function fetchPaymentMethod() {
+            // You can await here
+            await dispatch(getPaymentMethod());
+        }
+        async function fetchPositions() {
+            await dispatch(getPositions())
+        }
+        fetchAcademy();
+        fetchEnglish();
+        fetchPaymentMethod();
+        fetchPositions();
+        
+
+    }, []);
     
     const handleChange = (event) => {
         const name = event.target.name;
@@ -74,6 +102,7 @@ const FormRaft = () => {
                 }).catch((err) => console.error('Problem fetching my IP', err))
             }
         }
+        console.log("posiciones load", positions);
     };
     
     const [raftform, setRaftForm] = useState({
@@ -88,15 +117,15 @@ const FormRaft = () => {
         secondLastName: "",
         phone: "",
         candidateEmail: "",
-        englishLevel: "English",
+        englishLevel: "",
         locationPreference: "",
         othersDetails: "",
-        candidateProfile: "Profile",
-        academicGrade: "Grade",
+        candidateProfile: "",
+        academicGrade: "",
         isResumeActive: true,
         isResumeRequired: true,
         isExternalreference: true,
-        paymentMethod: "Money",
+        paymentMethod: "",
         workType: "",
         resumeUrl: "" 
     });
@@ -233,14 +262,11 @@ const FormRaft = () => {
                         validators={["required"]}
                         errorMessages={["Este campo es requerido"]}
                     >
-                        {/* {categoriasDeEstudio.map(categoria => (
-                                        <MenuItem key={`categoria-${categoria.id}`} value={categoria.item ? categoria.item : ""}>
-                                        {categoria.item || " "}
+                        {englishlevel.map(english => (
+                                        <MenuItem key={`english-${english.level}`} value={english.title ? english.title : ""}>
+                                        {english.title || " "}
                                         </MenuItem>
-                                    ))} */}
-                        <MenuItem key="" value="">
-                            Seleccionar
-                        </MenuItem>
+                                    ))}
                     </SelectValidator>                  
                     <SelectValidator 
                         label="13. Location Preference:*" 
@@ -285,14 +311,11 @@ const FormRaft = () => {
                         validators={["required"]}
                         errorMessages={["Este campo es requerido"]}
                     >
-                        {/* {categoriasDeEstudio.map(categoria => (
-                                        <MenuItem key={`categoria-${categoria.id}`} value={categoria.item ? categoria.item : ""}>
-                                        {categoria.item || " "}
+                        {academiclist.map(academia => (
+                                        <MenuItem key={`academia-${academia.title}`} value={academia.title ? academia.title : ""}>
+                                        {academia.title || " "}
                                         </MenuItem>
-                                    ))} */}
-                        <MenuItem key="" value="">
-                            Seleccionar
-                        </MenuItem>
+                                    ))} 
                     </SelectValidator>
                     <SelectValidator 
                         label="16. Payment Method:*" 
@@ -303,14 +326,11 @@ const FormRaft = () => {
                         validators={["required"]}
                         errorMessages={["Este campo es requerido"]}
                     >
-                        {/* {categoriasDeEstudio.map(categoria => (
-                                        <MenuItem key={`categoria-${categoria.id}`} value={categoria.item ? categoria.item : ""}>
-                                        {categoria.item || " "}
+                        {paymentmethods.map(payment => (
+                                        <MenuItem key={`payment-${payment.title}`} value={payment.title ? payment.title : ""}>
+                                        {payment.title || " "}
                                         </MenuItem>
-                                    ))} */}
-                        <MenuItem key="" value="">
-                            Seleccionar
-                        </MenuItem>
+                                    ))}
                     </SelectValidator>                  
                     <SelectValidator 
                         label="17. Work Mode:*" 

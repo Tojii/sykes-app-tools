@@ -17,6 +17,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     //if (error.response.status === 401) {
         apiAuthService.logout(); 
+        //apiAuthService.removeUser();
         history.state = history.location.pathname;
         history.push({
           pathname: "/session/signin"
@@ -35,6 +36,7 @@ export const GetRefoundListByUser = (badgeId) => {
             type: GET_REFOUND_LIST_BY_USER,
             data: res.data
             });
+            //console.log(res.data)
       })).catch(function(error){
         console.log("Error", error);
       });

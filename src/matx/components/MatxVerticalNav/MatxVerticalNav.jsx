@@ -4,6 +4,7 @@ import { Icon } from "@material-ui/core";
 import TouchRipple from "@material-ui/core/ButtonBase";
 import MatxVerticalNavExpansionPanel from "./MatxVerticalNavExpansionPanel";
 import { withStyles } from "@material-ui/styles";
+import { useSelector, useDispatch } from 'react-redux'
 
 const styles = theme => ({
   expandIcon: {
@@ -18,10 +19,14 @@ const styles = theme => ({
 
 class MatxVerticalNav extends Component {
   state = {
-    collapsed: true
+    collapsed: true,
   };
-
-  renderLevels = data => {
+  
+  renderLevels = (data, user) => {
+    // data[0].display = "none";
+    // data[1].user = user;
+    // Se trae la variable con los tabs que deben mostrarse y se revisa para modificar el display, en caso de ser false se pone display "none" 
+    // y en caso de true no se hace nada para que semuestre
     return data.map((item, index) => {
       if (item.children) {
         return (
@@ -31,7 +36,7 @@ class MatxVerticalNav extends Component {
         );
       } else {
         return (
-          <NavLink key={index} to={item.path} className="nav-item">
+          <NavLink key={index} to={item.path} style={{display: item.display ? item.display : null}} className="nav-item">
             <TouchRipple key={item.name} name="child" className="w-100">
               {(() => {
                 if (item.icon) {
@@ -65,7 +70,7 @@ class MatxVerticalNav extends Component {
   render() {
     return (
       <div className="navigation">
-        {this.renderLevels(this.props.navigation)}
+        {this.renderLevels(this.props.navigation, this.props.user)}
       </div>
     );
   }

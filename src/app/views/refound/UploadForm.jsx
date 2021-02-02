@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(2),
     },
   },
+  gridtext: {
+    wordWrap: "break-word"
+  }
 }));
 
 
@@ -47,7 +50,7 @@ const UploadForm  = ({setFinish, files, setFiles, isError, errorMessage}) => {
     setOpen({open:false, message:""});
   }
 
- const handleFileSelect = event => {
+  const handleFileSelect = event => {
     let filesList = event.target.files;
     let list = [];
     let sizes = 0;
@@ -230,14 +233,14 @@ const UploadForm  = ({setFinish, files, setFiles, isError, errorMessage}) => {
                 alignItems="center"
                 direction="row"
               >
-                <Grid item lg={4} md={4}>
+                <Grid item lg={4} md={4} sm={4} xs={4}>
                   Nombre
                 </Grid>
-                <Grid item lg={1} md={1}>
+                <Grid item lg={4} md={4} sm={4} xs={4}>
                   Tamaño
                 </Grid>
              
-                <Grid item lg={4} md={4}>
+                <Grid item lg={4} md={4} sm={4} xs={4}>
                   Acciones
                 </Grid>
               </Grid>
@@ -257,14 +260,14 @@ const UploadForm  = ({setFinish, files, setFiles, isError, errorMessage}) => {
                     alignItems="center"
                     direction="row"
                   >
-                    <Grid item lg={4} md={4} sm={12} xs={12}>
+                    <Grid className={classes.gridtext} item lg={4} md={4} sm={4} xs={4}>
                       {file.name}
                     </Grid>
-                    <Grid item lg={1} md={1} sm={12} xs={12}>
+                    <Grid className={classes.gridtext} item lg={4} md={4} sm={4} xs={4}>
                       {(file.size / 1024 / 1024).toFixed(1)} MB
                     </Grid>
                 
-                    <Grid item lg={4} md={4} sm={12} xs={12}>
+                    <Grid item lg={4} md={4} sm={4} xs={4}>
                       <div className="flex">
                        
                         <Button

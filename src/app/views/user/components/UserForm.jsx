@@ -77,7 +77,7 @@ const UserForm = (props) => {
         return setDisableNext(true)
         user.email = form_user.email;
         user.phone = form_user.phone;
-        dispatch(setUserData(user));
+        //dispatch(setUserData(user));
         setDisableNext(false); 
     }
 
@@ -91,7 +91,7 @@ const UserForm = (props) => {
         if (form_user.phone === undefined || form_user.email === undefined) {
             setUserForm(user)
         }
-    }, [user]);
+    }, [form_user]);
 
     const onSubmit = () => {
         const payload = {
@@ -119,22 +119,22 @@ const UserForm = (props) => {
             <Grid item lg={11}>
                 <h3 className="p-sm-24">Personal Information</h3>
                 <ValidatorForm    onSubmit={onSubmit}>
-                    <Grid item xs={6}>
+                    <Grid item lg={6} md={6} sm={10} xs={10}>
                         <TextValidator
                             className="w-100 mx-24 my-16"
                             label="Email"
                             onChange={handleCustomChange}
                             onBlur={handleUserEmail}
-                            type="email"
+                            type="text"
                             name="email"
                             value={form_user.email}
-                            validators={["required", "isEmail"]}
+                            validators={["required", "matchRegexp:^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"]}
                             errorMessages={["This field is required", "Invalid email format"]}
                             error={form_user.email === "" || form_user.email === undefined}
                             helperText={handleEmailError()}
                         />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item lg={6} md={6} sm={10} xs={10}>
                         <TextValidator
                             className="w-100 mx-24 my-16"
                             label="Phone number"

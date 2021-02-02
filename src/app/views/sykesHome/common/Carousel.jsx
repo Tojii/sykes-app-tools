@@ -22,6 +22,42 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
+  buttonright: {
+    background: "#fff",
+    "@media (min-width: 1023px)": {
+      right: "0%",
+    },
+    "@media (min-width: 1024px)": {
+      right: "25%",
+    },
+    "@media (min-width: 1025px)": {
+      right: "35%",
+    },
+    "@media (min-width: 2048px)": {
+      right: "36.5%",
+    },
+    "@media (min-width: 3500px)": {
+      right: "43%",
+    },
+  },
+  buttonleft: {
+    background: "#fff",
+    "@media (min-width: 1023px)": {
+      left: "0%", 
+    },
+    "@media (min-width: 1024px)": {
+      left: "25%", 
+    },
+    "@media (min-width: 1025px)": {
+      left: "35%", 
+    },
+    "@media (min-width: 2048px)": {
+      left: "36.5%", 
+    },
+    "@media (min-width: 3500px)": {
+      left: "43%", 
+    },
+  }
 });
 
 export const Carousel = (props) => {
@@ -45,17 +81,17 @@ export const Carousel = (props) => {
       360: {
         slidesPerView: 1,
         spaceBetween: 0,
-        width: 300,
+        width: 280,
       },
-      420: {
+      410: {
         slidesPerView: 1,
         spaceBetween: 0,
-        width: 320,
+        width: 290,
       },
       480: {
         slidesPerView: 1,
         spaceBetween: 0,
-        width: 390,
+        width: 330,
       },
       540: {
         slidesPerView: 1,
@@ -71,9 +107,13 @@ export const Carousel = (props) => {
         slidesPerView: 1,
         width: 950,
       },
+      1080: {
+        slidesPerView: 1,
+        width: 240,
+      },
       1280: {
         slidesPerView: 1,
-        width: 940,
+        width: 225,
       },
       1920: {
         slidesPerView: 1,
@@ -122,10 +162,10 @@ export const Carousel = (props) => {
             </div>
 
             {/* navigation */}
-            <Fab className="carousel__button-prev bg-white">
+            <Fab className= {classes.buttonleft + " carousel__button-prev bg-white"}>
               <NavigateBefore />
             </Fab>
-            <Fab className="carousel__button-next bg-white">
+            <Fab className={classes.buttonright + " carousel__button-next bg-white"}>
               <NavigateNext />
             </Fab>
           </div>

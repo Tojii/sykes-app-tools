@@ -18,10 +18,26 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import format from "date-fns/format";
 import ValidationModal from './ValidationDialog';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
+import { makeStyles } from '@material-ui/core/styles';
+import ScrollContainer from 'react-indiana-drag-scroll'
 
 function getSteps() {
   return ["Personal Information", "Validation", "Resume", "Schedule", "Confirm"];
 }
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+  stepperscroll: {
+    overflow: "auto",
+    "-webkit-overflow-scrolling": "touch",
+   
+  },
+}));
 
 const ApplyStepper = (props) => {
     const { 
@@ -40,6 +56,7 @@ const ApplyStepper = (props) => {
     const [disableNext, setDisableNext] = useState(false);
     const steps = getSteps();
     const [open, setOpen] = useState(false);
+    const classes = useStyles();
 
 
     function getStepContent(stepIndex) {
@@ -121,6 +138,7 @@ const ApplyStepper = (props) => {
           {(isLoading || user.phone === undefined || user.email === undefined) ? <Loading /> :  
           <div>     
             <ValidationModal idioma={"Ingles"} save={() => {}} path={"/growth-opportunities"} state={(saveApplication != null && !saveApplication.succces) == false ? "Success!" : "Error!"} message={(saveApplication != null && !saveApplication.succces) == false ? "Application done!" : "An error occurred, please try again!"} setOpen={setOpen} open={open} />
+            <ScrollContainer nativeMobileScroll={false} className="scroll-container">
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map(label => (
                 <Step key={label}>
@@ -128,6 +146,7 @@ const ApplyStepper = (props) => {
                 </Step>
               ))}
             </Stepper>
+            </ScrollContainer>
             <div>
               {activeStep === steps.length ? (
                 <div>

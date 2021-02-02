@@ -11,12 +11,15 @@ function Alert(props) {
   }
 
 const useStyles = makeStyles((theme) => ({
-root: {
-    width: '100%',
-    '& > * + *': {
-    marginTop: theme.spacing(2),
+    root: {
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        }
     },
-},
+    gridtext: {
+      wordWrap: "break-word"
+    }
 }));
 
 const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
@@ -116,10 +119,10 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                 alignItems="center"
                 direction="row"
               >
-                <Grid item lg={6} md={6}>
+                <Grid item lg={6} md={6} sm={6} xs={6}>
                   Nombre
                 </Grid>
-                <Grid item lg={6} md={6}>
+                <Grid item lg={6} md={6} sm={6} xs={6}>
                   Tamaño
                 </Grid>
               </Grid>
@@ -133,16 +136,16 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                         alignItems="center"
                         direction="row"
                     >
-                        <Grid item lg={6} md={6} sm={12} xs={12}>
+                        <Grid lg={6} md={6} sm={6} xs={6}>
                             {file.size ? (
-                                <div className="flex flex-middle">
+                                <div className={classes.gridtext}>
                                     {file.name}
                                     </div>
                             ) : "No file attached" }
                         </Grid>
-                        <Grid item lg={6} md={6} sm={12} xs={12}>
+                        <Grid lg={6} md={6} sm={6} xs={6}>
                             {file.size ? (
-                                <div className="flex flex-middle">
+                                <div className={classes.gridtext}>
                                     {(file.size / 1024 / 1024).toFixed(1)} MB
                                 </div>
                             ) : "" }
