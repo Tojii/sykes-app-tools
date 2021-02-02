@@ -28,9 +28,16 @@ const ApplicationsTable = ({
         )
     }
 
-    const getMuiTheme = () =>
-    createMuiTheme({
-    });
+    const getMuiTheme = () => createMuiTheme({
+        overrides: {
+          MuiMenuItem: {
+            root: {
+              whiteSpace: "unset"
+            }
+          }
+        }
+    })
+
     const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
 
     const buildData = jobs_applied.map(item => {
@@ -59,12 +66,17 @@ const ApplicationsTable = ({
 
     const columns = [
         {
-            name: "Job Position"
+            name: "Job Position",
+            options: {
+                filterOptions: { 
+                    fullWidth: window.screen.width <= 1024 ? true : false
+                }
+            }
         },
         {
             name:"Status",
             options: {
-                filter: false
+                filter: false,
             }
         },
         {
@@ -72,6 +84,9 @@ const ApplicationsTable = ({
             options: {
                 filter: true,
                 sort: true,
+                filterOptions: { 
+                    fullWidth: window.screen.width <= 1024 ? true : false
+                },
                 customBodyRender: value =>
                 (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""           
             }

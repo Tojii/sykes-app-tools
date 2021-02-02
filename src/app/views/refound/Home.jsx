@@ -58,7 +58,6 @@ const Home = () => {
     const user = useSelector(state => state.user);
     const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(false);
     const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
-    
     const handleDetailsClick = () => {
       setShouldOpenDetailsDialog(true);
     }
@@ -120,6 +119,9 @@ const Home = () => {
          options: {
           filter: true,
           sort: true,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
          }
         },
         {
@@ -128,6 +130,9 @@ const Home = () => {
             options: {
              filter: true,
              sort: true,
+             filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+             }
             }
         },
         {
@@ -136,6 +141,9 @@ const Home = () => {
             options: {
              filter: true,
              sort: true,
+             filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+             }
             }
         },
         {
@@ -144,6 +152,9 @@ const Home = () => {
             options: {
              filter: true,
              sort: true,
+             filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+             }
             }
         },
         {
@@ -152,6 +163,9 @@ const Home = () => {
             options: {
              filter: true,
              sort: true,
+             filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+             }
             }
         },
         {
@@ -160,6 +174,9 @@ const Home = () => {
             options: {
              filter: true,
              sort: true,
+             filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+             },
              customBodyRender: value =>
              (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""
             }
@@ -170,6 +187,9 @@ const Home = () => {
             options: {
              filter: true,
              sort: true,
+             filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+             },
              customBodyRender: value =>
              (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""
             }

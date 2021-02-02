@@ -45,7 +45,7 @@ const MyMetrics = ({ metrics, history }) => {
 
     return (
         <>
-            <Grid className={classes.metricsModal} container md={12} xs={11} spacing={1}>
+            <Grid className={classes.metricsModal} container md={12} xs={12} spacing={1}>
                 <Grid item lg={12} md={12} sm={12} xs={12}>
                     <Grid container spacing={2} className="m-24">
                         <Grid item xs={11} md={3}>

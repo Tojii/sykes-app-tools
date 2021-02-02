@@ -5,7 +5,13 @@ import {
     Tooltip,
     Card,
     Button,
-    makeStyles
+    makeStyles,
+    FormControl,
+    ListItemText,
+    Checkbox,
+    Select,
+    InputLabel,
+    MenuItem
 } from "@material-ui/core";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import { setGrowthOpportunity } from "../../../redux/actions/GrowthOpportunityActions"
@@ -41,9 +47,15 @@ const GrowthOppTable = ({
         setShouldOpenMetricsDialog(false);
       };
 
-    const getMuiTheme = () =>
-    createMuiTheme({
-    });
+    const getMuiTheme = () => createMuiTheme({
+        overrides: {
+          MuiMenuItem: {
+            root: {
+              whiteSpace: "unset"
+            }
+          }
+        }
+    })
 
     const buildDetailButton = (item) => {
         return (
@@ -90,15 +102,28 @@ const GrowthOppTable = ({
     const columns = [ 
        {
         name: "Job Position",
+        options: {
+            filterOptions: { 
+                fullWidth: window.screen.width <= 1024 ? true : false,
+            }
+        }
        },
        {
         name: "Area",
+        options: {
+            filterOptions: { 
+                fullWidth: window.screen.width <= 1024 ? true : false
+            }
+        }
        },
        {
         name: "Expiration Date",
         options: {
             filter: true,
             sort: true,
+            filterOptions: { 
+                fullWidth: window.screen.width <= 1024 ? true : false
+            },
             customBodyRender: value =>
             (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""
             // customFilterListRender: value =>
@@ -116,7 +141,7 @@ const GrowthOppTable = ({
        {
         name: "Details",
         options: {
-            filter: false
+            filter: false,
         }
        },
     ]
