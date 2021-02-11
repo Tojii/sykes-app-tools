@@ -1,3 +1,23 @@
+// import React, { useState, useEffect } from "react";
+// import { Grid, Fab, Icon, Card, Divider } from "@material-ui/core";
+// import { connect } from "react-redux";
+// import MuiAlert from '@material-ui/lab/Alert';
+// import { makeStyles } from '@material-ui/core/styles';
+// import Snackbar from '@material-ui/core/Snackbar';
+
+// const ResumeStep = ({ user }) => {return user}
+// const mapStateToProps = ({ user }) => {
+//   return {
+//       user,
+//   };
+// };
+
+// export default connect(mapStateToProps, {
+  
+// })(ResumeStep);
+
+// const usuario = ResumeStep();
+
 export const navigations = [
   // {
   //   name: "Dashboard",
@@ -8,7 +28,7 @@ export const navigations = [
   {
     name: "Inicio",
     path: "/Inicio",
-    icon: "content_paste",
+    icon: "home_icon",
   },
   // {
   //   name: "LSS",
@@ -16,21 +36,67 @@ export const navigations = [
   //   icon: "content_paste",
   //   badge: { value: "New", color: "secondary" },
   // },
-  {
-    name: "Rembolso Educativo",
-    icon: "monetization_on",
-    children:[{
-      name: "Lista de Reembolsos",
-      path: "/ReembolsoEducativo/ListaReembolsos",
-      iconText: "A"
-    },
-    {
-      name: "Detalle de Reembolsos",
-      path: "/ReembolsoEducativo/Detalle",
-      iconText: "A"
-    }   
-    ]
+  { 
+    name: "Reembolso Educativo",
+    icon: "attach_money_icon",
+    path: "/ReembolsoEducativo/ListaReembolsos",
+    // children:[
+    // {
+    //   name: "Lista de Reembolsos",
+    //   path: "/ReembolsoEducativo/ListaReembolsos",
+    //   iconText: "LR"
+    // },
+    // {
+    //   name: "Detalle de Reembolsos",
+    //   path: "/ReembolsoEducativo/Detalle",
+    //   iconText: "DR"
+    // }   
+    // ]
   },
+  {
+    name: "Growth Opportunities",
+    path: "/growth-opportunities",
+    icon: "content_paste",
+  },
+  // { 
+  //   name: "Venta de Activos",
+  //   icon: "laptop",
+  //   children:[
+  //   {
+  //     name: "Ventas Home",
+  //     path: "/VentasHome",
+  //     iconText: "AC"
+  //   },
+  //   {
+  //     name: "Administración de Campaña",
+  //     path: "/Ventas/Campaign",
+  //     iconText: "AC"
+  //   },
+  //   {
+  //     name: "Administración de Inventario",
+  //     path: "/Ventas/Inventario",
+  //     iconText: "AI"
+  //   },
+  //   // {
+  //   //   name: "Consulta de Compras",
+  //   //   path: "/",
+  //   //   iconText: "CC"
+  //   // },
+  //   // {
+  //   //   name: "Consulta de Inventario",
+  //   //   path: "/",
+  //   //   iconText: "CI"
+  //   // },
+  //   ]
+     
+  // },
+  // {
+  //   name: "Raft",
+  //   path: "/Raft",
+  //   icon: "person_add_alt_1",
+  //   display: "none"
+    
+  // }, 
   // {
   //   name: "UI Kits",
   //   icon: "favorite",

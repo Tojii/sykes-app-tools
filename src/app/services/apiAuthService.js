@@ -22,14 +22,14 @@ class apiAuthService {
   loginWithEmailAndPassword = (email, password) => {
     const parameters = {
       username: email,
-      password: password
+      password: password,
+      force: true
     }
-
-    axios.defaults.headers.common["X-API-Key"] = `${process.env.REACT_APP_X_API_KEY}`
-    return axios.post(`${process.env.REACT_APP_API_URL}/Authenticate`, parameters).then(response => {
+    axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
+    return axios.post(`${process.env.REACT_APP_API_URL}/authenticate`, parameters).then(response => {
       // Login successful
       // Save token
-      console.log("Login", response);
+      //console.log("Login", response);
       this.setSession(response.data.token);
       // Set user
       this.setUser(response.data.token);
@@ -63,6 +63,7 @@ class apiAuthService {
     if (token) {
       localStorage.setItem("jwt_token", token);
       axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+      axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
     } else {
       localStorage.removeItem("jwt_token");
       delete axios.defaults.headers.common["Authorization"];

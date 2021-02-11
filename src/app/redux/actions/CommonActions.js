@@ -1,22 +1,58 @@
 import axios from "axios";
+import apiAuthService from "../../services/apiAuthService";
+import history from "history.js";
 
 export const GET_IMAGES = "GET_IMAGES";
 export const RE_LOADING = "RE_LOADING";
+
+const axiosInstance = axios.create();
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    //if (error.response.status === 401) {
+        apiAuthService.logout(); 
+        history.state = history.location.pathname;
+        history.push({
+          pathname: "/session/signin"
+        });
+    //}
+
+    return Promise.reject(error);
+  }
+)
 
 export const GetImages = () => {
     return async dispatch => {
       dispatch({
         type: RE_LOADING
       });
-      axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-      axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
-      await axios.get(`${process.env.REACT_APP_API_URL}/api/Common/GetImages`).then(res => {
-        console.log("Res", res.data);  
+      axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+      await axiosInstance.get(`${process.env.REACT_APP_API_URL}/api/Common/GetImages`).then(res => {
         dispatch({
           type: GET_IMAGES,
           data: res.data
           });
+        //console.log("imagenes",res.data)
       })
+      .catch((error) => {
+        // Error
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the 
+            // browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+      }); 
     };
   };
 

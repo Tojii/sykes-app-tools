@@ -23,7 +23,8 @@ import {
 import UploadForm from "./UploadForm";
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker
+  KeyboardDatePicker,
+  DatePicker 
 } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -31,6 +32,8 @@ import { format } from 'date-fns';
 import es from "date-fns/locale/es";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import MuiAlert from '@material-ui/lab/Alert';
+import ValidationModal from '../growth-opportunities/components/ValidationDialog';
+import { makeStyles } from '@material-ui/core/styles';
 
 function getSteps() {
   return ["Categoría del Curso", "Datos del Curso", "Archivos Adjuntos"];
@@ -39,6 +42,38 @@ function getSteps() {
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+const useStyles = makeStyles({
+  textvalidator: {
+     "@media (min-width: 0px)": {
+          marginLeft: "2%",
+          width: "96%",
+          //marginTop: "3%",
+      },
+      "@media (min-width: 1024px)": {
+          marginLeft: "2%",
+          width: "46%",
+      }
+  },
+  formcard: {
+      "@media (min-width: 1023px)": {
+          marginLeft: "0%",
+          width: "100%",
+      },
+      "@media (min-width: 1024px)": {
+          marginLeft: "25%",
+          width: "50%",
+      }
+   
+  },
+  sectionbutton: {
+      marginLeft: "25%",
+      width: "50%",
+      marginTop: "3%",
+      marginBottom: "2%",
+      textAlign: "center"
+  },
+});
 
 export const UNIVERSITY_STUDIES = "ESTUDIOS UNIVERSITARIOS";
 export const CERTIFICATION = "CERTIFICACIÓN";
@@ -65,15 +100,13 @@ const NewRefoundForm = () => {
   const [isErrorUpload, setIsErrorUpload] = useState(false);
   const [errorMessage, setErrorMessage] = useState([]);
   const [files, setFiles] = useState([]);
-  const [open, setOpen] = useState({
-    startDate : false,
-    endDate: false,
-    certificationDate: false
-  });
-
+  const [open, setOpen] = useState(false);
+  const [finish, setFinish] = useState(false);
+  const classes = useStyles();
+  
   const [form, setForm] = useState({
-    badge: user.badge, //'42553',,
-    name: user.fullname,
+    // badge: user.badge, //'42553',,
+    // name: user.fullname,
     exchangeRate: '',
     studiesCategory: '',
     universityInstitute: '',
@@ -84,16 +117,21 @@ const NewRefoundForm = () => {
     others: '',
     course: '',
     invoiceNumber: '',
-    certificationDate: null, //new Date(),
-    startDate: null, //new Date(),
-    endDate: null, //date.setDate(date.getDate()+1),
+    certificationDate: null, //new Date(),//null, 
+    startDate: null, //new Date(),  
+    endDate: null, //new Date().setDate(new Date().getDate() + 1), //null,
     email: ''
   });
 
   useEffect(() => {
     dispatch(GetIformationLists(user.badge));
     dispatch(getStudiesCatergory());
-  }, []);
+    // setForm({
+    //   ...form,
+    //   badge: user.badge, //'42553',,
+    //   name: user.fullname,
+    // });
+  }, [user]);
 
   const validateEmail = (email) => {
     const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -277,57 +315,55 @@ const NewRefoundForm = () => {
     setError(false);
     setEmailError(false);
     setFiles([]);
+    
     setErrorMessage([]);
   };
 
   const handleSubmit = async () => {
+    //console.log("save files", files);
+    var sizes = 0;
+    for (var i = 0; files.length > i; i++){
+      sizes = sizes + files[i].file.size;
+    } 
+    //console.log(sizes);
     if (files.length <= 0) {
       setIsErrorUpload(true);
       setErrorMessage(errorMessage => ({ ...errorMessage, files: "*Se debe seleccionar al menos un archivo" }));
       return;
     }
+    if (sizes > 1048576) {
+      setIsErrorUpload(true);
+      setErrorMessage(errorMessage => ({ ...errorMessage, files: "*Los archivos adjuntos superan el máximo permitido de 1MB." }));
+      return;
+    }
+    //console.log(sizes)
     setActiveStep(steps.length);
-    await dispatch(SaveRefund(form, files));
-
-    // if(saveRefound != null){
-    //   if(saveRefound.success == true){
-    //     console.log("saveRefound Inside", saveRefound)
-    //     setSubmitMessage({message:"¡Guardado existosamente!"});
-
-    //   }else{
-    //     setisErrorSaveRefound(true);
-    //     setSubmitMessage({message:"¡Se produjo un error, por favor vuelva a intentarlo!"})
-    //   } 
-    // }
+    await dispatch(SaveRefund(form, files, user.badge, user.fullname));
+    setOpen(true);
   }
 
   const handleDateChangeStartDate = date => {
     if (date != null) {
       setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
     }
-
     setForm({
       ...form,
       startDate: date,
-      // endDate: newDate.setDate(newDate.getDate() + 1),
+      endDate: null,
     });
-
-    console.log("endDate", form.endDate);
   };
 
   const handleDateChangeEndDate = date => {
-    
     if (date != null) {
       setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "", endDate: "" }));
     }
-
     setForm({
       ...form,
       endDate: date,
     });
   };
 
-  const handleDateChangeCertificationDate = date => {
+ const handleDateChangeCertificationDate = date => {
     if (date != null) {
       setErrorMessage(errorMessage => ({ ...errorMessage, certificationDate: "" }));
     }
@@ -337,8 +373,9 @@ const NewRefoundForm = () => {
       certificationDate: date,
     });
   };
+
   const CustomFormControl = (props) => (
-    <FormControl className="form-control-leader mt-24 mr-24" error={isError}>
+    <FormControl className={classes.textvalidator + " form-control-leader mt-24 mr-24"} error={isError}>
       <InputLabel id={`input-${props.id}`}>{props.label}</InputLabel>
       <Select labelId={`label-${props.id}`} onChange={event => handleChange(event)}
         value={props.value}
@@ -395,18 +432,19 @@ const NewRefoundForm = () => {
     switch (stepIndex) {
       case 0:
         return (
+          (isLoading || !user) ? <Loading /> :
           <div className="mb-24">
-            <TextField name="bagde" value={form.badge} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Badge" disabled variant="filled"
+            <TextField name="bagde" value={user.badge} className={classes.textvalidator + " mr-24 mt-24"} label="Badge" disabled variant="filled"
               InputProps={{
                 readOnly: true,
               }} />
-            <TextField name="nombre" value={form.name} className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Nombre" disabled variant="filled"
+            <TextField name="nombre" value={user.fullname} className={classes.textvalidator + " mr-24 mt-24"} label="Nombre" disabled variant="filled"
               InputProps={{
                 readOnly: true,
               }}
             />
-            <FormControl className="form-control-leader mt-24">
-              <InputLabel id="CategoriaEstudio">Categoría de estudio *</InputLabel>
+            <FormControl className={classes.textvalidator + " form-control-leader mt-24"}>
+              <InputLabel id="CategoriaEstudio">Categoría de Estudio *</InputLabel>
               <Select labelId="CategoriaEstudio" onChange={event => handleChange(event)}
                 value={form.studiesCategory}
                 name="studiesCategory"
@@ -421,8 +459,8 @@ const NewRefoundForm = () => {
                 ))}
               </Select>
             </FormControl>
-            <div className="Message">
-              <p>Seleccione una categoría de Estudio.</p>
+            <div className={classes.textvalidator + " Message"}>
+              <p>Seleccione una categoría de estudio.</p>
             </div>
           </div>
         );
@@ -431,19 +469,19 @@ const NewRefoundForm = () => {
           <div className="mb-24">
             {handleSelectCategory()}
 
-            <TextField className="mr-24 mt-24"
-              style={{ width: "calc(50% - 24px)" }} label="Nombre de la materia o curso*" name="course" value={form.course} onChange={event => handleChange(event)}
+            <TextField className={classes.textvalidator + " mr-24 mt-24"}
+              label="Nombre de la materia o curso*" name="course" value={form.course} onChange={event => handleChange(event)}
               error={!!errorMessage.course}
               helperText={errorMessage.course}
             />
 
-            <TextField className="mr-24 mt-24" style={{ width: "calc(50% - 24px)" }} label="Factura*"
+            <TextField className={classes.textvalidator + " mr-24 mt-24"} label="Factura*"
               name="invoiceNumber" value={form.invoiceNumber} onChange={event => handleChange(event)}
               error={!!errorMessage.invoiceNumber}
               helperText={errorMessage.invoiceNumber}
             />
 
-            <TextField className="mr-24 mt-24 " style={{ width: "calc(50% - 24px)" }} label="Correo Electrónico*"
+            <TextField className={classes.textvalidator + " mr-24 mt-24"} label="Correo Electrónico*"
               name="email" value={form.email}
               onChange={event => handleChange(event)}
               error={!!errorMessage.email}
@@ -452,110 +490,54 @@ const NewRefoundForm = () => {
 
             {form.studiesCategory.toUpperCase() != CERTIFICATION ?
               <div>
-                {/* <TextField
-                  id="date"
-                  label="Fecha de Inicio*"
-                  type="date"
-                  value={form.startDate}
-                  name="startDate"
-                  className="mr-24 mt-24" 
-                  style={{ width: "calc(50% - 24px)" }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  error={!!errorMessage.startDate}
-                  helperText={errorMessage.startDate}
-                  onChange={handleDateChangeStartDate}
-                /> */}
-
                 <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-                  <KeyboardDatePicker
+                  <DatePicker
+                    className={classes.textvalidator + " mr-24 mt-24"}
                     cancelLabel="CANCELAR"
                     error={!!errorMessage.startDate}
                     helperText={errorMessage.startDate}
-                    open={open.startDate}
-                    onClick={() => setOpen({ ...open, startDate: true })}
-                    onClose={() => setOpen({ ...open, startDate: false })}
-                    className="mr-24 mt-24"
-                    style={{ width: "calc(50% - 24px)" }}
-                    margin="none"
-                    id="mui-pickers-date"
-                    label="Fecha de Inicio*"
-                    inputVariant="standard"
-                    type="text"
-                    autoOk={true}
-                    value={form.startDate}
-                    name="startDate"
-                    onChange={handleDateChangeStartDate}
-
                     format="dd/MM/yyyy"
-                    KeyboardButtonProps={{
-                      "aria-label": "change date"
-                    }}
-                    readOnly = {true}
+                    label="Fecha de Inicio*"
+                    value={form.startDate}
+                    name="endDate"
+                    onChange={handleDateChangeStartDate}    
                   />
                 </MuiPickersUtilsProvider>
-
-                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-                  <KeyboardDatePicker
+                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}> 
+                  <DatePicker
+                    className={classes.textvalidator + " mr-24 mt-24"}
                     cancelLabel="CANCELAR"
                     error={!!errorMessage.endDate}
                     helperText={errorMessage.endDate}
-                    open = {open.endDate}
-                    onClick={form.startDate !=  null? () => setOpen({...open, endDate: true}) :() => setOpen({...open, endDate: false}) }
-                    onClose = { () => setOpen({...open, endDate: false})}
-                    className="mr-24 mt-24"
-                    style={{ width: "calc(50% - 24px)" }}
-                    margin="none"
-                    id="mui-pickers-date"
+                    format="dd/MM/yyyy"
                     label="Fecha de Finalización*"
-                    inputVariant="standard"
-                    type="text"
-                    autoOk={true}
                     value={form.endDate}
                     name="endDate"
                     onChange={handleDateChangeEndDate}
-                    format="dd/MM/yyyy"
-                    KeyboardButtonProps={{
-                      "aria-label": "change date"
-                    }}
-                    minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000 ) : null}
+                    minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000) : null}
                     disabled={!form.startDate}
-                    readOnly = {true}
                   />
                 </MuiPickersUtilsProvider>
               </div> :
               <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-                <KeyboardDatePicker
+                <DatePicker
+                  className={classes.textvalidator + " mr-24 mt-24"}
                   cancelLabel="CANCELAR"
                   error={!!errorMessage.certificationDate}
                   helperText={errorMessage.certificationDate}
-                  open = {open.certificationDate}
-                  onClick={()=>setOpen({...open, certificationDate: true})}
-                  onClose = {()=>setOpen({...open, certificationDate: false})}
-                  className="mr-24 mt-24"
-                  style={{ width: "calc(50% - 24px)" }}
-                  margin="none"
-                  id="mui-pickers-date"
+                  format="dd/MM/yyyy"
                   label="Fecha de Certificación*"
-                  inputVariant="standard"
-                  type="text"
-                  autoOk={true}
                   value={form.certificationDate}
                   name="certificationDate"
                   onChange={handleDateChangeCertificationDate}
-                  format="dd/MM/yyyy"
-                  KeyboardButtonProps={{
-                    "aria-label": "change date"
-                  }}
-                  readOnly = {true}
+                  minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000) : null}
                 />
               </MuiPickersUtilsProvider>
             }
           </div>
         );
       case 2:
-        return <UploadForm files={files} setFiles={setFiles} isError={isErrorUpload} setErrorMessage={setIsErrorUpload} errorMessage={errorMessage.files} />
+        return <UploadForm files={files} setFinish={setFinish} setFiles={setFiles} isError={isErrorUpload} setErrorMessage={setIsErrorUpload} errorMessage={errorMessage.files} />
       default:
         return "";
     }
@@ -563,9 +545,10 @@ const NewRefoundForm = () => {
 
   return (
     <div>
-      {isLoading ? <Loading /> :
+      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={(saveRefound != null && !saveRefound.success) == false ? "Success!" : "Error!"} save={() => {}} message={(saveRefound != null && !saveRefound.success) == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
+      {(isLoading || !user) ? <Loading /> :
         <div className="m-sm-30">
-          <SimpleCard title="Nuevo reembolso educativo">
+          <SimpleCard title="Nuevo Reembolso Educativo">
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map(label => (
                 <Step key={label}>
@@ -575,15 +558,20 @@ const NewRefoundForm = () => {
             </Stepper>
             <div>
               {activeStep === steps.length ? (
-                <div className="">
-                  <div className="d-flex justify-content-center mb-16">
-                    <Alert severity={!saveRefound.succes ? "success" : "warning"}>
-                      {!saveRefound.succes ? "¡Guardado existosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
+                <div>
+                  {saveRefound != null ? 
+                  <div>
+                    <div className="d-flex justify-content-center mb-16">
+                    <Alert variant="outlined" severity={!saveRefound.success == false ? "success" : "error"}>
+                      {!saveRefound.success == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
                     </Alert>
                   </div>
-                  <Button variant="contained" color="secondary" onClick={handleReset}>
+                  {/* <Button variant="contained" color="secondary" onClick={handleReset}>
                     Volver a nuevo
-                  </Button>
+                  </Button> */}
+                  
+                  </div> 
+                  : <div></div>}
                 </div>
               ) : (
                   <div>
@@ -597,12 +585,13 @@ const NewRefoundForm = () => {
                       >
                         Regresar
                       </Button>
+                      
                       <Button
                         className="ml-16"
                         variant="contained"
                         color="primary"
                         onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
-                        disabled={form.studiesCategory ? false : true}
+                        disabled={(activeStep !== steps.length - 1 && form.studiesCategory) ? false : ((activeStep === steps.length - 1 && files.length !== 0 && finish) ? false : true)}
                       >
                         {activeStep === steps.length - 1 ? "Finalizar" : "Siguiente"}
                       </Button>

@@ -3,6 +3,7 @@ import { Fab, Icon, Card, Grid, Divider, Button } from "@material-ui/core";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
+import WarningIcon from '@material-ui/icons/Warning';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -15,10 +16,13 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(2),
     },
   },
+  gridtext: {
+    wordWrap: "break-word"
+  }
 }));
 
 
-const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
+const UploadForm  = ({setFinish, files, setFiles, isError, errorMessage}) => {
   const classes = useStyles();
   const [params, setParams] = useState(
       {
@@ -46,23 +50,44 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
     setOpen({open:false, message:""});
   }
 
- const handleFileSelect = event => {
+  const handleFileSelect = event => {
     let filesList = event.target.files;
     let list = [];
+    let sizes = 0;
+    setFinish(true);
 
-    for (const iterator of filesList) {  
+    if (files.length !== 0) {for (const iterator of files) {
+      sizes = sizes + iterator.file.size;
+    }}
+
+    for (const iterator of filesList) {
       if(iterator.type == "application/pdf" || iterator.type == "image/png" || 
       iterator.type == "image/jpeg" || iterator.type == "image/jpg"){
-        if (iterator.size/1024/1024 > 1) {
-          setOpen({open:true, message: `¡El archivo ${iterator.name}  tiene un peso mayor de 1 MB por lo que no se puede guardar!`});
-        }else{
-          list.push({
-            file: iterator,
-          });
+        if(iterator.name.includes('.jfif') || iterator.name.includes('.pjp') || iterator.name.includes('.pjpeg')) {
+          setOpen({open:true, message:`¡Uno o mas archivos no tienen el tipo correcto!`});
+        } else {
+          let item = files.find(x=> x.file.name == iterator.name);
+          if(item == null || item == undefined){
+            if (iterator.size/1024/1024 > 1) {
+              setOpen({open:true, message: `¡Uno o mas archivos tienen un peso mayor de 1 MB!`});
+            }else{
+              list.push({
+                file: iterator,
+              });
+            }
+          }else{
+            setOpen({open:true, message: `¡Ya existe un archivo con este nombre!`});
+          }
+          sizes = sizes + iterator.size;
         }
       }else{
-        setOpen({open:true, message:`¡El archivo ${iterator.name} no tiene el formato correcto!`});
+        setOpen({open:true, message:`¡Uno o mas archivos no tienen el tipo correcto!`});
       }
+    }
+    //console.log("size", sizes)
+    if (sizes > 1048576) {
+      setOpen({open:true, message:`*Los archivos adjuntos superan el máximo permitido de 1MB.`});
+      setFinish(false);
     }
     setFiles((item)=>[...item, ...list]);
   };
@@ -78,22 +103,42 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
    
     let filesList = event.dataTransfer.files;
     let list = [];  
+    let sizes = 0;
+    setFinish(true);
+
+    if (files.length !== 0) {for (const iterator of files) {
+      sizes = sizes + iterator.file.size;
+    }}
 
     for (const iterator of filesList) {
       if(iterator.type == "application/pdf" || iterator.type == "image/png" || 
       iterator.type == "image/jpeg" || iterator.type == "image/jpg"){
-        if (iterator.size/1024/1024 > 1) {
-          setOpen({open:true, message: `¡El archivo ${iterator.name}  tiene un peso mayor de 1 MB por lo que no se puede guardar!`});
-        }else{
-          list.push({
-            file: iterator,
-          });
+        if(iterator.name.includes('.jfif') || iterator.name.includes('.pjp') || iterator.name.includes('.pjpeg')) {
+          setOpen({open:true, message:`¡Uno o mas archivos no tienen el tipo correcto!`});
+        } else {
+          let item = files.find(x=> x.file.name == iterator.name);
+          if(item == null || item == undefined){
+            if (iterator.size/1024/1024 > 1) {
+              setOpen({open:true, message: `¡Uno o mas archivos tienen un peso mayor de 1 MB!`});
+            }else{
+              list.push({
+                file: iterator,
+              });
+            }
+          }else{
+            setOpen({open:true, message: `¡Ya existe un archivo con este nombre!`});
+          }
+          sizes = sizes + iterator.size;
         }
       }else{
-        setOpen({open:true, message:`¡El archivo ${iterator.name} no tiene el formato correcto!`});
+        setOpen({open:true, message:`¡Uno o mas archivos no tienen el tipo correcto!`});
       }
     }
-
+    //console.log("size", sizes)
+    if (sizes > 1048576) {
+      setOpen({open:true, message:`*Los archivos adjuntos superan el máximo permitido de 1MB.`});
+      setFinish(false);
+    }
     setParams({ ...params, dragClass: "" });
     setFiles((item)=>[...item, ...list]);
     return false;
@@ -104,15 +149,30 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
   };
 
   const handleSingleRemove = index => {
-    
+    let sizes = 0;
     let filesList = [...files];
     filesList.splice(index, 1);
     setFiles([...filesList]);
+    if(filesList.length === 0) {
+      setFinish(false);
+    } else {
+      for (const iterator of filesList) {
+        sizes = sizes + iterator.file.size;
+      }
+      if (sizes > 1048576) {
+        setOpen({open:true, message:`*Los archivos adjuntos superan el máximo permitido de 1MB.`});
+        setFinish(false);
+      } else {
+        setOpen({open:false, message:""});
+        setFinish(true);
+      }
+    }
 
   };
 
   const handleAllRemove = () => {
     setFiles([]);
+    setFinish(false);
   };
 
     let isEmpty = files.length === 0;
@@ -173,14 +233,14 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
                 alignItems="center"
                 direction="row"
               >
-                <Grid item lg={4} md={4}>
+                <Grid item lg={4} md={4} sm={4} xs={4}>
                   Nombre
                 </Grid>
-                <Grid item lg={1} md={1}>
+                <Grid item lg={4} md={4} sm={4} xs={4}>
                   Tamaño
                 </Grid>
              
-                <Grid item lg={4} md={4}>
+                <Grid item lg={4} md={4} sm={4} xs={4}>
                   Acciones
                 </Grid>
               </Grid>
@@ -200,14 +260,14 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
                     alignItems="center"
                     direction="row"
                   >
-                    <Grid item lg={4} md={4} sm={12} xs={12}>
+                    <Grid className={classes.gridtext} item lg={4} md={4} sm={4} xs={4}>
                       {file.name}
                     </Grid>
-                    <Grid item lg={1} md={1} sm={12} xs={12}>
+                    <Grid className={classes.gridtext} item lg={4} md={4} sm={4} xs={4}>
                       {(file.size / 1024 / 1024).toFixed(1)} MB
                     </Grid>
                 
-                    <Grid item lg={4} md={4} sm={12} xs={12}>
+                    <Grid item lg={4} md={4} sm={4} xs={4}>
                       <div className="flex">
                        
                         <Button
@@ -242,18 +302,19 @@ const UploadForm  = ({files, setFiles, isError, errorMessage}) => {
                 <p>Favor seleccionar todos los archivos a la vez y dar click en Open. El peso máximo permitido para archivos adjuntos es 1MB.</p>
             </div>
 
-            <div>
+            {/* <div>
                 {isError ? 
                   <div className="Message">
                      <Alert severity="warning">{errorMessage}</Alert>
                   </div>
                 :""}
-            </div>
+            </div> */}
 
             <div className={classes.root}>
               <Snackbar open={open.open} autoHideDuration={6000} onClose={handleClose}
                 anchorOrigin={anchor}
               >
+                
               <Alert onClose={handleClose} severity="warning">
                   {open.message}
               </Alert>

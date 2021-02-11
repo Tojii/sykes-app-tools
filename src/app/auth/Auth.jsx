@@ -24,7 +24,8 @@ class Auth extends Component {
 
     if (!this.props.login.success)
       history.push({
-        pathname: "/session/signin"
+        pathname: "/session/signin",
+        prev: history.location.pathname
       });
 
   }
@@ -37,7 +38,8 @@ class Auth extends Component {
       // Set user
       // this.props.setUserData(user);
       history.push({
-        pathname: "/session/signin"
+        pathname: "/session/signin",
+        prev: history.location.pathname
       });
       // You should redirect user to Dashboard here
       
@@ -46,7 +48,8 @@ class Auth extends Component {
       // Ridirect user to sign in page here
       console.log(err);
       history.push({
-        pathname: "/session/signin"
+        pathname: "/session/signin",
+        prev: history.location.pathname
       });
     });
   };

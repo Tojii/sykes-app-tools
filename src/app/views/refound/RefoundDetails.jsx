@@ -7,7 +7,9 @@ import {
     Icon,
     Button,
     Card,
+    Grid
 } from "@material-ui/core";
+import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 
 const RefoundDetails = () => {
     const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
@@ -18,6 +20,10 @@ const RefoundDetails = () => {
     useEffect(() => {
         dispatch(GetRefoundListByUser(user.badge));
     }, []);
+
+    const getMuiTheme = () =>
+    createMuiTheme({
+    });
 
     const columns = [
         {
@@ -34,6 +40,8 @@ const RefoundDetails = () => {
             options: {
              filter: true,
              sort: true,
+             customBodyRender: value =>
+                (value != null && value != undefined && value != "") ? ("$" + value) : "$0"
             }
         },
         {
@@ -42,6 +50,8 @@ const RefoundDetails = () => {
             options: {
              filter: true,
              sort: true,
+             customBodyRender: value =>
+             (value != null && value != undefined && value != "") ? ("$" + value) : "$0"
             }
         },
        
@@ -52,6 +62,11 @@ const RefoundDetails = () => {
         selectableRowsHeader: false,
         selectableRowsOnClick: false,
         print:false,
+        download: false,
+        pagination: false,
+        filter: false,
+        viewColumns: false,
+        search: false,
         textLabels: {
           body: {
             noMatch: "Disculpas, no se encontraron registros",
@@ -69,7 +84,7 @@ const RefoundDetails = () => {
             downloadCsv: "Descargar CSV",
             //print: "Imprimir",
             viewColumns: "Ver Columnas",
-            filterTable: "Filtar tabla",
+            filterTable: "Filtrar tabla",
           },
           filter: {
             all: "TODAS",
@@ -89,16 +104,36 @@ const RefoundDetails = () => {
       }
     return (
         <div className="m-sm-30">
-            { isLoading ? <Loading /> :  
-                    <Card className="w-100 overflow-auto" elevation={6}>
-                        <MUIDataTable
-                            title={`Lista de Reembolsos ${employeeRefunds.length > 0 ? employeeRefunds[0].anio : "" }`}
-                            data={employeeRefunds.length > 0 ? employeeRefunds[0].balanceCategories : [] }
-                            columns={columns}
-                            options={options}
-                        />
-                    </Card>
-            }
+          <Grid container spacing={2}>
+            <Grid item md={12} xs={12}>
+              { isLoading ? <Loading /> :  
+                      <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+                          <MuiThemeProvider theme={getMuiTheme()}>
+                            <MUIDataTable  className="w-100"
+                                title={`Lista de Reembolsos ${employeeRefunds.length > 0 ? employeeRefunds[0].anio : "" }`}
+                                data={employeeRefunds.length > 0 ? employeeRefunds[0].balanceCategories : [] }
+                                columns={columns}
+                                options={options}
+                            />
+                          </MuiThemeProvider>
+                      </Card>
+              }
+            </Grid>
+            <Grid item md={12} xs={12}>
+              { isLoading ? <Loading /> :  
+                      <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+                          <MuiThemeProvider theme={getMuiTheme()}>
+                            <MUIDataTable  className="w-100"
+                                title={`Lista de Reembolsos ${employeeRefunds.length > 0 ? employeeRefunds[1].anio : "" }`}
+                                data={employeeRefunds.length > 0 ? employeeRefunds[1].balanceCategories : [] }
+                                columns={columns}
+                                options={options}
+                            />
+                          </MuiThemeProvider>
+                      </Card>
+              }
+            </Grid>
+          </Grid>
         </div>
     )
 }

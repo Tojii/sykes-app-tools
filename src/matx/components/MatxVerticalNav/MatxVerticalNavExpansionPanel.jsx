@@ -73,7 +73,7 @@ class MatxVerticalNavExpansionPanel extends Component {
         >
           <div>
             <Icon className="text-middle item-icon">{icon}</Icon>
-            <span className="text-middle pl-20 item-text">{name}</span>
+            <span style={{paddingLeft:"15px"}} className="text-middle item-text">{name}</span>
           </div>
           {badge && (
             <div className={`badge bg-${badge.color}`}>{badge.value}</div>
