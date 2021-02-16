@@ -175,9 +175,6 @@ const RefoundDetails = (props) => {
           options: {
             filter: true,
             filterType: 'custom',
-            //filterList: [25, 50],
-            // customBodyRender: value =>
-            // (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : "",
             customFilterListOptions: {
               render: v => {
                 if (v[0] && v[1] && false) {
@@ -191,9 +188,7 @@ const RefoundDetails = (props) => {
                 }
                 return [];
               },
-              update: (filterList, filterPos, index) => {
-                //console.log('customFilterListOnDelete: ', filterList, filterPos, index);
-  
+              update: (filterList, filterPos, index) => { 
                 if (filterPos === 0) {
                   filterList[index].splice(filterPos, 1, '');
                 } else if (filterPos === 1) {
@@ -210,7 +205,6 @@ const RefoundDetails = (props) => {
               names: [],
               logic(age, filters) {
                 var date = new Date(age.replace( /(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3"))
-                //console.log(date.getTime() + "----" + new Date(filters[1]).getTime())
                 if (filters[0] && filters[1]) {
                   return date.getTime() < new Date(filters[0]).getTime() || date.getTime() > new Date(filters[1]).getTime();
                 } else if (filters[0]) {
@@ -224,29 +218,10 @@ const RefoundDetails = (props) => {
                 <div style={{ width: '100%' }}>
                   <FormLabel>Fecha</FormLabel>
                   <FormGroup row>
-                    {/* <TextField
-                      label='start'
-                      value={filterList[index][0] || ''}
-                      onChange={event => {
-                        filterList[index][0] = event.target.value;
-                        onChange(filterList[index], index, column);
-                      }}
-                      style={{ width: '48%' }}
-                    /> */}
-                    {/* <TextField
-                      label='end'
-                      value={filterList[index][1] || ''}
-                      onChange={event => {
-                        filterList[index][1] = event.target.value;
-                        onChange(filterList[index], index, column);
-                      }}
-                      style={{ width: '48%', marginLeft: '4%' }}
-                    /> */}
                      <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
                         <DatePicker
                             cancelLabel="CANCELAR"
                             error={false}
-                            //helperText={errorMessage.startDate}
                             format="dd/MM/yyyy"
                             label="Inicio"
                             value={filterList[index][0] || null}
@@ -263,28 +238,16 @@ const RefoundDetails = (props) => {
                             style={{ width: '48%', marginLeft: '4%' }}
                             cancelLabel="CANCELAR"
                             error={false}
-                            //helperText={errorMessage.startDate}
                             format="dd/MM/yyyy"
                             label="Final"
                             value={filterList[index][1] || null}
                             onChange={event => {
                               filterList[index][1] = event;
-                              //console.log(new Date(event).toLocaleDateString())
                               onChange(filterList[index], index, column);
                             }} 
                             minDate={filterList[index][0] != null ? new Date(filterList[index][0]).setTime(new Date(filterList[index][0]).getTime() + 1 * 86400000) : null}
                         />
                     </MuiPickersUtilsProvider>
-                    {/* <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={this.state.ageFilterChecked}
-                          onChange={event => this.setState({ ageFilterChecked: event.target.checked })}
-                        />
-                      }
-                      label='Separate Values'
-                      style={{ marginLeft: '0px' }}
-                    /> */}
                   </FormGroup>
                 </div>
               ),
@@ -294,17 +257,6 @@ const RefoundDetails = (props) => {
             print: false,
           },
         },
-        // {
-        //   name: "date",
-        //   label: "Fecha",
-        //   options: {
-        //    filter: true,
-        //    sort: true,
-        //    filterOptions: { 
-        //     fullWidth: window.screen.width <= 1024 ? true : false
-        //    }
-        //   }
-        // },
         {
           name: "notes",
           label: "Notas",
@@ -351,7 +303,6 @@ const RefoundDetails = (props) => {
     ]
 
     const handleDetalle = (item) => {    
-      //history.push(`/Ventas/CompraDetalle/${item.id}`);
       history.push({
         pathname: `/Ventas/CompraDetalle/${item.id}`,
         prev: history.location.pathname
@@ -374,26 +325,6 @@ const RefoundDetails = (props) => {
           </React.Fragment>
       );
     }
-
-    // const data = [
-    //   {
-    //     "idCompra": "5",
-    //     "badge":"12345",
-    //     "name": "Alejandro",
-    //     "email": "email",
-    //     "telephone": "22222222",
-    //     "provincia": "Alajuela",
-    //     "canton": "Alajuela",
-    //     "distrito": "Alajuela",
-    //     "direccion": "direccion",
-    //     "campaign": "Campaña 1",
-    //     "date": "23/01/2021",
-    //     "notes": "Temporary Quality",
-    //     "totalArticulos": "2",
-    //     "totalCompra": "52000",
-    //   },
-    
-    // ];
 
     const builddata = orders.map(item => {
       return [

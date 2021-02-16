@@ -42,18 +42,11 @@ const InventarioTable = () => {
     });
 
     const handleDelete = async (id) => {
-      //alert(`Eliminado!` + id);
       await dispatch(DeleteCampaignItem(id));
       setOpen(true);
-      //await dispatch(GetCampaignsItems());
-      //setOpen(true);
-      //setShouldOpenConfirmationDialog(true)
-      
     };
 
     const handleEdit= (id) => {
-      //alert(`Edit!` + id);
-      //setShouldOpenConfirmationDialog(true)
       history.push(`/Ventas/FormAdminInventario/${id}`);
       
     };
@@ -62,14 +55,10 @@ const InventarioTable = () => {
       return (
           <React.Fragment>
             <Tooltip title={"Nuevo"}>
-              {/* <IconButton component={Link} to="/ReembolsoEducativo/Nuevo">
-                <AddIcon/>
-              </IconButton> */}
               <Button
                 component={Link} to="/Ventas/FormAdminInventario"
                 variant="contained"
                 color="primary"
-                //className={classes.button}
                 startIcon={<AddIcon />}
               >
                 Nuevo
@@ -83,35 +72,18 @@ const InventarioTable = () => {
       return (
         item.image ? <img
         height={"257px"}
-        width={"195px"}
-        //className={classes.imageadd}                                          
+        width={"195px"}                                         
         alt="..."
         src={`${item.image}`}
         /> : ""
       );
     }
 
-    // const data = [
-    //   {
-    //     "id": "1",
-    //     "campaignid": "1",
-    //     "name": "Monitor",
-    //     "description": "descripcion",
-    //     "image": null,
-    //     "quantity": "9",
-    //     "stockQuantity": "9",
-    //     "unitPrice": "4555",
-    //     "maxLimitPerPerson": "4"
-    //   }
-    // ];
-
     const builddata = campaignitem.map(item => {
-      //console.log(data)
       if (item != undefined) {
       return [
           item.id,
           item.campaign.id,
-          // item.campaignid,
           item.name,
           item.description,
           showImage(item),
@@ -225,7 +197,6 @@ const InventarioTable = () => {
     ]
 
     const options = {
-      //selectableRowsHideCheckboxes: true,
       selectableRowsHeader: false,
       selectableRowsOnClick: true,
       isRowSelectable: (dataIndex, selectedRows) => {
@@ -296,8 +267,6 @@ const InventarioTable = () => {
   }
 
   return (
-    //console.log(user, admin),
-    //console.log("inventario success",successCampaignItems),
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className="m-sm-30">

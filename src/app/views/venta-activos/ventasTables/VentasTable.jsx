@@ -18,10 +18,6 @@ const RefoundDetails = () => {
     const isLoading  = useSelector(state => state.refound.loading);
     const user = useSelector(state => state.user);
 
-    // useEffect(() => {
-    //     dispatch(GetRefoundListByUser(user.badge));
-    // }, []);
-
     const getMuiTheme = () =>
     createMuiTheme({
     });

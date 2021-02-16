@@ -20,8 +20,6 @@ const defaultToolbarSelectStyles = {
   },
 };
 
-//const [shouldOpenConfirmationDialog, setShouldOpenConfirmationDialog] = useState(false);
-
 class CustomToolbarSelect extends React.Component {
   state = {
     setShouldOpenConfirmationDialog: false
@@ -45,16 +43,8 @@ class CustomToolbarSelect extends React.Component {
   };
 
   handleClickDelete = () => {
-    //alert(`Eliminar: ` + this.props.displayData[this.props.selectedRows.data[0].index].data[1]);
-    //setShouldOpenConfirmationDialog(true)
     this.setState({ "setShouldOpenConfirmationDialog": true })
   };
-
-//   handleConfirm = () => {
-//     alert(`Eliminado!` + this.props.displayData[this.props.selectedRows.data[0].index].data[0]);
-//     //setShouldOpenConfirmationDialog(true)
-    
-//   };
 
   render() {
     const { classes } = this.props;

@@ -1,14 +1,6 @@
 import { MatxLoadable } from "matx";
 import jwtDecode from 'jwt-decode';
 
-//const user = localStorage.getItem("jwt_token") ? jwtDecode(localStorage.getItem("jwt_token")) : null
-
- //console.log(user)
-
-//const admin = user != undefined ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
-
-//console.log(admin)
-
 const Campaign = MatxLoadable({
     loader: () => import("./ventasTables/CampaignTable")
   });

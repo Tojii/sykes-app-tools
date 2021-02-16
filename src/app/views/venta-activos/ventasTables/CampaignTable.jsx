@@ -23,7 +23,6 @@ import moment from "moment"
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 
 const CampaignTable = (props) => {
-    //const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
     const dispatch = useDispatch();
     const isAdmin = props.admin != undefined ? props.admin : true;
     const user = useSelector(state => state.user);
@@ -39,24 +38,11 @@ const CampaignTable = (props) => {
     
 
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
-    //console.log("admin", isAdmin)
-    //const isLoading  = useSelector(state => state.refound.loading);
-    //const user = useSelector(state => state.user);
   
     useEffect(() => {
         dispatch(CleanPurchase());
         isAdmin && dispatch(GetCampaigns());
         !isAdmin && dispatch(GetCampaignsActive());
-        // dispatch(GetCampaignsById("4"));
-        
-        // dispatch(UpdateCampaign("4",{
-        //   "id": 4,
-        //   "name": "UpdateCampaña",
-        //   "description": "update by app6",
-        //   "startDate": "2021-02-09T19:54:18.297Z",
-        //   "endDate": "2021-02-09T19:54:18.297Z",
-        //   "maxLimitPerPerson": 5
-        // }));
     }, []);
 
     const getMuiTheme = () =>
@@ -64,24 +50,15 @@ const CampaignTable = (props) => {
     });
 
     const handleDelete = async (id) => {
-      //alert(`Eliminado!` + id);
       await dispatch(DeleteCampaign(id));
-      //await dispatch(GetCampaigns());
       setOpen(true);
-      //setShouldOpenConfirmationDialog(true)
-      
     };
 
-    const handleEdit = (id) => {
-      //alert(`Edit!` + id);
-      //setShouldOpenConfirmationDialog(true)   
-      //dispatch(GetCampaignsById("5"));   
+    const handleEdit = (id) => { 
       history.push(`/Ventas/FormAdminCampaign/${id}`);
     };
 
-    const handleComprar = (item) => {
-      //alert(`Edit!` + id);
-      //setShouldOpenConfirmationDialog(true)      
+    const handleComprar = (item) => {     
       history.push(`/Ventas/form/${item.id}`);
     };
 
@@ -89,14 +66,10 @@ const CampaignTable = (props) => {
       return (
           <React.Fragment>
             <Tooltip title={"Nuevo"}>
-              {/* <IconButton component={Link} to="/ReembolsoEducativo/Nuevo">
-                <AddIcon/>
-              </IconButton> */}
               <Button
                 component={Link} to="/Ventas/FormAdminCampaign"
                 variant="contained"
                 color="primary"
-                //className={classes.button}
                 startIcon={<AddIcon />}
               >
                 Nuevo
@@ -107,7 +80,6 @@ const CampaignTable = (props) => {
     }
 
     const compraButton = (item) => {
-      //dispatch(GetUserPurchased(item.id));
       return (
           <React.Fragment>
             <Tooltip title={"Comprar"}>
@@ -123,25 +95,6 @@ const CampaignTable = (props) => {
           </React.Fragment>
       );
     }
-
-    // const data = [
-    //   {
-    //     "id": "5",
-    //     "name": "Campaña 1",
-    //     "description": "Temporary Quality",
-    //     "fechaInicio": "2021/01/03",
-    //     "fechaFinalizacion": "2021/01/31",
-    //     "limite": "10",
-    //   },
-    //   {
-    //     "id": "1222",
-    //     "name": "Campaña 2",
-    //     "description": "description",
-    //     "fechaInicio": "2021/01/13",
-    //     "fechaFinalizacion": "2021/01/28",
-    //     "limite": "5",
-    //   },
-    // ];
 
     const builddata = isAdmin ? campaigns.map(item => {
       return [
