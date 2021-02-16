@@ -3,6 +3,7 @@ import Scrollbar from "react-perfect-scrollbar";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import Loading from "../../../matx/components/MatxLoadable/Loading";
 
 import { navigations } from "../../navigations";
 import { MatxVerticalNav } from "matx";
@@ -38,10 +39,11 @@ class Sidenav extends Component {
     return (
       <Fragment>
         {/* {console.log(navigations, this.props.user)} */}
+        {this.props.user.badge == null ? <Loading/> :
         <Scrollbar option={{suppressScrollX: true}} className="scrollable position-relative">
           {this.props.children}
           <MatxVerticalNav navigation={navigations} user={this.props.user} />
-        </Scrollbar>
+        </Scrollbar>}
         {this.renderOverlay()}
       </Fragment>
     );

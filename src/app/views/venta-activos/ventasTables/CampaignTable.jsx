@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
-import { GetRefoundListByUser } from "../../../redux/actions/RefoundActions";
+import { GetCampaigns, GetCampaignsActive, GetCampaignsById, UpdateCampaign, DeleteCampaign } from "../../../redux/actions/CampaignActions";
+import { GetUserPurchased, CleanPurchase } from "../../../redux/actions/OrderActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import CustomToolbarSelect from "./CustomSelect"
@@ -17,32 +18,64 @@ import ShoppingCart from "@material-ui/icons/ShoppingCart";
 import { Link } from 'react-router-dom';
 import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
+import NotFound from "../../sessions/NotFound"
+import moment from "moment"
+import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 
 const CampaignTable = (props) => {
     //const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
     const dispatch = useDispatch();
     const isAdmin = props.admin != undefined ? props.admin : true;
-    console.log("admin", isAdmin)
+    const user = useSelector(state => state.user);
+    const campaigns = useSelector(state => state.campaign.campaigns);
+    const purchases = useSelector(state => state.order.purchases);
+    const addCampaign = useSelector(state => state.campaign.addCampaign);
+    const successCampaign = useSelector(state => state.campaign.success);
+    const campaignsActive = useSelector(state => state.campaign.campaignsActive);
+    const isLoading  = useSelector(state => state.campaign.loading);
+    const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
+    const [open, setOpen] = useState(false);
+    const [purchaseList, setPurchaseList] = useState([]);
+    
+
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    //console.log("admin", isAdmin)
     //const isLoading  = useSelector(state => state.refound.loading);
     //const user = useSelector(state => state.user);
-
-    // useEffect(() => {
-    //     dispatch(GetRefoundListByUser(user.badge));
-    // }, []);
+  
+    useEffect(() => {
+        dispatch(CleanPurchase());
+        isAdmin && dispatch(GetCampaigns());
+        !isAdmin && dispatch(GetCampaignsActive());
+        // dispatch(GetCampaignsById("4"));
+        
+        // dispatch(UpdateCampaign("4",{
+        //   "id": 4,
+        //   "name": "UpdateCampaña",
+        //   "description": "update by app6",
+        //   "startDate": "2021-02-09T19:54:18.297Z",
+        //   "endDate": "2021-02-09T19:54:18.297Z",
+        //   "maxLimitPerPerson": 5
+        // }));
+    }, []);
 
     const getMuiTheme = () =>
     createMuiTheme({
     });
 
-    const handleDelete = (id) => {
-      alert(`Eliminado!` + id);
+    const handleDelete = async (id) => {
+      //alert(`Eliminado!` + id);
+      await dispatch(DeleteCampaign(id));
+      //await dispatch(GetCampaigns());
+      setOpen(true);
       //setShouldOpenConfirmationDialog(true)
       
     };
 
     const handleEdit = (id) => {
       //alert(`Edit!` + id);
-      //setShouldOpenConfirmationDialog(true)      
+      //setShouldOpenConfirmationDialog(true)   
+      //dispatch(GetCampaignsById("5"));   
       history.push(`/Ventas/FormAdminCampaign/${id}`);
     };
 
@@ -74,6 +107,7 @@ const CampaignTable = (props) => {
     }
 
     const compraButton = (item) => {
+      //dispatch(GetUserPurchased(item.id));
       return (
           <React.Fragment>
             <Tooltip title={"Comprar"}>
@@ -90,35 +124,45 @@ const CampaignTable = (props) => {
       );
     }
 
-    const data = [
-      {
-        "id": "1613",
-        "name": "Campaña 1",
-        "description": "Temporary Quality",
-        "fechaInicio": "2021/01/03",
-        "fechaFinalizacion": "2021/01/31",
-        "limite": "10",
-      },
-      {
-        "id": "1222",
-        "name": "Campaña 2",
-        "description": "description",
-        "fechaInicio": "2021/01/13",
-        "fechaFinalizacion": "2021/01/28",
-        "limite": "5",
-      },
-    ];
+    // const data = [
+    //   {
+    //     "id": "5",
+    //     "name": "Campaña 1",
+    //     "description": "Temporary Quality",
+    //     "fechaInicio": "2021/01/03",
+    //     "fechaFinalizacion": "2021/01/31",
+    //     "limite": "10",
+    //   },
+    //   {
+    //     "id": "1222",
+    //     "name": "Campaña 2",
+    //     "description": "description",
+    //     "fechaInicio": "2021/01/13",
+    //     "fechaFinalizacion": "2021/01/28",
+    //     "limite": "5",
+    //   },
+    // ];
 
-    const builddata = data.map(item => {
+    const builddata = isAdmin ? campaigns.map(item => {
       return [
           item.id,
           item.name, 
           item.description,
-          item.fechaInicio,
-          item.fechaFinalizacion,
-          item.limite,
+          item.startDate,
+          item.endDate,
+          item.maxLimitPerPerson,
           compraButton(item)
       ]
+  }) : campaignsActive.map(item => {
+    return [
+        item.id,
+        item.name, 
+        item.description,
+        item.startDate,
+        item.endDate,
+        item.maxLimitPerPerson,
+        compraButton(item)
+    ]
   })
 
     const columns = [
@@ -129,6 +173,7 @@ const CampaignTable = (props) => {
              filter: false,
              sort: true,
              display: false,
+             //viewColumns: false,
             }
         },
         {
@@ -137,47 +182,67 @@ const CampaignTable = (props) => {
           options: {
            filter: true,
            sort: true,
+           filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+           }
           }
         },
         {
           name: "description",
           label: "Descripción Campaña ",
           options: {
-          filter: true,
-          sort: true,
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
           }
         },
         {
-          name: "fechaInicio",
+          name: "startDate",
           label: "Fecha Inicio ",
           options: {
-          filter: true,
-          sort: true,
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            },
+            customBodyRender: value =>
+            (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""
           }
         },
         {
-          name: "fechaFinalizacion",
+          name: "endDate",
           label: "Fecha Finalización",
           options: {
-          filter: true,
-          sort: true,
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            },
+            customBodyRender: value =>
+            (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""
           }
         },
         {
-          name: "limite",
-          label: "Límite Máximo Campaña ",
+          name: "maxLimitPerPerson",
+          label: "Límite Máximo Artículos ",
           options: {
-          filter: true,
-          sort: true,
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
           }
         },
         {
           name: "compra",
           label: " ",
           options: {
-          filter: true,
+          filter: false,
           sort: true,
-          display: !isAdmin
+          display: !isAdmin,
+          viewColumns: false,
           }
         },
        
@@ -190,11 +255,11 @@ const CampaignTable = (props) => {
         //prevents selection of any additional row after the third
         if (selectedRows.data.length > 0 && selectedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
         //prevents selection of row with title "Attorney"
-        return data[dataIndex][1] != "Attorney";
+        return builddata[dataIndex][1] != "Attorney";
       },
       selectableRowsOnClick: isAdmin,
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
+        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar la campaña "} index={1} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
       ),
       print:false,
       download: false,
@@ -249,24 +314,29 @@ const CampaignTable = (props) => {
   }
 
   return (
-      <div className="m-sm-30">
-        <Grid container spacing={2}>
-          <Grid item md={12} xs={12}>
-            {/* { isLoading ? <Loading /> :   */}
-                    <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
-                        <MuiThemeProvider theme={getMuiTheme()}>
-                          <MUIDataTable  className="w-100"
-                              title={isAdmin ? <div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Administración de Campaña</h4></div> : <h4 style={{alignSelf: "flex-end"}}>Campañas activas</h4>}
-                              data={builddata}
-                              columns={columns}
-                              options={options}
-                          />
-                        </MuiThemeProvider>
-                    </Card>
-            {/* } */}
-          </Grid>
-        </Grid>
-      </div>
+      console.log("clean",purchases),
+      isLoading ? <Loading /> :
+        (admin || !isAdmin) ?
+          <div className="m-sm-30">
+            <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la campaña no pudo ser eliminada!"} setOpen={setOpen} open={open} />
+            <Grid container spacing={2}>
+              <Grid item md={12} xs={12}>
+                {/* { isLoading ? <Loading /> :   */}
+                        <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+                            <MuiThemeProvider theme={getMuiTheme()}>
+                              <MUIDataTable  className="w-100"
+                                  title={isAdmin ? <div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Administración de Campaña</h4></div> : <h4 style={{alignSelf: "flex-end"}}>Campañas activas</h4>}
+                                  data={builddata}
+                                  columns={columns}
+                                  options={options}
+                              />
+                            </MuiThemeProvider>
+                        </Card>
+                {/* } */}
+              </Grid>
+            </Grid>
+          </div>
+        : <NotFound/>
   )
 }
 
