@@ -43,7 +43,7 @@ export const GetRefoundListByUser = (badgeId) => {
   } 
 };
 
-export const SaveRefund = (Data, Files, badge, fullname) =>{
+export const SaveRefund = (Data, Files, badge, fullname) => {
   
   var formData = new FormData();
   formData.append('badge', badge);

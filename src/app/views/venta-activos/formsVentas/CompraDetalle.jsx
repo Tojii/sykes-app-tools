@@ -19,7 +19,10 @@ import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import AgregarDialog from './AgregarArticulo'
+import { GetOrderById } from "../../../redux/actions/OrderActions";
 import history from "history.js";
+import { useParams } from "react-router";
+import moment from "moment";
 
 
 const useStyles = makeStyles({
@@ -46,6 +49,9 @@ const useStyles = makeStyles({
         marginBottom: "2%",
         textAlign: "center"
     },
+    cellspace:{
+        whiteSpace: "unset",
+    }
 });
 
 const styles = (theme) => ({
@@ -77,18 +83,21 @@ const DialogTitle = withStyles(styles)((props) => {
 
 const CompraDetalle = (props) => {
     
-    // const user = useSelector(state => state.user);
+    const order = useSelector(state => state.order.order);
+    const isLoading  = useSelector(state => state.order.loading);
     const dispatch = useDispatch();
     const classes = useStyles();
+    let { id } = useParams();
+    const SPACED_DATE_FORMAT = "DD/MM/YYYY";
     const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(
         {
             open: false,
-            index: 0
+            index: 0,
         }   
     );
 
     useEffect(() => {
-        // dispatch(GetImages());
+        dispatch(GetOrderById(id));
     }, []);
 
     const handleClose = () => {
@@ -96,58 +105,63 @@ const CompraDetalle = (props) => {
       }
 
     const handleBack = () => {
-        history.push(`/VentasHome`);
+        if (history.location.prev) { 
+            history.push(history.location.prev);
+        } else {
+            history.push("/VentasHome");
+        }
     }
 
-    const disponibles = [
-        {articulo: "Monitor MSI",
-        cantidad: 5,
-        valor: 10000},
-        {articulo: "Audifonos MSI",
-        cantidad: 4,
-        valor: 12000},
-    ]
+    const [disponibles, setDisponibles] = useState([
+        {id:1, name: "Monitor MSI",
+        quantity: 3,
+        unitPrice: 10000},
+        {id:2,name: "Audifonos MSI",
+        quantity: 4,
+        unitPrice: 12000,
+        },
+    ]);
 
     return (
         <div className="m-sm-30">
+            {(isLoading) ? <Loading/> : 
             <Grid container spacing={2}>
                 <Grid item md={12} xs={12}> 
                     <Card className={classes.formcard} elevation={6}>                              
                             <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">Datos del usuario:</h2>
-                             {/* {image[0] == undefined ? <Loading /> :  */}
                              <Table>
                                 <TableBody>
                                     <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"><h6>Badge:</h6></TableCell>
-                                        <TableCell className="px-sm-24 border-none">{ "Badge"}</TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Badge:</h6></TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].badge }</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"><h6>Nombre:</h6></TableCell>
-                                        <TableCell className="px-sm-24 border-none">{ "descripcion" }</TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Nombre:</h6></TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].name }</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"><h6>Correo electronico:</h6></TableCell>
-                                        <TableCell className="px-sm-24 border-none">{ "correo" }</TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Correo electronico:</h6></TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].email }</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"> <h6>Telefono:</h6> </TableCell>
-                                        <TableCell className="px-sm-24 border-none">{"88888888"}</TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Telefono:</h6> </TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].phone }</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"> <h6>Provincia:</h6> </TableCell>
-                                        <TableCell className="px-sm-24 border-none">{"provincia"}</TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Provincia:</h6> </TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].province }</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"> <h6>Cantón:</h6> </TableCell>
-                                        <TableCell className="px-sm-24 border-none">{"canton"}</TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Cantón:</h6> </TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].canton }</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"> <h6>Distrito:</h6> </TableCell>
-                                        <TableCell className="px-sm-24 border-none">{"distrito"}</TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Distrito:</h6> </TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].district }</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"> <h6>Dirección exacta:</h6> </TableCell>
-                                        <TableCell className="px-sm-24 border-none">{"distrito"}</TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Dirección exacta:</h6> </TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].address }</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -155,19 +169,27 @@ const CompraDetalle = (props) => {
                             <Table>
                                 <TableBody>
                                     <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"><h6>Campaña:</h6></TableCell>
-                                        <TableCell className="px-sm-24 border-none">{ "Campaña"}</TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Campaña:</h6></TableCell>
+                                        <TableCell width={"70%"} className="px-sm-24">{ order[0] == undefined ? "" : order[0].campaign.name }</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"><h6>Fecha:</h6></TableCell>
-                                        <TableCell className="px-sm-24 border-none">{ "Fecha" }</TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Fecha:</h6></TableCell>
+                                        <TableCell className="px-sm-24">{ (order[0] != null && order[0] != undefined && order[0].createdDate != "") ? moment(new Date(order[0].createdDate)).format(SPACED_DATE_FORMAT) : "" }</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"><h6>Notas:</h6></TableCell>
-                                        <TableCell className="px-sm-24 border-none">{ "Notas" }</TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Notas:</h6></TableCell>
+                                        <TableCell width={"70%"} className="px-sm-24">{ order[0] == undefined ? "" : order[0].notes }</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell colSpan={3}>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Total articulos comprados:</h6> </TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].totalItems }</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Total Compra:</h6> </TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : "₡" + order[0].total }</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell colSpan={3} className="px-sm-24 border-none">
                                         {<h5 className={classes.cardcarrito}>Articulos añadidos a la compra:</h5>}
                                         <Card className={classes.cardcarrito} elevation={2}>
                                             <div className="p-16">
@@ -193,11 +215,11 @@ const CompraDetalle = (props) => {
                                             </Grid>
                                             </div>
 
-                                            {disponibles.length == 0 && <p className="px-16">No hay ningun artículo</p>}
+                                            {(order[0] == undefined || order[0].detail == undefined || order[0].detail.length == 0) && <p className="px-16">No hay ningun artículo</p>}
 
-                                            {disponibles.map((item, index) => {
+                                            {(order[0] != undefined && order[0].detail != undefined) ? order[0].detail.map((item, index) => {
                                             return ( 
-                                                <div className="px-16 py-16" key={item.articulo}>
+                                                <div className="px-16 py-16" key={item.item.id}>
                                                 <Grid
                                                     container
                                                     spacing={2}
@@ -206,13 +228,13 @@ const CompraDetalle = (props) => {
                                                     direction="row"
                                                 >
                                                     <Grid item lg={3} md={3} sm={3} xs={3}>
-                                                    {item.articulo}
+                                                    {item.itemName}
                                                     </Grid>
                                                     <Grid item lg={2} md={2} sm={2} xs={2}>
-                                                    {item.cantidad}
+                                                    {item.amount}
                                                     </Grid>
                                                     <Grid item lg={4} md={4} sm={4} xs={4}>
-                                                    {item.valor}
+                                                    ₡ {item.subTotal}
                                                     </Grid>
                                                     <Grid item lg={3} md={3} sm={3} xs={3}>
                                                     <div className="flex">
@@ -221,7 +243,7 @@ const CompraDetalle = (props) => {
                                                         variant="contained"
                                                         className="bg-primary"
                                                         style={{color: "white"}}
-                                                        onClick={() => setShouldOpenDetailsDialog({open: true, index: index})}
+                                                        onClick={() => setShouldOpenDetailsDialog({open: true, id: item.item.id, index: index})}
                                                         >
                                                         Detalles
                                                         </Button>
@@ -230,17 +252,11 @@ const CompraDetalle = (props) => {
                                                 </Grid>
                                                 </div>
                                             ); 
-                                            })}  
+                                            })
+                                            : null }
                                         </Card>
+                                        <br/>
                                         </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"> <h6>Total articulos comprados:</h6> </TableCell>
-                                        <TableCell className="px-sm-24 border-none">{"5"}</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell width={"30%"} className="pl-sm-24 border-none"> <h6>Total Compra:</h6> </TableCell>
-                                        <TableCell className="px-sm-24 border-none">{"12300000"}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>   
@@ -253,11 +269,11 @@ const CompraDetalle = (props) => {
                                 <DialogTitle  id="customized-dialog-title" onClose={handleClose}>
                                 Detalles del artículo:
                                 </DialogTitle>
-                                <AgregarDialog type={"detalles"} close={handleClose}  disponibles={disponibles} index={shouldOpenDetailsDialog.index} />
+                                <AgregarDialog type={"detalles"} close={handleClose}  order={(order[0] != undefined && order[0].detail != undefined) ? order[0].detail : [{}]} id={shouldOpenDetailsDialog.id} index={shouldOpenDetailsDialog.index} />
                             </Dialog>  
                     </Card>
                 </Grid>
-          </Grid>
+          </Grid>}
         </div>
     );
 }

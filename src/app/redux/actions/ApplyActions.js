@@ -99,7 +99,12 @@ export const saveJobApplication = (payload) => dispatch => {
             type: SAVE_JOB_APPLICATION,
             payload: res.data
         });
-        if (payload.refresh) {window.location.reload();}
+        if (payload.refresh) {
+            history.push({
+                pathname: "/"
+            });
+            history.replace({ pathname: "/growth-opportunities" });
+        }
     })
     .catch((error) => {
         // Error

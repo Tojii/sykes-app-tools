@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
-import { GetRefoundListByUser } from "../../../redux/actions/RefoundActions";
+import { GetOrder, GetAllOrder } from "../../../redux/actions/OrderActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import {
@@ -8,23 +8,42 @@ import {
     Button,
     Card,
     Grid,
-    Tooltip
+    Tooltip,
+    FormControl,
+    FormLabel,
+    TextField,
+    FormControlLabel,
+    Checkbox,
+    FormGroup
 } from "@material-ui/core";
 import Details from "@material-ui/icons/Details";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
+import "date-fns";
+import DateFnsUtils from "@date-io/date-fns";
+import es from "date-fns/locale/es";
+import {
+    MuiPickersUtilsProvider,
+    DatePicker 
+  } from "@material-ui/pickers";
+import moment from "moment";
+import NotFound from "../../sessions/NotFound"
 
 
-const RefoundDetails = () => {
-    const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
+const RefoundDetails = (props) => {
+    const orders = useSelector(state => state.order.orders);
     const dispatch = useDispatch();
-    const isLoading  = useSelector(state => state.refound.loading);
+    const isAdmin = props.admin != undefined ? props.admin : true;
+    const isLoading  = useSelector(state => state.order.loading);
     const user = useSelector(state => state.user);
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
 
-    // useEffect(() => {
-    //     dispatch(GetRefoundListByUser(user.badge));
-    // }, []);
+    useEffect(() => {
+        isAdmin && dispatch(GetAllOrder());
+        !isAdmin && dispatch(GetOrder());
+    }, []);
 
     const getMuiTheme = () =>
     createMuiTheme({
@@ -32,57 +51,311 @@ const RefoundDetails = () => {
    
     const columns = [
         {
+          name: "id",
+          label: "ID. Compra",
+          options: {
+          filter: true,
+          sort: true,
+          display: false,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "badge",
+          label: "Badge",
+          options: {
+          filter: true,
+          sort: true,
+          display: isAdmin,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "name",
+          label: "Nombre",
+          options: {
+          filter: true,
+          sort: true,
+          display: false,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "email",
+          label: "Correo Electrónico",
+          options: {
+          filter: true,
+          sort: true,
+          display: false,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "phone",
+          label: "Teléfono",
+          options: {
+          filter: true,
+          sort: true,
+          display: false,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "province",
+          label: "Provincia",
+          options: {
+          filter: true,
+          sort: true,
+          display: false,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "canton",
+          label: "Cantón",
+          options: {
+          filter: true,
+          sort: true,
+          display: false,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "district",
+          label: "Distrito",
+          options: {
+          filter: true,
+          sort: true,
+          display: false,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "address",
+          label: "Dirección",
+          options: {
+          filter: true,
+          sort: true,
+          display: false,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
             name: "campaign",
             label: "Campaña ",
             options: {
              filter: true,
              sort: true,
+             filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+             }
             }
         },
         {
-          name: "date",
-          label: "Fecha",
+          name: "CreatedDate",
+          label: "Fecha compra",
           options: {
-           filter: true,
-           sort: true,
-          }
+            filter: true,
+            filterType: 'custom',
+            //filterList: [25, 50],
+            // customBodyRender: value =>
+            // (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : "",
+            customFilterListOptions: {
+              render: v => {
+                if (v[0] && v[1] && false) {
+                  return [`Fecha Inicio: ${new Date(v[0]).toLocaleDateString()}`, `Fecha Final: ${new Date(v[1]).toLocaleDateString()}`];
+                } else if (v[0] && v[1] && true) {
+                  return `Fecha Inicio: ${new Date(v[0]).toLocaleDateString()}, Fecha Final: ${new Date(v[1]).toLocaleDateString()}`;
+                } else if (v[0]) {
+                  return `Fecha Inicio: ${new Date(v[0]).toLocaleDateString()}`;
+                } else if (v[1]) {
+                  return `Fecha Final: ${new Date(v[1]).toLocaleDateString()}`;
+                }
+                return [];
+              },
+              update: (filterList, filterPos, index) => {
+                //console.log('customFilterListOnDelete: ', filterList, filterPos, index);
+  
+                if (filterPos === 0) {
+                  filterList[index].splice(filterPos, 1, '');
+                } else if (filterPos === 1) {
+                  filterList[index].splice(filterPos, 1);
+                } else if (filterPos === -1) {
+                  filterList[index] = [];
+                }
+  
+                return filterList;
+              },
+            },
+            filterOptions: {
+              fullWidth: window.screen.width <= 1024 ? true : false,
+              names: [],
+              logic(age, filters) {
+                var date = new Date(age.replace( /(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3"))
+                //console.log(date.getTime() + "----" + new Date(filters[1]).getTime())
+                if (filters[0] && filters[1]) {
+                  return date.getTime() < new Date(filters[0]).getTime() || date.getTime() > new Date(filters[1]).getTime();
+                } else if (filters[0]) {
+                  return date.getTime() < new Date(filters[0]).getTime();
+                } else if (filters[1]) {
+                  return date.getTime() > new Date(filters[1]).getTime();
+                }
+                return false;
+              },
+              display: (filterList, onChange, index, column) => (
+                <div style={{ width: '100%' }}>
+                  <FormLabel>Fecha</FormLabel>
+                  <FormGroup row>
+                    {/* <TextField
+                      label='start'
+                      value={filterList[index][0] || ''}
+                      onChange={event => {
+                        filterList[index][0] = event.target.value;
+                        onChange(filterList[index], index, column);
+                      }}
+                      style={{ width: '48%' }}
+                    /> */}
+                    {/* <TextField
+                      label='end'
+                      value={filterList[index][1] || ''}
+                      onChange={event => {
+                        filterList[index][1] = event.target.value;
+                        onChange(filterList[index], index, column);
+                      }}
+                      style={{ width: '48%', marginLeft: '4%' }}
+                    /> */}
+                     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
+                        <DatePicker
+                            cancelLabel="CANCELAR"
+                            error={false}
+                            //helperText={errorMessage.startDate}
+                            format="dd/MM/yyyy"
+                            label="Inicio"
+                            value={filterList[index][0] || null}
+                            onChange={event => {
+                              filterList[index][0] = event;
+                              filterList[index][1] = null;
+                              onChange(filterList[index], index, column);
+                            }}
+                            style={{ width: '48%' }}
+                        />
+                     </MuiPickersUtilsProvider>
+                     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
+                        <DatePicker
+                            style={{ width: '48%', marginLeft: '4%' }}
+                            cancelLabel="CANCELAR"
+                            error={false}
+                            //helperText={errorMessage.startDate}
+                            format="dd/MM/yyyy"
+                            label="Final"
+                            value={filterList[index][1] || null}
+                            onChange={event => {
+                              filterList[index][1] = event;
+                              //console.log(new Date(event).toLocaleDateString())
+                              onChange(filterList[index], index, column);
+                            }} 
+                            minDate={filterList[index][0] != null ? new Date(filterList[index][0]).setTime(new Date(filterList[index][0]).getTime() + 1 * 86400000) : null}
+                        />
+                    </MuiPickersUtilsProvider>
+                    {/* <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={this.state.ageFilterChecked}
+                          onChange={event => this.setState({ ageFilterChecked: event.target.checked })}
+                        />
+                      }
+                      label='Separate Values'
+                      style={{ marginLeft: '0px' }}
+                    /> */}
+                  </FormGroup>
+                </div>
+              ),
+            },
+            customBodyRender: value =>
+             (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : "",
+            print: false,
+          },
         },
+        // {
+        //   name: "date",
+        //   label: "Fecha",
+        //   options: {
+        //    filter: true,
+        //    sort: true,
+        //    filterOptions: { 
+        //     fullWidth: window.screen.width <= 1024 ? true : false
+        //    }
+        //   }
+        // },
         {
           name: "notes",
           label: "Notas",
           options: {
-          filter: true,
-          sort: true,
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
           }
         },
         {
-          name: "totalArticulos",
+          name: "totalItems",
           label: "Total Artículos ",
           options: {
-          filter: true,
-          sort: true,
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
           }
         },
         {
-          name: "totalCompra",
+          name: "total",
           label: "Total Compra",
           options: {
-          filter: true,
-          sort: true,
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
           }
         },
         {
           name: "detalles",
           label: " ",
           options: {
-          filter: true,
-          sort: true,
+            filter: false,
+            sort: true,
+            viewColumns: false,
+            download: false
           }
         },
     ]
 
-    const handleComprar = (item) => {    
-      history.push(`/Ventas/CompraDetalle/${item.id}`);
+    const handleDetalle = (item) => {    
+      //history.push(`/Ventas/CompraDetalle/${item.id}`);
+      history.push({
+        pathname: `/Ventas/CompraDetalle/${item.id}`,
+        prev: history.location.pathname
+      });
     };
 
     const detallesButton = (item) => {
@@ -92,7 +365,7 @@ const RefoundDetails = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => handleComprar(item)}
+                onClick={() => handleDetalle(item)}
                 startIcon={<Details />}
               >
                 Detalles
@@ -102,30 +375,42 @@ const RefoundDetails = () => {
       );
     }
 
-    const data = [
-      {
-        "campaign": "Campaña 1",
-        "date": "2021/01/23",
-        "notes": "Temporary Quality",
-        "totalArticulos": "2",
-        "totalCompra": "52000",
-      },
-      {
-        "campaign": "Campaña 1",
-        "date": "2021/01/03",
-        "notes": "notes",
-        "totalArticulos": "5",
-        "totalCompra": "140500",
-      },
-    ];
+    // const data = [
+    //   {
+    //     "idCompra": "5",
+    //     "badge":"12345",
+    //     "name": "Alejandro",
+    //     "email": "email",
+    //     "telephone": "22222222",
+    //     "provincia": "Alajuela",
+    //     "canton": "Alajuela",
+    //     "distrito": "Alajuela",
+    //     "direccion": "direccion",
+    //     "campaign": "Campaña 1",
+    //     "date": "23/01/2021",
+    //     "notes": "Temporary Quality",
+    //     "totalArticulos": "2",
+    //     "totalCompra": "52000",
+    //   },
+    
+    // ];
 
-    const builddata = data.map(item => {
+    const builddata = orders.map(item => {
       return [
-          item.campaign,
-          item.date, 
+          item.id,
+          item.badge,
+          item.name,
+          item.email,
+          item.phone,
+          item.province,
+          item.canton,
+          item.district,
+          item.address,
+          item.campaign.name,
+          item.createdDate, 
           item.notes,
-          item.totalArticulos,
-          item.totalCompra,
+          item.totalItems,
+          "₡" + item.total,
           detallesButton(item)
       ]
   })
@@ -134,7 +419,14 @@ const RefoundDetails = () => {
       selectableRowsHideCheckboxes: true,
       selectableRowsHeader: false,
       print:false,
-      download: false,
+      download: isAdmin,
+      downloadOptions: {
+        filename: 'Compras.csv',
+        filterOptions: {
+          useDisplayedColumnsOnly: true,
+          useDisplayedRowsOnly: true
+        }
+      },
       vertical: true,
       customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage, textLabels) => {
         return (
@@ -186,24 +478,28 @@ const RefoundDetails = () => {
   }
 
   return (
-      <div className="m-sm-30">
-        <Grid container spacing={2}>
-          <Grid item md={12} xs={12}>
-            {/* { isLoading ? <Loading /> :   */}
-                    <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
-                        <MuiThemeProvider theme={getMuiTheme()}>
-                          <MUIDataTable  className="w-100"
-                              title={`Compras`}
-                              data={builddata}
-                              columns={columns}
-                              options={options}
-                          />
-                        </MuiThemeProvider>
-                    </Card>
-            {/* } */}
-          </Grid>
-        </Grid>
-      </div>
+      isLoading ? <Loading /> :
+        admin ?
+          <div className="m-sm-30">
+            <Grid container spacing={2}>
+              <Grid item md={12} xs={12}>
+                {/* { isLoading ? <Loading /> :   */}
+                        <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+                            <MuiThemeProvider theme={getMuiTheme()}>
+                              <MUIDataTable  className="w-100"
+                                  title={`Compras`}
+                                  data={builddata}
+                                  columns={columns}
+                                  options={options}
+                              />
+                            </MuiThemeProvider>
+                        </Card>
+                {/* } */}
+              </Grid>
+            </Grid>
+          </div>
+        : <NotFound/>
+
     )
 }
 

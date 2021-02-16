@@ -1,4 +1,4 @@
-import React, { useState, Component, useRef } from "react";
+import React, { useState, Component, useRef, useEffect } from "react";
 import {
   Button,
   Card
@@ -6,6 +6,7 @@ import {
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
 import {addRaft} from "../../../redux/actions/RaftActions";
+import { GetCampaignsById, UpdateCampaign, AddCampaign } from "../../../redux/actions/CampaignActions";
 import { useSelector, useDispatch } from 'react-redux';
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -15,23 +16,47 @@ import {
     DatePicker 
   } from "@material-ui/pickers";
 import { useParams } from "react-router";
+import Loading from "../../../../matx/components/MatxLoadable/Loading";
+import NotFound from "../../sessions/NotFound"
+import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
+import Campaigns from "app/views/dashboard/shared/Campaigns";
+import history from "history.js";
 
 const useStyles = makeStyles({
     textvalidator: {
-      marginLeft: "25%",
-      width: "50%",
-      marginTop: "3%",
-    },
+        "@media (min-width: 0px)": {
+             marginLeft: "7.5%",
+             width: "85%",
+             marginTop: "3%",
+         },
+         "@media (min-width: 1025px)": {
+             marginLeft: "25%",
+             width: "50%",
+             marginTop: "3%",
+         }
+     },
     formcard: {
-      marginLeft: "25%",
-      width: "50%",
+        "@media (min-width: 0px)": {
+            marginLeft: "0%",
+            width: "100%",
+        },
+        "@media (min-width: 1024px)": {
+            marginLeft: "25%",
+            width: "50%",
+        }
     },
     sectionbutton: {
         marginLeft: "25%",
         width: "50%",
         marginTop: "3%",
         marginBottom: "2%",
-        textAlign: "center"
+        textAlign: "center",
+        "@media (min-width: 0px)": {
+            display: "inline-flex",
+        },
+        "@media (min-width: 1024px)": {
+            display: "inline-block",
+        }
     },
     filelabel: {
         color: "rgba(74, 70, 109, 0.54)",
@@ -50,41 +75,54 @@ const FormAdminCampaign = () => {
     const dispatch = useDispatch();
     let { id } = useParams();
     const [errorMessage, setErrorMessage] = useState([]);
-    
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const [campaignform, setCampaignForm] = useState({
-        badge: "",
-        fullName: "",
-        campaign: "",
-        personalPhone: "",
-        identificationNumber: "",
-        firstName: "",
-        secondName: "",
-        lastName: "",
-        secondLastName: "",
-        phone: "",
-        candidateEmail: "",
-        englishLevel: "English",
-        locationPreference: "",
-        othersDetails: "",
-        candidateProfile: "Profile",
-        academicGrade: "Grade",
-        isResumeActive: true,
-        isResumeRequired: true,
-        isExternalreference: true,
-        paymentMethod: "Money",
-        workType: "",
-        resumeUrl: "",
+        name: "",
+        description: "",
         startDate: null,
         endDate: null,
+        maxLimitPerPerson: "",
+        campaignItems: [],
     });
     const classes = useStyles();
+    const addCampaign = useSelector(state => state.campaign.addCampaign);
+    const successCampaign = useSelector(state => state.campaign.success);
+    const campaign = useSelector(state => state.campaign.campaign);
+    const isLoading  = useSelector(state => state.campaign.loading);
+    const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        if (id) {
+            dispatch(GetCampaignsById(id));
+        }  
+    }, []);
+
+    useEffect(() => {
+        if(id && campaign != [] && campaign[0] != [""] && campaign[0] != undefined) {setCampaignForm({
+            name: campaign[0].name,
+            description: campaign[0].description,
+            startDate: campaign[0].startDate,
+            endDate: campaign[0].endDate,
+            maxLimitPerPerson: campaign[0].maxLimitPerPerson != undefined ? campaign[0].maxLimitPerPerson.toString() : null,
+            campaignItems: campaign[0].campaignItems,
+        });}
+    }, [campaign]);
 
     const handleFormSubmit = async () => {
-        // await dispatch(addRaft(raftform));
-        if (campaignform.startDate != null || campaignform.endDate != null) { 
-          alert("Success!")
+        if (campaignform.startDate != null && campaignform.endDate != null) { 
+            if (id) {
+                await dispatch(UpdateCampaign(id,campaignform));
+                setOpen(true);
+            } else {
+                await dispatch(AddCampaign(campaignform));
+                setOpen(true);
+            }
         }
     };
+
+    const handleBack = () => {
+        history.push("/Ventas/Campaign");
+    }
 
     const presave = () => {
         if (campaignform.startDate == null || campaignform.endDate == null) { 
@@ -128,75 +166,83 @@ const FormAdminCampaign = () => {
 
     return (
         <div className="p-24">
-            {console.log(campaignform)}
+            <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
             <Card className={classes.formcard} elevation={6}>
-                <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar" : "Agregar"}</h2>
+                {(isLoading && id) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Campaña" : "Agregar Campaña"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>                 
-                    <TextValidator
-                        className={classes.textvalidator}
-                        label="Nombre Campaña*"
-                        onChange={handleChange}
-                        type="text"
-                        name="campaign"
-                        value={campaignform.campaign}
-                        validators={["required","maxStringLength:5"]}
-                        errorMessages={["Este campo es requerido", "Máximo 5 carácteres"]}
-                    />
-                    <TextValidator
-                        className={classes.textvalidator}
-                        label="Descripción Campaña"
-                        onChange={handleChange}
-                        type="text"
-                        name="fullName"
-                        value={campaignform.fullName}
-                        validators={["required","maxStringLength:150"]}
-                        errorMessages={["Este campo es requerido", "Máximo 150 carácteres"]}
-                    />
-                    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-                        <DatePicker
+                    {(isLoading && id) ? <Loading/> :
+                    <>
+                        <TextValidator
                             className={classes.textvalidator}
-                            cancelLabel="CANCELAR"
-                            error={!!errorMessage.startDate}
-                            helperText={errorMessage.startDate}
-                            format="dd/MM/yyyy"
-                            label="Fecha de Inicio*"
-                            value={campaignform.startDate}
-                            name="endDate"
-                            onChange={handleDateChangeStartDate}    
+                            label="Nombre Campaña*"
+                            onChange={handleChange}
+                            type="text"
+                            name="name"
+                            value={campaignform.name}
+                            validators={["required","maxStringLength:30"]}
+                            errorMessages={["Este campo es requerido", "Máximo 30 carácteres"]}
                         />
-                    </MuiPickersUtilsProvider>
-                    <br/>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}> 
-                        <DatePicker
+                        <TextValidator
                             className={classes.textvalidator}
-                            cancelLabel="CANCELAR"
-                            error={!!errorMessage.endDate}
-                            helperText={errorMessage.endDate}
-                            format="dd/MM/yyyy"
-                            label="Fecha de Finalización*"
-                            value={campaignform.endDate}
-                            name="endDate"
-                            onChange={handleDateChangeEndDate}
-                            minDate={campaignform.startDate != null ? new Date(campaignform.startDate).setTime(new Date(campaignform.startDate).getTime() + 1 * 86400000) : null}
-                            disabled={!campaignform.startDate}
+                            label="Descripción Campaña*"
+                            onChange={handleChange}
+                            type="text"
+                            name="description"
+                            value={campaignform.description}
+                            validators={["required","maxStringLength:150"]}
+                            errorMessages={["Este campo es requerido", "Máximo 150 carácteres"]}
                         />
-                    </MuiPickersUtilsProvider>
-                    <TextValidator
-                        className={classes.textvalidator}
-                        label="Límite Máximo Campaña*"
-                        onChange={handleChange}
-                        type="number"
-                        name="personalPhone"
-                        value={campaignform.personalPhone}
-                        validators={["required","isNumber","maxStringLength:8"]}
-                        errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 8 carácteres"]}
-                    />
-                   
-                    <div className={classes.sectionbutton}>
-                        <Button variant="contained" onClick={presave} color="primary" type="submit">
-                            ENVIAR
-                        </Button>
-                    </div>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
+                            <DatePicker
+                                className={classes.textvalidator}
+                                cancelLabel="CANCELAR"
+                                error={!!errorMessage.startDate}
+                                helperText={errorMessage.startDate}
+                                format="dd/MM/yyyy"
+                                label="Fecha de Inicio*"
+                                value={campaignform.startDate}
+                                name="startDate"
+                                onChange={handleDateChangeStartDate}    
+                            />
+                        </MuiPickersUtilsProvider>
+                        <br/>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}> 
+                            <DatePicker
+                                className={classes.textvalidator}
+                                cancelLabel="CANCELAR"
+                                error={!!errorMessage.endDate}
+                                helperText={errorMessage.endDate}
+                                format="dd/MM/yyyy"
+                                label="Fecha de Finalización*"
+                                value={campaignform.endDate}
+                                name="endDate"
+                                onChange={handleDateChangeEndDate}
+                                minDate={campaignform.startDate != null ? new Date(campaignform.startDate).setTime(new Date(campaignform.startDate).getTime() + 1 * 86400000) : null}
+                                disabled={!campaignform.startDate}
+                            />
+                        </MuiPickersUtilsProvider>
+                        <TextValidator
+                            className={classes.textvalidator}
+                            label="Límite Máximo Campaña*"
+                            onChange={handleChange}
+                            type="text"
+                            name="maxLimitPerPerson"
+                            value={campaignform.maxLimitPerPerson}
+                            validators={["required","isNumber","maxStringLength:8"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 8 carácteres"]}
+                        />
+                    
+                        <div className={classes.sectionbutton}>
+                        <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
+                                ENVIAR  
+                            </Button>
+
+                            <Button style={{margin: "1%"}} variant="contained" onClick={handleBack} color="default">
+                                CANCELAR
+                            </Button>
+                        </div>
+                    </>
+                    }
                 </ValidatorForm>
             </Card>
         </div>
