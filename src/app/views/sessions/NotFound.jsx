@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Button } from "@material-ui/core";
+import history from "history.js";
 
 class NotFound extends Component {
   state = {};
@@ -12,7 +13,7 @@ class NotFound extends Component {
             className="capitalize"
             variant="contained"
             color="primary"
-            onClick={() => this.props.history.push("/")}
+            onClick={() => history.push(`/`)}
           >
             Back to Dashboard
           </Button>

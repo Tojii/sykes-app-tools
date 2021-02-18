@@ -16,30 +16,37 @@ import AddIcon from "@material-ui/icons/Add";
 import { Link } from 'react-router-dom';
 import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
+import { GetImages } from "../../../redux/actions/CommonActions";
+import NotFound from "../../sessions/NotFound"
+import { GetCampaignItemsById, DeleteCampaignItem, GetCampaignsItems } from "../../../redux/actions/CampaignActions";
+import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 
-const RefoundDetails = () => {
+const InventarioTable = () => {
     const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
     const dispatch = useDispatch();
-    const isLoading  = useSelector(state => state.refound.loading);
     const user = useSelector(state => state.user);
+    const image = null;
+    const campaignitem = useSelector(state => state.campaign.campaignitems);
+    const successCampaignItems = useSelector(state => state.campaign.success);
+    const isLoading  = useSelector(state => state.campaign.loading);
+    const [open, setOpen] = useState(false);
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    
 
-    // useEffect(() => {
-    //     dispatch(GetRefoundListByUser(user.badge));
-    // }, []);
+    useEffect(() => {
+      dispatch(GetCampaignsItems());
+    }, []);
 
     const getMuiTheme = () =>
     createMuiTheme({
     });
 
-    const handleDelete = (id) => {
-      alert(`Eliminado!` + id);
-      //setShouldOpenConfirmationDialog(true)
-      
+    const handleDelete = async (id) => {
+      await dispatch(DeleteCampaignItem(id));
+      setOpen(true);
     };
 
     const handleEdit= (id) => {
-      //alert(`Edit!` + id);
-      //setShouldOpenConfirmationDialog(true)
       history.push(`/Ventas/FormAdminInventario/${id}`);
       
     };
@@ -48,14 +55,10 @@ const RefoundDetails = () => {
       return (
           <React.Fragment>
             <Tooltip title={"Nuevo"}>
-              {/* <IconButton component={Link} to="/ReembolsoEducativo/Nuevo">
-                <AddIcon/>
-              </IconButton> */}
               <Button
                 component={Link} to="/Ventas/FormAdminInventario"
                 variant="contained"
                 color="primary"
-                //className={classes.button}
                 startIcon={<AddIcon />}
               >
                 Nuevo
@@ -63,39 +66,53 @@ const RefoundDetails = () => {
             </Tooltip>
           </React.Fragment>
       );
-  }
+    }
 
-    const data = [
-      {
-        "idArticulo": "1613",
-        "idCampaign": "JO101540",
-        "name": "Temporary Quality",
-        "description": "Capital One",
-        "image": "2021/01/13 21:00",
-        "inventarioInicial": "2021/01/20 23:00",
-        "existencias": "14",
-        "valorArticulo": "4555",
-        "limiteMaximo": "4"
-      },
-    ];
+    const showImage = (item) => {
+      return (
+        item.image ? <img
+        height={"257px"}
+        width={"195px"}                                         
+        alt="..."
+        src={`${item.image}`}
+        /> : ""
+      );
+    }
+
+    const builddata = campaignitem.map(item => {
+      if (item != undefined) {
+      return [
+          item.id,
+          item.campaign.id,
+          item.name,
+          item.description,
+          showImage(item),
+          item.quantity,
+          item.stockQuantity,
+          "₡" + item.unitPrice,
+          item.maxLimitPerPerson,
+      ]}
+    })
 
     const columns = [
         {
-          name: "idArticulo",
+          name: "id",
           label: "ID Artículo",
           options: {
-          filter: false,
-          sort: true,
-          display: false
+            filter: false,
+            sort: true,
+            display: false,
+            //viewColumns: false,
           }
         },
         {
-            name: "idCampaign",
+            name: "campaignid",
             label: "ID Campaña",
             options: {
              filter: false,
              sort: true,
              display: false,
+             //viewColumns: false,
             }
         },
         {
@@ -104,73 +121,102 @@ const RefoundDetails = () => {
           options: {
            filter: true,
            sort: true,
+           filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+           }
           }
         },
         {
           name: "description",
           label: "Descripción Artículo",
           options: {
-          filter: true,
-          sort: true,
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
           }
         },
         {
           name: "image",
-          label: "Imagen Artículo",
+          label: " ",
           options: {
-          filter: true,
-          sort: true,
+            download: false,
+            viewColumns: false,
+            filter: false,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
           }
         },
         {
-          name: "inventarioInicial",
+          name: "quantity",
           label: "Inventario Inicial ",
           options: {
-          filter: true,
-          sort: true,
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
           }
         },
         {
-          name: "existencias",
+          name: "stockQuantity",
           label: "Existencias",
           options: {
-          filter: true,
-          sort: true,
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
           }
         },
         {
-          name: "valorArticulo",
+          name: "unitPrice",
           label: "Valor Artículo",
           options: {
-          filter: true,
-          sort: true,
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
           }
         },
         {
-          name: "limiteMaximo",
+          name: "maxLimitPerPerson",
           label: "Límite Máximo Artículo",
           options: {
-          filter: true,
-          sort: true,
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
           }
         },
     ]
 
     const options = {
-      //selectableRowsHideCheckboxes: true,
       selectableRowsHeader: false,
       selectableRowsOnClick: true,
       isRowSelectable: (dataIndex, selectedRows) => {
         //prevents selection of any additional row after the third
         if (selectedRows.data.length > 0 && selectedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
         //prevents selection of row with title "Attorney"
-        return data[dataIndex][1] != "Attorney";
+        return campaignitem[dataIndex][1] != "Attorney";
       },
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
+        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar el artículo "} index={2} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
       ),
       print:false,
-      download: false,
+      download: true,
+      downloadOptions: {
+        filename: 'Inventario.csv',
+        filterOptions: {
+          useDisplayedColumnsOnly: true,
+          useDisplayedRowsOnly: true
+        }
+      },
       vertical: true,
       customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage, textLabels) => {
         return (
@@ -200,7 +246,6 @@ const RefoundDetails = () => {
         toolbar: {
           search: "Buscar",
           downloadCsv: "Descargar CSV",
-          //print: "Imprimir",
           viewColumns: "Ver Columnas",
           filterTable: "Filtrar tabla",
         },
@@ -222,25 +267,29 @@ const RefoundDetails = () => {
   }
 
   return (
-      <div className="m-sm-30">
-        <Grid container spacing={2}>
-          <Grid item md={12} xs={12}>
-            {/* { isLoading ? <Loading /> :   */}
-                    <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
-                        <MuiThemeProvider theme={getMuiTheme()}>
-                          <MUIDataTable  className="w-100"
-                              title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Administración de Inventario</h4></div>}
-                              data={data}
-                              columns={columns}
-                              options={options}
-                          />
-                        </MuiThemeProvider>
-                    </Card>
-            {/* } */}
+    (isLoading || user.badge == undefined) ? <Loading /> :
+      admin ?
+        <div className="m-sm-30">
+          <ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />
+          <Grid container spacing={2}>
+            <Grid item md={12} xs={12}>
+              {/* { isLoading ? <Loading /> :   */}
+                      <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+                          <MuiThemeProvider theme={getMuiTheme()}>
+                            <MUIDataTable  className="w-100"
+                                title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Administración de Inventario</h4></div>}
+                                data={builddata}
+                                columns={columns}
+                                options={options}
+                            />
+                          </MuiThemeProvider>
+                      </Card>
+              {/* } */}
+            </Grid>
           </Grid>
-        </Grid>
-      </div>
+        </div> 
+      : <NotFound/>
   )
 }
 
-export default RefoundDetails
+export default InventarioTable

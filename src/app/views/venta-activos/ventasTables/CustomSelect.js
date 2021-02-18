@@ -20,8 +20,6 @@ const defaultToolbarSelectStyles = {
   },
 };
 
-//const [shouldOpenConfirmationDialog, setShouldOpenConfirmationDialog] = useState(false);
-
 class CustomToolbarSelect extends React.Component {
   state = {
     setShouldOpenConfirmationDialog: false
@@ -40,24 +38,17 @@ class CustomToolbarSelect extends React.Component {
   };
 
   handleClickEdit = () => {
-    this.props.editar(this.props.displayData[this.props.selectedRows.data[0].index].data[0]);
+    //console.log("edit", this.props.selectedRows.data[0].dataIndex)
+    this.props.editar(this.props.displayData[this.props.selectedRows.data[0].dataIndex].data[0]);
   };
 
   handleClickDelete = () => {
-    //alert(`Eliminar: ` + this.props.displayData[this.props.selectedRows.data[0].index].data[1]);
-    //setShouldOpenConfirmationDialog(true)
     this.setState({ "setShouldOpenConfirmationDialog": true })
   };
 
-//   handleConfirm = () => {
-//     alert(`Eliminado!` + this.props.displayData[this.props.selectedRows.data[0].index].data[0]);
-//     //setShouldOpenConfirmationDialog(true)
-    
-//   };
-
   render() {
     const { classes } = this.props;
-
+    //console.log(this.props.displayData)
     return (
       <div className={classes.iconContainer}>
         <Tooltip title={"Editar"}>
@@ -77,7 +68,7 @@ class CustomToolbarSelect extends React.Component {
             aria-labelledby="confirm-dialog"
             >
             <DialogTitle id="confirm-dialog">{"Confirmación"}</DialogTitle>
-            <DialogContent>{<h4>¿Desea eliminar la campaña {this.props.displayData[this.props.selectedRows.data[0].index].data[1]}?</h4>}</DialogContent>
+            <DialogContent>{<h4>{this.props.question} {this.props.displayData[this.props.selectedRows.data[0].dataIndex].data[this.props.index]}?</h4>}</DialogContent>
             <DialogActions>
                 <Button
                 variant="contained"
@@ -90,7 +81,7 @@ class CustomToolbarSelect extends React.Component {
                 variant="contained"
                 onClick={() => {
                     this.setState({ "setShouldOpenConfirmationDialog": false });
-                    this.props.eliminar(this.props.displayData[this.props.selectedRows.data[0].index].data[0]);
+                    this.props.eliminar(this.props.displayData[this.props.selectedRows.data[0].dataIndex].data[0]);
                 }}
                 color="primary"
                 >

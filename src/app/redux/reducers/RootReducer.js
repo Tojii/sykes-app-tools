@@ -15,6 +15,9 @@ import RaftReducer from "./RaftReducer";
 import RefoundsReducer from "./RefoundReducer";
 import CommonReducer from "./CommonReducer";
 import { persistStore } from 'redux-persist'
+import CampaignReducer from "./CampaignReducer";
+import OrderReducer from "./OrderReducer";
+import LocationReducer from "./LocationReducer";
 
 
 const appReducer = combineReducers({
@@ -29,6 +32,9 @@ const appReducer = combineReducers({
   raft: RaftReducer,
   refound: RefoundsReducer,
   common: CommonReducer,
+  campaign: CampaignReducer,
+  order: OrderReducer,
+  locations: LocationReducer,
   growthReducer,
   metricsReducer,
   applyReducer,

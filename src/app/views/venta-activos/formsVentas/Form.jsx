@@ -8,7 +8,7 @@ function Form() {
             <div className="mb-sm-30">
                 <Breadcrumb
                 routeSegments={[
-                { name: "Ventas", path: "/Ventas" },
+                { name: "Ventas", path: "/VentasHome" },
                 { name: "Nuevo", path: "/Ventas/Form" },                
                 ]}
             />
