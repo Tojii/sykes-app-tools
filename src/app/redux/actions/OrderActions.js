@@ -11,6 +11,8 @@ export const OR_LOADING = "OR_LOADING";
 export const OR_ERROR = "OR_ERROR";
 export const GET_USER_PURCHASED = "GET_USER_PURCHASED";
 export const OR_CLEAN = "OR_CLEAN";
+export const GET_ALL_ORDER_ITEMS = "GET_ALL_ORDER_ITEMS";
+export const OR_LOADING_ITEMS = "OR_LOADING_ITEMS";
 
 const axiosInstance = axios.create();
 
@@ -27,6 +29,14 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 )
+
+  export const CleanPurchase = () => { 
+    return async dispatch => {
+      dispatch({
+        type: OR_CLEAN
+      });
+    };
+  };
 
   export const GetOrder = () => {
     const config = {
@@ -93,13 +103,37 @@ axiosInstance.interceptors.response.use(
     };
   }; 
 
-  export const CleanPurchase = () => { 
+  export const GetAllOrderItems = (id) => {
+    const config = {
+        headers: {
+            'content-type': 'application/json',
+        }
+      }  
     return async dispatch => {
       dispatch({
-        type: OR_CLEAN
+        type: OR_LOADING_ITEMS
       });
+      axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+      await axiosInstance.get(`${process.env.REACT_APP_API_URL}/Order/Campaign/${id}/Items`,config).then(res => {
+        dispatch({
+          type: GET_ALL_ORDER_ITEMS,
+          data: res.data
+          });
+
+        //console.log("imagenes",res.data)
+      })
+      .catch((error) => {
+        if (error.response) {
+            console.log(error.response.data);
+        } else if (error.request) {
+            console.log(error.request);
+        } else {
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+      }); 
     };
-  };
+  }; 
 
   export const GetOrderById = (id) => {
     const config = {

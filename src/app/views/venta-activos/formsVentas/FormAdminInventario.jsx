@@ -78,6 +78,7 @@ const FormAdminInventario = () => {
     const [files, setFiles] = useState(null);
     const [image, setImage] = useState(null);
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
+    const [errorStock, setErrorStock] = useState({error: false, errorMessage: ""});
     
     const [inventarioform, setInventarioForm] = useState({
         idcampaign: "",
@@ -93,10 +94,10 @@ const FormAdminInventario = () => {
     const classes = useStyles();
 
     const handleFormSubmit = async () => {
-        if ((id && files != null) || (id && inventarioform.image != null)) {
+        if (((id && files != null) || (id && inventarioform.image != null)) && (parseInt(inventarioform.quantity, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
             await dispatch(UpdateCampaignItems(id, inventarioform, files));
             setOpen(true);
-        } else if (files != null || inventarioform.image != null) {
+        } else if ((files != null || inventarioform.image != null) && (parseInt(inventarioform.quantity, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
             await dispatch(AddCampaignItems(inventarioform.idcampaign,inventarioform, files));
             setOpen(true);
         }
@@ -105,6 +106,9 @@ const FormAdminInventario = () => {
     const presave = () => {
         if (files == null && inventarioform.image == null) {
             setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
+        }
+        if (parseInt(inventarioform.quantity, 10) < parseInt(inventarioform.stockQuantity, 10)) {
+            setErrorStock({error: true, errorMessage:`Las existencias no pueden ser mayores al inventario inicial`});
         }
     }
 
@@ -137,7 +141,26 @@ const FormAdminInventario = () => {
 
 
     const handleChange = (event) => {
+        if ((event.target.name == "quantity") && (parseInt(event.target.value, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
+            setErrorStock({error: false, errorMessage:``});
+        } else if (event.target.name == "quantity") {
+            if (event.target.value == "" || inventarioform.stockQuantity == ""){
+                setErrorStock({error: false, errorMessage:``});
+            } else { 
+                setErrorStock({error: true, errorMessage:`Las existencias no pueden ser mayores al inventario inicial`});
+            }
+        }
+        if ((event.target.name == "stockQuantity") && (parseInt(inventarioform.quantity, 10) >= parseInt(event.target.value, 10))) {
+            setErrorStock({error: false, errorMessage:``});
+        } else if (event.target.name == "stockQuantity") {
+            if (event.target.value == "" || inventarioform.quantity == ""){
+                setErrorStock({error: false, errorMessage:``});
+            } else {
+                setErrorStock({error: true, errorMessage:`Las existencias no pueden ser mayores al inventario inicial`});
+            }
+        }
         const name = event.target.name;
+        //console.log("name", event.target.value)
         setInventarioForm({
           ...inventarioform,
           [name]: event.target.value,
@@ -241,8 +264,8 @@ const FormAdminInventario = () => {
                             name="quantity"
                             //disabled={true}
                             value={inventarioform.quantity}
-                            validators={["required","isNumber","maxStringLength:15"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres"]}
+                            validators={["required","isNumber","maxStringLength:15", "isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres", "No se aceptan negativos"]}
                         />
                         <TextValidator
                             className={classes.textvalidator}
@@ -251,9 +274,11 @@ const FormAdminInventario = () => {
                             type="text"
                             name="stockQuantity"
                             value={inventarioform.stockQuantity}
-                            validators={["required","isNumber","maxStringLength:15"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres"]}
+                            validators={["required","isNumber","maxStringLength:15", "isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres", "No se aceptan negativos"]}
+                            error={errorStock.error}
                         />
+                        <FormHelperText style={{display: errorStock.error ? null : "none", marginTop: "0%"}} className={classes.textvalidator} error={errorStock.error} id="my-helper-text">{errorStock.errorMessage}</FormHelperText>
                         <TextValidator
                             className={classes.textvalidator}
                             label="Valor Artículo*"
@@ -261,8 +286,8 @@ const FormAdminInventario = () => {
                             type="text"
                             name="unitPrice"
                             value={inventarioform.unitPrice}
-                            validators={["required","isNumber","maxStringLength:15"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres"]}
+                            validators={["required","isNumber","maxStringLength:15", "isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres", "No se aceptan negativos"]}
                         />
                         <TextValidator
                             className={classes.textvalidator}
@@ -271,8 +296,8 @@ const FormAdminInventario = () => {
                             type="text"
                             name="maxLimitPerPerson"
                             value={inventarioform.maxLimitPerPerson}
-                            validators={["required","isNumber","maxStringLength:15"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres"]}
+                            validators={["required","isNumber","maxStringLength:15","isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres", "No se aceptan negativos"]}
                         />
                         <FormControl className={classes.textvalidator}>
                             <label className={classes.filelabel} id="image">Imagen Artículo (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>

@@ -38,7 +38,7 @@ class CustomToolbarSelect extends React.Component {
   };
 
   handleClickEdit = () => {
-    console.log("edit", this.props.selectedRows.data[0].dataIndex)
+    //console.log("edit", this.props.selectedRows.data[0].dataIndex)
     this.props.editar(this.props.displayData[this.props.selectedRows.data[0].dataIndex].data[0]);
   };
 
@@ -48,7 +48,7 @@ class CustomToolbarSelect extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log(this.props.displayData)
+    //console.log(this.props.displayData)
     return (
       <div className={classes.iconContainer}>
         <Tooltip title={"Editar"}>

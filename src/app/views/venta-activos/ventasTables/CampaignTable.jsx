@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
-import { GetCampaigns, GetCampaignsActive, GetCampaignsById, UpdateCampaign, DeleteCampaign } from "../../../redux/actions/CampaignActions";
-import { GetUserPurchased, CleanPurchase } from "../../../redux/actions/OrderActions";
+import { GetCampaigns, GetCampaignsActive, DeleteCampaign } from "../../../redux/actions/CampaignActions";
+import { CleanPurchase } from "../../../redux/actions/OrderActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import CustomToolbarSelect from "./CustomSelect"
 import {
-    Icon,
     Button,
     Card,
     Grid,
@@ -27,14 +26,14 @@ const CampaignTable = (props) => {
     const isAdmin = props.admin != undefined ? props.admin : true;
     const user = useSelector(state => state.user);
     const campaigns = useSelector(state => state.campaign.campaigns);
-    const purchases = useSelector(state => state.order.purchases);
-    const addCampaign = useSelector(state => state.campaign.addCampaign);
+    // const purchases = useSelector(state => state.order.purchases);
+    // const addCampaign = useSelector(state => state.campaign.addCampaign);
     const successCampaign = useSelector(state => state.campaign.success);
     const campaignsActive = useSelector(state => state.campaign.campaignsActive);
     const isLoading  = useSelector(state => state.campaign.loading);
     const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
     const [open, setOpen] = useState(false);
-    const [purchaseList, setPurchaseList] = useState([]);
+    // const [purchaseList, setPurchaseList] = useState([]);
     
 
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
@@ -126,7 +125,7 @@ const CampaignTable = (props) => {
              filter: false,
              sort: true,
              display: false,
-             //viewColumns: false,
+             viewColumns: isAdmin,
             }
         },
         {
@@ -245,7 +244,6 @@ const CampaignTable = (props) => {
         toolbar: {
           search: "Buscar",
           downloadCsv: "Descargar CSV",
-          //print: "Imprimir",
           viewColumns: "Ver Columnas",
           filterTable: "Filtrar tabla",
         },
@@ -267,7 +265,7 @@ const CampaignTable = (props) => {
   }
 
   return (
-      console.log("clean",purchases),
+      //console.log("clean",purchases),
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">

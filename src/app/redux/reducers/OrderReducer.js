@@ -6,13 +6,17 @@ import {
     OR_LOADING,
     OR_ERROR,
     GET_USER_PURCHASED,
-    OR_CLEAN
+    OR_CLEAN,
+    GET_ALL_ORDER_ITEMS,
+    OR_LOADING_ITEMS
 } from "../actions/OrderActions"
 
 const initialState = {
     orders: [],
     order: [],
+    ordersitems: [],
     loading: false,
+    loadingitems: false,
     addOrder: null,
     success: true,
     purchases: []
@@ -24,6 +28,12 @@ const CampaignReducer = function(state = initialState, action){
             return {
               ...state,
               loading: true
+            }
+        }
+        case OR_LOADING_ITEMS: {
+            return {
+              ...state,
+              loadingitems: true
             }
         }
         case OR_ERROR: {
@@ -66,6 +76,13 @@ const CampaignReducer = function(state = initialState, action){
                 ...state,
                 orders: [...action.data],
                 loading: false
+            }
+        }
+        case GET_ALL_ORDER_ITEMS: {
+            return {
+                ...state,
+                ordersitems: [...action.data],
+                loadingitems: false
             }
         }
         case ADD_ORDER: {

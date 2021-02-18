@@ -189,8 +189,8 @@ const FormVentas = () => {
     
     const handleCantidad = () => {
         let i;
-        console.log("cantidad", purchases[0] != undefined ? (purchases[0].allowedPendingPurchaseItems - ventasform.totalCompra) : "meh")
-        console.log("cantidad", campaign[0] != undefined ? campaign[0].maxLimitPerPerson : "nah")
+        //console.log("cantidad", purchases[0] != undefined ? (purchases[0].allowedPendingPurchaseItems - ventasform.totalCompra) : "")
+        //console.log("cantidad", campaign[0] != undefined ? campaign[0].maxLimitPerPerson : "")
         if (campaign[0] != undefined) {
             for (i = 1; i <= campaign[0].maxLimitPerPerson && (purchases[0] != undefined && i <= (purchases[0].allowedPendingPurchaseItems - ventasform.totalCompra)); i++) {
                 cantidad.push(i);
@@ -347,8 +347,8 @@ const FormVentas = () => {
 
     return (
         <div className="m-sm-30">
-            { console.log("purchases", purchases)}
-            { console.log("carrito", carrito)}
+            {/* { console.log("purchases", purchases)}
+            { console.log("carrito", carrito)} */}
             <ValidationModal idioma={"Español"} path={"/VentasHome"} state={(successOrder) ? "Success!" : "Error!"} save={() => {}} message={(successOrder) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
             {(isLoadingCampaign || isLoadingOrder) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/VentasHome"} state={"¡Lo sentimos!"} save={() => {}} message={"¡Ya se ha alcanzado el máximo de artículos comprados en esta campaña!"} setOpen={setOpenPurchase} open={openPurchase && !isLoadingCampaign} />}
             <Card className={classes.formcard} elevation={6}>
@@ -396,8 +396,8 @@ const FormVentas = () => {
                             type="text"
                             name="phone"
                             value={ventasform.phone}
-                            validators={["required","isNumber","maxStringLength:8"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 8 carácteres"]}
+                            validators={["required","isNumber", "isPositive","maxStringLength:8","minStringLength:8"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos", "Máximo 8 carácteres", "Mínimo 8 carácteres"]}
                         />
                         <SelectValidator 
                             label="Provincia*" 
@@ -554,7 +554,7 @@ const FormVentas = () => {
 
                             {(campaign[0] != undefined && campaign[0].campaignItems != undefined) ? campaign[0].campaignItems.map((item, index) => {
                             return (
-                                (!indexlist.includes(item.id) && item.stockQuantity > 0 && (purchases[0] != undefined && purchases[0].items[index] != undefined && purchases[0].items[index].allowedPendingPurchaseItems > 0)) ?
+                                (!indexlist.includes(item.id) && item.stockQuantity > 0 && (purchases[0] != undefined && purchases[0].items[index] != undefined && (item.maxLimitPerPerson - purchases[0].items[index].totalPurchasedItems) > 0)) ?
                                 <div className="px-16 py-16" key={item.id}>
                                 <Grid
                                     container
@@ -644,7 +644,7 @@ const FormVentas = () => {
                                         validators={["required"]}
                                         errorMessages={["Este campo es requerido"]}
                                     >
-                                        { console.log("cant carrito", item.limiteActual),
+                                        { //console.log("cant carrito", item.limiteActual),
                                         cantidad.map(cantidaditem => (
                                                         (cantidaditem <= item.maxLimitPerPerson && cantidaditem <= item.stockQuantity && cantidaditem <= item.limiteActual) ?
                                                         <MenuItem key={`cantidad-${cantidaditem}`} value={cantidaditem ? cantidaditem : ""}>

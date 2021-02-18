@@ -228,8 +228,8 @@ const FormAdminCampaign = () => {
                             type="text"
                             name="maxLimitPerPerson"
                             value={campaignform.maxLimitPerPerson}
-                            validators={["required","isNumber","maxStringLength:8"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 8 carácteres"]}
+                            validators={["required","isNumber","isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos"]}
                         />
                     
                         <div className={classes.sectionbutton}>

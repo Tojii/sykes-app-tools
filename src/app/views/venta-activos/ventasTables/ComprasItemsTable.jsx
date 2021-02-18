@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MUIDataTable from "mui-datatables";
-import { GetOrder, GetAllOrder, GetAllOrderItems } from "../../../redux/actions/OrderActions";
+import { GetAllOrderItems } from "../../../redux/actions/OrderActions";
+import { GetCampaigns } from "../../../redux/actions/CampaignActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import {
-    Button,
     Card,
     Grid,
-    Tooltip,
     FormLabel,
     FormGroup
 } from "@material-ui/core";
@@ -24,21 +23,35 @@ import {
   } from "@material-ui/pickers";
 import moment from "moment";
 import NotFound from "../../sessions/NotFound"
-import ComprasItems from "./ComprasItemsTable"
+import MenuItem from '@material-ui/core/MenuItem';
+import { SelectValidator, ValidatorForm } from "react-material-ui-form-validator";
 
-const ComprasTable = (props) => {
+const ComprasItems = (props) => {
     const dispatch = useDispatch();
-    const orders = useSelector(state => state.order.orders);
-    const isLoading  = useSelector(state => state.order.loading);
+    const campaigns = useSelector(state => state.campaign.campaigns);
+    const ordersitems = useSelector(state => state.order.ordersitems);
+    const isLoading  = useSelector(state => state.order.loadingitems);
+    const isLoadingCampaign  = useSelector(state => state.campaign.loading);
     const user = useSelector(state => state.user);
     const isAdmin = props.admin != undefined ? props.admin : true;
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
+    const [campaignform, setCampaignForm] = useState({
+      campaign: "",
+    });
 
     useEffect(() => {
-        isAdmin && dispatch(GetAllOrder());
-        !isAdmin && dispatch(GetOrder());
+        dispatch(GetCampaigns());
     }, []);
+
+    useEffect(() => {
+      if (campaigns != undefined && campaigns[0] != undefined && isAdmin) {
+         dispatch(GetAllOrderItems(campaigns[0].id));
+         setCampaignForm({
+          campaign: campaigns[0].id,
+        })
+      }
+    }, [campaigns]);
 
     const getMuiTheme = () =>
     createMuiTheme({
@@ -52,7 +65,72 @@ const ComprasTable = (props) => {
           filter: true,
           viewColumns: isAdmin,
           sort: true,
-          display: false,
+          display: true,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "itemName",
+          label: "Artículo",
+          options: {
+          filter: true,
+          viewColumns: isAdmin,
+          sort: true,
+          display: true,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "itemDescription",
+          label: "Descripción artículo",
+          options: {
+          filter: true,
+          viewColumns: isAdmin,
+          sort: true,
+          display: true,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "itemUnitPrice",
+          label: "Precio artículo",
+          options: {
+          filter: true,
+          viewColumns: isAdmin,
+          sort: true,
+          display: true,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "amount",
+          label: "Cant artículo",
+          options: {
+          filter: true,
+          viewColumns: isAdmin,
+          sort: true,
+          display: true,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
+          }
+        },
+        {
+          name: "subtotal",
+          label: "Subtotal",
+          options: {
+          filter: true,
+          viewColumns: isAdmin,
+          sort: true,
+          display: true,
           filterOptions: { 
             fullWidth: window.screen.width <= 1024 ? true : false
           }
@@ -267,6 +345,7 @@ const ComprasTable = (props) => {
           options: {
             filter: true,
             sort: true,
+            display: false,
             filterOptions: { 
               fullWidth: window.screen.width <= 1024 ? true : false
             }
@@ -306,47 +385,56 @@ const ComprasTable = (props) => {
         },
     ]
 
-    const handleDetalle = (item) => {    
-      history.push({
-        pathname: `/Ventas/CompraDetalle/${item.id}`,
-        prev: history.location.pathname
-      });
-    };
-
-    const detallesButton = (item) => {
+    const dropCampaign = () => {
       return (
-          <React.Fragment>
-            <Tooltip title={"Detalles"}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleDetalle(item)}
-                startIcon={<Details />}
-              >
-                Detalles
-              </Button>
-            </Tooltip>
-          </React.Fragment>
-      );
+        <React.Fragment>
+          <SelectValidator 
+          label="Campaña*" 
+          name="campaign"
+          value={campaignform.campaign} 
+          onChange={handleChange} 
+          errorMessages={["Este campo es requerido"]}
+          >
+          {campaigns.map(campaign => (
+                          <MenuItem key={`campaign-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
+                          {campaign.name || " "}
+                          </MenuItem>
+                      ))}
+          </SelectValidator> 
+        </React.Fragment>
+        );
     }
 
-    const builddata = orders.map(item => {
+    const handleChange = (event) => {
+      const name = event.target.name;
+      setCampaignForm({
+        ...campaignform,
+        [name]: event.target.value,
+      });
+      dispatch(GetAllOrderItems(event.target.value));
+    };
+
+    const builddataitems = ordersitems.map(item => {
       return [
-          item.id,
-          item.badge,
-          item.name,
-          item.email,
-          item.phone,
-          item.province,
-          item.canton,
-          item.district,
-          item.address,
-          item.campaign.name,
-          item.createdDate, 
-          item.notes,
-          item.totalItems,
-          "₡" + item.total,
-          detallesButton(item)
+          item.order.id,
+          item.itemName,
+          item.itemDescription,
+          item.itemUnitPrice,
+          item.amount,
+          item.itemUnitPrice * item.amount,
+          item.order.badge,
+          item.order.name,
+          item.order.email,
+          item.order.phone,
+          item.order.province,
+          item.order.canton,
+          item.order.district,
+          item.order.address,
+          item.order.campaign.name,
+          item.order.createdDate, 
+          item.order.notes,
+          item.order.totalItems,
+          "₡" + item.order.total,
       ]
     })
 
@@ -356,7 +444,7 @@ const ComprasTable = (props) => {
       print:false,
       download: isAdmin,
       downloadOptions: {
-        filename: 'Compras.csv',
+        filename: 'ComprasItems.csv',
         filterOptions: {
           useDisplayedColumnsOnly: true,
           useDisplayedRowsOnly: true
@@ -412,29 +500,34 @@ const ComprasTable = (props) => {
   }
 
   return (
-      (isLoading) ? <Loading /> :
-        (admin || !isAdmin) ?
+      console.log("campaña",campaigns),
+      <ValidatorForm onSubmit={() => {}}>
+        {(isLoading || isLoadingCampaign) ? <Loading /> :
+          (admin || !isAdmin) ?
           <div className="m-sm-30">
-            <Grid container spacing={2}>
-              <Grid item md={12} xs={12}>
-                {/* { isLoading ? <Loading /> :   */}
-                        <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
-                            <MuiThemeProvider theme={getMuiTheme()}>
-                              <MUIDataTable  className="w-100"
-                                  title={`Compras`}
-                                  data={builddata}
-                                  columns={columns}
-                                  options={options}
-                              />
-                            </MuiThemeProvider>
-                        </Card>
-                {/* } */}
+              <Grid container spacing={2}>
+                 
+                <Grid item md={12} xs={12}>
+                  {/* { isLoading ? <Loading /> :   */}
+                          <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+                            
+                              <MuiThemeProvider theme={getMuiTheme()}>
+                                <MUIDataTable  className="w-100"
+                                    title={<div style={{display: "inline-flex"}}>{dropCampaign()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Artículos de Compras</h4></div>}
+                                    data={builddataitems}
+                                    columns={columns}
+                                    options={options}
+                                />
+                              </MuiThemeProvider>
+                          </Card>
+                  {/* } */}
+                </Grid>
               </Grid>
-            </Grid>
-          </div>
-        : <NotFound/>
+            </div>
+          : <NotFound/>}
+      </ValidatorForm>
 
     )
 }
 
-export default ComprasTable
+export default ComprasItems

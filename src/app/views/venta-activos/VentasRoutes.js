@@ -13,6 +13,10 @@ const Compras = MatxLoadable({
   loader: () => import("./ventasTables/ComprasTable")
 });
 
+const ComprasItems = MatxLoadable({
+  loader: () => import("./ventasTables/ComprasItemsTable")
+});
+
 const NotFound = MatxLoadable({
   loader: () => import("../sessions/NotFound")
 });
@@ -61,6 +65,10 @@ const FormAdminInventario = MatxLoadable({
     {
       path: "/Ventas/Compras",
       component: Compras
+    },
+    {
+      path: "/Ventas/ComprasItems",
+      component: ComprasItems
     },
     {
       path: "/Ventas/FormAdminCampaign/:id",
