@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
-import { GetOrder, GetAllOrder, GetAllOrderItems } from "../../../redux/actions/OrderActions";
+import { GetOrder, GetAllOrder } from "../../../redux/actions/OrderActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import {
@@ -12,7 +12,7 @@ import {
     FormGroup
 } from "@material-ui/core";
 import Details from "@material-ui/icons/Details";
-import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
 import "date-fns";
@@ -24,7 +24,6 @@ import {
   } from "@material-ui/pickers";
 import moment from "moment";
 import NotFound from "../../sessions/NotFound"
-import ComprasItems from "./ComprasItemsTable"
 
 const ComprasTable = (props) => {
     const dispatch = useDispatch();

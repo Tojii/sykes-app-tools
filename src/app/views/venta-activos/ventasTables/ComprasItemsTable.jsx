@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
 import { GetAllOrderItems } from "../../../redux/actions/OrderActions";
 import { GetCampaigns } from "../../../redux/actions/CampaignActions";
@@ -10,9 +10,7 @@ import {
     FormLabel,
     FormGroup
 } from "@material-ui/core";
-import Details from "@material-ui/icons/Details";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
-import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -389,17 +387,17 @@ const ComprasItems = (props) => {
       return (
         <React.Fragment>
           <SelectValidator 
-          label="Campaña*" 
-          name="campaign"
-          value={campaignform.campaign} 
-          onChange={handleChange} 
-          errorMessages={["Este campo es requerido"]}
+            label="Campaña*" 
+            name="campaign"
+            value={campaignform.campaign} 
+            onChange={handleChange} 
+            errorMessages={["Este campo es requerido"]}
           >
           {campaigns.map(campaign => (
-                          <MenuItem key={`campaign-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
-                          {campaign.name || " "}
-                          </MenuItem>
-                      ))}
+              <MenuItem key={`campaign-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
+              {campaign.name || " "}
+              </MenuItem>
+          ))}
           </SelectValidator> 
         </React.Fragment>
         );
@@ -506,7 +504,6 @@ const ComprasItems = (props) => {
           (admin || !isAdmin) ?
           <div className="m-sm-30">
               <Grid container spacing={2}>
-                 
                 <Grid item md={12} xs={12}>
                   {/* { isLoading ? <Loading /> :   */}
                           <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>

@@ -1,4 +1,4 @@
-import React, { useState, Component, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Button,
   Card,
@@ -8,7 +8,6 @@ import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
-import {addRaft} from "../../../redux/actions/RaftActions";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
 import { GetCampaignItemsById, UpdateCampaignItems, AddCampaignItems, GetCampaigns } from "../../../redux/actions/CampaignActions";
@@ -65,10 +64,11 @@ const useStyles = makeStyles({
 });
 
 const FormAdminInventario = () => {
-    
-    const user = useSelector(state => state.user);
+
+    const classes = useStyles();
     const dispatch = useDispatch();
     let { id } = useParams();
+    const user = useSelector(state => state.user);
     const campaignitem = useSelector(state => state.campaign.campaignitem);
     const campaigns = useSelector(state => state.campaign.campaigns);
     const addCampaignItems = useSelector(state => state.campaign.addCampaignItems);
@@ -79,7 +79,6 @@ const FormAdminInventario = () => {
     const [image, setImage] = useState(null);
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
     const [errorStock, setErrorStock] = useState({error: false, errorMessage: ""});
-    
     const [inventarioform, setInventarioForm] = useState({
         idcampaign: "",
         name: "",
@@ -91,30 +90,6 @@ const FormAdminInventario = () => {
         maxLimitPerPerson: "",
         files: null
     });
-    const classes = useStyles();
-
-    const handleFormSubmit = async () => {
-        if (((id && files != null) || (id && inventarioform.image != null)) && (parseInt(inventarioform.quantity, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
-            await dispatch(UpdateCampaignItems(id, inventarioform, files));
-            setOpen(true);
-        } else if ((files != null || inventarioform.image != null) && (parseInt(inventarioform.quantity, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
-            await dispatch(AddCampaignItems(inventarioform.idcampaign,inventarioform, files));
-            setOpen(true);
-        }
-    };
-
-    const presave = () => {
-        if (files == null && inventarioform.image == null) {
-            setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
-        }
-        if (parseInt(inventarioform.quantity, 10) < parseInt(inventarioform.stockQuantity, 10)) {
-            setErrorStock({error: true, errorMessage:`Las existencias no pueden ser mayores al inventario inicial`});
-        }
-    }
-
-    const handleBack = () => {
-        history.push("/Ventas/Inventario");
-    }
 
     useEffect(() => {
         dispatch(GetCampaigns());
@@ -139,6 +114,28 @@ const FormAdminInventario = () => {
 
     }, [campaignitem]);
 
+    const handleFormSubmit = async () => {
+        if (((id && files != null) || (id && inventarioform.image != null)) && (parseInt(inventarioform.quantity, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
+            await dispatch(UpdateCampaignItems(id, inventarioform, files));
+            setOpen(true);
+        } else if ((files != null || inventarioform.image != null) && (parseInt(inventarioform.quantity, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
+            await dispatch(AddCampaignItems(inventarioform.idcampaign,inventarioform, files));
+            setOpen(true);
+        }
+    };
+
+    const presave = () => {
+        if (files == null && inventarioform.image == null) {
+            setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
+        }
+        if (parseInt(inventarioform.quantity, 10) < parseInt(inventarioform.stockQuantity, 10)) {
+            setErrorStock({error: true, errorMessage:`Las existencias no pueden ser mayores al inventario inicial`});
+        }
+    }
+
+    const handleBack = () => {
+        history.push("/Ventas/Inventario");
+    }
 
     const handleChange = (event) => {
         if ((event.target.name == "quantity") && (parseInt(event.target.value, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
@@ -231,10 +228,10 @@ const FormAdminInventario = () => {
                             errorMessages={["Este campo es requerido"]}
                         >
                             {campaigns.map(campaign => (
-                                            <MenuItem key={`province-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
-                                            {campaign.name || " "}
-                                            </MenuItem>
-                                        ))}
+                                <MenuItem key={`province-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
+                                {campaign.name || " "}
+                                </MenuItem>
+                            ))}
                         </SelectValidator> 
                         <TextValidator
                             className={classes.textvalidator}

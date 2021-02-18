@@ -1,11 +1,10 @@
-import React, { useState, Component, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Button,
   Card
 } from "@material-ui/core";
-import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
-import {addRaft} from "../../../redux/actions/RaftActions";
 import { GetCampaignsById, UpdateCampaign, AddCampaign } from "../../../redux/actions/CampaignActions";
 import { useSelector, useDispatch } from 'react-redux';
 import "date-fns";
@@ -19,7 +18,6 @@ import { useParams } from "react-router";
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import NotFound from "../../sessions/NotFound"
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
-import Campaigns from "app/views/dashboard/shared/Campaigns";
 import history from "history.js";
 
 const useStyles = makeStyles({
@@ -71,10 +69,10 @@ const useStyles = makeStyles({
 
 const FormAdminCampaign = () => {
     
+    const classes = useStyles();
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     let { id } = useParams();
-    const [errorMessage, setErrorMessage] = useState([]);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const [campaignform, setCampaignForm] = useState({
         name: "",
@@ -84,12 +82,12 @@ const FormAdminCampaign = () => {
         maxLimitPerPerson: "",
         campaignItems: [],
     });
-    const classes = useStyles();
+    const [open, setOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState([]);
     const addCampaign = useSelector(state => state.campaign.addCampaign);
     const successCampaign = useSelector(state => state.campaign.success);
     const campaign = useSelector(state => state.campaign.campaign);
     const isLoading  = useSelector(state => state.campaign.loading);
-    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         if (id) {
@@ -98,14 +96,16 @@ const FormAdminCampaign = () => {
     }, []);
 
     useEffect(() => {
-        if(id && campaign != [] && campaign[0] != [""] && campaign[0] != undefined) {setCampaignForm({
-            name: campaign[0].name,
-            description: campaign[0].description,
-            startDate: campaign[0].startDate,
-            endDate: campaign[0].endDate,
-            maxLimitPerPerson: campaign[0].maxLimitPerPerson != undefined ? campaign[0].maxLimitPerPerson.toString() : null,
-            campaignItems: campaign[0].campaignItems,
-        });}
+        if(id && campaign != [] && campaign[0] != [""] && campaign[0] != undefined) {
+            setCampaignForm({
+                name: campaign[0].name,
+                description: campaign[0].description,
+                startDate: campaign[0].startDate,
+                endDate: campaign[0].endDate,
+                maxLimitPerPerson: campaign[0].maxLimitPerPerson != undefined ? campaign[0].maxLimitPerPerson.toString() : null,
+                campaignItems: campaign[0].campaignItems,
+            });
+        }
     }, [campaign]);
 
     const handleFormSubmit = async () => {
@@ -231,9 +231,8 @@ const FormAdminCampaign = () => {
                             validators={["required","isNumber","isPositive"]}
                             errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos"]}
                         />
-                    
                         <div className={classes.sectionbutton}>
-                        <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
+                            <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
                                 ENVIAR  
                             </Button>
 

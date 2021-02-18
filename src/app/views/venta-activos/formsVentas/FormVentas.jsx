@@ -13,7 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { AddOrder } from "../../../redux/actions/OrderActions";
 import { useSelector, useDispatch } from 'react-redux';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import AgregarDialog from './AgregarArticulo'
@@ -22,7 +22,6 @@ import { useParams } from "react-router";
 import { GetUserPurchased } from "../../../redux/actions/OrderActions";
 import { GetCampaignsById } from "../../../redux/actions/CampaignActions";
 import { GetProvince, GetCantons, GetDistricts } from "../../../redux/actions/LocationActions";
-import Campaigns from "app/views/dashboard/shared/Campaigns";
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 import { updateUserData, setUserData } from "../../../redux/actions/UserActions"
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
@@ -106,11 +105,12 @@ const DialogTitle = withStyles(styles)((props) => {
   });
 
 const FormVentas = () => {
-    
+
+    const classes = useStyles();
+    const dispatch = useDispatch();
+    let { idcampaign } = useParams();
     const user = useSelector(state => state.user);
     const campaign = useSelector(state => state.campaign.campaign);
-    const [cantidad, setCantidad] = useState([]);
-    const [indexlist, setIndexlist] = useState([0]);
     const addOrder = useSelector(state => state.order.addOrder);
     const successOrder = useSelector(state => state.order.success);
     const purchases = useSelector(state => state.order.purchases);
@@ -119,15 +119,14 @@ const FormVentas = () => {
     const districts = useSelector(state => state.locations.districts);
     const isLoadingCampaign  = useSelector(state => state.campaign.loading);
     const isLoadingOrder  = useSelector(state => state.order.loading);
-    let { idcampaign } = useParams();
-    const dispatch = useDispatch();
+    const [cantidad, setCantidad] = useState([]);
+    const [indexlist, setIndexlist] = useState([0]);
     const [open, setOpen] = useState(false);
     const [openPurchase, setOpenPurchase] = useState(false);
     const [disableCarrito, setDisableCarrito] = useState(false);
     const [disableMaximo, setDisableMaximo] = useState(false);
     const [disableCanton, setDisableCanton] = useState(true);
     const [disableDistrict, setDisableDistrict] = useState(true);
-    const classes = useStyles();
     const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(
         {
             open: false,
@@ -189,8 +188,6 @@ const FormVentas = () => {
     
     const handleCantidad = () => {
         let i;
-        //console.log("cantidad", purchases[0] != undefined ? (purchases[0].allowedPendingPurchaseItems - ventasform.totalCompra) : "")
-        //console.log("cantidad", campaign[0] != undefined ? campaign[0].maxLimitPerPerson : "")
         if (campaign[0] != undefined) {
             for (i = 1; i <= campaign[0].maxLimitPerPerson && (purchases[0] != undefined && i <= (purchases[0].allowedPendingPurchaseItems - ventasform.totalCompra)); i++) {
                 cantidad.push(i);
@@ -347,8 +344,6 @@ const FormVentas = () => {
 
     return (
         <div className="m-sm-30">
-            {/* { console.log("purchases", purchases)}
-            { console.log("carrito", carrito)} */}
             <ValidationModal idioma={"Español"} path={"/VentasHome"} state={(successOrder) ? "Success!" : "Error!"} save={() => {}} message={(successOrder) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
             {(isLoadingCampaign || isLoadingOrder) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/VentasHome"} state={"¡Lo sentimos!"} save={() => {}} message={"¡Ya se ha alcanzado el máximo de artículos comprados en esta campaña!"} setOpen={setOpenPurchase} open={openPurchase && !isLoadingCampaign} />}
             <Card className={classes.formcard} elevation={6}>
@@ -409,10 +404,10 @@ const FormVentas = () => {
                             errorMessages={["Este campo es requerido"]}
                         >
                             {provinces.map(province => (
-                                            <MenuItem key={`province-${province.code}`} id={province.code} value={province.code ? province.code : ""}>
-                                            {province.name || " "}
-                                            </MenuItem>
-                                        ))}
+                                <MenuItem key={`province-${province.code}`} id={province.code} value={province.code ? province.code : ""}>
+                                {province.name || " "}
+                                </MenuItem>
+                            ))}
                         </SelectValidator> 
                         <SelectValidator 
                             label="Cantón*" 
@@ -425,10 +420,10 @@ const FormVentas = () => {
                             errorMessages={["Este campo es requerido"]}
                         >
                             {cantons.map(canton => (
-                                            <MenuItem key={`canton-${canton.code}`} value={canton.code ? canton.code : ""}>
-                                            {canton.name || " "}
-                                            </MenuItem>
-                                        ))}
+                                <MenuItem key={`canton-${canton.code}`} value={canton.code ? canton.code : ""}>
+                                {canton.name || " "}
+                                </MenuItem>
+                            ))}
                         </SelectValidator> 
                         <SelectValidator 
                             label="Distrito*" 
@@ -441,10 +436,10 @@ const FormVentas = () => {
                             errorMessages={["Este campo es requerido"]}
                         >
                             {districts.map(district => (
-                                            <MenuItem key={`district-${district.code}`} value={district.code ? district.code : ""}>
-                                            {district.name || " "}
-                                            </MenuItem>
-                                        ))}
+                                <MenuItem key={`district-${district.code}`} value={district.code ? district.code : ""}>
+                                {district.name || " "}
+                                </MenuItem>
+                            ))}
                         </SelectValidator> 
                         <TextValidator
                             className={classes.textvalidator}
@@ -527,35 +522,6 @@ const FormVentas = () => {
                         {<h5 className={classes.textvalidator}>Articulos disponibles para compra:</h5>}
                         <Card className={classes.gridtext} elevation={2}>
                             <div className="p-16">
-                            <Grid
-                                container
-                                spacing={2}
-                                justify="center"
-                                alignItems="center"
-                                direction="row"
-                            >
-                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                Articulo
-                                </Grid>
-                                <Grid item lg={2} md={2} sm={2} xs={2}>
-                                Cant
-                                </Grid>
-                                <Grid item lg={4} md={4} sm={4} xs={4}>
-                                Valor
-                                </Grid>
-                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                Acciones
-                                </Grid>
-                            </Grid>
-                            </div>
-                            <Divider></Divider>
-
-                            {(campaign[0] == undefined || campaign[0].campaignItems == undefined || campaign[0].campaignItems.length == 0 || campaign[0].campaignItems.length == indexlist.length - 1) && <p className="px-16">No hay ningun artículo</p>}
-
-                            {(campaign[0] != undefined && campaign[0].campaignItems != undefined) ? campaign[0].campaignItems.map((item, index) => {
-                            return (
-                                (!indexlist.includes(item.id) && item.stockQuantity > 0 && (purchases[0] != undefined && purchases[0].items[index] != undefined && (item.maxLimitPerPerson - purchases[0].items[index].totalPurchasedItems) > 0)) ?
-                                <div className="px-16 py-16" key={item.id}>
                                 <Grid
                                     container
                                     spacing={2}
@@ -564,32 +530,59 @@ const FormVentas = () => {
                                     direction="row"
                                 >
                                     <Grid item lg={3} md={3} sm={3} xs={3}>
-                                    {item.name}
+                                    Articulo
                                     </Grid>
                                     <Grid item lg={2} md={2} sm={2} xs={2}>
-                                    {item.stockQuantity}
+                                    Cant
                                     </Grid>
                                     <Grid item lg={4} md={4} sm={4} xs={4}>
-                                    ₡{item.unitPrice}
+                                    Valor
                                     </Grid>
                                     <Grid item lg={3} md={3} sm={3} xs={3}>
-                                    <div className="flex">
-                                    
-                                        <Button
-                                        variant="contained"
-                                        className= {(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0) ) ? "bg-default" : "bg-primary"}
-                                        style={{color: (ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0) ) ? "gray" : "white"}}
-                                        disabled={(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0) )}
-                                        onClick={() => setShouldOpenDetailsDialog({open: true, id: item.id, index: index})}
-                                        >
-                                        Agregar
-                                        </Button>
-                                    </div>
+                                    Acciones
                                     </Grid>
                                 </Grid>
-                                </div> : null
-                            
-                            ); 
+                            </div>
+                            <Divider></Divider>
+
+                            {(campaign[0] == undefined || campaign[0].campaignItems == undefined || campaign[0].campaignItems.length == 0 || campaign[0].campaignItems.length == indexlist.length - 1) && <p className="px-16">No hay ningun artículo</p>}
+
+                            {(campaign[0] != undefined && campaign[0].campaignItems != undefined) ? campaign[0].campaignItems.map((item, index) => {
+                                return (
+                                    (!indexlist.includes(item.id) && item.stockQuantity > 0 && (purchases[0] != undefined && purchases[0].items[index] != undefined && (item.maxLimitPerPerson - purchases[0].items[index].totalPurchasedItems) > 0)) ?
+                                    <div className="px-16 py-16" key={item.id}>
+                                        <Grid
+                                            container
+                                            spacing={2}
+                                            justify="center"
+                                            alignItems="center"
+                                            direction="row"
+                                        >
+                                            <Grid item lg={3} md={3} sm={3} xs={3}>
+                                            {item.name}
+                                            </Grid>
+                                            <Grid item lg={2} md={2} sm={2} xs={2}>
+                                            {item.stockQuantity}
+                                            </Grid>
+                                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                                            ₡{item.unitPrice}
+                                            </Grid>
+                                            <Grid item lg={3} md={3} sm={3} xs={3}>
+                                            <div className="flex">   
+                                                <Button
+                                                variant="contained"
+                                                className= {(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0) ) ? "bg-default" : "bg-primary"}
+                                                style={{color: (ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0) ) ? "gray" : "white"}}
+                                                disabled={(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0) )}
+                                                onClick={() => setShouldOpenDetailsDialog({open: true, id: item.id, index: index})}
+                                                >
+                                                Agregar
+                                                </Button>
+                                            </div>
+                                            </Grid>
+                                        </Grid>
+                                    </div> : null
+                                ); 
                             }) 
                             : null }
                         </Card>
@@ -598,34 +591,6 @@ const FormVentas = () => {
                         {<h5 className={classes.textvalidator}>Articulos añadidos a la compra:</h5>}
                         <Card className={classes.gridtext} elevation={2}>
                             <div className="p-16">
-                            <Grid
-                                container
-                                spacing={2}
-                                justify="center"
-                                alignItems="center"
-                                direction="row"
-                            >
-                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                Articulo
-                                </Grid>
-                                <Grid item lg={2} md={2} sm={2} xs={2}>
-                                Cant
-                                </Grid>
-                                <Grid item lg={4} md={4} sm={4} xs={4}>
-                                Subtotal
-                                </Grid>
-                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                Acciones
-                                </Grid>
-                            </Grid>
-                            </div>
-                            <Divider></Divider>
-
-                            {carrito.length == 0 && <p className="px-16">No hay ningun artículo</p>}
-
-                            {carrito.map((item, index) => {
-                            return ( 
-                                <div className="px-16 py-16" key={item.id}>
                                 <Grid
                                     container
                                     spacing={2}
@@ -634,43 +599,71 @@ const FormVentas = () => {
                                     direction="row"
                                 >
                                     <Grid item lg={3} md={3} sm={3} xs={3}>
-                                    {item.name}
+                                    Articulo
                                     </Grid>
                                     <Grid item lg={2} md={2} sm={2} xs={2}>
-                                    <SelectValidator  
-                                        name="buyquantity"
-                                        value={item.buyquantity} 
-                                        onChange={(e) => handleChangeCantidad(index, e)} 
-                                        validators={["required"]}
-                                        errorMessages={["Este campo es requerido"]}
-                                    >
-                                        { //console.log("cant carrito", item.limiteActual),
-                                        cantidad.map(cantidaditem => (
-                                                        (cantidaditem <= item.maxLimitPerPerson && cantidaditem <= item.stockQuantity && cantidaditem <= item.limiteActual) ?
-                                                        <MenuItem key={`cantidad-${cantidaditem}`} value={cantidaditem ? cantidaditem : ""}>
-                                                        {cantidaditem || " "}
-                                                        </MenuItem> : null
-                                                    ))}
-                                    </SelectValidator>
+                                    Cant
                                     </Grid>
                                     <Grid item lg={4} md={4} sm={4} xs={4}>
-                                    ₡{item.subtotal}
+                                    Subtotal
                                     </Grid>
                                     <Grid item lg={3} md={3} sm={3} xs={3}>
-                                    <div className="flex">
-                                    
-                                        <Button
-                                        variant="contained"
-                                        className="bg-error"
-                                        onClick={() => handleSingleRemove(index)}
-                                        >
-                                        Eliminar
-                                        </Button>
-                                    </div>
+                                    Acciones
                                     </Grid>
                                 </Grid>
-                                </div>
-                            );
+                            </div>
+                            <Divider></Divider>
+
+                            {carrito.length == 0 && <p className="px-16">No hay ningun artículo</p>}
+
+                            {carrito.map((item, index) => {
+                                return ( 
+                                    <div className="px-16 py-16" key={item.id}>
+                                        <Grid
+                                            container
+                                            spacing={2}
+                                            justify="center"
+                                            alignItems="center"
+                                            direction="row"
+                                        >
+                                            <Grid item lg={3} md={3} sm={3} xs={3}>
+                                            {item.name}
+                                            </Grid>
+                                            <Grid item lg={2} md={2} sm={2} xs={2}>
+                                            <SelectValidator  
+                                                name="buyquantity"
+                                                value={item.buyquantity} 
+                                                onChange={(e) => handleChangeCantidad(index, e)} 
+                                                validators={["required"]}
+                                                errorMessages={["Este campo es requerido"]}
+                                            >
+                                                { //console.log("cant carrito", item.limiteActual),
+                                                cantidad.map(cantidaditem => (
+                                                                (cantidaditem <= item.maxLimitPerPerson && cantidaditem <= item.stockQuantity && cantidaditem <= item.limiteActual) ?
+                                                                <MenuItem key={`cantidad-${cantidaditem}`} value={cantidaditem ? cantidaditem : ""}>
+                                                                {cantidaditem || " "}
+                                                                </MenuItem> : null
+                                                            ))}
+                                            </SelectValidator>
+                                            </Grid>
+                                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                                            ₡{item.subtotal}
+                                            </Grid>
+                                            <Grid item lg={3} md={3} sm={3} xs={3}>
+                                            <div className="flex">
+                                            
+                                                <Button
+                                                variant="contained"
+                                                className="bg-error"
+                                                onClick={() => handleSingleRemove(index)}
+                                                >
+                                                Eliminar
+                                                </Button>
+                                            </div>
+                                            </Grid>
+                                        </Grid>
+                                    </div>
+                                );
                             })} 
                         </Card>
                         <label style={{color: "red", display: disableCarrito ? null : "none"}} className={classes.textvalidator} id="image2">Se debe añadir al menos un artículo a la compra</label>
@@ -712,7 +705,7 @@ const FormVentas = () => {
                 </ValidatorForm>
                 <Dialog fullWidth maxWidth="md" onClose={handleClose} open={shouldOpenDetailsDialog.open}>
                 <DialogTitle  id="customized-dialog-title" onClose={handleClose}>
-                Detalles del artículo:
+                    Detalles del artículo:
                  </DialogTitle>
                 <AgregarDialog type={"agregar"} close={handleClose} purchases={purchases} ventas={ventasform} setventas={setVentasForm} indexlist={indexlist} setIndex={setIndexlist} carrito={carrito} setCarrito={setCarrito} order={[{}]} setDisponibles={setDisponibles} id={shouldOpenDetailsDialog.id} index={shouldOpenDetailsDialog.index} />
                 </Dialog>
