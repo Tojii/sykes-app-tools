@@ -93,12 +93,12 @@ export const navigations = [
       iconText: "CC",
       display: "none"
     },
-    {
-      name: "Consulta sobre Artículos Comprados",
-      path: "/Ventas/ComprasItems",
-      iconText: "CC",
-      display: "none",
-    },
+    // {
+    //   name: "Consulta sobre Artículos Comprados",
+    //   path: "/Ventas/ComprasItems",
+    //   iconText: "CC",
+    //   display: "none",
+    // },
     // {
     //   name: "Consulta de Inventario",
     //   path: "/",

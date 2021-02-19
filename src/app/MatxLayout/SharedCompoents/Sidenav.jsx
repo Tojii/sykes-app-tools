@@ -39,7 +39,7 @@ class Sidenav extends Component {
     return (
       <Fragment>
         {/* {console.log(navigations, this.props.user)} */}
-        {this.props.user.badge == null ? <Loading/> :
+        {this.props.user == null ? <Loading/> :
         <Scrollbar option={{suppressScrollX: true}} className="scrollable position-relative">
           {this.props.children}
           <MatxVerticalNav navigation={navigations} user={this.props.user} />
@@ -56,7 +56,7 @@ Sidenav.propTypes = {
 const mapStateToProps = state => ({
   setLayoutSettings: PropTypes.func.isRequired,
   settings: state.layout.settings,
-  user: state.user
+  user: state.user.user
 });
 export default withRouter(
   connect(

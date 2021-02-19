@@ -18,6 +18,7 @@ const styles = theme => ({
   }
 });
 
+
 class MatxVerticalNav extends Component {
   state = {
     collapsed: true,
@@ -36,10 +37,19 @@ class MatxVerticalNav extends Component {
                 if(item2.name == "Ventas Home") {
                   data[index].children[index2].display = null;  
                 }
+              } else {
+                data[index].display = "none";
+                if(item2.name == "Ventas Home") {
+                  data[index].children[index2].display = "none";  
+                }
               }
               if ((user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner'))) {
-                if(item2.name == "Administración Campaña" || item2.name == "Administración Inventario" || item2.name == "Consulta de Compras" || item2.name == "Consulta sobre Artículos Comprados") {
+                if(item2.name == "Administración Campaña" || item2.name == "Administración Inventario" || item2.name == "Consulta de Compras") {
                   data[index].children[index2].display = null;  
+                }
+              } else {
+                if(item2.name == "Administración Campaña" || item2.name == "Administración Inventario" || item2.name == "Consulta de Compras") {
+                  data[index].children[index2].display = "none";  
                 }
               }
             })
