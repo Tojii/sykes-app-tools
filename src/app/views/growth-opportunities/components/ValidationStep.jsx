@@ -87,15 +87,11 @@ const ResumeStep = ({
     );
 }
 
-const mapStateToProps = ({ applyReducer, growthReducer, user }) => {
-    const { validations } = applyReducer;
-    const { growth_opportunity } = growthReducer;
-    return {
-        user, 
-        validations, 
-        growth_opportunity
-    };
-};
+const mapStateToProps = state => ({
+    validations: state.apply.validations,
+    growth_opportunity: state.growth.growth_opportunity,
+    user: state.user.user,
+});
 
 export default connect(mapStateToProps, {
     setApplyData, setValidations, saveJobApplication,

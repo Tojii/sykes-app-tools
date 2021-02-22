@@ -14,12 +14,13 @@ const userReducer = function(state = initialState, action) {
     case SET_USER_DATA: {
       return {
         ...state,
-        ...action.data
+        user: action.data,
       };
     }
     case REMOVE_USER_DATA: {
       return {
-        ...state
+        ...state,
+        user: null
       };
     }
     case USER_LOGGED_OUT: {

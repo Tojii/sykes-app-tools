@@ -71,7 +71,7 @@ class AuthGuard extends Component {
 AuthGuard.contextType = AppContext;
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user.user
 });
 
 export default withRouter(connect(mapStateToProps)(AuthGuard));

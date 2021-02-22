@@ -134,7 +134,7 @@ Layout1Sidenav.propTypes = {
   setLayoutSettings: PropTypes.func.isRequired,
   setDefaultSettings: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  //user: PropTypes.object.isRequired,
   settings: PropTypes.object.isRequired
 };
 
@@ -142,7 +142,7 @@ const mapStateToProps = state => ({
   setDefaultSettings: PropTypes.func.isRequired,
   setLayoutSettings: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
-  user: state.user,
+  user: state.user.user,
   settings: state.layout.settings
 });
 

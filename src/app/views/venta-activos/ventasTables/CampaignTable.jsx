@@ -24,14 +24,14 @@ import ValidationModal from '../../growth-opportunities/components/ValidationDia
 const CampaignTable = (props) => {
     const dispatch = useDispatch();
     const isAdmin = props.admin != undefined ? props.admin : true;
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.user.user);
     const campaigns = useSelector(state => state.campaign.campaigns);
     const successCampaign = useSelector(state => state.campaign.success);
     const campaignsActive = useSelector(state => state.campaign.campaignsActive);
     const isLoading  = useSelector(state => state.campaign.loading);
     const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
     const [open, setOpen] = useState(false);
-    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const admin = (user != null && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
   
     useEffect(() => {
         dispatch(CleanPurchase());
@@ -260,7 +260,7 @@ const CampaignTable = (props) => {
   }
 
   return (
-      isLoading ? <Loading /> :
+      (isLoading || !user) ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">
             <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la campaña no pudo ser eliminada!"} setOpen={setOpen} open={open} />

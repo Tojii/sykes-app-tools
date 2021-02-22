@@ -24,13 +24,13 @@ import ValidationModal from '../../growth-opportunities/components/ValidationDia
 const InventarioTable = () => {
     const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
     const dispatch = useDispatch();
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.user.user);
     const image = null;
     const campaignitem = useSelector(state => state.campaign.campaignitems);
     const successCampaignItems = useSelector(state => state.campaign.success);
     const isLoading  = useSelector(state => state.campaign.loading);
     const [open, setOpen] = useState(false);
-    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const admin = (user != null && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     
 
     useEffect(() => {
@@ -267,7 +267,7 @@ const InventarioTable = () => {
   }
 
   return (
-    (isLoading || user.badge == undefined) ? <Loading /> :
+    (isLoading || !user) ? <Loading /> :
       admin ?
         <div className="m-sm-30">
           <ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />

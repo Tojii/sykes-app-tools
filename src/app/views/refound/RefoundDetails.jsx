@@ -15,10 +15,10 @@ const RefoundDetails = () => {
     const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
     const dispatch = useDispatch();
     const isLoading  = useSelector(state => state.refound.loading);
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.user.user);
 
     useEffect(() => {
-        dispatch(GetRefoundListByUser(user.badge));
+        dispatch(GetRefoundListByUser(user != null ? user.badge : ""));
     }, []);
 
     const getMuiTheme = () =>

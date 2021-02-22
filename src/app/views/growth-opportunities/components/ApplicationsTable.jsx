@@ -110,12 +110,9 @@ const ApplicationsTable = ({
     )
 }
 
-const mapStateToProps = ({ growthReducer }) => {
-    const { jobs_applied } = growthReducer;
-    return {
-        jobs_applied,
-    };
-};
+const mapStateToProps = state => ({
+    jobs_applied: state.growth.jobs_applied,
+});
 
 export default connect(mapStateToProps, {
 })(ApplicationsTable);

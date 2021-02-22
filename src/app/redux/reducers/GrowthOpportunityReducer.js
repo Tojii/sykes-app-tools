@@ -6,13 +6,13 @@ import {
 } from "../actions/GrowthOpportunityActions";
 import localStorageService from "../../services/localStorageService"
 
-const INIT_STATE = {
+const initialState = {
     growth_opportunities: null,
     growth_opportunity: null,
     jobs_applied: null,
 };
 
-export default (state = INIT_STATE, action) => {
+const GrowthReducer = function(state = initialState, action){
     switch (action.type) {
         case GET_GROWTH_OPPORTUNITIES:
             return { ...state, growth_opportunities: action.payload };
@@ -26,3 +26,5 @@ export default (state = INIT_STATE, action) => {
             return { ...state };
      }
 };
+
+export default GrowthReducer;

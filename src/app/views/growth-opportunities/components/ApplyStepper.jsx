@@ -51,7 +51,7 @@ const ApplyStepper = (props) => {
       saveApplication
     } = props
     const dispatch = useDispatch();  
-    const isLoading = useSelector(state => state.applyReducer.loading);
+    const isLoading = useSelector(state => state.apply.loading);
     const [activeStep, setActiveStep] = useState(0);
     const [disableNext, setDisableNext] = useState(false);
     const steps = getSteps();
@@ -135,7 +135,7 @@ const ApplyStepper = (props) => {
 
     return (
         <div>
-          {(isLoading || user.phone === undefined || user.email === undefined) ? <Loading /> :  
+          {(isLoading || user == null) ? <Loading /> :  
           <div>     
             <ValidationModal idioma={"Ingles"} save={() => {}} path={"/growth-opportunities"} state={(saveApplication != null && !saveApplication.succces) == false ? "Success!" : "Error!"} message={(saveApplication != null && !saveApplication.succces) == false ? "Application done!" : "An error occurred, please try again!"} setOpen={setOpen} open={open} />
             <ScrollContainer nativeMobileScroll={false} className="scroll-container">
@@ -198,17 +198,13 @@ const ApplyStepper = (props) => {
       );
 }
 
-const mapStateToProps = ({ applyReducer, growthReducer, user }) => {
-  const { apply, validations, saveApplication } = applyReducer;
-    const { growth_opportunity } = growthReducer;
-    return {
-      apply,
-      user,
-      validations,
-      growth_opportunity,
-      saveApplication
-  };
-};
+const mapStateToProps = state => ({
+  apply: state.apply.apply,
+  validations: state.apply.validations,
+  saveApplication: state.apply.saveApplication,
+  growth_opportunity: state.growth.growth_opportunity,
+  user: state.user.user,
+});
 
 export default connect(mapStateToProps, {
   setApplyData, saveJobApplication,

@@ -29,9 +29,9 @@ const ComprasTable = (props) => {
     const dispatch = useDispatch();
     const orders = useSelector(state => state.order.orders);
     const isLoading  = useSelector(state => state.order.loading);
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.user.user);
     const isAdmin = props.admin != undefined ? props.admin : true;
-    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const admin = (user != null && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
 
     useEffect(() => {
@@ -411,7 +411,7 @@ const ComprasTable = (props) => {
   }
 
   return (
-      (isLoading) ? <Loading /> :
+      (isLoading || !user) ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">
             <Grid container spacing={2}>

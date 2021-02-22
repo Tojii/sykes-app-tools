@@ -55,7 +55,7 @@ const Home = () => {
     const dispatch = useDispatch();  
     const summary = useSelector(state => state.refound.summary);
     const isLoading  = useSelector(state => state.refound.loading);
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.user.user);
     const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(false);
     const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
     const handleDetailsClick = () => {
@@ -253,12 +253,13 @@ const Home = () => {
     }
 
     useEffect(() => {
-        dispatch(GetRefoundListByUser(user.badge));
+        dispatch(GetRefoundListByUser(user != null ? user.badge : ""));
     }, [user]);
 
     return (
         <div>
-            { (!summary || isLoading) ? <Loading /> : 
+          {console.log(summary)}
+            { (summary.length == 0 || isLoading || !user) ? <Loading /> : 
                 <div className="m-sm-30">
                     <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                         <MuiThemeProvider theme={getMuiTheme()}>

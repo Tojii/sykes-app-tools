@@ -70,10 +70,10 @@ const useStyles = makeStyles({
 const FormAdminCampaign = () => {
     
     const classes = useStyles();
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.user.user);
     const dispatch = useDispatch();
     let { id } = useParams();
-    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const admin = (user != null && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const [campaignform, setCampaignForm] = useState({
         name: "",
         description: "",
@@ -168,9 +168,10 @@ const FormAdminCampaign = () => {
         <div className="p-24">
             <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
             <Card className={classes.formcard} elevation={6}>
-                {(isLoading && id) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Campaña" : "Agregar Campaña"}</h2>}
+                {(isLoading && id) ? <Loading/> : admin ? <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Campaña" : "Agregar Campaña"}</h2> : null}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>                 
                     {(isLoading && id) ? <Loading/> :
+                    admin ?
                     <>
                         <TextValidator
                             className={classes.textvalidator}
@@ -240,7 +241,7 @@ const FormAdminCampaign = () => {
                                 CANCELAR
                             </Button>
                         </div>
-                    </>
+                    </> : <NotFound/>
                     }
                 </ValidatorForm>
             </Card>

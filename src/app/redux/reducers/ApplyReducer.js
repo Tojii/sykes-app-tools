@@ -6,14 +6,14 @@ import {
     SET_LOADING,
 } from "../actions/ApplyActions";
 
-const INIT_STATE = {
+const initialState = {
     apply: {},
     validations: null,
     saveApplication: null,
     loading: false
 };
 
-export default (state = INIT_STATE, action) => {
+const ApplyReducer = function(state = initialState, action){
     switch (action.type) {
         case RE_LOADING: 
             return {...state, loading: true };
@@ -29,3 +29,5 @@ export default (state = INIT_STATE, action) => {
             return { ...state, loading: false };
      }
 };
+
+export default ApplyReducer;

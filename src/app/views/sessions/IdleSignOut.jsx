@@ -123,7 +123,7 @@ IdleSignOut.propTypes = {
 
 const mapStateToProps = state => ({
   logoutUser: PropTypes.func.isRequired,
-  user: state.user,
+  user: state.user.user,
   login: state.login
 });
 export default withStyles(styles, { withTheme: true })(

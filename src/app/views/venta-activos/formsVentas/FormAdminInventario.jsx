@@ -15,6 +15,7 @@ import ValidationModal from '../../growth-opportunities/components/ValidationDia
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
+import NotFound from "app/views/sessions/NotFound";
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -68,7 +69,8 @@ const FormAdminInventario = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     let { id } = useParams();
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.user.user);
+    const admin = (user != null && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const campaignitem = useSelector(state => state.campaign.campaignitem);
     const campaigns = useSelector(state => state.campaign.campaigns);
     const addCampaignItems = useSelector(state => state.campaign.addCampaignItems);
@@ -213,9 +215,10 @@ const FormAdminInventario = () => {
         <div className="p-24">
             <ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
             <Card className={classes.formcard} elevation={6}>
-                {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Artículo" : "Agregar Artículo"}</h2>}
+                {(isLoading) ? <Loading/> : admin ? <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Artículo" : "Agregar Artículo"}</h2> : null}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
                     {(isLoading) ? <Loading/> :
+                    admin ?
                     <>               
                          <SelectValidator 
                             label="Campaña*" 
@@ -325,7 +328,7 @@ const FormAdminInventario = () => {
                                 CANCELAR
                             </Button>
                         </div>
-                    </>
+                    </> : <NotFound/>
                     }
                 </ValidatorForm>
             </Card>

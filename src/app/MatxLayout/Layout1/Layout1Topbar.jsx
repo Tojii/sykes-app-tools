@@ -113,7 +113,7 @@ class Layout1Topbar extends Component {
                       variant="contained"
                       color="secondary"
                     >
-                      { this.props.user.fullname }
+                      { this.props.user != null ? this.props.user.fullname : "" }
                     </Button>
                   }
                 >
@@ -170,7 +170,7 @@ Layout1Topbar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  user: state.user,
+  user: state.user.user,
   setLayoutSettings: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
   settings: state.layout.settings

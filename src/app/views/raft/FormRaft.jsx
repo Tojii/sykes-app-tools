@@ -41,7 +41,7 @@ const useStyles = makeStyles({
 
 const FormRaft = () => {
     
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.user.user);
     const academiclist = useSelector(state => state.raft.academicgrades);
     const englishlevel = useSelector(state => state.raft.englishlevel);
     const paymentmethods = useSelector(state => state.raft.paymentmethods);
@@ -106,10 +106,10 @@ const FormRaft = () => {
     };
     
     const [raftform, setRaftForm] = useState({
-        badge: user.badge,
-        fullName: user.fullname,
-        personalEmail: user.email,
-        personalPhone: user.phone,
+        badge: user != null ? user.badge : "",
+        fullName: user != null ? user.fullname : "",
+        personalEmail: user != null ? user.email : "",
+        personalPhone: user != null ? user.phone : "",
         identificationNumber: "",
         firstName: "",
         secondName: "",

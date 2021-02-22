@@ -66,10 +66,10 @@ const FormAdminInventario = MatxLoadable({
       path: "/Ventas/Compras",
       component: Compras
     },
-    {
-      path: "/Ventas/ComprasItems",
-      component: ComprasItems
-    },
+    // {
+    //   path: "/Ventas/ComprasItems",
+    //   component: ComprasItems
+    // },
     {
       path: "/Ventas/FormAdminCampaign/:id",
       component: FormAdminCampaign

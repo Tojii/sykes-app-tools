@@ -84,7 +84,7 @@ export const OTHERS = "OTROS";
 
 const NewRefoundForm = () => {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
+  const user = useSelector(state => state.user.user);
   const studiesCatergory = useSelector(state => state.refound.studiesCatergory);
   const universityInstitutes = useSelector(state => state.refound.universityInstitutes);
   const ciscoAcademies = useSelector(state => state.refound.ciscoAcademies);
@@ -124,7 +124,7 @@ const NewRefoundForm = () => {
   });
 
   useEffect(() => {
-    dispatch(GetIformationLists(user.badge));
+    dispatch(GetIformationLists(user != null ? user.badge : ""));
     dispatch(getStudiesCatergory());
     // setForm({
     //   ...form,
@@ -338,7 +338,7 @@ const NewRefoundForm = () => {
     }
     //console.log(sizes)
     setActiveStep(steps.length);
-    await dispatch(SaveRefund(form, files, user.badge, user.fullname));
+    await dispatch(SaveRefund(form, files, user != null ? user.badge : "", user != null ? user.fullname : ""));
     setOpen(true);
   }
 
@@ -434,11 +434,11 @@ const NewRefoundForm = () => {
         return (
           (isLoading || !user) ? <Loading /> :
           <div className="mb-24">
-            <TextField name="bagde" value={user.badge} className={classes.textvalidator + " mr-24 mt-24"} label="Badge" disabled variant="filled"
+            <TextField name="bagde" value={user != null ? user.badge : ""} className={classes.textvalidator + " mr-24 mt-24"} label="Badge" disabled variant="filled"
               InputProps={{
                 readOnly: true,
               }} />
-            <TextField name="nombre" value={user.fullname} className={classes.textvalidator + " mr-24 mt-24"} label="Nombre" disabled variant="filled"
+            <TextField name="nombre" value={user != null ? user.fullname : ""} className={classes.textvalidator + " mr-24 mt-24"} label="Nombre" disabled variant="filled"
               InputProps={{
                 readOnly: true,
               }}

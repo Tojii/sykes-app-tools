@@ -18,12 +18,9 @@ const OpportunityDetail = (props) => {
     )
 }
 
-const mapStateToProps = ({ growthReducer }) => {
-    const { growth_opportunity } = growthReducer;
-    return {
-        growth_opportunity,
-    };
-};
+const mapStateToProps = state => ({
+    growth_opportunity: state.growth.growth_opportunity,
+});
 
 export default connect(mapStateToProps, {
     getGrowthOpportunity

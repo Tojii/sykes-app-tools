@@ -109,7 +109,7 @@ const FormVentas = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     let { idcampaign } = useParams();
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.user.user);
     const campaign = useSelector(state => state.campaign.campaign);
     const addOrder = useSelector(state => state.order.addOrder);
     const successOrder = useSelector(state => state.order.success);
@@ -143,13 +143,13 @@ const FormVentas = () => {
 
     useEffect(() => {
         if (cantidad[0] == undefined) {handleCantidad();}
-        if ((ventasform.badge == undefined && ventasform.name == undefined) || ventasform.email == user.email && ventasform.phone == user.phone) {
+        if ((ventasform.badge == undefined && ventasform.name == undefined || ventasform.badge == "" && ventasform.name == "") || (user != null && ventasform.email == user.email) && (user != null && ventasform.phone == user.phone)) {
             setVentasForm({
             ...ventasform,
-            badge: user.badge,
-            name: user.fullname,
-            email: user.email,
-            phone: user.phone,
+            badge: user != null ? user.badge : "",
+            name: user != null ? user.fullname : "",
+            email: user != null ? user.email : "",
+            phone: user != null ? user.phone : "",
             campaignName: campaign[0] != undefined ? campaign[0].name : "",
             campaign: {id: campaign[0] != undefined ? campaign[0].id : ""},
             fechaInicio: campaign[0] != undefined ? moment(new Date(campaign[0].startDate)).format("DD/MM/yyyy") : "",
@@ -208,10 +208,10 @@ const FormVentas = () => {
     const [carrito, setCarrito] = useState([]);
     
     const [ventasform, setVentasForm] = useState({
-        badge: user.badge,
-        name: user.fullname,
-        email: user.email,
-        phone: user.phone,
+        badge: user != null ? user.badge : "",
+        name: user != null ? user.fullname: "",
+        email: user != null ? user.email : "",
+        phone: user != null ? user.phone : "",
         province: "",
         canton: "",
         district: "",

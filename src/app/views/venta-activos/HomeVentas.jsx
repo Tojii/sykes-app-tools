@@ -12,8 +12,8 @@ import NotFound from "../sessions/NotFound"
 import { useSelector, useDispatch } from 'react-redux';
 
 const HomeVentas = () => {
-    const user = useSelector(state => state.user);
-    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const user = useSelector(state => state.user.user);
+    const admin = (user != null && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     //console.log("user",user)
     
     useEffect(() => {
@@ -22,7 +22,7 @@ const HomeVentas = () => {
 
     return (
         <>
-        {(user.badge == undefined) 
+        {(user == null) 
             ? <Loading /> :
              admin ? <>
                 {/* <Card className="m-sm-30"> */}
@@ -41,15 +41,8 @@ const HomeVentas = () => {
     )
 }
 
-const mapStateToProps = ({ growthReducer, user, applyReducer }) => {
-    const { growth_opportunities, jobs_applied } = growthReducer;
-    const { loading } = applyReducer;
-    return {
-        growth_opportunities,
-        jobs_applied,
-        user,
-        loading,
-    };
-};
+// const mapStateToProps = state => ({
+//     user: state.user.user,
+// });
 
 export default HomeVentas;
