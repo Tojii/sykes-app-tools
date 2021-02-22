@@ -5,6 +5,7 @@ import TouchRipple from "@material-ui/core/ButtonBase";
 import MatxVerticalNavExpansionPanel from "./MatxVerticalNavExpansionPanel";
 import { withStyles } from "@material-ui/styles";
 import { useSelector, useDispatch } from 'react-redux'
+import Loading from "../../../matx/components/MatxLoadable/Loading"
 
 const styles = theme => ({
   expandIcon: {
@@ -17,6 +18,7 @@ const styles = theme => ({
   }
 });
 
+
 class MatxVerticalNav extends Component {
   state = {
     collapsed: true,
@@ -25,12 +27,41 @@ class MatxVerticalNav extends Component {
   renderLevels = (data, user) => {
     // data[0].display = "none";
     // data[1].user = user;
+    //console.log("nav",user)
+    if ( user!=undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) { 
+        data.map((item, index) => {
+          if (item.children) {
+            item.children.map((item2, index2) => {
+              if ((user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_User')) || (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner'))) {
+                data[index].display = null;
+                if(item2.name == "Ventas Home") {
+                  data[index].children[index2].display = null;  
+                }
+              } else {
+                data[index].display = "none";
+                if(item2.name == "Ventas Home") {
+                  data[index].children[index2].display = "none";  
+                }
+              }
+              if ((user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner'))) {
+                if(item2.name == "Administración Campaña" || item2.name == "Administración Inventario" || item2.name == "Consulta de Compras") {
+                  data[index].children[index2].display = null;  
+                }
+              } else {
+                if(item2.name == "Administración Campaña" || item2.name == "Administración Inventario" || item2.name == "Consulta de Compras") {
+                  data[index].children[index2].display = "none";  
+                }
+              }
+            })
+          }
+        })   
+    }
     // Se trae la variable con los tabs que deben mostrarse y se revisa para modificar el display, en caso de ser false se pone display "none" 
-    // y en caso de true no se hace nada para que semuestre
-    return data.map((item, index) => {
+    // y en caso de true no se hace nada para que se muestre
+    return data.map((item, index) => { 
       if (item.children) {
         return (
-          <MatxVerticalNavExpansionPanel item={item} key={index}>
+          <MatxVerticalNavExpansionPanel item={item} key={index} display={item.display ? item.display : null}>
             {this.renderLevels(item.children)}
           </MatxVerticalNavExpansionPanel>
         );

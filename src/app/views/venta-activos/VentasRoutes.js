@@ -1,4 +1,5 @@
 import { MatxLoadable } from "matx";
+import jwtDecode from 'jwt-decode';
 
 const Campaign = MatxLoadable({
     loader: () => import("./ventasTables/CampaignTable")
@@ -6,6 +7,18 @@ const Campaign = MatxLoadable({
 
 const Inventario = MatxLoadable({
   loader: () => import("./ventasTables/InventarioTable")
+});
+
+const Compras = MatxLoadable({
+  loader: () => import("./ventasTables/ComprasTable")
+});
+
+const ComprasItems = MatxLoadable({
+  loader: () => import("./ventasTables/ComprasItemsTable")
+});
+
+const NotFound = MatxLoadable({
+  loader: () => import("../sessions/NotFound")
 });
 
 const Form = MatxLoadable({
@@ -49,6 +62,14 @@ const FormAdminInventario = MatxLoadable({
       path: "/Ventas/Inventario",
       component: Inventario
     },
+    {
+      path: "/Ventas/Compras",
+      component: Compras
+    },
+    // {
+    //   path: "/Ventas/ComprasItems",
+    //   component: ComprasItems
+    // },
     {
       path: "/Ventas/FormAdminCampaign/:id",
       component: FormAdminCampaign

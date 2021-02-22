@@ -67,7 +67,7 @@ const routes = [
   ...sykesHomeRoutes,
   ...growthOpportunitiesRoutes,
   ...userRoutes,
-  //...ventasRoutes,
+  ...ventasRoutes,
   //...lssRoutes,
   //...raftRoutes,
   // ...homeRoutes,

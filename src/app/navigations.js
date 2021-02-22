@@ -4,7 +4,13 @@
 // import MuiAlert from '@material-ui/lab/Alert';
 // import { makeStyles } from '@material-ui/core/styles';
 // import Snackbar from '@material-ui/core/Snackbar';
+import jwtDecode from 'jwt-decode';
 
+const user = localStorage.getItem("jwt_token") ? jwtDecode(localStorage.getItem("jwt_token")) : null
+
+ //console.log(user)
+
+const admin = user != undefined ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
 // const ResumeStep = ({ user }) => {return user}
 // const mapStateToProps = ({ user }) => {
 //   return {
@@ -58,38 +64,50 @@ export const navigations = [
     path: "/growth-opportunities",
     icon: "content_paste",
   },
-  // { 
-  //   name: "Venta de Activos",
-  //   icon: "laptop",
-  //   children:[
-  //   {
-  //     name: "Ventas Home",
-  //     path: "/VentasHome",
-  //     iconText: "AC"
-  //   },
-  //   {
-  //     name: "Administración de Campaña",
-  //     path: "/Ventas/Campaign",
-  //     iconText: "AC"
-  //   },
-  //   {
-  //     name: "Administración de Inventario",
-  //     path: "/Ventas/Inventario",
-  //     iconText: "AI"
-  //   },
-  //   // {
-  //   //   name: "Consulta de Compras",
-  //   //   path: "/",
-  //   //   iconText: "CC"
-  //   // },
-  //   // {
-  //   //   name: "Consulta de Inventario",
-  //   //   path: "/",
-  //   //   iconText: "CI"
-  //   // },
-  //   ]
+  { 
+    name: "Venta de Activos",
+    icon: "laptop",
+    display: "none",
+    children:[
+    {
+      name: "Ventas Home",
+      path: "/VentasHome",
+      iconText: "AC",
+      display: "none"
+    },
+    {
+      name: "Administración Campaña",
+      path: "/Ventas/Campaign",
+      iconText: "AC",
+      display: "none"
+    },
+    {
+      name: "Administración Inventario",
+      path: "/Ventas/Inventario",
+      iconText: "AI",
+      display: "none"
+    },
+    {
+      name: "Consulta de Compras",
+      path: "/Ventas/Compras",
+      iconText: "CC",
+      display: "none"
+    },
+    // {
+    //   name: "Consulta sobre Artículos Comprados",
+    //   path: "/Ventas/ComprasItems",
+    //   iconText: "CC",
+    //   display: "none",
+    // },
+    // {
+    //   name: "Consulta de Inventario",
+    //   path: "/",
+    //   iconText: "CI",
+    //   display: "none"
+    // },
+    ]
      
-  // },
+  },
   // {
   //   name: "Raft",
   //   path: "/Raft",
