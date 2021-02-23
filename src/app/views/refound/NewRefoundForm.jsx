@@ -530,7 +530,7 @@ const NewRefoundForm = () => {
                   value={form.certificationDate}
                   name="certificationDate"
                   onChange={handleDateChangeCertificationDate}
-                  minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000) : null}
+                  //minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000) : null}
                 />
               </MuiPickersUtilsProvider>
             }
