@@ -5,17 +5,17 @@ import apiAuthService from "../services/apiAuthService";
 import history from "history.js";
 import login from './reducers/LoginReducer';
 
-// const store = createStore(login);
-// const state = store.getState();
-// console.log("prueba", state)
+const store = createStore(login);
+const state = store.getState();
+console.log("prueba", state)
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_API_URL
 });
 
-//instance.defaults.headers.common['Authorization'] = 'Bearer ' + state.token;
+instance.defaults.headers.common['Authorization'] = 'Bearer ' + state.token;
 
-//console.log("api",instance.defaults.headers)
+console.log("api",instance.defaults.headers)
 
 instance.interceptors.response.use(
     (response) => response,
