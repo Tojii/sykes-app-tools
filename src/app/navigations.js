@@ -58,10 +58,11 @@ export const navigations = [
     ]
      
   },
-  // {
-  //   name: "Raft",
-  //   path: "/Raft",
-  //   icon: "person_add_alt_1",
-  //   display: "none"
+  {
+    name: "Raft",
+    path: "/Raft",
+    icon: "person_add_alt_1",
+    display: null
+  },
   
 ];

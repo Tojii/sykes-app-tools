@@ -84,6 +84,7 @@ const InventarioTable = () => {
       return [
           item.id,
           item.campaign.id,
+          item.campaign.name,
           item.name,
           item.description,
           showImage(item),
@@ -115,6 +116,16 @@ const InventarioTable = () => {
              //viewColumns: false,
             }
         },
+        {
+          name: "campaignname",
+          label: "Campaña",
+          options: {
+           filter: true,
+           sort: true,
+           display: false,
+           //viewColumns: false,
+          }
+      },
         {
           name: "name",
           label: "Nombre Artículo",
@@ -267,6 +278,7 @@ const InventarioTable = () => {
   }
 
   return (
+    console.log(campaignitem),
     (isLoading || !user) ? <Loading /> :
       admin ?
         <div className="m-sm-30">

@@ -1,6 +1,7 @@
 import axios from "axios";
 import history from "history.js";
 import apiAuthService from "../../services/apiAuthService";
+import configureStore from "../Store";
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
@@ -23,6 +24,10 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 )
+
+const { Store, Persistor } = configureStore();
+
+console.log("login store", Store.getState())
 
 export const setUserData = user => dispatch => {
   //console.log("entré",user)

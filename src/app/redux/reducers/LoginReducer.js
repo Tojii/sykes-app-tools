@@ -2,12 +2,14 @@ import {
   LOGIN_SUCCESS,
   LOGIN_ERROR,
   LOGIN_LOADING,
-  RESET_PASSWORD
+  RESET_PASSWORD,
+  LOGIN_DATA
 } from "../actions/LoginActions";
 
 const initialState = {
   success: false,
   loading: false,
+  token: null,
   error: {
     username: null,
     password: null
@@ -27,6 +29,12 @@ const LoginReducer = function(state = initialState, action) {
         ...state,
         success: true,
         loading: false
+      };
+    }
+    case LOGIN_DATA: {
+      return {
+        ...state,
+        token: action.data
       };
     }
     case RESET_PASSWORD: {

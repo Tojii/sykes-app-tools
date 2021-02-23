@@ -38,7 +38,7 @@ const routes = [
   ...userRoutes,
   ...ventasRoutes,
   //...lssRoutes,
-  //...raftRoutes,
+  ...raftRoutes,
   ...redirectRoute,
   ...errorRoute
 ];

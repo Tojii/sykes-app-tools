@@ -2,6 +2,7 @@ import axios from "axios";
 import { format } from 'date-fns';
 import apiAuthService from "../../services/apiAuthService";
 import history from "history.js";
+import instance from "../apiService"
 
 export const GET_REFOUND_LIST_BY_USER = "GET_REFOUND_LIST_BY_USER";
 export const SAVE_REFOUND = "SAVE_REFOUND";
@@ -10,28 +11,29 @@ export const GET_INFORMATION_LISTS = "GET_INFORMATION_LISTS";
 export const GET_STUDIES_CATEGORY = "GET_STUDIES_CATEGORY";
 export const CLEAN_SAVEREFOUND =  "CLEAN_SAVEREFOUND";
 
-const axiosInstance = axios.create();
+// const axiosInstance = axios.create();
 
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    //if (error.response.status === 401) {
-        apiAuthService.logout(); 
-        //apiAuthService.removeUser();
-        history.state = history.location.pathname;
-        history.push({
-          pathname: "/session/signin"
-        });
-    //}
+// axiosInstance.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     //if (error.response.status === 401) {
+//         apiAuthService.logout(); 
+//         //apiAuthService.removeUser();
+//         history.state = history.location.pathname;
+//         history.push({
+//           pathname: "/session/signin"
+//         });
+//     //}
 
-    return Promise.reject(error);
-  }
-)
+//     return Promise.reject(error);
+//   }
+// )
+console.log("refund", instance.defaults.headers)
 
 export const GetRefoundListByUser = (badgeId) => {
   return async dispatch =>{
-    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-      await axiosInstance.get(`${process.env.REACT_APP_API_URL}/api/Refund/GetListByUser?badgeId=${badgeId}`).then((res => {
+    //axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+      await instance.get(`${process.env.REACT_APP_API_URL}/api/Refund/GetListByUser?badgeId=${badgeId}`).then((res => {
         dispatch({
             type: GET_REFOUND_LIST_BY_USER,
             data: res.data
@@ -97,8 +99,8 @@ export const SaveRefund = (Data, Files, badge, fullname) => {
         dispatch({
             type: RE_LOADING
           });
-        axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-        await axiosInstance.post(`${process.env.REACT_APP_API_URL}/api/Refund/SaveRefund`,formData, config 
+        //axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+        await instance.post(`${process.env.REACT_APP_API_URL}/api/Refund/SaveRefund`,formData, config 
           ).then((res => {
           dispatch({
                 type: SAVE_REFOUND,
@@ -133,8 +135,8 @@ export const GetIformationLists = () => {
     dispatch({
         type: RE_LOADING
       });
-    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    await axiosInstance.get(`${process.env.REACT_APP_API_URL}/api/Refund/GetInformationLists`).then((res => {
+    //axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
+    await instance.get(`${process.env.REACT_APP_API_URL}/api/Refund/GetInformationLists`).then((res => {
       dispatch({
             type: GET_INFORMATION_LISTS,
             data: res.data
@@ -163,8 +165,8 @@ export const GetIformationLists = () => {
 
 export const getStudiesCatergory = () => {
   return async dispatch => {
-    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-    await axiosInstance.get(`${process.env.REACT_APP_API_URL}/api/Refund/GetStudiesCategory`).then((res => {
+    //axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
+    await instance.get(`${process.env.REACT_APP_API_URL}/api/Refund/GetStudiesCategory`).then((res => {
       dispatch({
         type: GET_STUDIES_CATEGORY,
         data: res.data
