@@ -234,7 +234,7 @@ const InventarioTable = () => {
         return campaignitem[dataIndex][1] != "Attorney";
       },
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar el artículo "} index={2} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
+        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar el artículo "} index={3} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
       ),
       print:false,
       download: true,
