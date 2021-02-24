@@ -1,7 +1,5 @@
 import api from "../Api"
-
 import history from "history.js";
-import apiAuthService from "../../services/apiAuthService";
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
@@ -17,8 +15,6 @@ export const setUserData = user => dispatch => {
 
 export function logoutUser() {
   return dispatch => {
-    apiAuthService.logout();
-
     history.push({
       pathname: "/session/signin"
     });

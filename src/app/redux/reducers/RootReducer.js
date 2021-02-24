@@ -5,7 +5,6 @@ import LayoutReducer from "./LayoutReducer";
 import ScrumBoardReducer from "./ScrumBoardReducer";
 import NotificationReducer from "./NotificationReducer";
 import EcommerceReducer from "./EcommerceReducer";
-import MantenimientoReducer from "./MantenimientoReducer";
 import LSSReducer from "./LSSReducer";
 import GrowthReducer from "./GrowthOpportunityReducer";
 import MetricsReducer from "./MetricsReducer";
@@ -19,7 +18,6 @@ import CampaignReducer from "./CampaignReducer";
 import OrderReducer from "./OrderReducer";
 import LocationReducer from "./LocationReducer";
 
-
 const appReducer = combineReducers({
   login: LoginReducer,
   user: UserReducer,
@@ -27,7 +25,6 @@ const appReducer = combineReducers({
   scrumboard: ScrumBoardReducer,
   notification: NotificationReducer,
   ecommerce: EcommerceReducer,
-  mantenimientos: MantenimientoReducer,
   lss: LSSReducer,
   raft: RaftReducer,
   refound: RefoundsReducer,

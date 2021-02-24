@@ -1,8 +1,6 @@
-import apiAuthService from "../../services/apiAuthService";
 import { setUserData, logoutUser } from "./UserActions";
 import history from "history.js";
 import api from "../Api"
-import axios from "axios";
 import jwtDecode from 'jwt-decode';
 
 export const LOGIN_ERROR = "LOGIN_ERROR";
@@ -24,16 +22,12 @@ export function login({ email, password }) {
       force: true
     }
     return api.post(`/authenticate`, parameters).then(response => {
-      // Login successful
       // Save token
-      console.log("response", response);
-      
       dispatch({
         type: LOGIN_DATA,
         data: response.data
       });
       
-      apiAuthService.setSession(response.data.token);
       // Set user
       dispatch(setUserData(jwtDecode(response.data.token)));
 
@@ -50,7 +44,6 @@ export function login({ email, password }) {
       return dispatch({
         type: LOGIN_SUCCESS
       });
-      //return jwtDecode(response.data.token);
     })
     .catch(error => {
       return dispatch({

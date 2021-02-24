@@ -11,7 +11,6 @@ export const CLEAN_SAVEREFOUND =  "CLEAN_SAVEREFOUND";
 export const GetRefoundListByUser = (badgeId) => {
   return async dispatch =>{
       await api.get(`/api/Refund/GetListByUser?badgeId=${badgeId}`).then((res => {
-        console.log("worked", res);
         dispatch({
             type: GET_REFOUND_LIST_BY_USER,
             data: res.data
