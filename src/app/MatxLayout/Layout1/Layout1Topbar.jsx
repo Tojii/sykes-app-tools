@@ -9,7 +9,6 @@ import {
   MuiThemeProvider
 } from "@material-ui/core";
 import { connect } from "react-redux";
-import localStorageService from "../../services/localStorageService";
 import { setLayoutSettings } from "app/redux/actions/LayoutActions";
 import { logoutUser } from "app/redux/actions/UserActions";
 import { PropTypes } from "prop-types";
@@ -17,7 +16,6 @@ import { MatxMenu, MatxSearchBox } from "matx";
 import { isMdScreen } from "utils";
 import NotificationBar from "../SharedCompoents/NotificationBar";
 import { Link } from "react-router-dom";
-// import ShoppingCart from "../SharedCompoents/ShoppingCart";
 import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
@@ -27,8 +25,6 @@ const styles = theme => ({
 });
 
 class Layout1Topbar extends Component {
-  // state = {user: localStorage.getItem("user")};
-  // console.log(settings.layout1Settings)
 
   updateSidebarMode = sidebarSettings => {
     let { settings, setLayoutSettings } = this.props;

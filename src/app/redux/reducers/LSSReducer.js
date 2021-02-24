@@ -6,7 +6,6 @@ import {
     GET_JEFE_DIRECTO,
     LSS_LOADING
   } from "../actions/LSSActions";
-  import localStorageService from "../../services/localStorageService";
   
   const initialState = {
     user: {},

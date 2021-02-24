@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { setApplyData } from "../../../redux/actions/ApplyActions";
-import { setUserData } from "../../../redux/actions/UserActions";
+import { updateUserData } from "../../../redux/actions/UserActions";
 import { validateEmail } from '../../../../utils';
 import { connect } from "react-redux";
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
@@ -101,7 +101,7 @@ const UserForm = (props) => {
         }
         user.email = form_user.email;
         user.phone = form_user.phone;
-        dispatch(setUserData(user));
+        dispatch(updateUserData(user));
         
         // apply['phone'] = form_user.phone;
         // apply['email'] = form_user.email;

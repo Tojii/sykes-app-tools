@@ -23,7 +23,7 @@ import { GetUserPurchased } from "../../../redux/actions/OrderActions";
 import { GetCampaignsById } from "../../../redux/actions/CampaignActions";
 import { GetProvince, GetCantons, GetDistricts } from "../../../redux/actions/LocationActions";
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
-import { updateUserData, setUserData } from "../../../redux/actions/UserActions"
+import { updateUserData } from "../../../redux/actions/UserActions"
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import history from "history.js";
 
@@ -252,7 +252,7 @@ const FormVentas = () => {
                 phone: ventasform.phone,
                 badge: ventasform.badge,
             }
-            await dispatch(setUserData(payloadUser));
+
             await dispatch(updateUserData(payloadUser));
             setOpen(true);
         } else {

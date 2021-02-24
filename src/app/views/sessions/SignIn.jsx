@@ -13,7 +13,7 @@ import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { withRouter } from "react-router-dom";
-import { loginWithEmailAndPassword } from "../../redux/actions/LoginActions";
+import { login } from "../../redux/actions/LoginActions";
 
 const styles = theme => ({
   wrapper: {
@@ -44,7 +44,7 @@ class SignIn extends Component {
     });
   };
   handleFormSubmit = event => {
-    this.props.loginWithEmailAndPassword({ ...this.state });
+    this.props.login({ ...this.state });
   };
   
   render() {
@@ -142,14 +142,14 @@ class SignIn extends Component {
 }
 
 const mapStateToProps = state => ({
-  loginWithEmailAndPassword: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
   login: state.login
 });
 export default withStyles(styles, { withTheme: true })(
   withRouter(
     connect(
       mapStateToProps,
-      { loginWithEmailAndPassword }
+      { login }
     )(SignIn)
   )
 );

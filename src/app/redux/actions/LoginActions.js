@@ -1,8 +1,7 @@
 import apiAuthService from "../../services/apiAuthService";
-import { setUserData } from "./UserActions";
+import { setUserData, logoutUser } from "./UserActions";
 import history from "history.js";
-import configureStore from "../Store";
-import instance from "../apiService"
+import api from "../Api"
 import axios from "axios";
 import jwtDecode from 'jwt-decode';
 
@@ -10,13 +9,10 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_LOADING = "LOGIN_LOADING";
 export const LOGIN_DATA = "LOGIN_DATA";
+export const LOGIN_LOGGED_OUT = "LOGIN_LOGGED_OUT";
 export const RESET_PASSWORD = "RESET_PASSWORD";
 
-const { Store, Persistor } = configureStore();
-
-console.log("login store", Store.getState().login.token)
-
-export function loginWithEmailAndPassword({ email, password }) {
+export function login({ email, password }) {
   return dispatch => {
     dispatch({
       type: LOGIN_LOADING
@@ -27,21 +23,20 @@ export function loginWithEmailAndPassword({ email, password }) {
       password: password,
       force: true
     }
-    axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
-    return instance.post(`${process.env.REACT_APP_API_URL}/authenticate`, parameters).then(response => {
+    return api.post(`/authenticate`, parameters).then(response => {
       // Login successful
       // Save token
-      //console.log("Login", response);
+      console.log("response", response);
+      
       dispatch({
         type: LOGIN_DATA,
-        data: response.data.token
+        data: response.data
       });
-      instance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
+      
       apiAuthService.setSession(response.data.token);
       // Set user
-      apiAuthService.setUser(response.data.token);
       dispatch(setUserData(jwtDecode(response.data.token)));
-      //console.log("history",history)
+
       if (history.location.prev) {
         history.push({
           pathname: history.location.pathname != history.location.prev ? history.location.prev : "/"
@@ -66,11 +61,33 @@ export function loginWithEmailAndPassword({ email, password }) {
   };
 }
 
-export function resetPassword({ email }) {
+export const logout = () => {
   return dispatch => {
     dispatch({
-      payload: email,
-      type: RESET_PASSWORD
+      type: LOGIN_LOADING
+    });
+
+    dispatch(logoutUser());
+
+    dispatch({
+      type: LOGIN_LOGGED_OUT
+    });
+    
+    history.state = history.location.pathname;
+    history.push({
+       pathname: "/session/signin"
     });
   };
-}
+};
+
+export const refreshtoken = (refreshtoken) => {
+  return async dispatch => {
+    const response = await api.post(`/Authenticate/Refresh`, `"${refreshtoken}"`);
+    dispatch({
+      type: LOGIN_DATA,
+      data: response.data
+    });
+    dispatch(setUserData(jwtDecode(response.data.token)));
+    return response.data.token;
+  };
+};

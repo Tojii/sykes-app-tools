@@ -3,13 +3,16 @@ import {
   LOGIN_ERROR,
   LOGIN_LOADING,
   RESET_PASSWORD,
-  LOGIN_DATA
+  LOGIN_DATA,
+  LOGIN_LOGGED_OUT
 } from "../actions/LoginActions";
 
 const initialState = {
   success: false,
   loading: false,
   token: null,
+  token_type: null,
+  refreshtoken: null,
   error: {
     username: null,
     password: null
@@ -34,8 +37,13 @@ const LoginReducer = function(state = initialState, action) {
     case LOGIN_DATA: {
       return {
         ...state,
-        token: action.data
+        token: action.data.token,
+        refreshtoken: action.data.refreshtoken,
+        token_type: action.data.token_type
       };
+    }
+    case LOGIN_LOGGED_OUT: {
+      return state;
     }
     case RESET_PASSWORD: {
       return {

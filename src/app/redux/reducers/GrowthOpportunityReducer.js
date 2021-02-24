@@ -4,7 +4,6 @@ import {
     GET_JOBS_APPLIED,
     GET_GROWTH_OPPORTUNITY,
 } from "../actions/GrowthOpportunityActions";
-import localStorageService from "../../services/localStorageService"
 
 const initialState = {
     growth_opportunities: null,
