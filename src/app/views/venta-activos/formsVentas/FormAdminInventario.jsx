@@ -12,7 +12,7 @@ import {addRaft} from "../../../redux/actions/RaftActions";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { GetCampaignItemsById, UpdateCampaignItems, AddCampaignItems, GetCampaigns, GetCampaignsActive } from "../../../redux/actions/CampaignActions";
+import { GetCampaignItemsById, UpdateCampaignItems, AddCampaignItems, GetCampaigns, GetCampaignsActive, GetCampaignsItems } from "../../../redux/actions/CampaignActions";
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
@@ -215,7 +215,7 @@ const FormAdminInventario = () => {
 
     return (
         <div className="p-24">
-            <ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
+            <ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Artículo" : "Agregar Artículo"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  

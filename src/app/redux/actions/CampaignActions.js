@@ -306,7 +306,7 @@ export const UpdateCampaignItems = (id, payload, files) => dispatch => {
         'content-type': 'multipart/form-data',
     }
   }  
-  console.log("updatever", files)
+  //console.log("updatever", files)
   var formData = new FormData();
     formData.append('name', payload.name);
     formData.append('description', payload.description);
