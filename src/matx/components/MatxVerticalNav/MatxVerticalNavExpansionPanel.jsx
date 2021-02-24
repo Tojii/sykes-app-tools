@@ -28,7 +28,7 @@ const styles = theme => {
 
 class MatxVerticalNavExpansionPanel extends Component {
   state = {
-    collapsed: true
+    collapsed: this.props.display == null ? true : false
   };
   elementRef = React.createRef();
 
@@ -62,8 +62,10 @@ class MatxVerticalNavExpansionPanel extends Component {
     let { collapsed } = this.state;
     let { classes, children } = this.props;
     let { name, icon, badge } = this.props.item;
+    let displayitem = this.props.display;
+
     return (
-      <div>
+      <div style={{display: displayitem ? displayitem : null}}>
         <TouchRipple
           className={classList({
             "nav-item flex-middle h-48 w-100 has-submenu": true,
@@ -73,7 +75,7 @@ class MatxVerticalNavExpansionPanel extends Component {
         >
           <div>
             <Icon className="text-middle item-icon">{icon}</Icon>
-            <span className="text-middle pl-20 item-text">{name}</span>
+            <span style={{paddingLeft:"15px"}} className="text-middle item-text">{name}</span>
           </div>
           {badge && (
             <div className={`badge bg-${badge.color}`}>{badge.value}</div>

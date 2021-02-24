@@ -1,3 +1,29 @@
+// import React, { useState, useEffect } from "react";
+// import { Grid, Fab, Icon, Card, Divider } from "@material-ui/core";
+// import { connect } from "react-redux";
+// import MuiAlert from '@material-ui/lab/Alert';
+// import { makeStyles } from '@material-ui/core/styles';
+// import Snackbar from '@material-ui/core/Snackbar';
+import jwtDecode from 'jwt-decode';
+
+const user = localStorage.getItem("jwt_token") ? jwtDecode(localStorage.getItem("jwt_token")) : null
+
+ //console.log(user)
+
+const admin = user != undefined ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+// const ResumeStep = ({ user }) => {return user}
+// const mapStateToProps = ({ user }) => {
+//   return {
+//       user,
+//   };
+// };
+
+// export default connect(mapStateToProps, {
+  
+// })(ResumeStep);
+
+// const usuario = ResumeStep();
+
 export const navigations = [
   // {
   //   name: "Dashboard",
@@ -8,7 +34,7 @@ export const navigations = [
   {
     name: "Inicio",
     path: "/Inicio",
-    icon: "content_paste",
+    icon: "home_icon",
   },
   // {
   //   name: "LSS",
@@ -16,26 +42,78 @@ export const navigations = [
   //   icon: "content_paste",
   //   badge: { value: "New", color: "secondary" },
   // },
+  { 
+    name: "Reembolso Educativo",
+    icon: "attach_money_icon",
+    path: "/ReembolsoEducativo/ListaReembolsos",
+    // children:[
+    // {
+    //   name: "Lista de Reembolsos",
+    //   path: "/ReembolsoEducativo/ListaReembolsos",
+    //   iconText: "LR"
+    // },
+    // {
+    //   name: "Detalle de Reembolsos",
+    //   path: "/ReembolsoEducativo/Detalle",
+    //   iconText: "DR"
+    // }   
+    // ]
+  },
   {
-    name: "Rembolso Educativo",
-    icon: "monetization_on",
-    children:[{
-      name: "Lista de Reembolsos",
-      path: "/ReembolsoEducativo/ListaReembolsos",
-      iconText: "A"
+    name: "Growth Opportunities",
+    path: "/growth-opportunities",
+    icon: "content_paste",
+  },
+  { 
+    name: "Venta de Activos",
+    icon: "laptop",
+    display: "none",
+    children:[
+    {
+      name: "Ventas Home",
+      path: "/VentasHome",
+      iconText: "AC",
+      display: "none"
     },
     {
-      name: "Detalle de Reembolsos",
-      path: "/ReembolsoEducativo/Detalle",
-      iconText: "A"
-    }   
+      name: "Administración Campaña",
+      path: "/Ventas/Campaign",
+      iconText: "AC",
+      display: "none"
+    },
+    {
+      name: "Administración Inventario",
+      path: "/Ventas/Inventario",
+      iconText: "AI",
+      display: "none"
+    },
+    {
+      name: "Consulta de Compras",
+      path: "/Ventas/Compras",
+      iconText: "CC",
+      display: "none"
+    },
+    // {
+    //   name: "Consulta sobre Artículos Comprados",
+    //   path: "/Ventas/ComprasItems",
+    //   iconText: "CC",
+    //   display: "none",
+    // },
+    // {
+    //   name: "Consulta de Inventario",
+    //   path: "/",
+    //   iconText: "CI",
+    //   display: "none"
+    // },
     ]
+     
   },
   // {
   //   name: "Raft",
   //   path: "/Raft",
   //   icon: "person_add_alt_1",
-  //   badge: { value: "New", color: "secondary" },
+  //   display: "none"
+    
   // }, 
   // {
   //   name: "UI Kits",

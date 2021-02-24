@@ -2,7 +2,8 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import lssRoutes from './views/lss/LssRoutes';
-//import raftRoutes from './views/raft/RaftRoutes';
+import raftRoutes from './views/raft/RaftRoutes';
+import ventasRoutes from './views/venta-activos/VentasRoutes';
 import refoundRoutes from './views/refound/refoundRoutes';
 import sykesHomeRoutes from './views/sykesHome/sykesHomeRoutes';
 
@@ -32,6 +33,8 @@ import chatRoutes from "./views/chat-box/ChatRoutes";
 import todoRoutes from "./views/todo/TodoRoutes";
 import pageLayoutRoutes from "./views/page-layouts/PageLayoutRoutees";
 import ListRoute from "./views/list/ListRoute";
+import growthOpportunitiesRoutes from "./views/growth-opportunities/GrowthOpportunitiesRoutes";
+import userRoutes from "./views/user/UserRoutes";
 
 /*
   Required if you are going to use Evelynn Landing page
@@ -62,6 +65,9 @@ const routes = [
   ...sessionRoutes,
   ...refoundRoutes,
   ...sykesHomeRoutes,
+  ...growthOpportunitiesRoutes,
+  ...userRoutes,
+  ...ventasRoutes,
   //...lssRoutes,
   //...raftRoutes,
   // ...homeRoutes,
