@@ -48,7 +48,7 @@ class SignIn extends Component {
   };
   
   render() {
-    const error = this.props.login.error && !this.props.success ? null : 
+    const error = this.props.loginState.error && !this.props.loginState.success ? null : 
       <Alert variant="outlined" severity="error">The username or password is incorrect!</Alert>
 
     let { email, password } = this.state;
@@ -106,12 +106,12 @@ class SignIn extends Component {
                         <Button
                           variant="contained"
                           color="primary"
-                          disabled={this.props.login.loading}
+                          disabled={this.props.loginState.loading}
                           type="submit"
                         >
                           Sign in 
                         </Button>
-                        {this.props.login.loading && (
+                        {this.props.loginState.loading && (
                           <CircularProgress
                             size={24}
                             className={classes.buttonProgress}
@@ -143,7 +143,7 @@ class SignIn extends Component {
 
 const mapStateToProps = state => ({
   login: PropTypes.func.isRequired,
-  login: state.login
+  loginState: state.login
 });
 export default withStyles(styles, { withTheme: true })(
   withRouter(

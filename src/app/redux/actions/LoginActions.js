@@ -55,6 +55,7 @@ export function login({ email, password }) {
 }
 
 export const logout = () => {
+  console.log("something is bad");
   return dispatch => {
     dispatch({
       type: LOGIN_LOADING
