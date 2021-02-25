@@ -1,7 +1,8 @@
 import React, { useState, Component, useRef, useEffect } from "react";
 import {
   Button,
-  Card
+  Card,
+  FormHelperText
 } from "@material-ui/core";
 import MenuItem from '@material-ui/core/MenuItem';
 import Input from '@material-ui/core/Input';
@@ -10,16 +11,32 @@ import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui
 import { makeStyles } from '@material-ui/core/styles';
 import {addRaft, getAcademicGrades, getEnglishLevel, getPaymentMethod, getPositions} from "../../redux/actions/RaftActions";
 import { useSelector, useDispatch } from 'react-redux';
+import history from "history.js";
+import { useParams } from "react-router";
 
 const useStyles = makeStyles({
     textvalidator: {
-      marginLeft: "25%",
-      width: "50%",
-      marginTop: "3%",
-    },
-    formcard: {
-      marginLeft: "25%",
-      width: "50%",
+        "@media (min-width: 0px)": {
+             marginLeft: "7.5%",
+             width: "85%",
+             marginTop: "3%",
+         },
+         "@media (min-width: 1025px)": {
+             marginLeft: "25%",
+             width: "50%",
+             marginTop: "3%",
+         }
+     },
+     formcard: {
+        "@media (min-width: 1023px)": {
+            marginLeft: "0%",
+            width: "100%",
+        },
+        "@media (min-width: 1024px)": {
+            marginLeft: "25%",
+            width: "50%",
+        }
+     
     },
     sectionbutton: {
         marginLeft: "25%",
@@ -45,15 +62,36 @@ const FormRaft = () => {
     const academiclist = useSelector(state => state.raft.academicgrades);
     const englishlevel = useSelector(state => state.raft.englishlevel);
     const paymentmethods = useSelector(state => state.raft.paymentmethods);
-    const positions = useSelector(state => state.raft.positions)
+    const positions = useSelector(state => state.raft.positions);
+    const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
     const dispatch = useDispatch();
+    let { id } = useParams();
     
     const handleFormSubmit = async () => {
-        console.log("submit")
-        await dispatch(addRaft(raftform));
+        if (raftform.resume != null) {     
+            console.log("submit")
+            await dispatch(addRaft(raftform));
+        }
     };
 
     useEffect(() => {
+        if (id) {
+            if(id.length == 9 || id.length == 11 || id.length == 12 || id.length == 18 || id.length == 25) {
+                fetch(`https://sykescostaricahr.com/RegistroCivil/api/PadronElectoral?Cedula=${id}`).then(response => {
+                   return response.json();
+                }).then((res) => {
+                    console.log(res);
+                    setRaftForm({
+                    ...raftform,
+                    ["identificationNumber"]: id,
+                    ["firstName"]: res.data[0].FirstName,
+                    ["lastName"]: res.data[0].LastName1,
+                    ["secondLastName"]: res.data[0].LastName2,
+                    ["secondName"]: res.data[0].SecondName,
+                    });
+                }).catch((err) => console.error('Problem fetching my IP', err))
+            }
+        }
         async function fetchAcademy() {
             // You can await here
             await dispatch(getAcademicGrades());
@@ -76,6 +114,16 @@ const FormRaft = () => {
         
 
     }, []);
+
+    const presave = () => {
+        if (raftform.resume == null) {
+            setErrorFile({error: true, errorMessage:`You must attach a file`});
+        }
+    }
+
+    const handleBack = () => {
+        history.push("/Raft/MakeReferral");
+    }
     
     const handleChange = (event) => {
         const name = event.target.name;
@@ -104,13 +152,41 @@ const FormRaft = () => {
         }
         console.log("posiciones load", positions);
     };
+
+    const handleFileSelect = event => {
+        let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
+        let list = [];
+        let sizes = 0;
+
+        if(filesList != null && (filesList.type == "application/msword" || filesList.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || 
+        filesList.type == "application/pdf" || filesList.name.includes('.docx') || filesList.name.includes('.doc'))){
+                // if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
+                //     setErrorFile({error: true, errorMessage:`File format is invalid`});
+                //     //setFiles(null);
+                //     setRaftForm({...raftform, resume: null});
+                // }
+                if (filesList.size/1024/1024 > 2) {
+                    setErrorFile({error: true, errorMessage:`File size must not exceed 2MB`});
+                    //setFiles(null);
+                    setRaftForm({...raftform, resume: null});
+                } else {
+                    setErrorFile({error: false, errorMessage:``});
+                    //setFiles(event.target.files[0]);
+                    setRaftForm({...raftform, resume: event.target.files[0]});
+                }
+        } else {
+            setErrorFile({error: true, errorMessage:`File format is invalid`});
+            //setFiles(null);
+            setRaftForm({...raftform, resume: null});
+        }
+      };
     
     const [raftform, setRaftForm] = useState({
         badge: user.badge,
         fullName: user.fullname,
         personalEmail: user.email,
         personalPhone: user.phone,
-        identificationNumber: "",
+        identificationNumber: id ? id : "",
         firstName: "",
         secondName: "",
         lastName: "",
@@ -127,7 +203,7 @@ const FormRaft = () => {
         isExternalreference: true,
         paymentMethod: "",
         workType: "",
-        resumeUrl: "" 
+        resume: null 
     });
     const classes = useStyles();
 
@@ -176,8 +252,8 @@ const FormRaft = () => {
                         type="text"
                         name="personalPhone"
                         value={raftform.personalPhone}
-                        validators={["required","isNumber","maxStringLength:8"]}
-                        errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 8 carácteres"]}
+                        validators={["required","isNumber", "isPositive","maxStringLength:8","minStringLength:8"]}
+                        errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos", "Máximo 8 carácteres", "Mínimo 8 carácteres"]}
                     />
                     <TextValidator
                         className={classes.textvalidator}
@@ -185,9 +261,10 @@ const FormRaft = () => {
                         onChange={handleChange}
                         type="text"
                         name="identificationNumber"
+                        disabled={true}
                         value={raftform.identificationNumber}
-                        validators={["required"]}
-                        errorMessages={["Este campo es requerido"]} 
+                        validators={["required","isNumber", "isPositive","maxStringLength:25","minStringLength:9"]}
+                        errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos", "Máximo 25 carácteres", "Mínimo 9 carácteres"]}
                     />
                     <TextValidator
                         className={classes.textvalidator}
@@ -240,8 +317,8 @@ const FormRaft = () => {
                         type="text"
                         name="phone"
                         value={raftform.phone}
-                        validators={["required","isNumber","maxStringLength:8"]}
-                        errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 8 carácteres"]}
+                        validators={["required","isNumber", "isPositive","maxStringLength:8","minStringLength:8"]}
+                        errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos", "Máximo 8 carácteres", "Mínimo 8 carácteres"]}
                     />
                     <TextValidator
                         className={classes.textvalidator}
@@ -350,11 +427,16 @@ const FormRaft = () => {
                     </SelectValidator>                   
                     <FormControl className={classes.textvalidator}>
                         <label className={classes.filelabel} id="Resume">18. Resume(applicable formats: .doc, .docx, .pdf) (Max 2MB)*</label>
-                        <Input type="file" name="resume"/>                                 
-                    </FormControl>                  
+                        <Input type="file" name="resume" error={errorFile.error} aria-describedby="my-helper-text" accept=".doc, .docx, .pdf" onChange={handleFileSelect} />  
+                        <FormHelperText error={errorFile.error} id="my-helper-text">{errorFile.errorMessage}</FormHelperText>                               
+                    </FormControl>
+
                     <div className={classes.sectionbutton}>
-                        <Button variant="contained" color="primary" type="submit">
+                        <Button variant="contained" color="primary" onClick={presave} type="submit">
                             SUBMIT
+                        </Button>
+                        <Button style={{margin: "1%"}} variant="contained" onClick={handleBack} color="default">
+                            CANCEL
                         </Button>
                         {/* <Button className={classes.formbutton} component={Link} to="/Raft">Cancelar</Button> */}
                     </div>

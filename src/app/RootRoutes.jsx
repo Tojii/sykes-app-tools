@@ -69,7 +69,7 @@ const routes = [
   ...userRoutes,
   ...ventasRoutes,
   //...lssRoutes,
-  //...raftRoutes,
+  ...raftRoutes,
   // ...homeRoutes,
   // ...dashboardRoutes,
   // ...materialRoutes,

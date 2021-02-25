@@ -47,7 +47,7 @@ const Home = () => {
         return (
             <React.Fragment>
               <Tooltip title={"Nuevo"}>
-                <IconButton component={Link} to="/Raft/Form">
+                <IconButton component={Link} to="/Raft/FormRefer">
                   <AddIcon/>
                 </IconButton>
               </Tooltip>

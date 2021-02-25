@@ -108,13 +108,50 @@ export const navigations = [
     ]
      
   },
-  // {
-  //   name: "Raft",
-  //   path: "/Raft",
-  //   icon: "person_add_alt_1",
-  //   display: "none"
-    
-  // }, 
+  { 
+    name: "Raft",
+    icon: "person_add_alt_1",
+    display: null,
+    children:[
+    {
+      name: "Raft Home",
+      path: "/Raft/Home",
+      iconText: "RH",
+      display: null
+    },
+    {
+      name: "Make a Referral",
+      path: "/Raft/MakeReferral",
+      iconText: "AC",
+      display: null
+    },
+    {
+      name: "Check Referral Status",
+      path: "/Ventas/Inventario",
+      iconText: "AI",
+      display: null
+    },
+    {
+      name: "Contact RAF Team",
+      path: "/Ventas/Compras",
+      iconText: "CC",
+      display: "none"
+    },
+    {
+      name: "Feedbacks",
+      path: "/Ventas/ComprasItems",
+      iconText: "CC",
+      display: "none",
+    },
+    // {
+    //   name: "Consulta de Inventario",
+    //   path: "/",
+    //   iconText: "CI",
+    //   display: "none"
+    // },
+    ]
+     
+  },
   // {
   //   name: "UI Kits",
   //   icon: "favorite",
