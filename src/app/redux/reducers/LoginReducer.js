@@ -4,7 +4,8 @@ import {
   LOGIN_LOADING,
   RESET_PASSWORD,
   LOGIN_DATA,
-  LOGIN_LOGGED_OUT
+  LOGIN_LOGGED_OUT,
+  LOGIN_ERROR_SESSION_ACTIVE
 } from "../actions/LoginActions";
 
 const initialState = {
@@ -13,7 +14,8 @@ const initialState = {
   token: null,
   token_type: null,
   refreshtoken: null,
-  error: null
+  error: null,
+  force: false,
 };
 
 const LoginReducer = function(state = initialState, action) {
@@ -53,6 +55,14 @@ const LoginReducer = function(state = initialState, action) {
       return {
         success: false,
         loading: false,
+        error: action.data
+      };
+    }
+    case LOGIN_ERROR_SESSION_ACTIVE: {
+      return {
+        success: false,
+        loading: false,
+        force: true,
         error: action.data
       };
     }

@@ -9,8 +9,9 @@ export const LOGIN_LOADING = "LOGIN_LOADING";
 export const LOGIN_DATA = "LOGIN_DATA";
 export const LOGIN_LOGGED_OUT = "LOGIN_LOGGED_OUT";
 export const RESET_PASSWORD = "RESET_PASSWORD";
+export const LOGIN_ERROR_SESSION_ACTIVE = "LOGIN_ERROR_SESSION_ACTIVE";
 
-export function login({ email, password }) {
+export function login({ email, password, force }) {
   return dispatch => {
     dispatch({
       type: LOGIN_LOADING
@@ -19,7 +20,7 @@ export function login({ email, password }) {
     const parameters = {
       username: email,
       password: password,
-      force: true
+      force: force
     }
     return api.post(`/authenticate`, parameters).then(response => {
       // Save token
@@ -46,7 +47,12 @@ export function login({ email, password }) {
       });
     })
     .catch(error => {
-      if (error.response.status === 400)
+      if (error.response.status === 409)
+        return dispatch({
+          type: LOGIN_ERROR_SESSION_ACTIVE,
+          data: `${error.response.data}. If you want to continue and close the active session click Sign in again.`
+        });
+      else 
         return dispatch({
           type: LOGIN_ERROR,
           data: error.response.data

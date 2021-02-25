@@ -35,8 +35,9 @@ class SignIn extends Component {
   state = {
     email: "",
     password: "",
-    agreement: ""
+    force: this.props.loginState.force
   };
+
   handleChange = event => {
     event.persist();
     this.setState({
@@ -44,21 +45,21 @@ class SignIn extends Component {
     });
   };
   handleFormSubmit = event => {
-    this.props.login({ ...this.state });
+    this.setState({
+      force: this.props.loginState.force
+    }, () => this.props.login({ ...this.state }));
   };
   
   render() {
-    console.log("state",this.props.loginState);
     const error = !this.props.loginState.error ? null : 
       <Alert variant="outlined" severity="error">{this.props.loginState.error}</Alert>
-    console.log(error);
 
     let { email, password } = this.state;
     let { classes } = this.props;
     return (
-      <div className="signup flex flex-center w-100 h-100vh">
+      <div className="signin flex flex-center w-100 h-100vh">
         <div className="p-8">
-          <Card className="signup-card position-relative y-center">
+          <Card className="signin-card position-relative y-center">
             <Grid container>
               <Grid item lg={5} md={5} sm={5} xs={12}>
                 <div className={"p-32 flex flex-center flex-middle flex-column h-100 " + classes.logoWrapper }>

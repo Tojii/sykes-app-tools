@@ -1,4 +1,3 @@
-import SignUp from "./SignUp";
 import SignIn from "./SignIn";
 import NotFound from "./NotFound";
 
@@ -26,11 +25,6 @@ const settings = {
 };
 
 const sessionRoutes = [
-  {
-    path: "/session/signup",
-    component: SignUp,
-    settings
-  },
   {
     path: "/session/signin",
     component: SignIn,
