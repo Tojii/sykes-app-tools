@@ -11,7 +11,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     //if (error.response.status === 401) {
         apiAuthService.logout(); 
-        history.state = history.location.pathname;
+        history.state = history.location.pathname != "/session/signin" ? history.location.pathname : history.state;
         history.push({
           pathname: "/session/signin"
         });

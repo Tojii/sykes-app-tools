@@ -43,7 +43,7 @@ const FormAdminInventario = MatxLoadable({
 
   const raftRoutes = [
     {
-      path: "/VentasHome",
+      path: "/Ventas/Home",
       component: Home
     },
     {

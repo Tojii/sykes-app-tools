@@ -297,9 +297,10 @@ const FormAdminInventario = () => {
                                 onChange={handleChange}
                                 type="text"
                                 name="unitPrice"
+                                placeholder="0.00"
                                 value={inventarioform.unitPrice}
-                                validators={["required","isNumber","maxStringLength:15", "isPositive"]}
-                                errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres", "No se aceptan negativos"]}
+                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$"]} 
+                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales"]}
                                 InputProps={{
                                     startAdornment:<InputAdornment position="start">₡</InputAdornment>,
                                   }}

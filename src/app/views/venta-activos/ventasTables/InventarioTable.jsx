@@ -238,6 +238,9 @@ const InventarioTable = () => {
       ),
       print:false,
       download: true,
+      onDownload: (buildHead, buildBody, columns, data) => {
+        return "\uFEFF" + buildHead(columns) + buildBody(data); 
+      }, 
       downloadOptions: {
         filename: 'Inventario.csv',
         filterOptions: {

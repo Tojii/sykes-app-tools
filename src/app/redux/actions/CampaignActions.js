@@ -23,9 +23,9 @@ const axiosInstance = axios.create();
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401) {
+    if (error.response.status === 401 || error.response.status === 403) {
         apiAuthService.logout(); 
-        history.state = history.location.pathname;
+        history.state = history.location.pathname != "/session/signin" ? history.location.pathname : history.state;
         history.push({
           pathname: "/session/signin"
         });
@@ -235,10 +235,10 @@ export const AddCampaignItems = (id, payload, files) => {
     formData.append('description', payload.description);
     formData.append('quantity', parseInt(payload.quantity, 10));
     formData.append('stockQuantity', parseInt(payload.stockQuantity, 10));
-    formData.append('unitPrice', parseInt(payload.unitPrice, 10));
+    formData.append('unitPrice', parseFloat(payload.unitPrice).toFixed(2));
     formData.append('maxLimitPerPerson', parseInt(payload.maxLimitPerPerson, 10));
     formData.append('files', files);
-  
+    console.log("add", parseFloat(payload.unitPrice).toFixed(2))
     const config = {
         headers: {
             'content-type': 'multipart/form-data',
@@ -312,7 +312,7 @@ export const UpdateCampaignItems = (id, payload, files) => dispatch => {
     formData.append('description', payload.description);
     formData.append('quantity', payload.quantity);
     formData.append('stockQuantity', parseInt(payload.stockQuantity, 10));
-    formData.append('unitPrice', payload.unitPrice);
+    formData.append('unitPrice', parseFloat(payload.unitPrice).toFixed(2));
     formData.append('maxLimitPerPerson', payload.maxLimitPerPerson);
     if (files != null) {formData.append('files', files);}
   dispatch({
