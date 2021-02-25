@@ -28,8 +28,7 @@ instance.interceptors.request.use(
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
       return instance(originalRequest);
     }
-
-    Store.dispatch(logout());
+    
     return Promise.reject(error);
   });
 

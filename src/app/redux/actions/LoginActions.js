@@ -46,10 +46,11 @@ export function login({ email, password }) {
       });
     })
     .catch(error => {
-      return dispatch({
-        type: LOGIN_ERROR,
-        payload: error
-      });
+      if (error.response.status === 400)
+        return dispatch({
+          type: LOGIN_ERROR,
+          data: error.response.data
+        });
     });
   };
 }

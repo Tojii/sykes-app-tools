@@ -13,10 +13,7 @@ const initialState = {
   token: null,
   token_type: null,
   refreshtoken: null,
-  error: {
-    username: null,
-    password: null
-  }
+  error: null
 };
 
 const LoginReducer = function(state = initialState, action) {
