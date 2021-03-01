@@ -140,7 +140,7 @@ const mapStateToProps = state => ({
   deleteProductFromCart: PropTypes.func.isRequired,
   updateCartAmount: PropTypes.func.isRequired,
   cartList: state.ecommerce.cartList,
-  user: state.user.user
+  user: state.user
 });
 
 export default withStyles({}, { withTheme: true })(

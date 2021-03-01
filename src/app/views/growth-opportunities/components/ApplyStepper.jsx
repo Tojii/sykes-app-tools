@@ -203,7 +203,7 @@ const mapStateToProps = state => ({
   validations: state.apply.validations,
   saveApplication: state.apply.saveApplication,
   growth_opportunity: state.growth.growth_opportunity,
-  user: state.user.user,
+  user: state.user,
 });
 
 export default connect(mapStateToProps, {

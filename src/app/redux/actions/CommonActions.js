@@ -1,4 +1,4 @@
-import api from "../Api"
+import api from "../Api";
 
 export const GET_IMAGES = "GET_IMAGES";
 export const RE_LOADING = "RE_LOADING";

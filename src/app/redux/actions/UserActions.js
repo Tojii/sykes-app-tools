@@ -1,10 +1,9 @@
-import api from "../Api"
 import history from "history.js";
+import api from "../Api"
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
 export const USER_LOGGED_OUT = "USER_LOGGED_OUT";
-export const UPDATE_USER_DATA = "UPDATE_USER_DATA";
 
 export const setUserData = user => dispatch => {
   dispatch({
@@ -15,10 +14,8 @@ export const setUserData = user => dispatch => {
 
 export function logoutUser() {
   return dispatch => {
-    history.push({
-      pathname: "/session/signin"
-    });
-
+    history.push("/session/signin");
+    
     dispatch({
       type: USER_LOGGED_OUT
     });
@@ -39,9 +36,6 @@ export const updateUserData = (payload) => dispatch => {
   }
   //console.log("formdata", formData)
   api.post(`/api/GrowthOpportunity/UpdatePersonalInformation`, formData, config).then(res => {
-    dispatch({
-      type: UPDATE_USER_DATA,
-      data: res.data
-    });
+    setUserData(res.data);
   }); 
 }

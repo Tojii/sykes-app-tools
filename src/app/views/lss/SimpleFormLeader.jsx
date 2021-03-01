@@ -1136,7 +1136,7 @@ const mapStateToProps = state => ({
   accounts: state.lss.accounts,
   jefes: state.lss.jefes,
   supervisor_accounts: state.lss.supervisor_accounts,
-  user: state.user.user,
+  user: state.user,
   loading: state.lss.loading
 });
 

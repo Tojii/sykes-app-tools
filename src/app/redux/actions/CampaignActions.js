@@ -1,4 +1,4 @@
-import api from "../Api"
+import api from "../Api";
 import moment from "moment"
 
 export const GET_CAMPAIGNS = "GET_CAMPAIGNS";

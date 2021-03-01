@@ -94,6 +94,7 @@ class SignIn extends Component {
                       value={password}
                       validators={["required"]}
                       errorMessages={["this field is required"]}
+                      autoComplete="on"
                     />
                     {/* <FormControlLabel
                       className="mb-8"
@@ -124,15 +125,6 @@ class SignIn extends Component {
                       </div>
                     </div>
                     {error}
-
-                    {/*<Button
-                      className="text-primary"
-                      onClick={() =>
-                        this.props.history.push("/session/forgot-password")
-                      }
-                    >
-                      Forgot password?
-                    </Button>*/}
                   </ValidatorForm>
                 </div>
               </Grid>

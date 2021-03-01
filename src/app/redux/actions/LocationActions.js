@@ -1,4 +1,4 @@
-import api from "../Api"
+import api from "../Api";
 
 export const GET_PROVINCE = "GET_PROVINCE";
 export const GET_CANTONS = "GET_CANTONS";

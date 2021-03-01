@@ -1,4 +1,4 @@
-import api from "../Api"
+import api from "../Api";
 import history from "history.js";
 
 export const SET_APPLY_DATA = "SET_APPLY_DATA";

@@ -177,7 +177,7 @@ const UserForm = (props) => {
 
 const mapStateToProps = state => ({
     apply: state.apply.apply,
-    user: state.user.user,
+    user: state.user,
 });
 
 export default connect(mapStateToProps, {

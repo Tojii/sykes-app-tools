@@ -110,7 +110,6 @@ export const getByIdRaft = rafid =>{
             type: RE_LOADING
           });
         axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-        axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
         await axios.get(`${process.env.REACT_APP_API_URL}/api/Raft/GetbyIdRaft?idRaft=${rafid}`).then((res => {
             dispatch({
                 type: GET_RAFT_BY_RAFID,
@@ -153,7 +152,6 @@ export const addRaft = data =>{
           }
        }
         axios.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-        axios.defaults.headers.common["x-api-key"] = `${process.env.REACT_APP_X_API_KEY}`;
         await axios.post(`${process.env.REACT_APP_API_URL}/api/Raft/SaveRaft`,
         formData, config
         ).then((res => {

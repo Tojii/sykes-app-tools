@@ -1,11 +1,8 @@
 import {
-  LOGIN_SUCCESS,
-  LOGIN_ERROR,
   LOGIN_LOADING,
-  RESET_PASSWORD,
-  LOGIN_DATA,
-  LOGIN_LOGGED_OUT,
-  LOGIN_ERROR_SESSION_ACTIVE
+  LOGIN_SUCCESS,
+  LOGIN_ERROR_SESSION_ACTIVE,
+  LOGIN_ERROR,
 } from "../actions/LoginActions";
 
 const initialState = {
@@ -30,25 +27,11 @@ const LoginReducer = function(state = initialState, action) {
       return {
         ...state,
         success: true,
-        loading: false
-      };
-    }
-    case LOGIN_DATA: {
-      return {
-        ...state,
+        loading: false,
         token: action.data.token,
         refreshtoken: action.data.refreshtoken,
-        token_type: action.data.token_type
-      };
-    }
-    case LOGIN_LOGGED_OUT: {
-      return state;
-    }
-    case RESET_PASSWORD: {
-      return {
-        ...state,
-        success: true,
-        loading: false
+        token_type: action.data.token_type,
+        error: null
       };
     }
     case LOGIN_ERROR: {

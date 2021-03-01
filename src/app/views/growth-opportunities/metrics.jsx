@@ -71,7 +71,7 @@ const Metrics = (props) => {
 
 const mapStateToProps = state => ({
   metrics: state.metrics.metrics,
-  user: state.user.user,
+  user: state.user,
 });
 
 export default connect(mapStateToProps, {

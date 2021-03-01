@@ -1,5 +1,5 @@
 import localStorageService from "../../services/localStorageService";
-import api from "../Api"
+import  api, { globalErrorHandler } from "../Api"
 
 export const GET_GROWTH_OPPORTUNITIES = "GET_GROWTH_OPPORTUNITIES";
 export const SET_GROWTH_OPPORTUNITY = "SET_GROWTH_OPPORTUNITY";
@@ -12,7 +12,7 @@ export const getGrowthOpportunities = () => dispatch => {
             type: GET_GROWTH_OPPORTUNITIES,
             payload: res.data
         })
-    );
+    ).catch(globalErrorHandler);
 };
 
 export const getJobsApplied = (badge) => dispatch => {
@@ -21,7 +21,7 @@ export const getJobsApplied = (badge) => dispatch => {
         type: GET_JOBS_APPLIED,
         payload: res.data
       })
-    ); 
+    ).catch(globalErrorHandler);
 };
 
 export const setGrowthOpportunity = (payload) => dispatch => {

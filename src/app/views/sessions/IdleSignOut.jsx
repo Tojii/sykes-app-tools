@@ -25,57 +25,44 @@ const styles = theme => ({
 class IdleSignOut extends Component {
 
   state = {
-    isTimedOut: false,
     openDialog: false
   };
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
-    this.idleTimer = React.createRef();
+
+    this.idleTimer = null;
+    this.handleOnIdle = this.handleOnIdle.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+
   }
 
-  shouldComponentUpdate() {
-    return this.props.login.success;
-  }
-
-  _onAction = (e) => {
-    this.setState({ 'isTimedOut': false })
-  }
-
-  _onIdle = (e) => {
-    const { isTimedOut } = this.state;
-    if (isTimedOut && this.props.login.success){
+  handleOnIdle () {
+    if (this.props.login.success){
       this.setState({openDialog: true})
     }
-    else {
-      this.idleTimer.current.reset();
-      this.setState({ isTimedOut: true })
-    }
   }
 
-  handleClose = () => {
-    this.idleTimer.current.reset();
-    this.setState({ openDialog: false, isTimedOut: false })
-  }
-
-  handleSignOut = () => {
+  handleClose () {
     this.setState({openDialog: false}, this.props.logoutUser);
   };
 
+  handleKeepBrowsing () {
+    this.setState({openDialog: false});
+  }
+
   render() {
     let { classes } = this.props;
-    return (
-      <>
-        <IdleTimer 
-          key='idleTimer'
-          startOnMount={ true }
-          ref={ this.idleTimer }
-          element={ document }
-          onActive={ this.handleClose }
-          onIdle={ this._onIdle }
-          timeout={1000 * 60 * parseInt(process.env.REACT_APP_IDLE_TIME_MIN)}
+    return !this.props.login.success ? 
+    null :
+     (
+        <>
+         <IdleTimer
+          ref={ref => { this.idleTimer = ref }}
+          timeout={1000 * 60  * parseInt(process.env.REACT_APP_IDLE_TIME_MIN)}
+          onIdle={this.handleOnIdle}
+          debounce={250}
         />
-        {
           <Dialog
             open={this.state.openDialog}
             disableBackdropClick={true}
@@ -94,8 +81,7 @@ class IdleSignOut extends Component {
                         size={80}
                         strokeWidth={7}
                         colors={[['#E51B23']]}
-                        onComplete={this.handleSignOut}
-                        // colors={[[{'#004777'}, 0.33], ['#F7B801', 0.33], ['#E51B23']]}
+                        onComplete={this.handleClose}
                       >
                         {({ remainingTime }) => remainingTime}
                       </CountdownCircleTimer>
@@ -103,16 +89,15 @@ class IdleSignOut extends Component {
               </div>
             </DialogContent>
             <DialogActions>
-              <Button onClick={this.handleSignOut} color="primary">
+              <Button onClick={this.handleClose} color="primary">
                 Cerrar sesión
               </Button>
-              <Button onClick={this.handleClose} color="primary" autoFocus>
+              <Button onClick={this.handleKeepBrowsing} color="primary" autoFocus>
                 Continuar Navegando
               </Button>
             </DialogActions>
-              </Dialog> 
-        }
-      </>
+          </Dialog> 
+        </>
     );
   }
 }

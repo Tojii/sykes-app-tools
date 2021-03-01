@@ -63,7 +63,7 @@ const ConfirmStep = (props) => {
 const mapStateToProps = state => ({
     apply: state.apply.apply,
     growth_opportunity: state.growth.growth_opportunity,
-    user: state.user.user,
+    user: state.user,
 });
 
 export default connect(mapStateToProps, {

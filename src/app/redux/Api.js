@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Store } from "./Store";
-import { refreshtoken, logout } from './actions/LoginActions'
+import { refreshtoken } from './actions/LoginActions'
+import { logoutUser } from './actions/UserActions'
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_API_URL
@@ -28,6 +29,8 @@ instance.interceptors.request.use(
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
       return instance(originalRequest);
     }
+    // else 
+    //   Store.dispatch(logoutUser()); 
     
     return Promise.reject(error);
   });
@@ -40,4 +43,13 @@ export const HeaderContentTypeJson = () => {
             'content-type': 'application/json',
         }
     }
+};
+
+export const globalErrorHandler = async (error) => {
+    console.log("something went wrong");
+    //if (error.response.status === 403) {
+    //await Store.dispatch(logout());
+    Store.dispatch(logoutUser());
+    //window.location.reload(false);
+  //}
 };

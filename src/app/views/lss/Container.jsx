@@ -44,7 +44,7 @@ class Wrapper extends Component {
 const mapStateToProps = state => ({
   getValidation: PropTypes.func.isRequired,
   lss: state.lss,
-  user: state.user.user
+  user: state.user
 });
 
 export default connect(

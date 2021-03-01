@@ -17,6 +17,7 @@ import { isMdScreen } from "utils";
 import NotificationBar from "../SharedCompoents/NotificationBar";
 import { Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
+import { ContourSeries } from "react-vis";
 
 const styles = theme => ({
   root: {
@@ -60,6 +61,7 @@ class Layout1Topbar extends Component {
 
   render() {
     let { theme, settings, className, style } = this.props;
+
     const topbarTheme =
       settings.themes[settings.layout1Settings.topbar.theme] || theme;
     return (
@@ -95,7 +97,7 @@ class Layout1Topbar extends Component {
                 <NotificationBar /> */}
 
                 {/* <ShoppingCart></ShoppingCart> */}
-
+                { Object.keys(this.props.user).length != 0 && 
                 <MatxMenu
                   menuButton={
                     // <img
@@ -109,7 +111,7 @@ class Layout1Topbar extends Component {
                       variant="contained"
                       color="secondary"
                     >
-                      { this.props.user != null ? this.props.user.fullname : "" }
+                      { this.props.user.fullname ? this.props.user.fullname : "" }
                     </Button>
                   }
                 >
@@ -150,6 +152,7 @@ class Layout1Topbar extends Component {
                     <span className="pl-16"> Logout </span>
                   </MenuItem>
                 </MatxMenu>
+              }
               </div>
             </div>
           </div>
@@ -166,7 +169,7 @@ Layout1Topbar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  user: state.user.user,
+  user: state.user,
   setLayoutSettings: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
   settings: state.layout.settings

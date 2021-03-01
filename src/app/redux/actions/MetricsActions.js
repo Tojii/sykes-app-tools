@@ -1,4 +1,4 @@
-import api from "../Api"
+import api from "../Api";
 
 export const GET_METRICS = "GET_METRICS";
 

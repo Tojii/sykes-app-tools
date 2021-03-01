@@ -58,7 +58,7 @@ class AuthGuard extends Component {
 
   render() {
     let { children } = this.props;
-    const { authenticated, isTimedOut } = this.state;
+    const { authenticated } = this.state;
 
     return authenticated ? 
                       <Fragment>
@@ -71,7 +71,7 @@ class AuthGuard extends Component {
 AuthGuard.contextType = AppContext;
 
 const mapStateToProps = state => ({
-  user: state.user.user
+  user: state.user
 });
 
 export default withRouter(connect(mapStateToProps)(AuthGuard));

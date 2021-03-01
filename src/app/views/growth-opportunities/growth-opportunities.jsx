@@ -47,7 +47,7 @@ const GrowthOpportunities = (props) => {
 const mapStateToProps = state => ({
     growth_opportunities: state.growth.growth_opportunities, 
     jobs_applied: state.growth.jobs_applied,
-    user: state.user.user,
+    user: state.user,
     loading: state.apply.loading,
 });
 

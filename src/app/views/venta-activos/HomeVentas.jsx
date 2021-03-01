@@ -42,7 +42,7 @@ const HomeVentas = () => {
 }
 
 // const mapStateToProps = state => ({
-//     user: state.user.user,
+//     user: state.user,
 // });
 
 export default HomeVentas;

@@ -3,10 +3,11 @@ import { createStore, applyMiddleware, compose } from "redux";
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 import RootReducer from "./reducers/RootReducer";
+import { middleware } from './middlewares/catchError';
 
 const initialState = {};
 
-const middlewares = [thunk];
+const middlewares = [thunk, middleware];
 
 const persistConfig = {
   key: 'root',

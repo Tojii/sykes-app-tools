@@ -1,4 +1,4 @@
-import api from "../Api"
+import api from "../Api";
 
 export const GET_ACCOUNT = "GET_ACCOUNT";
 export const GET_SUPERVISOR_ACCOUNT = "GET_SUPERVISOR_ACCOUNT";

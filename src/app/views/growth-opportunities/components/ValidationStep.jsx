@@ -90,7 +90,7 @@ const ResumeStep = ({
 const mapStateToProps = state => ({
     validations: state.apply.validations,
     growth_opportunity: state.growth.growth_opportunity,
-    user: state.user.user,
+    user: state.user,
 });
 
 export default connect(mapStateToProps, {

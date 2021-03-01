@@ -19,7 +19,7 @@ class MatxLayout extends Component {
     this.updateSettingsFromRouter();
 
     // Set settings from query (Only for demo purpose)
-    this.setLayoutFromQuery();
+    //this.setLayoutFromQuery();
   }
 
   componentDidUpdate(prevProps) {
@@ -71,23 +71,28 @@ class MatxLayout extends Component {
   updateSettingsFromRouter() {
     const { routes } = this.appContext;
     const matched = matchRoutes(routes, this.props.location.pathname)[0];
-    let { defaultSettings, settings, setLayoutSettings } = this.props;
+    let { defaultSettings, settings, setLayoutSettings, user } = this.props;
+
+    console.log("user", user);
+    console.log("update layout settings", settings.layout1Settings.topbar.show);
 
     if (matched && matched.route.settings) {
       // ROUTE HAS SETTINGS
       const updatedSettings = merge({}, settings, matched.route.settings);
+      
       if (!isEqual(settings, updatedSettings)) {
         setLayoutSettings(updatedSettings);
-        // console.log('Route has settings');
       }
     } else if (!isEqual(settings, defaultSettings)) {
       setLayoutSettings(defaultSettings);
-      // console.log('reset settings', defaultSettings);
     }
   }
 
   render() {
     const { settings } = this.props;
+    console.log("user", this.props.user);
+    console.log("matx layout", settings.layout1Settings.topbar.show);
+    
     const Layout = MatxLayouts[settings.activeLayout];
 
     return <Layout {...this.props} />;
@@ -98,7 +103,8 @@ const mapStateToProps = state => ({
   setLayoutSettings: PropTypes.func.isRequired,
   setDefaultSettings: PropTypes.func.isRequired,
   settings: state.layout.settings,
-  defaultSettings: state.layout.defaultSettings
+  defaultSettings: state.layout.defaultSettings,
+  user: state.user
 });
 
 MatxLayout.contextType = AppContext;
