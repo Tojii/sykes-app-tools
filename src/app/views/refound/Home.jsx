@@ -23,6 +23,7 @@ import Typography from '@material-ui/core/Typography';
 import history from "history.js";
 import moment from "moment"
 import CustomFooter from '../muidatatable/CustomFooter';
+import { makeStyles } from '@material-ui/core/styles';
 
 const styles = (theme) => ({
   root: {
@@ -36,6 +37,17 @@ const styles = (theme) => ({
     color: theme.palette.grey[500],
   },
 });
+
+const useStyles = makeStyles({
+  tableMargin: {     
+      "@media (min-width: 0px)": {
+          marginBottom: "25%",
+      },
+      "@media (min-width: 1024px)": {
+          marginBottom: "5%",
+      },
+  },
+})
 
 const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
@@ -53,6 +65,7 @@ const DialogTitle = withStyles(styles)((props) => {
 
 const Home = () => {
     const dispatch = useDispatch();  
+    const classes = useStyles();
     const summary = useSelector(state => state.refound.summary);
     const isLoading  = useSelector(state => state.refound.loading);
     const user = useSelector(state => state.user);
@@ -259,7 +272,7 @@ const Home = () => {
     return (
         <div>
             { (!summary || isLoading) ? <Loading /> : 
-                <div className="m-sm-30">
+                <div className={classes.tableMargin + " m-sm-30"}>
                     <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                         <MuiThemeProvider theme={getMuiTheme()}>
                           <MUIDataTable  className="w-100"

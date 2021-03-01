@@ -4,8 +4,21 @@ import ApplyStepper from "./components/ApplyStepper"
 import { connect } from "react-redux";
 import { getGrowthOpportunity } from "app/redux/actions/GrowthOpportunityActions";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+    tableMargin: {     
+        "@media (min-width: 0px)": {
+            marginBottom: "25%",
+        },
+        "@media (min-width: 1024px)": {
+            marginBottom: "5%",
+        },
+    },
+})
 
 const ApplySteps = (props) => {
+    const classes = useStyles();
 
     useEffect(() => {
         props.getGrowthOpportunity();
@@ -14,7 +27,7 @@ const ApplySteps = (props) => {
     return (
         (!props.growth_opportunity 
             ? <Loading /> 
-            :   <div className="m-sm-30">
+            :   <div className={classes.tableMargin + " m-sm-30"}>
                     <SimpleCard title={props.growth_opportunity.title}>
                         <ApplyStepper {...props}/>
                     </SimpleCard>

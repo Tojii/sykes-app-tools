@@ -23,7 +23,7 @@ const settings = {
     }
   },
   likeDislikeButtons: { show: true }
-};
+}; 
 
   const refoundRoutes = [
     {

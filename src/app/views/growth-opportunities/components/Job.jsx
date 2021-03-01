@@ -12,9 +12,22 @@ import {
 import { connect } from "react-redux";
 import ReactHtmlParser from 'react-html-parser';
 import { setLoading } from "../../../redux/actions/ApplyActions";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+    tableMargin: {     
+        "@media (min-width: 0px)": {
+            marginBottom: "25%",
+        },
+        "@media (min-width: 1024px)": {
+            marginBottom: "5%",
+        },
+    },
+})
 
 const Job = (props) => {
     const { history, match, growth_opportunity, apply, setLoading } = props
+    const classes = useStyles();
     
     const handleApply = () => {
         setLoading();
@@ -30,7 +43,7 @@ const Job = (props) => {
 
     return (
         <>
-            <Card className="m-sm-30">
+            <Card className={classes.tableMargin + " m-sm-30"}>
                 <Grid container>
                     <Grid item lg={12}>
                         <h3 className="p-sm-24">{growth_opportunity.title}</h3>
