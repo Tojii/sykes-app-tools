@@ -11,7 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import {addRaft} from "../../../redux/actions/RaftActions";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
-import { GetCampaignItemsById, UpdateCampaignItems, AddCampaignItems, GetCampaigns } from "../../../redux/actions/CampaignActions";
+import InputAdornment from '@material-ui/core/InputAdornment';
+import { GetCampaignItemsById, UpdateCampaignItems, AddCampaignItems, GetCampaigns, GetCampaignsActive, GetCampaignsItems } from "../../../redux/actions/CampaignActions";
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
@@ -70,7 +71,7 @@ const FormAdminInventario = () => {
     const dispatch = useDispatch();
     let { id } = useParams();
     const campaignitem = useSelector(state => state.campaign.campaignitem);
-    const campaigns = useSelector(state => state.campaign.campaigns);
+    const campaigns = useSelector(state => state.campaign.campaignsActive);
     const addCampaignItems = useSelector(state => state.campaign.addCampaignItems);
     const successCampaignItems = useSelector(state => state.campaign.success);
     const isLoading  = useSelector(state => state.campaign.loading);
@@ -117,7 +118,7 @@ const FormAdminInventario = () => {
     }
 
     useEffect(() => {
-        dispatch(GetCampaigns());
+        dispatch(GetCampaignsActive());
         if (id) {
             dispatch(GetCampaignItemsById(id));
         } 
@@ -214,7 +215,7 @@ const FormAdminInventario = () => {
 
     return (
         <div className="p-24">
-            <ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
+            <ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Artículo" : "Agregar Artículo"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
@@ -279,7 +280,7 @@ const FormAdminInventario = () => {
                             error={errorStock.error}
                         />
                         <FormHelperText style={{display: errorStock.error ? null : "none", marginTop: "0%"}} className={classes.textvalidator} error={errorStock.error} id="my-helper-text">{errorStock.errorMessage}</FormHelperText>
-                        <TextValidator
+                        {/* <TextValidator
                             className={classes.textvalidator}
                             label="Valor Artículo*"
                             onChange={handleChange}
@@ -288,7 +289,24 @@ const FormAdminInventario = () => {
                             value={inventarioform.unitPrice}
                             validators={["required","isNumber","maxStringLength:15", "isPositive"]}
                             errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres", "No se aceptan negativos"]}
-                        />
+                        /> */}
+                        <FormControl className={classes.textvalidator}>
+                            <TextValidator
+                                fullWidth
+                                label="Valor Artículo*"
+                                onChange={handleChange}
+                                type="text"
+                                name="unitPrice"
+                                placeholder="0.00"
+                                value={inventarioform.unitPrice}
+                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$"]} 
+                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales"]}
+                                InputProps={{
+                                    startAdornment:<InputAdornment position="start">₡</InputAdornment>,
+                                  }}
+                                
+                            />
+                        </FormControl>
                         <TextValidator
                             className={classes.textvalidator}
                             label="Límite Máximo Artículo*"
@@ -309,8 +327,8 @@ const FormAdminInventario = () => {
                         <div className={classes.sectionbutton}>
                         {inventarioform.image ? 
                             <img
-                            height={"437px"}
-                            width={"331px"}
+                            //height={"437px"}
+                            //width={"331px"}
                             className={classes.imageadd}                                          
                             alt="..."
                             src={`${inventarioform.image}`}

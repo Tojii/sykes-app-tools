@@ -17,6 +17,7 @@ import { MatxMenu, MatxSearchBox } from "matx";
 import { isMdScreen } from "utils";
 import NotificationBar from "../SharedCompoents/NotificationBar";
 import { Link } from "react-router-dom";
+import history from "history.js";
 // import ShoppingCart from "../SharedCompoents/ShoppingCart";
 import Button from '@material-ui/core/Button';
 
@@ -59,6 +60,7 @@ class Layout1Topbar extends Component {
   };
 
   handleSignOut = () => {
+    history.state = "/session/signin";
     this.props.logoutUser();
   };
 

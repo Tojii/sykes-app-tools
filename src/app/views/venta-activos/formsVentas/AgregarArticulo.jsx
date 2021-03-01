@@ -35,7 +35,7 @@ const useStyles = makeStyles({
             marginLeft: "0%",
         },
         "@media (min-width: 1024px)": {
-            marginLeft: "25%",
+            marginLeft: "0%",
         },
         marginTop: "3%",
         margin: "auto"
@@ -50,6 +50,12 @@ const useStyles = makeStyles({
         marginTop: "3%",
         marginBottom: "2%",
         textAlign: "center"
+    },
+    sectionimage: {
+        marginLeft: "25%",
+        width: "50%",
+        marginTop: "3%",
+        marginBottom: "2%",
     },
     cellspace:{
         whiteSpace: "unset",
@@ -141,15 +147,15 @@ const AgregarArticulo = (props) => {
                                     {campaignItems[0].image != null ?
                                     <TableRow>
                                         <TableCell colSpan={3} className="px-sm-24 border-none">
-                                       
-                                            <img
-                                            height={"515px"}
-                                            width={"390px"}
-                                            className={classes.imageadd}                                          
-                                            alt="..."
-                                            src={`${campaignItems[0].image}`}
-                                            />
-                                        
+                                            <div className={classes.sectionimage}>
+                                                <img
+                                                //height={"515px"}
+                                                //width={"390px"}
+                                                className={classes.imageadd}                                          
+                                                alt="..."
+                                                src={`${campaignItems[0].image}`}
+                                                />
+                                            </div>
                                         </TableCell>
                                     </TableRow> : null
                                     }

@@ -6,7 +6,7 @@ import {
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
 import {addRaft} from "../../../redux/actions/RaftActions";
-import { GetCampaignsById, UpdateCampaign, AddCampaign } from "../../../redux/actions/CampaignActions";
+import { GetCampaignsById, UpdateCampaign, AddCampaign, GetCampaigns } from "../../../redux/actions/CampaignActions";
 import { useSelector, useDispatch } from 'react-redux';
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -166,7 +166,7 @@ const FormAdminCampaign = () => {
 
     return (
         <div className="p-24">
-            <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
+            <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading && id) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Campaña" : "Agregar Campaña"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>                 

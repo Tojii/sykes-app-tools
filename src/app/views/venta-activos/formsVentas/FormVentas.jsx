@@ -184,7 +184,7 @@ const FormVentas = () => {
     }
     
     const handleBack = () => {
-        history.push("/VentasHome");
+        history.push("/Ventas/Home");
     }
     
     const handleCantidad = () => {
@@ -349,8 +349,8 @@ const FormVentas = () => {
         <div className="m-sm-30">
             {/* { console.log("purchases", purchases)}
             { console.log("carrito", carrito)} */}
-            <ValidationModal idioma={"Español"} path={"/VentasHome"} state={(successOrder) ? "Success!" : "Error!"} save={() => {}} message={(successOrder) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
-            {(isLoadingCampaign || isLoadingOrder) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/VentasHome"} state={"¡Lo sentimos!"} save={() => {}} message={"¡Ya se ha alcanzado el máximo de artículos comprados en esta campaña!"} setOpen={setOpenPurchase} open={openPurchase && !isLoadingCampaign} />}
+            <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={(successOrder) ? "Success!" : "Error!"} save={() => {}} message={(successOrder) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
+            {(isLoadingCampaign || isLoadingOrder) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={"¡Lo sentimos!"} save={() => {}} message={"¡Ya se ha alcanzado el máximo de artículos comprados en esta campaña!"} setOpen={setOpenPurchase} open={openPurchase && !isLoadingCampaign} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoadingCampaign || isLoadingOrder) ? <Loading/> : <h4 className={classes.titulo}>*El rebajo de artículos comprados se hará de planilla</h4>}
                 {(isLoadingCampaign || isLoadingOrder) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">Datos del usuario</h2>}

@@ -362,6 +362,9 @@ const ComprasTable = (props) => {
           useDisplayedRowsOnly: true
         }
       },
+      onDownload: (buildHead, buildBody, columns, data) => {
+        return "\uFEFF" + buildHead(columns) + buildBody(data); 
+      }, 
       vertical: true,
       customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage, textLabels) => {
         return (
