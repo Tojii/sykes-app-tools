@@ -44,7 +44,7 @@ export const LikesDislikesHome = () => {
 
     useEffect(() => {
         async function getValue() {
-            let url = history.location.pathname.split('/');
+            let url =  history.location.pathname.split('/');
             var secondSegment = url[1];
             let data = { 
                 url: secondSegment.toUpperCase(), 
