@@ -305,7 +305,7 @@ const FormAdminInventario = () => {
                                 name="unitPrice"
                                 placeholder="0.00"
                                 value={inventarioform.unitPrice}
-                                validators={["required","matchRegexp:^[0-9]+([\,][0-9]{1,2})?$"]} 
+                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$"]} 
                                 errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales"]}
                                 InputProps={{
                                     startAdornment:<InputAdornment position="start">₡</InputAdornment>,
