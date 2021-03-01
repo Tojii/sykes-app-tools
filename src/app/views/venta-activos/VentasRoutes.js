@@ -48,7 +48,8 @@ const settings = {
       show: true
     },
     leftSidebar: {
-      show: true
+      show: true,
+      mode: 'full'
     }
   },
   likeDislikeButtons: { show: true }
