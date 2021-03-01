@@ -96,6 +96,13 @@ const CampaignTable = (props) => {
     }
 
     const builddata = isAdmin ? campaigns.map(item => {
+      var stock = 0;
+      item.campaignItems.map(item2 =>
+      {
+        stock += item2.stockQuantity;
+      }
+      )
+
       return [
           item.id,
           item.name, 
@@ -103,9 +110,29 @@ const CampaignTable = (props) => {
           item.startDate,
           item.endDate,
           item.maxLimitPerPerson,
+          stock,
           compraButton(item)
       ]
-  }) : campaignsActive.map(item => {
+  }) : campaignsActive.filter(function(item) {
+    var stock = 0;
+    item.campaignItems.map(item2 =>
+    {
+      stock += item2.stockQuantity;
+    }
+    )
+
+    if (stock == 0) {
+      return false; // skip
+    }
+    return true;
+  }).map(item => {
+    var stock = 0;
+    item.campaignItems.map(item2 =>
+    {
+      stock += item2.stockQuantity;
+    }
+    )
+
     return [
         item.id,
         item.name, 
@@ -113,6 +140,7 @@ const CampaignTable = (props) => {
         item.startDate,
         item.endDate,
         item.maxLimitPerPerson,
+        stock,
         compraButton(item)
     ]
   })
@@ -178,7 +206,18 @@ const CampaignTable = (props) => {
         },
         {
           name: "maxLimitPerPerson",
-          label: "Límite Máximo Artículos ",
+          label: "Límite Máximo por Persona",
+          options: {
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
+          }
+        },
+        {
+          name: "stockquantity",
+          label: "Artículos en stock",
           options: {
             filter: true,
             sort: true,
@@ -265,7 +304,7 @@ const CampaignTable = (props) => {
   }
 
   return (
-      //console.log("clean",purchases),
+      console.log("clean",campaignsActive),
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">

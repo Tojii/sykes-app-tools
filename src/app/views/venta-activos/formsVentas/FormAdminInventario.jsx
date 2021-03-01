@@ -29,7 +29,13 @@ const useStyles = makeStyles({
              marginLeft: "25%",
              width: "50%",
              marginTop: "3%",
-         }
+         },
+         "& .MuiInputBase-root.Mui-disabled": {
+             color: "darkgray"
+         },
+         "& .MuiFormLabel-root.Mui-disabled": {
+             color: "rgba(74, 70, 109, 0.43)" 
+         },
      },
     formcard: {
         "@media (min-width: 0px)": {
@@ -265,8 +271,8 @@ const FormAdminInventario = () => {
                             name="quantity"
                             //disabled={true}
                             value={inventarioform.quantity}
-                            validators={["required","isNumber","maxStringLength:15", "isPositive"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres", "No se aceptan negativos"]}
+                            validators={["required","isNumber","maxStringLength:9", "isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 9 carácteres", "No se aceptan negativos"]}
                         />
                         <TextValidator
                             className={classes.textvalidator}
@@ -275,8 +281,8 @@ const FormAdminInventario = () => {
                             type="text"
                             name="stockQuantity"
                             value={inventarioform.stockQuantity}
-                            validators={["required","isNumber","maxStringLength:15", "isPositive"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres", "No se aceptan negativos"]}
+                            validators={["required","isNumber","maxStringLength:9", "isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 9 carácteres", "No se aceptan negativos"]}
                             error={errorStock.error}
                         />
                         <FormHelperText style={{display: errorStock.error ? null : "none", marginTop: "0%"}} className={classes.textvalidator} error={errorStock.error} id="my-helper-text">{errorStock.errorMessage}</FormHelperText>
@@ -299,7 +305,7 @@ const FormAdminInventario = () => {
                                 name="unitPrice"
                                 placeholder="0.00"
                                 value={inventarioform.unitPrice}
-                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$"]} 
+                                validators={["required","matchRegexp:^[0-9]+([\,][0-9]{1,2})?$"]} 
                                 errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales"]}
                                 InputProps={{
                                     startAdornment:<InputAdornment position="start">₡</InputAdornment>,
@@ -314,8 +320,8 @@ const FormAdminInventario = () => {
                             type="text"
                             name="maxLimitPerPerson"
                             value={inventarioform.maxLimitPerPerson}
-                            validators={["required","isNumber","maxStringLength:15","isPositive"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 15 carácteres", "No se aceptan negativos"]}
+                            validators={["required","isNumber","maxStringLength:9","isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 9 carácteres", "No se aceptan negativos"]}
                         />
                         <FormControl className={classes.textvalidator}>
                             <label className={classes.filelabel} id="image">Imagen Artículo (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>

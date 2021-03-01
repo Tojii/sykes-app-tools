@@ -44,11 +44,11 @@ class MatxVerticalNav extends Component {
                 }
               }
               if ((user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner'))) {
-                if(item2.name == "Administración Campaña" || item2.name == "Administración Inventario" || item2.name == "Consulta de Compras") {
+                if(item2.name == "Administración Campaña" || item2.name == "Administración Inventario" || item2.name == "Consulta de Compras" || item2.name == "Consulta sobre Artículos Comprados") {
                   data[index].children[index2].display = null;  
                 }
               } else {
-                if(item2.name == "Administración Campaña" || item2.name == "Administración Inventario" || item2.name == "Consulta de Compras") {
+                if(item2.name == "Administración Campaña" || item2.name == "Administración Inventario" || item2.name == "Consulta de Compras" || item2.name == "Consulta sobre Artículos Comprados") {
                   data[index].children[index2].display = "none";  
                 }
               }

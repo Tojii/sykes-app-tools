@@ -39,7 +39,13 @@ const useStyles = makeStyles({
             marginLeft: "25%",
             width: "50%",
             marginTop: "3%",
-        }
+        },
+        "& .MuiInputBase-root.Mui-disabled": {
+            color: "darkgray" 
+        },
+        "& .MuiFormLabel-root.Mui-disabled": {
+            color: "rgba(74, 70, 109, 0.43)" 
+        },
     },
     gridtext: {
         "@media (min-width: 0px)": {
@@ -111,6 +117,7 @@ const FormVentas = () => {
     const campaign = useSelector(state => state.campaign.campaign);
     const [cantidad, setCantidad] = useState([]);
     const [indexlist, setIndexlist] = useState([0]);
+    const [maximolist, setMaximolist] = useState([0]);
     const addOrder = useSelector(state => state.order.addOrder);
     const successOrder = useSelector(state => state.order.success);
     const purchases = useSelector(state => state.order.purchases);
@@ -155,13 +162,25 @@ const FormVentas = () => {
             campaign: {id: campaign[0] != undefined ? campaign[0].id : ""},
             fechaInicio: campaign[0] != undefined ? moment(new Date(campaign[0].startDate)).format("DD/MM/yyyy") : "",
             fechaFinal: campaign[0] != undefined ? moment(new Date(campaign[0].endDate)).format("DD/MM/yyyy") : "",
-            maximo: campaign[0] != undefined ? campaign[0].maxLimitPerPerson : ""
+            maximo: campaign[0] != undefined ? campaign[0].maxLimitPerPerson : "",
+            compradosCampaign: purchases[0] != undefined ? purchases[0].totalPurchasedItems : ""
             }) 
         }
+
         if (purchases[0] != undefined && purchases[0].canPurchase == false) {
             setOpenPurchase(true);
         } else {setOpenPurchase(false);}
-    }, [campaign, indexlist, user, purchases]);
+
+        if (campaign[0] != undefined) {
+            campaign[0].campaignItems.map((item, index) => {
+                if (!maximolist.includes(item.id) && purchases[0] != undefined && purchases[0].items[index] != undefined && (item.maxLimitPerPerson - purchases[0].items[index].totalPurchasedItems) == 0) { 
+                    //setMaximolist([...maximolist, item.id])
+                    maximolist.push(item.id);
+                }
+            })
+        }
+
+    }, [campaign, user, indexlist, purchases]);
     
     const handleSingleRemove = index => {
         setDisableMaximo(false);
@@ -230,7 +249,8 @@ const FormVentas = () => {
         notes: "",
         totalComprados: 0,
         totalCompra: 0,
-        maximo: campaign[0] != undefined ? campaign[0].maxLimitPerPerson : ""
+        maximo: campaign[0] != undefined ? campaign[0].maxLimitPerPerson : "",
+        compradosCampaign: purchases[0] != undefined ? purchases[0].totalPurchasedItems : ""
     });
 
     const handleFormSubmit = async () => {
@@ -343,12 +363,17 @@ const FormVentas = () => {
             totalComprados: totalcomprados + event.target.value,
             totalCompra: totalcompra + event.target.value * carrito[index].unitPrice,
         })
+        if((purchases[0] != undefined && (totalcomprados + event.target.value) > (ventasform.maximo - purchases[0].totalPurchasedItems))) {
+            setDisableMaximo(true);
+        } else {
+            setDisableMaximo(false);
+        }
     }
 
     return (
         <div className="m-sm-30">
-            {/* { console.log("purchases", purchases)}
-            { console.log("carrito", carrito)} */}
+            { console.log("purchases", maximolist)}
+            {/* { console.log("carrito", carrito)} */}
             <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={(successOrder) ? "Success!" : "Error!"} save={() => {}} message={(successOrder) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
             {(isLoadingCampaign || isLoadingOrder) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={"¡Lo sentimos!"} save={() => {}} message={"¡Ya se ha alcanzado el máximo de artículos comprados en esta campaña!"} setOpen={setOpenPurchase} open={openPurchase && !isLoadingCampaign} />}
             <Card className={classes.formcard} elevation={6}>
@@ -502,6 +527,17 @@ const FormVentas = () => {
                             validators={["required"]}
                             errorMessages={["Este campo es requerido"]}
                         />
+                        <TextValidator
+                            className={classes.textvalidator}
+                            label="Cant artículos comprados en la campaña"
+                            onChange={handleChange}
+                            type="text"
+                            name="maximo"
+                            value={ventasform.compradosCampaign}
+                            disabled={true}
+                            validators={["required"]}
+                            errorMessages={["Este campo es requerido"]}
+                        />
                          {/* <TextValidator
                             className={classes.textvalidator}
                             label="Fecha compra"
@@ -550,7 +586,9 @@ const FormVentas = () => {
                             </div>
                             <Divider></Divider>
 
-                            {(campaign[0] == undefined || campaign[0].campaignItems == undefined || campaign[0].campaignItems.length == 0 || campaign[0].campaignItems.length == indexlist.length - 1) && <p className="px-16">No hay ningun artículo</p>}
+                            {(campaign[0] == undefined || campaign[0].campaignItems == undefined || campaign[0].campaignItems.length == 0 || (indexlist.length > 1 && campaign[0].campaignItems.length == (indexlist.length + maximolist.length - 2))) && <p className="px-16">No hay ningun artículo disponible para compra</p>}
+
+                            {(campaign[0] == undefined || campaign[0].campaignItems.length == maximolist.length - 1) && <p className="px-16">Ha alcanzado el límite de compra de todos los artículos disponibles</p>}
 
                             {(campaign[0] != undefined && campaign[0].campaignItems != undefined) ? campaign[0].campaignItems.map((item, index) => {
                             return (

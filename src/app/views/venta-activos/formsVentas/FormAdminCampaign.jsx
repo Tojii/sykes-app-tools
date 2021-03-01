@@ -33,7 +33,13 @@ const useStyles = makeStyles({
              marginLeft: "25%",
              width: "50%",
              marginTop: "3%",
-         }
+         }, 
+         "& .MuiInputBase-root.Mui-disabled": {
+            color: "darkgray"
+         },
+         "& .MuiFormLabel-root.Mui-disabled": {
+            color: "rgba(74, 70, 109, 0.43)" 
+         },
      },
     formcard: {
         "@media (min-width: 0px)": {
@@ -228,8 +234,8 @@ const FormAdminCampaign = () => {
                             type="text"
                             name="maxLimitPerPerson"
                             value={campaignform.maxLimitPerPerson}
-                            validators={["required","isNumber","isPositive"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos"]}
+                            validators={["required","isNumber","isPositive","maxStringLength:9"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos", "Máximo 9 carácteres"]}
                         />
                     
                         <div className={classes.sectionbutton}>

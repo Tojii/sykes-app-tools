@@ -238,7 +238,7 @@ export const AddCampaignItems = (id, payload, files) => {
     formData.append('unitPrice', parseFloat(payload.unitPrice).toFixed(2));
     formData.append('maxLimitPerPerson', parseInt(payload.maxLimitPerPerson, 10));
     formData.append('files', files);
-    console.log("add", parseFloat(payload.unitPrice).toFixed(2))
+    console.log("add", payload.unitPrice)
     const config = {
         headers: {
             'content-type': 'multipart/form-data',
@@ -312,7 +312,7 @@ export const UpdateCampaignItems = (id, payload, files) => dispatch => {
     formData.append('description', payload.description);
     formData.append('quantity', payload.quantity);
     formData.append('stockQuantity', parseInt(payload.stockQuantity, 10));
-    formData.append('unitPrice', parseFloat(payload.unitPrice).toFixed(2));
+    formData.append('unitPrice', payload.unitPrice);
     formData.append('maxLimitPerPerson', payload.maxLimitPerPerson);
     if (files != null) {formData.append('files', files);}
   dispatch({

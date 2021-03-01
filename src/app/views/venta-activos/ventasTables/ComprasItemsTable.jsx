@@ -419,9 +419,9 @@ const ComprasItems = (props) => {
           item.order.id,
           item.itemName,
           item.itemDescription,
-          item.itemUnitPrice,
+          "₡" + item.itemUnitPrice,
           item.amount,
-          item.itemUnitPrice * item.amount,
+          "₡" + item.itemUnitPrice * item.amount,
           item.order.badge,
           item.order.name,
           item.order.email,
@@ -450,6 +450,9 @@ const ComprasItems = (props) => {
           useDisplayedRowsOnly: true
         }
       },
+      onDownload: (buildHead, buildBody, columns, data) => {
+        return "\uFEFF" + buildHead(columns) + buildBody(data); 
+      }, 
       vertical: true,
       customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage, textLabels) => {
         return (
