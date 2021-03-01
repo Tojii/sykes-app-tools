@@ -87,7 +87,8 @@ const raftRoutes = [
   },
   {
     path: "/Ventas/ComprasItems",
-    component: ComprasItems
+    component: ComprasItems,
+    settings
   },
   {
     path: "/Ventas/FormAdminCampaign/:id",

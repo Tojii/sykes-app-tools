@@ -8,7 +8,9 @@ import {
     Card,
     Grid,
     FormLabel,
-    FormGroup
+    FormGroup,
+    FormControl,
+    InputLabel
 } from "@material-ui/core";
 import Details from "@material-ui/icons/Details";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
@@ -25,9 +27,22 @@ import moment from "moment";
 import NotFound from "../../sessions/NotFound"
 import MenuItem from '@material-ui/core/MenuItem';
 import { SelectValidator, ValidatorForm } from "react-material-ui-form-validator";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+    tableMargin: {     
+        "@media (min-width: 0px)": {
+            marginBottom: "25%",
+        },
+        "@media (min-width: 1024px)": {
+            marginBottom: "5%",
+        },
+    },
+})
 
 const ComprasItems = (props) => {
     const dispatch = useDispatch();
+    const classes = useStyles();
     const campaigns = useSelector(state => state.campaign.campaigns);
     const ordersitems = useSelector(state => state.order.ordersitems);
     const isLoading  = useSelector(state => state.order.loadingitems);
@@ -48,7 +63,7 @@ const ComprasItems = (props) => {
       if (campaigns != undefined && campaigns[0] != undefined && isAdmin) {
          dispatch(GetAllOrderItems(campaigns[0].id));
          setCampaignForm({
-          campaign: campaigns[0].id,
+          campaign: "",
         })
       }
     }, [campaigns]);
@@ -388,9 +403,16 @@ const ComprasItems = (props) => {
     const dropCampaign = () => {
       return (
         <React.Fragment>
+          <FormControl>
+          <InputLabel shrink style={{marginTop: "-15%"}} htmlFor="age-native-label-placeholder">
+          Campaña*
+          </InputLabel>
+         
           <SelectValidator 
-          label="Campaña*" 
-          name="campaign"
+          inputProps={{
+            name: 'campaign',
+            id: 'age-native-label-placeholder',
+          }}
           value={campaignform.campaign} 
           onChange={handleChange} 
           errorMessages={["Este campo es requerido"]}
@@ -400,7 +422,8 @@ const ComprasItems = (props) => {
                           {campaign.name || " "}
                           </MenuItem>
                       ))}
-          </SelectValidator> 
+          </SelectValidator>
+          </FormControl>
         </React.Fragment>
         );
     }
@@ -503,11 +526,11 @@ const ComprasItems = (props) => {
   }
 
   return (
-      console.log("campaña",campaigns),
+      //console.log("campaña",campaigns),
       <ValidatorForm onSubmit={() => {}}>
         {(isLoading || isLoadingCampaign) ? <Loading /> :
           (admin || !isAdmin) ?
-          <div className="m-sm-30">
+          <div className={classes.tableMargin + " m-sm-30"}>
               <Grid container spacing={2}>
                  
                 <Grid item md={12} xs={12}>

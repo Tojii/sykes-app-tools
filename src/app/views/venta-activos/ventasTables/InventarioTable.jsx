@@ -24,7 +24,6 @@ import ValidationModal from '../../growth-opportunities/components/ValidationDia
 
 const useStyles = makeStyles({
   sectionbutton: {
-    
       "@media (min-width: 0px)": {
         maxWidth: "140px",
         marginLeft: "0%" 
@@ -32,6 +31,14 @@ const useStyles = makeStyles({
       "@media (min-width: 1024px)": {
         maxWidth: "300px",
       }
+  },
+  tableMargin: {     
+    "@media (min-width: 0px)": {
+        marginBottom: "25%",
+    },
+    "@media (min-width: 1024px)": {
+        marginBottom: "5%",
+    },
   },
 });
 
@@ -300,7 +307,7 @@ const InventarioTable = () => {
   return (
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
-        <div className="m-sm-30">
+        <div className={classes.tableMargin + " m-sm-30"}>
           <ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
