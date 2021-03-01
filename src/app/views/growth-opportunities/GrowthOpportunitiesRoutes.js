@@ -18,6 +18,14 @@ const Metrics = MatxLoadable({
 
 const settings = {
   activeLayout: "layout1",
+  layout1Settings: {
+    topbar: {
+      show: true
+    },
+    leftSidebar: {
+      show: true
+    }
+  },
   likeDislikeButtons: { show: true }
 };
 

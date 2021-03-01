@@ -318,7 +318,7 @@ const FormAdminInventario = () => {
                             label="Límite Máximo Artículo*"
                             onChange={handleChange}
                             type="text"
-                            name="maxLimitPerPerson"
+                            name="maxLimitPerPerson" 
                             value={inventarioform.maxLimitPerPerson}
                             validators={["required","isNumber","maxStringLength:9","isPositive"]}
                             errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 9 carácteres", "No se aceptan negativos"]}
