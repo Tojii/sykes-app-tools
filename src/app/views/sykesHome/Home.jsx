@@ -8,15 +8,14 @@ import {
 } from "../../redux/actions/CommonActions";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import Swiper from "swiper";
-
 const useStyles = makeStyles({
-  
+
     widthCarousel: {
         margin: "auto",
         // when window width is <= 480px
         "@media (min-width: 1023px)": {
             width: "100%",
-            },
+        },
         "@media (min-width: 1024px)": {
             width: "50%",
         },
@@ -39,12 +38,12 @@ const useStyles = makeStyles({
             width: "14%",
         }
     },
-  });
+});
 
 const Home = () => {
     const dispatch = useDispatch();
     const images = useSelector(state => state.common.images);
-    const isLoading  = useSelector(state => state.common.loading);
+    const isLoading = useSelector(state => state.common.loading);
     const classes = useStyles();
 
     // const images = [
@@ -60,8 +59,9 @@ const Home = () => {
     return (
         <div className={classes.widthCarousel}>
             { isLoading ? <Loading /> :
-            <Carousel>
-                {images.map((image, index) => (
+                <div>
+                    <Carousel>
+                        {images.map((image, index) => (
                             <div key={index} className="pb-16">
                                 <img
                                     height={"515px"}
@@ -69,19 +69,21 @@ const Home = () => {
                                     //className="p-0 m-0 pb-24 pt-16" 
                                     alt="..."
                                     src={`data:image/png;base64,${image.content}`}
-                                    onClick= {image.url ? function() {
+                                    onClick={image.url ? function () {
                                         window.location.href = image.url;
                                     } : null}
-                                    //alt={`key-${images.imageName}`}
+                                //alt={`key-${images.imageName}`}
                                 />
                             </div>
-                    // <Card className="h-100 px-24 card" key={index}>
-                    //     <CardContent className="testimonial1__card-content">
-                            
-                    //     </CardContent>
-                    // </Card>
-                ))}
-            </Carousel>
+                            // <Card className="h-100 px-24 card" key={index}>
+                            //     <CardContent className="testimonial1__card-content">
+
+                            //     </CardContent>
+                            // </Card>
+                        ))}
+                    </Carousel>
+                </div>
+
             }
         </div>
     )

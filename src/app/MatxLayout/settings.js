@@ -33,5 +33,9 @@ export const MatxLayoutSettings = {
     show: false,
     fixed: false,
     theme: "dark" // View all valid theme colors inside MatxTheme/themeColors.js
+  },
+  
+  likeDislikeButtons: {
+    show: false
   }
 };

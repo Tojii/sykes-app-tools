@@ -10,7 +10,6 @@ import LSSReducer from "./LSSReducer";
 import growthReducer from "./GrowthOpportunityReducer";
 import metricsReducer from "./MetricsReducer";
 import applyReducer from "./ApplyReducer";
-//import ReembolsosEducativosReducer from "./ReembolsoEducativoReducer";
 import RaftReducer from "./RaftReducer";
 import RefoundsReducer from "./RefoundReducer";
 import CommonReducer from "./CommonReducer";
@@ -18,7 +17,6 @@ import { persistStore } from 'redux-persist'
 import CampaignReducer from "./CampaignReducer";
 import OrderReducer from "./OrderReducer";
 import LocationReducer from "./LocationReducer";
-
 
 const appReducer = combineReducers({
   login: LoginReducer,
