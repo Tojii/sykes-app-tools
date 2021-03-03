@@ -229,7 +229,7 @@ const FormAdminCampaign = () => {
                         </MuiPickersUtilsProvider>
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Límite Máximo Campaña*"
+                            label="Límite Máximo de Artículos por Usuario*"
                             onChange={handleChange}
                             type="text"
                             name="maxLimitPerPerson"

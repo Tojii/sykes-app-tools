@@ -17,6 +17,7 @@ import ValidationModal from '../../growth-opportunities/components/ValidationDia
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
+import moment from "moment"
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -77,7 +78,7 @@ const FormAdminInventario = () => {
     const dispatch = useDispatch();
     let { id } = useParams();
     const campaignitem = useSelector(state => state.campaign.campaignitem);
-    const campaigns = useSelector(state => state.campaign.campaignsActive);
+    const campaigns = useSelector(state => state.campaign.campaigns);
     const addCampaignItems = useSelector(state => state.campaign.addCampaignItems);
     const successCampaignItems = useSelector(state => state.campaign.success);
     const isLoading  = useSelector(state => state.campaign.loading);
@@ -124,7 +125,7 @@ const FormAdminInventario = () => {
     }
 
     useEffect(() => {
-        dispatch(GetCampaignsActive());
+        dispatch(GetCampaigns());
         if (id) {
             dispatch(GetCampaignItemsById(id));
         } 
@@ -238,10 +239,11 @@ const FormAdminInventario = () => {
                             errorMessages={["Este campo es requerido"]}
                         >
                             {campaigns.map(campaign => (
-                                            <MenuItem key={`province-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
-                                            {campaign.name || " "}
-                                            </MenuItem>
-                                        ))}
+                                (new Date(campaign.endDate).getTime() > new Date().getTime()) ?
+                                <MenuItem key={`province-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
+                                {campaign.name || " "}
+                                </MenuItem> : null
+                            ))}
                         </SelectValidator> 
                         <TextValidator
                             className={classes.textvalidator}
@@ -315,7 +317,7 @@ const FormAdminInventario = () => {
                         </FormControl>
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Límite Máximo Artículo*"
+                            label="Límite Máximo de Venta por Artículo*"
                             onChange={handleChange}
                             type="text"
                             name="maxLimitPerPerson" 
