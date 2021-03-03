@@ -50,12 +50,14 @@ const UserForm = (props) => {
     const handleUserEmail = (event) => {
         if (event.target.value !== "" || validateEmail(event.target.value))
         { 
+            dispatch(updateUserData(user));
         }
     }
 
     const handleUserPhone = (event) => {
         if (event.target.value !== "" || event.target.value.length < 8)
         {       
+            dispatch(updateUserData(user));
         }
     }
 

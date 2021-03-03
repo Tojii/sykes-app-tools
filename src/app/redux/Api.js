@@ -1,7 +1,8 @@
 import axios from "axios";
 import { Store } from "./Store";
-import { refreshtoken } from './actions/LoginActions'
-import { logoutUser } from './actions/UserActions'
+import { refreshtoken } from './actions/LoginActions';
+import { logoutUser } from './actions/UserActions';
+import history from "history.js";
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_API_URL
@@ -50,6 +51,11 @@ export const globalErrorHandler = async (error) => {
     //if (error.response.status === 403) {
     //await Store.dispatch(logout());
     Store.dispatch(logoutUser());
+    console.log("URL AFTHER DISPATCH", history);
+    history.push({
+        pathname: "/"
+    });
+    history.replace({ pathname: "/growth-opportunities" });
     //window.location.reload(false);
   //}
 };
