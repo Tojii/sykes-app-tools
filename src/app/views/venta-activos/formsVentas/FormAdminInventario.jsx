@@ -149,6 +149,7 @@ const FormAdminInventario = () => {
 
 
     const handleChange = (event) => {
+        const name = event.target.name;
         if ((event.target.name == "quantity") && (parseInt(event.target.value, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
             setErrorStock({error: false, errorMessage:``});
         } else if (event.target.name == "quantity") {
@@ -167,12 +168,18 @@ const FormAdminInventario = () => {
                 setErrorStock({error: true, errorMessage:`Las existencias no pueden ser mayores al inventario inicial`});
             }
         }
-        const name = event.target.name;
-        //console.log("name", event.target.value)
-        setInventarioForm({
-          ...inventarioform,
-          [name]: event.target.value,
-        });
+        if ((event.target.name == "quantity") && !id) {
+            setInventarioForm({
+                ...inventarioform,
+                [name]: event.target.value,
+                "stockQuantity": event.target.value
+              });
+        } else {
+            setInventarioForm({
+            ...inventarioform,
+            [name]: event.target.value,
+            });
+        }
     };
 
     const getBase64 = (file) => {
@@ -282,6 +289,7 @@ const FormAdminInventario = () => {
                             onChange={handleChange}
                             type="text"
                             name="stockQuantity"
+                            disabled={!id}
                             value={inventarioform.stockQuantity}
                             validators={["required","isNumber","maxStringLength:9", "isPositive"]}
                             errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 9 carácteres", "No se aceptan negativos"]}
@@ -317,7 +325,7 @@ const FormAdminInventario = () => {
                         </FormControl>
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Límite Máximo de Venta por Artículo*"
+                            label="Límite Máximo de Venta por Empleado*"
                             onChange={handleChange}
                             type="text"
                             name="maxLimitPerPerson" 
