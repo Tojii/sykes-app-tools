@@ -8,7 +8,7 @@ import Zoom from '@material-ui/core/Zoom';
 import { red } from '@material-ui/core/colors';
 import Tooltip from '@material-ui/core/Tooltip';
 import history from "history.js";
-import {getLikesDislikes, addLikesDislikes} from "./LikesDislikesService";
+import { getLikesDislikes, addLikesDislikes } from "./LikesDislikesService";
 
 const MODULE = "EmployeeTools";
 
@@ -43,59 +43,63 @@ export const LikesDislikesHome = () => {
     const user = useSelector(state => state.user);
 
     useEffect(() => {
+        setValue(false);
         async function getValue() {
-            let url =  history.location.pathname.split('/');
+            let url = history.location.pathname.split('/');
             var secondSegment = url[1];
-            let data = { 
-                url: secondSegment.toUpperCase(), 
-                module: MODULE, 
-                username: user.username, 
+            let data = {
+                url: secondSegment.toUpperCase(),
+                module: MODULE,
+                username: user.username,
                 expirationDays: 0,
-                answer : 0
-            }; 
+                answer: 0
+            };
             const resp = await getLikesDislikes(data);
-            setValue(false);
             setTimeout(() => setValue(!resp), 2000);
         }
         getValue();
-    }, [history.location.pathname]);
+
+    }, [history.location.pathname, user]);
 
     const onHandleClick = async (val) => {
-        setValue(false);
         let url = history.location.pathname.split('/');
         var secondSegment = url[1];
-        let data = { 
-            url: secondSegment.toUpperCase(), 
-            module: MODULE, 
-            userName: user.username, 
+        let data = {
+            url: secondSegment.toUpperCase(),
+            module: MODULE,
+            userName: user.username,
             expirationDays: 0,
-            answer : val
+            answer: val
         };
-        const value = await addLikesDislikes(data);
+        await addLikesDislikes(data);
+        setValue(false);
     }
-
     return (
-        <div className={classes.root}>
-            <Zoom in={value}>
-                <div className={classes.fab}>
-                    <Tooltip TransitionComponent={Zoom} title="Like" aria-label="Like" arrow>
-                        <Fab
-                            className={classes.margin}
-                            color="primary"
-                            onClick={() => onHandleClick(1)}>
-                            <ThumbUpIcon />
-                        </Fab>
-                    </Tooltip>
-                    <Tooltip TransitionComponent={Zoom} title="Dislike" aria-label="Dislike" arrow>
-                        <Fab
-                            className={classes.fabRed}
-                            color="inherit"
-                            onClick={() => onHandleClick(0)}>
-                            <ThumbDownIcon />
-                        </Fab>
-                    </Tooltip>
+        <>
+            {(user.username !== undefined) && (
+                <div className={classes.root}>
+                    <Zoom in={value}>
+                        <div className={classes.fab}>
+                            <Tooltip TransitionComponent={Zoom} title="Like" aria-label="Like" arrow>
+                                <Fab
+                                    className={classes.margin}
+                                    color="primary"
+                                    onClick={() => onHandleClick(1)}>
+                                    <ThumbUpIcon />
+                                </Fab>
+                            </Tooltip>
+                            <Tooltip TransitionComponent={Zoom} title="Dislike" aria-label="Dislike" arrow>
+                                <Fab
+                                    className={classes.fabRed}
+                                    color="inherit"
+                                    onClick={() => onHandleClick(0)}>
+                                    <ThumbDownIcon />
+                                </Fab>
+                            </Tooltip>
+                        </div>
+                    </Zoom>
                 </div>
-            </Zoom>
-        </div>
+            )}
+        </>
     );
 };
