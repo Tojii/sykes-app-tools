@@ -2,6 +2,7 @@ import axios from "axios";
 import apiAuthService from "../../services/apiAuthService";
 import history from "history.js";
 import { format } from 'date-fns';
+import { setError } from "./LoginActions"
 
 export const GET_ORDER = "GET_ORDER";
 export const ADD_ORDER = "ADD_ORDER";
@@ -59,6 +60,9 @@ axiosInstance.interceptors.response.use(
       })
       .catch((error) => {
         // Error
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -91,6 +95,9 @@ axiosInstance.interceptors.response.use(
         //console.log("imagenes",res.data)
       })
       .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -123,6 +130,9 @@ axiosInstance.interceptors.response.use(
         //console.log("imagenes",res.data)
       })
       .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -155,6 +165,9 @@ axiosInstance.interceptors.response.use(
         //console.log("imagenes",res.data)
       })
       .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -187,6 +200,9 @@ axiosInstance.interceptors.response.use(
         //console.log("imagenes",res.data)
       })
       .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -223,6 +239,9 @@ axiosInstance.interceptors.response.use(
             dispatch({
               type: OR_ERROR
             });
+            if (error.response.status === 401 || error.response.status === 403) {
+              dispatch(setError("Your session expired!"));
+            }
             if (error.response) {
                 console.log(error.response.data);
             } else if (error.request) {

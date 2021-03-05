@@ -7,6 +7,7 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_LOADING = "LOGIN_LOADING";
 export const RESET_PASSWORD = "RESET_PASSWORD";
+export const CA_SET_ERROR = "CA_SET_ERROR";
 
 const { Store, Persistor } = configureStore();
 
@@ -41,6 +42,16 @@ export function loginWithEmailAndPassword({ email, password }) {
           payload: error
         });
       });
+  };
+}
+
+export const setError = error => {
+  // console.log("mensaje de error", error)
+  return dispatch => {
+    dispatch({
+      data: error,
+      type: CA_SET_ERROR
+    });
   };
 }
 

@@ -2,6 +2,7 @@ import axios from "axios";
 import apiAuthService from "../../services/apiAuthService";
 import history from "history.js";
 import { format } from 'date-fns';
+import { setError } from "./LoginActions"
 
 export const GET_PROVINCE = "GET_PROVINCE";
 export const GET_CANTONS = "GET_CANTONS";
@@ -44,6 +45,9 @@ axiosInstance.interceptors.response.use(
         //console.log("imagenes",res.data)
       })
       .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -75,6 +79,9 @@ axiosInstance.interceptors.response.use(
         //console.log("imagenes",res.data)
       })
       .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -106,6 +113,9 @@ axiosInstance.interceptors.response.use(
         //console.log("imagenes",res.data)
       })
       .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {

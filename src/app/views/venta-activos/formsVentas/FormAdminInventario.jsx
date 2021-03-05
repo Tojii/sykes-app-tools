@@ -17,6 +17,7 @@ import ValidationModal from '../../growth-opportunities/components/ValidationDia
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
+import moment from "moment"
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -77,7 +78,7 @@ const FormAdminInventario = () => {
     const dispatch = useDispatch();
     let { id } = useParams();
     const campaignitem = useSelector(state => state.campaign.campaignitem);
-    const campaigns = useSelector(state => state.campaign.campaignsActive);
+    const campaigns = useSelector(state => state.campaign.campaigns);
     const addCampaignItems = useSelector(state => state.campaign.addCampaignItems);
     const successCampaignItems = useSelector(state => state.campaign.success);
     const isLoading  = useSelector(state => state.campaign.loading);
@@ -124,7 +125,7 @@ const FormAdminInventario = () => {
     }
 
     useEffect(() => {
-        dispatch(GetCampaignsActive());
+        dispatch(GetCampaigns());
         if (id) {
             dispatch(GetCampaignItemsById(id));
         } 
@@ -148,6 +149,7 @@ const FormAdminInventario = () => {
 
 
     const handleChange = (event) => {
+        const name = event.target.name;
         if ((event.target.name == "quantity") && (parseInt(event.target.value, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
             setErrorStock({error: false, errorMessage:``});
         } else if (event.target.name == "quantity") {
@@ -166,12 +168,18 @@ const FormAdminInventario = () => {
                 setErrorStock({error: true, errorMessage:`Las existencias no pueden ser mayores al inventario inicial`});
             }
         }
-        const name = event.target.name;
-        //console.log("name", event.target.value)
-        setInventarioForm({
-          ...inventarioform,
-          [name]: event.target.value,
-        });
+        if ((event.target.name == "quantity") && !id) {
+            setInventarioForm({
+                ...inventarioform,
+                [name]: event.target.value,
+                "stockQuantity": event.target.value
+              });
+        } else {
+            setInventarioForm({
+            ...inventarioform,
+            [name]: event.target.value,
+            });
+        }
     };
 
     const getBase64 = (file) => {
@@ -238,10 +246,11 @@ const FormAdminInventario = () => {
                             errorMessages={["Este campo es requerido"]}
                         >
                             {campaigns.map(campaign => (
-                                            <MenuItem key={`province-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
-                                            {campaign.name || " "}
-                                            </MenuItem>
-                                        ))}
+                                (new Date(campaign.endDate).getTime() > new Date().getTime()) ?
+                                <MenuItem key={`province-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
+                                {campaign.name || " "}
+                                </MenuItem> : null
+                            ))}
                         </SelectValidator> 
                         <TextValidator
                             className={classes.textvalidator}
@@ -280,6 +289,7 @@ const FormAdminInventario = () => {
                             onChange={handleChange}
                             type="text"
                             name="stockQuantity"
+                            disabled={!id}
                             value={inventarioform.stockQuantity}
                             validators={["required","isNumber","maxStringLength:7", "isPositive"]}
                             errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 7 carácteres", "No se aceptan negativos"]}
@@ -315,7 +325,7 @@ const FormAdminInventario = () => {
                         </FormControl>
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Límite Máximo Artículo*"
+                            label="Límite Máximo de Venta por Empleado*"
                             onChange={handleChange}
                             type="text"
                             name="maxLimitPerPerson" 

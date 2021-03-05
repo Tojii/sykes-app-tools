@@ -1,6 +1,7 @@
 import axios from "axios";
 import apiAuthService from "../../services/apiAuthService";
 import history from "history.js";
+import { setError } from "./LoginActions"
 
 export const GET_IMAGES = "GET_IMAGES";
 export const RE_LOADING = "RE_LOADING";
@@ -37,6 +38,9 @@ export const GetImages = () => {
       })
       .catch((error) => {
         // Error
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx

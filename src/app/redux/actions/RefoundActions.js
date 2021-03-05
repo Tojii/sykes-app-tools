@@ -2,6 +2,7 @@ import axios from "axios";
 import { format } from 'date-fns';
 import apiAuthService from "../../services/apiAuthService";
 import history from "history.js";
+import { setError } from "./LoginActions"
 
 export const GET_REFOUND_LIST_BY_USER = "GET_REFOUND_LIST_BY_USER";
 export const SAVE_REFOUND = "SAVE_REFOUND";
@@ -38,6 +39,9 @@ export const GetRefoundListByUser = (badgeId) => {
             });
             //console.log(res.data)
       })).catch(function(error){
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         console.log("Error", error);
       });
   } 
@@ -108,6 +112,9 @@ export const SaveRefund = (Data, Files, badge, fullname) => {
         }))
         .catch((error) => {
           // Error
+          if (error.response.status === 401 || error.response.status === 403) {
+            dispatch(setError("Your session expired!"));
+          }
           if (error.response) {
               // The request was made and the server responded with a status code
               // that falls out of the range of 2xx
@@ -142,6 +149,9 @@ export const GetIformationLists = () => {
     }))
     .catch((error) => {
       // Error
+      if (error.response.status === 401 || error.response.status === 403) {
+        dispatch(setError("Your session expired!"));
+      }
       if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
@@ -172,6 +182,9 @@ export const getStudiesCatergory = () => {
     }))
     .catch((error) => {
       // Error
+      if (error.response.status === 401 || error.response.status === 403) {
+        dispatch(setError("Your session expired!"));
+      }
       if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
