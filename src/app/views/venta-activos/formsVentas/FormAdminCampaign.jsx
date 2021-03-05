@@ -229,13 +229,13 @@ const FormAdminCampaign = () => {
                         </MuiPickersUtilsProvider>
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Límite Máximo Campaña*"
+                            label="Límite Máximo de Artículos por Usuario*"
                             onChange={handleChange}
                             type="text"
                             name="maxLimitPerPerson"
                             value={campaignform.maxLimitPerPerson}
-                            validators={["required","isNumber","isPositive","maxStringLength:9"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos", "Máximo 9 carácteres"]}
+                            validators={["required","isNumber","isPositive","maxStringLength:7"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos", "Máximo 7 carácteres"]}
                         />
                     
                         <div className={classes.sectionbutton}>

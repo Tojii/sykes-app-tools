@@ -2,7 +2,8 @@ import {
   LOGIN_SUCCESS,
   LOGIN_ERROR,
   LOGIN_LOADING,
-  RESET_PASSWORD
+  RESET_PASSWORD,
+  CA_SET_ERROR
 } from "../actions/LoginActions";
 
 const initialState = {
@@ -11,7 +12,8 @@ const initialState = {
   error: {
     username: null,
     password: null
-  }
+  },
+  errorSession: ""
 };
 
 const LoginReducer = function(state = initialState, action) {
@@ -41,6 +43,14 @@ const LoginReducer = function(state = initialState, action) {
         success: false,
         loading: false,
         error: action.data
+      };
+    }
+    case CA_SET_ERROR: {
+      return {
+        success: false,
+        loading: false,
+        errorSession: action.data,
+        error: undefined
       };
     }
     default: {

@@ -63,7 +63,7 @@ const ComprasItems = (props) => {
       if (campaigns != undefined && campaigns[0] != undefined && isAdmin) {
          dispatch(GetAllOrderItems(campaigns[0].id));
          setCampaignForm({
-          campaign: "",
+          campaign: campaigns[0].id,
         })
       }
     }, [campaigns]);

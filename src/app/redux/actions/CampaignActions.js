@@ -1,5 +1,6 @@
 import axios from "axios";
 import apiAuthService from "../../services/apiAuthService";
+import { setError } from "./LoginActions"
 import history from "history.js";
 import moment from "moment"
 import { format } from 'date-fns';
@@ -54,6 +55,9 @@ export const GetCampaignsActive = () => {
         //console.log("imagenes",res.data)
       })
       .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -87,6 +91,9 @@ export const GetCampaignsActive = () => {
       })
       .catch((error) => {
         // Error
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
@@ -125,6 +132,9 @@ export const GetCampaignsActive = () => {
         //console.log("imagenes",res.data)
       })
       .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -152,6 +162,9 @@ export const GetCampaignsActive = () => {
         //console.log("imagenesby",res.data)
       })
       .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -179,6 +192,9 @@ export const GetCampaignsActive = () => {
         //console.log("imagenesby",res.data)
       })
       .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -216,6 +232,9 @@ export const GetCampaignsActive = () => {
             dispatch({
               type: CA_ERROR
             });
+            if (error.response.status === 401 || error.response.status === 403) {
+              dispatch(setError("Your session expired!"));
+            }
             if (error.response) {
                 console.log(error.response.data);
             } else if (error.request) {
@@ -261,6 +280,9 @@ export const AddCampaignItems = (id, payload, files) => {
           dispatch({
             type: CA_ERROR
           });
+          if (error.response.status === 401 || error.response.status === 403) {
+            dispatch(setError("Your session expired!"));
+          }
           if (error.response) {
               console.log(error.response.data);
           } else if (error.request) {
@@ -289,6 +311,9 @@ export const AddCampaignItems = (id, payload, files) => {
         dispatch({
           type: CA_ERROR
         });
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -330,6 +355,9 @@ export const UpdateCampaignItems = (id, payload, files) => dispatch => {
       dispatch({
         type: CA_ERROR
       });
+      if (error.response.status === 401 || error.response.status === 403) {
+        dispatch(setError("Your session expired!"));
+      }
       if (error.response) {
           console.log(error.response.data);
       } else if (error.request) {
@@ -356,6 +384,9 @@ export const DeleteCampaign = (id) => dispatch => {
         dispatch({
           type: CA_ERROR
         });
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
         if (error.response) {
             console.log(error.response.data);
         } else if (error.request) {
@@ -383,6 +414,9 @@ export const DeleteCampaignItem = (id) => dispatch => {
       dispatch({
         type: CA_ERROR
       });
+      if (error.response.status === 401 || error.response.status === 403) {
+        dispatch(setError("Your session expired!"));
+      }
       if (error.response) {
           console.log(error.response.data);
       } else if (error.request) {

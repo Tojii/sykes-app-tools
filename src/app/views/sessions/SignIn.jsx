@@ -48,8 +48,9 @@ class SignIn extends Component {
   };
   
   render() {
+    //console.log("sig in", this.props.login.errorSession)
     const error = this.props.login.error && !this.props.success ? null : 
-      <Alert variant="outlined" severity="error">The username or password is incorrect!</Alert>
+      <Alert variant="outlined" severity="error">{this.props.login.errorSession ? this.props.login.errorSession : "The username or password is incorrect!"}</Alert>
 
     let { email, password } = this.state;
     let { classes } = this.props;

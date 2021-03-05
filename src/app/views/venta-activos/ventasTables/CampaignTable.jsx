@@ -304,7 +304,6 @@ const CampaignTable = (props) => {
   }
 
   return (
-      console.log("clean",campaignsActive),
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">

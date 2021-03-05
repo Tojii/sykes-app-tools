@@ -1,6 +1,7 @@
 import axios from "axios";
 import history from "history.js";
 import apiAuthService from "../../services/apiAuthService";
+import { setError } from "./LoginActions"
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
@@ -34,6 +35,9 @@ export const setUserData = user => dispatch => {
     });
   })
   .catch((error) => {
+    if (error.response.status === 401 || error.response.status === 403) {
+      dispatch(setError("Your session expired!"));
+    }
     if (error.response) {
         console.log(error.response.data);
     } else if (error.request) {
@@ -80,6 +84,9 @@ export const updateUserData = (payload) => dispatch => {
     });
   })
   .catch((error) => {
+    if (error.response.status === 401 || error.response.status === 403) {
+      dispatch(setError("Your session expired!"));
+    }
     if (error.response) {
         console.log(error.response.data);
     } else if (error.request) {

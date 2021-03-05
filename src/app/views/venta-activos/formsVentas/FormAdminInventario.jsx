@@ -17,6 +17,7 @@ import ValidationModal from '../../growth-opportunities/components/ValidationDia
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
+import moment from "moment"
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -77,7 +78,7 @@ const FormAdminInventario = () => {
     const dispatch = useDispatch();
     let { id } = useParams();
     const campaignitem = useSelector(state => state.campaign.campaignitem);
-    const campaigns = useSelector(state => state.campaign.campaignsActive);
+    const campaigns = useSelector(state => state.campaign.campaigns);
     const addCampaignItems = useSelector(state => state.campaign.addCampaignItems);
     const successCampaignItems = useSelector(state => state.campaign.success);
     const isLoading  = useSelector(state => state.campaign.loading);
@@ -124,7 +125,7 @@ const FormAdminInventario = () => {
     }
 
     useEffect(() => {
-        dispatch(GetCampaignsActive());
+        dispatch(GetCampaigns());
         if (id) {
             dispatch(GetCampaignItemsById(id));
         } 
@@ -148,30 +149,37 @@ const FormAdminInventario = () => {
 
 
     const handleChange = (event) => {
-        if ((event.target.name == "quantity") && (parseInt(event.target.value, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
+        const name = event.target.name;
+        if (id && (event.target.name == "quantity") && (parseInt(event.target.value, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
             setErrorStock({error: false, errorMessage:``});
-        } else if (event.target.name == "quantity") {
+        } else if (id && event.target.name == "quantity") {
             if (event.target.value == "" || inventarioform.stockQuantity == ""){
                 setErrorStock({error: false, errorMessage:``});
             } else { 
                 setErrorStock({error: true, errorMessage:`Las existencias no pueden ser mayores al inventario inicial`});
             }
         }
-        if ((event.target.name == "stockQuantity") && (parseInt(inventarioform.quantity, 10) >= parseInt(event.target.value, 10))) {
+        if (id && (event.target.name == "stockQuantity") && (parseInt(inventarioform.quantity, 10) >= parseInt(event.target.value, 10))) {
             setErrorStock({error: false, errorMessage:``});
-        } else if (event.target.name == "stockQuantity") {
+        } else if (id && event.target.name == "stockQuantity") {
             if (event.target.value == "" || inventarioform.quantity == ""){
                 setErrorStock({error: false, errorMessage:``});
             } else {
                 setErrorStock({error: true, errorMessage:`Las existencias no pueden ser mayores al inventario inicial`});
             }
         }
-        const name = event.target.name;
-        //console.log("name", event.target.value)
-        setInventarioForm({
-          ...inventarioform,
-          [name]: event.target.value,
-        });
+        if ((event.target.name == "quantity") && !id) {
+            setInventarioForm({
+                ...inventarioform,
+                [name]: event.target.value,
+                "stockQuantity": event.target.value
+              });
+        } else {
+            setInventarioForm({
+            ...inventarioform,
+            [name]: event.target.value,
+            });
+        }
     };
 
     const getBase64 = (file) => {
@@ -192,6 +200,7 @@ const FormAdminInventario = () => {
         let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
         let list = [];
         let sizes = 0;
+        //console.log("image prop", filesList)
 
         if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
                 if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
@@ -238,10 +247,11 @@ const FormAdminInventario = () => {
                             errorMessages={["Este campo es requerido"]}
                         >
                             {campaigns.map(campaign => (
-                                            <MenuItem key={`province-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
-                                            {campaign.name || " "}
-                                            </MenuItem>
-                                        ))}
+                                (new Date(campaign.endDate).getTime() > new Date().getTime()) ?
+                                <MenuItem key={`province-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
+                                {campaign.name || " "}
+                                </MenuItem> : null
+                            ))}
                         </SelectValidator> 
                         <TextValidator
                             className={classes.textvalidator}
@@ -250,8 +260,8 @@ const FormAdminInventario = () => {
                             type="text"
                             name="name"
                             value={inventarioform.name}
-                            validators={["required","maxStringLength:30"]}
-                            errorMessages={["Este campo es requerido", "Máximo 30 carácteres"]}
+                            validators={["required","maxStringLength:100"]}
+                            errorMessages={["Este campo es requerido", "Máximo 100 carácteres"]}
                         />
                         <TextValidator
                             className={classes.textvalidator}
@@ -271,8 +281,8 @@ const FormAdminInventario = () => {
                             name="quantity"
                             //disabled={true}
                             value={inventarioform.quantity}
-                            validators={["required","isNumber","maxStringLength:9", "isPositive"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 9 carácteres", "No se aceptan negativos"]}
+                            validators={["required","isNumber","maxStringLength:7", "isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 7 carácteres", "No se aceptan negativos"]}
                         />
                         <TextValidator
                             className={classes.textvalidator}
@@ -280,9 +290,10 @@ const FormAdminInventario = () => {
                             onChange={handleChange}
                             type="text"
                             name="stockQuantity"
+                            disabled={!id}
                             value={inventarioform.stockQuantity}
-                            validators={["required","isNumber","maxStringLength:9", "isPositive"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 9 carácteres", "No se aceptan negativos"]}
+                            validators={["required","isNumber","maxStringLength:7", "isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 7 carácteres", "No se aceptan negativos"]}
                             error={errorStock.error}
                         />
                         <FormHelperText style={{display: errorStock.error ? null : "none", marginTop: "0%"}} className={classes.textvalidator} error={errorStock.error} id="my-helper-text">{errorStock.errorMessage}</FormHelperText>
@@ -305,8 +316,8 @@ const FormAdminInventario = () => {
                                 name="unitPrice"
                                 placeholder="0.00"
                                 value={inventarioform.unitPrice}
-                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$"]} 
-                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales"]}
+                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$","maxStringLength:11"]} 
+                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales", "Máximo 11 carácteres"]}
                                 InputProps={{
                                     startAdornment:<InputAdornment position="start">₡</InputAdornment>,
                                   }}
@@ -315,13 +326,13 @@ const FormAdminInventario = () => {
                         </FormControl>
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Límite Máximo Artículo*"
+                            label="Límite Máximo de Venta por Empleado*"
                             onChange={handleChange}
                             type="text"
                             name="maxLimitPerPerson" 
                             value={inventarioform.maxLimitPerPerson}
-                            validators={["required","isNumber","maxStringLength:9","isPositive"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 9 carácteres", "No se aceptan negativos"]}
+                            validators={["required","isNumber","maxStringLength:7","isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 7 carácteres", "No se aceptan negativos"]}
                         />
                         <FormControl className={classes.textvalidator}>
                             <label className={classes.filelabel} id="image">Imagen Artículo (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>
