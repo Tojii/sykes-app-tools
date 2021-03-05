@@ -10,7 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import history from "history.js";
 import { getLikesDislikes, addLikesDislikes } from "./LikesDislikesService";
 
-const MODULE = "EmployeeTools"; 
+const MODULE = "EmployeeTools";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 export const LikesDislikesHome = () => {
     const classes = useStyles();
     const [value, setValue] = React.useState(false);
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.user.user);
 
     useEffect(() => {
         setValue(false);
@@ -57,7 +57,10 @@ export const LikesDislikesHome = () => {
             const resp = await getLikesDislikes(data);
             setTimeout(() => setValue(!resp), 2000);
         }
-        getValue();
+
+        if (user != undefined || user != null) {
+            getValue();
+        }
 
     }, [history.location.pathname, user]);
 
@@ -76,30 +79,28 @@ export const LikesDislikesHome = () => {
     }
     return (
         <>
-            {(user.username !== undefined) ? (
-                <div className={classes.root}>
-                    <Zoom in={value}>
-                        <div className={classes.fab}>
-                            <Tooltip TransitionComponent={Zoom} title="Like" aria-label="Like" arrow>
-                                <Fab
-                                    className={classes.margin}
-                                    color="primary"
-                                    onClick={() => onHandleClick(1)}>
-                                    <ThumbUpIcon />
-                                </Fab>
-                            </Tooltip>
-                            <Tooltip TransitionComponent={Zoom} title="Dislike" aria-label="Dislike" arrow>
-                                <Fab
-                                    className={classes.fabRed}
-                                    color="inherit"
-                                    onClick={() => onHandleClick(0)}>
-                                    <ThumbDownIcon />
-                                </Fab>
-                            </Tooltip>
-                        </div>
-                    </Zoom>
-                </div>
-            ): <></>}
+            <div className={classes.root}>
+                <Zoom in={value}>
+                    <div className={classes.fab}>
+                        <Tooltip TransitionComponent={Zoom} title="Like" aria-label="Like" arrow>
+                            <Fab
+                                className={classes.margin}
+                                color="primary"
+                                onClick={() => onHandleClick(1)}>
+                                <ThumbUpIcon />
+                            </Fab>
+                        </Tooltip>
+                        <Tooltip TransitionComponent={Zoom} title="Dislike" aria-label="Dislike" arrow>
+                            <Fab
+                                className={classes.fabRed}
+                                color="inherit"
+                                onClick={() => onHandleClick(0)}>
+                                <ThumbDownIcon />
+                            </Fab>
+                        </Tooltip>
+                    </div>
+                </Zoom>
+            </div>
         </>
     );
 };
