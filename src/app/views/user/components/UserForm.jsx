@@ -13,6 +13,7 @@ import { setUserData } from "../../../redux/actions/UserActions";
 import { validateEmail } from '../../../../utils';
 import { connect } from "react-redux";
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
+import history from "history.js";
 
 const UserForm = (props) => {
     const {
@@ -26,7 +27,10 @@ const UserForm = (props) => {
     } = props
     const dispatch = useDispatch();
     const [form_user, setUserForm] = useState(user);
-    const [emailError, setEmailError] = useState(true);
+    
+    useEffect(()=>{
+        setUserForm(user);
+    },[]);
 
     const validateEmail = (email) => {
         const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -49,7 +53,7 @@ const UserForm = (props) => {
     }
 
     const handleUserEmail = (event) => {
-        if (event.target.value !== "" || validateEmail(event.target.value))
+        if (event.target.value !== "" && validateEmail(event.target.value))
         { 
             const payload = {
                 phone: user.phone,
@@ -62,13 +66,12 @@ const UserForm = (props) => {
             apply['email'] = event.target.value;
             apply['badge'] = user.badge;
             setApplyData(apply);
-            handleSubmitCallback(payload);
+            //handleSubmitCallback(payload);
         }
     }
 
     const handleUserPhone = (event) => {
-        console.log(validatePhone(event.target.phone));
-        if (event.target.value !== "" || event.target.value.length < 8 || validatePhone(event.target.phone))
+        if (event.target.value !== "" && event.target.value.length < 8 && validatePhone(event.target.phone))
         {       
             const payload = {
                 phone: event.target.value,
@@ -83,7 +86,7 @@ const UserForm = (props) => {
             apply['email'] = user.email;
             apply['badge'] = user.badge;
             setApplyData(apply);
-            handleSubmitCallback(payload);
+            //handleSubmitCallback(payload);
         }
     }
 
@@ -186,7 +189,7 @@ const UserForm = (props) => {
                             color="secondary"
                             onClick={handleClose}
                         >
-                            Cancel
+                            Home
                         </Button>
                     </div> : null }
                 </ValidatorForm>

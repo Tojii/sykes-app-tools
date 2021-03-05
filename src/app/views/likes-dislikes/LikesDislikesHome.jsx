@@ -76,7 +76,7 @@ export const LikesDislikesHome = () => {
     }
     return (
         <>
-            {(user.username !== undefined) && (
+            {(user.username !== undefined) ? (
                 <div className={classes.root}>
                     <Zoom in={value}>
                         <div className={classes.fab}>
@@ -99,7 +99,7 @@ export const LikesDislikesHome = () => {
                         </div>
                     </Zoom>
                 </div>
-            )}
+            ): <></>}
         </>
     );
 };
