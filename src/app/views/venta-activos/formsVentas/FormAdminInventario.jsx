@@ -150,18 +150,18 @@ const FormAdminInventario = () => {
 
     const handleChange = (event) => {
         const name = event.target.name;
-        if ((event.target.name == "quantity") && (parseInt(event.target.value, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
+        if (id && (event.target.name == "quantity") && (parseInt(event.target.value, 10) >= parseInt(inventarioform.stockQuantity, 10))) {
             setErrorStock({error: false, errorMessage:``});
-        } else if (event.target.name == "quantity") {
+        } else if (id && event.target.name == "quantity") {
             if (event.target.value == "" || inventarioform.stockQuantity == ""){
                 setErrorStock({error: false, errorMessage:``});
             } else { 
                 setErrorStock({error: true, errorMessage:`Las existencias no pueden ser mayores al inventario inicial`});
             }
         }
-        if ((event.target.name == "stockQuantity") && (parseInt(inventarioform.quantity, 10) >= parseInt(event.target.value, 10))) {
+        if (id && (event.target.name == "stockQuantity") && (parseInt(inventarioform.quantity, 10) >= parseInt(event.target.value, 10))) {
             setErrorStock({error: false, errorMessage:``});
-        } else if (event.target.name == "stockQuantity") {
+        } else if (id && event.target.name == "stockQuantity") {
             if (event.target.value == "" || inventarioform.quantity == ""){
                 setErrorStock({error: false, errorMessage:``});
             } else {
@@ -200,6 +200,7 @@ const FormAdminInventario = () => {
         let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
         let list = [];
         let sizes = 0;
+        //console.log("image prop", filesList)
 
         if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
                 if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
