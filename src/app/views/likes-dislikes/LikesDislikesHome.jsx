@@ -10,7 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import history from "history.js";
 import { getLikesDislikes, addLikesDislikes } from "./LikesDislikesService";
 
-const MODULE = "EmployeeTools";
+const MODULE = "EmployeeTools"; 
 
 const useStyles = makeStyles((theme) => ({
     root: {
