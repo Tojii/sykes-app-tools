@@ -77,7 +77,7 @@ const useStyles = makeStyles({
 const FormAdminCampaign = () => {
     
     const classes = useStyles();
-    const user = useSelector(state => state.user.user);
+    const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     let { id } = useParams();
     const admin = (user != null && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false

@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 export const LikesDislikesHome = () => {
     const classes = useStyles();
     const [value, setValue] = React.useState(false);
-    const user = useSelector(state => state.user.user);
+    const user = useSelector(state => state.user);
 
     useEffect(() => {
         setValue(false);

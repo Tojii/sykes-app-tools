@@ -24,7 +24,7 @@ import ValidationModal from '../../growth-opportunities/components/ValidationDia
 const CampaignTable = (props) => {
     const dispatch = useDispatch();
     const isAdmin = props.admin != undefined ? props.admin : true;
-    const user = useSelector(state => state.user.user);
+    const user = useSelector(state => state.user);
     const campaigns = useSelector(state => state.campaign.campaigns);
     const successCampaign = useSelector(state => state.campaign.success);
     const campaignsActive = useSelector(state => state.campaign.campaignsActive);

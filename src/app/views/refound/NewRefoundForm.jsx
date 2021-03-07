@@ -84,7 +84,7 @@ export const OTHERS = "OTROS";
 
 const NewRefoundForm = () => {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user.user);
+  const user = useSelector(state => state.user);
   const studiesCatergory = useSelector(state => state.refound.studiesCatergory);
   const universityInstitutes = useSelector(state => state.refound.universityInstitutes);
   const ciscoAcademies = useSelector(state => state.refound.ciscoAcademies);

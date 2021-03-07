@@ -43,7 +43,7 @@ const ComprasTable = (props) => {
     const classes = useStyles();
     const orders = useSelector(state => state.order.orders);
     const isLoading  = useSelector(state => state.order.loading);
-    const user = useSelector(state => state.user.user);
+    const user = useSelector(state => state.user);
     const isAdmin = props.admin != undefined ? props.admin : true;
     const admin = (user != null && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 

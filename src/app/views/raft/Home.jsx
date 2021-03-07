@@ -16,7 +16,7 @@ import AddIcon from "@material-ui/icons/Add";
 
 const Home = () => {
     const raft = useSelector(state => state.raft.raftlist);
-    const user = useSelector(state => state.user.user);
+    const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     const columns = ["Primer Nombre", "Segundo Nombre", "Primer Apellido", "Segundo Apellido", "Telefono", "Detalle", "Fecha Referencia", "Badge", "RAFTID", "Puesto", "Campaña"];
 

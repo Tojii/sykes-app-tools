@@ -15,7 +15,7 @@ const RefoundDetails = () => {
     const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
     const dispatch = useDispatch();
     const isLoading  = useSelector(state => state.refound.loading);
-    const user = useSelector(state => state.user.user);
+    const user = useSelector(state => state.user);
 
     useEffect(() => {
         dispatch(GetRefoundListByUser(user != null ? user.badge : ""));

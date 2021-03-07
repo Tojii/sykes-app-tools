@@ -68,7 +68,7 @@ const Home = () => {
     const classes = useStyles();
     const summary = useSelector(state => state.refound.summary);
     const isLoading  = useSelector(state => state.refound.loading);
-    const user = useSelector(state => state.user.user);
+    const user = useSelector(state => state.user);
     const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(false);
     const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
     const handleDetailsClick = () => {

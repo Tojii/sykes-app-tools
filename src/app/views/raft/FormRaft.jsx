@@ -41,7 +41,7 @@ const useStyles = makeStyles({
 
 const FormRaft = () => {
     
-    const user = useSelector(state => state.user.user);
+    const user = useSelector(state => state.user);
     const academiclist = useSelector(state => state.raft.academicgrades);
     const englishlevel = useSelector(state => state.raft.englishlevel);
     const paymentmethods = useSelector(state => state.raft.paymentmethods);
