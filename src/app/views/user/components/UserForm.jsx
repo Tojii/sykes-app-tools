@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { setApplyData } from "../../../redux/actions/ApplyActions";
-import { updateUserData } from "../../../redux/actions/UserActions";
+import { setUserData } from "../../../redux/actions/UserActions";
 import { validateEmail } from '../../../../utils';
 import { connect } from "react-redux";
 import Loading from "../../../../matx/components/MatxLoadable/Loading";

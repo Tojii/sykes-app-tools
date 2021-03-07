@@ -56,7 +56,6 @@ class Layout1Topbar extends Component {
   };
 
   handleSignOut = () => {
-    history.state = "/session/signin";
     this.props.logoutUser();
   };
 

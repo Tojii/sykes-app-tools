@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import api from "../Api";
+import  api, { globalErrorHandler } from "../Api"
 
 export const GET_REFOUND_LIST_BY_USER = "GET_REFOUND_LIST_BY_USER";
 export const SAVE_REFOUND = "SAVE_REFOUND";
@@ -81,27 +81,7 @@ export const SaveRefund = (Data, Files, badge, fullname) => {
           });
           //console.log(res.data)
         }))
-        .catch((error) => {
-          // Error
-          if (error.response.status === 401 || error.response.status === 403) {
-            dispatch(setError("Your session expired!"));
-          }
-          if (error.response) {
-              // The request was made and the server responded with a status code
-              // that falls out of the range of 2xx
-              console.log(error.response.data);
-          } else if (error.request) {
-              // The request was made but no response was received
-              // `error.request` is an instance of XMLHttpRequest in the 
-              // browser and an instance of
-              // http.ClientRequest in node.js
-              console.log(error.request);
-          } else {
-              // Something happened in setting up the request that triggered an Error
-              console.log('Error', error.message);
-          }
-          console.log(error.config);
-        }); 
+        .catch(globalErrorHandler);
         
     }
 }
@@ -117,28 +97,8 @@ export const GetIformationLists = () => {
             data: res.data
         });
     }))
-    .catch((error) => {
-      // Error
-      if (error.response.status === 401 || error.response.status === 403) {
-        dispatch(setError("Your session expired!"));
-      }
-      if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-      } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the 
-          // browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-      } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-      }
-      console.log(error.config);
-    }); 
-}
+    .catch(globalErrorHandler);
+  }
 }
 
 export const getStudiesCatergory = () => {
@@ -149,27 +109,7 @@ export const getStudiesCatergory = () => {
         data: res.data
       });
     }))
-    .catch((error) => {
-      // Error
-      if (error.response.status === 401 || error.response.status === 403) {
-        dispatch(setError("Your session expired!"));
-      }
-      if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-      } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the 
-          // browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-      } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-      }
-      console.log(error.config);
-    }); 
+    .catch(globalErrorHandler);
   }
 }
 
