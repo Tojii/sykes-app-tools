@@ -21,7 +21,8 @@ const settings = {
     navbar: { show: false }
   },
   secondarySidebar: { show: false },
-  footer: { show: false }
+  footer: { show: false },
+  likeDislikeButtons: {show: false } 
 };
 
 const sessionRoutes = [

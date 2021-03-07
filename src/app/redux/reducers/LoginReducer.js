@@ -49,6 +49,14 @@ const LoginReducer = function(state = initialState, action) {
         error: action.data
       };
     }
+    case CA_SET_ERROR: {
+      return {
+        success: false,
+        loading: false,
+        errorSession: action.data,
+        error: undefined
+      };
+    }
     default: {
       return state;
     }

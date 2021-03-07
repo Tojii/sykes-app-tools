@@ -8,7 +8,9 @@ import {
     Card,
     Grid,
     FormLabel,
-    FormGroup
+    FormGroup,
+    FormControl,
+    InputLabel
 } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import CustomFooter from '../../muidatatable/CustomFooter';
@@ -23,9 +25,22 @@ import moment from "moment";
 import NotFound from "../../sessions/NotFound"
 import MenuItem from '@material-ui/core/MenuItem';
 import { SelectValidator, ValidatorForm } from "react-material-ui-form-validator";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+    tableMargin: {     
+        "@media (min-width: 0px)": {
+            marginBottom: "25%",
+        },
+        "@media (min-width: 1024px)": {
+            marginBottom: "5%",
+        },
+    },
+})
 
 const ComprasItems = (props) => {
     const dispatch = useDispatch();
+    const classes = useStyles();
     const campaigns = useSelector(state => state.campaign.campaigns);
     const ordersitems = useSelector(state => state.order.ordersitems);
     const isLoading  = useSelector(state => state.order.loadingitems);
@@ -386,19 +401,27 @@ const ComprasItems = (props) => {
     const dropCampaign = () => {
       return (
         <React.Fragment>
+          <FormControl>
+          <InputLabel shrink style={{marginTop: "-15%"}} htmlFor="age-native-label-placeholder">
+          Campaña*
+          </InputLabel>
+         
           <SelectValidator 
-            label="Campaña*" 
-            name="campaign"
-            value={campaignform.campaign} 
-            onChange={handleChange} 
-            errorMessages={["Este campo es requerido"]}
+          inputProps={{
+            name: 'campaign',
+            id: 'age-native-label-placeholder',
+          }}
+          value={campaignform.campaign} 
+          onChange={handleChange} 
+          errorMessages={["Este campo es requerido"]}
           >
           {campaigns.map(campaign => (
-              <MenuItem key={`campaign-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
-              {campaign.name || " "}
-              </MenuItem>
-          ))}
-          </SelectValidator> 
+                          <MenuItem key={`campaign-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
+                          {campaign.name || " "}
+                          </MenuItem>
+                      ))}
+          </SelectValidator>
+          </FormControl>
         </React.Fragment>
         );
     }
@@ -417,9 +440,9 @@ const ComprasItems = (props) => {
           item.order.id,
           item.itemName,
           item.itemDescription,
-          item.itemUnitPrice,
+          "₡" + item.itemUnitPrice,
           item.amount,
-          item.itemUnitPrice * item.amount,
+          "₡" + item.itemUnitPrice * item.amount,
           item.order.badge,
           item.order.name,
           item.order.email,
@@ -448,6 +471,9 @@ const ComprasItems = (props) => {
           useDisplayedRowsOnly: true
         }
       },
+      onDownload: (buildHead, buildBody, columns, data) => {
+        return "\uFEFF" + buildHead(columns) + buildBody(data); 
+      }, 
       vertical: true,
       customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage, textLabels) => {
         return (
@@ -498,11 +524,11 @@ const ComprasItems = (props) => {
   }
 
   return (
-      console.log("campaña",campaigns),
+      //console.log("campaña",campaigns),
       <ValidatorForm onSubmit={() => {}}>
         {(isLoading || isLoadingCampaign || !user) ? <Loading /> :
           (admin || !isAdmin) ?
-          <div className="m-sm-30">
+          <div className={classes.tableMargin + " m-sm-30"}>
               <Grid container spacing={2}>
                 <Grid item md={12} xs={12}>
                   {/* { isLoading ? <Loading /> :   */}

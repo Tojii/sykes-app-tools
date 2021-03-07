@@ -83,6 +83,9 @@ export const SaveRefund = (Data, Files, badge, fullname) => {
         }))
         .catch((error) => {
           // Error
+          if (error.response.status === 401 || error.response.status === 403) {
+            dispatch(setError("Your session expired!"));
+          }
           if (error.response) {
               // The request was made and the server responded with a status code
               // that falls out of the range of 2xx
@@ -116,6 +119,9 @@ export const GetIformationLists = () => {
     }))
     .catch((error) => {
       // Error
+      if (error.response.status === 401 || error.response.status === 403) {
+        dispatch(setError("Your session expired!"));
+      }
       if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
@@ -145,6 +151,9 @@ export const getStudiesCatergory = () => {
     }))
     .catch((error) => {
       // Error
+      if (error.response.status === 401 || error.response.status === 403) {
+        dispatch(setError("Your session expired!"));
+      }
       if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx

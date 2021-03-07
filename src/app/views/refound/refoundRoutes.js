@@ -12,18 +12,35 @@ const RefoundDetails = MatxLoadable({
   loader: () => import("./RefoundDetails")
 });
 
+const settings = {
+  activeLayout: "layout1",
+  layout1Settings: {
+    topbar: {
+      show: true
+    },
+    leftSidebar: {
+      show: true,
+      mode: 'full'
+    }
+  },
+  likeDislikeButtons: { show: true }
+}; 
+
   const refoundRoutes = [
     {
       path: "/ReembolsoEducativo/Nuevo",
-      component: Form
+      component: Form,
+      settings
     },
     {
       path: "/ReembolsoEducativo/ListaReembolsos",
-      component: Home
+      component: Home,
+      settings
     },
     {
       path:"/ReembolsoEducativo/Detalle",
-      component: RefoundDetails
+      component: RefoundDetails,
+      settings
     }
   ];
   

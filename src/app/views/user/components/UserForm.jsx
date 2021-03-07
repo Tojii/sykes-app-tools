@@ -13,6 +13,7 @@ import { updateUserData } from "../../../redux/actions/UserActions";
 import { validateEmail } from '../../../../utils';
 import { connect } from "react-redux";
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
+import history from "history.js";
 
 const UserForm = (props) => {
     const {
@@ -26,6 +27,10 @@ const UserForm = (props) => {
     } = props
     const dispatch = useDispatch();
     const [form_user, setUserForm] = useState(user);
+    
+    useEffect(()=>{
+        setUserForm(user);
+    },[]);
 
     const validateEmail = (email) => {
         const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -48,16 +53,40 @@ const UserForm = (props) => {
     }
 
     const handleUserEmail = (event) => {
-        if (event.target.value !== "" || validateEmail(event.target.value))
+        if (event.target.value !== "" && validateEmail(event.target.value))
         { 
-            dispatch(updateUserData(user));
+            const payload = {
+                phone: user.phone,
+                email: event.target.value,
+                badge: user.badge
+            }
+            user.email = event.target.value;
+            dispatch(setUserData(user));
+            apply['phone'] = form_user.phone;
+            apply['email'] = event.target.value;
+            apply['badge'] = user.badge;
+            setApplyData(apply);
+            //handleSubmitCallback(payload);
         }
     }
 
     const handleUserPhone = (event) => {
-        if (event.target.value !== "" || event.target.value.length < 8)
+        if (event.target.value !== "" && event.target.value.length < 8 && validatePhone(event.target.phone))
         {       
-            dispatch(updateUserData(user));
+            const payload = {
+                phone: event.target.value,
+                email: user.email,
+                badge: user.badge
+            }
+            user.email = form_user.email;
+            user.phone = event.target.value;
+            dispatch(setUserData(user));
+            
+            apply['phone'] = event.target.value.phone;
+            apply['email'] = user.email;
+            apply['badge'] = user.badge;
+            setApplyData(apply);
+            //handleSubmitCallback(payload);
         }
     }
 
@@ -96,47 +125,48 @@ const UserForm = (props) => {
     }, [user]);
 
     const onSubmit = () => {
-        const payload = {
-            phone: form_user.phone,
-            email: form_user.email,
-            badge: user.badge
-        }
-        user.email = form_user.email;
-        user.phone = form_user.phone;
-        dispatch(updateUserData(user));
+        // const payload = {
+        //     phone: form_user.phone,
+        //     email: form_user.email,
+        //     badge: user.badge
+        // }
+        // user.email = form_user.email;
+        // user.phone = form_user.phone;
+        // dispatch(setUserData(user));
         
-        // apply['phone'] = form_user.phone;
-        // apply['email'] = form_user.email;
-        // apply['badge'] = user.badge;
-        // setApplyData(apply);
-        handleSubmitCallback(payload);
-        history.push({
-            pathname: "/"
-          });
+        // // apply['phone'] = form_user.phone;
+        // // apply['email'] = form_user.email;
+        // // apply['badge'] = user.badge;
+        // // setApplyData(apply);
+        // handleSubmitCallback(payload);
+        // history.push({
+        //     pathname: "/"
+        //   });
     } 
 
     return (
         <>
-            {(user == null) ? <Loading/> :
-            <Grid item lg={11}>
+            {(form_user.phone === undefined || form_user.email === undefined) ? <Loading/> :
+            <Grid item lg={12}>
                 <h3 className="p-sm-24">Personal Information</h3>
-                <ValidatorForm    onSubmit={onSubmit}>
+                <ValidatorForm  onSubmit={onSubmit}>
                     <Grid item lg={6} md={6} sm={10} xs={10}>
                         <TextValidator
-                            className="w-100 mx-24 my-16"
+                            className="w-100 mx-24 my-16 mx-24 my-16"
                             label="Email"
                             onChange={handleCustomChange}
                             onBlur={handleUserEmail}
                             type="text"
                             name="email"
-                            value={form_user != null ? form_user.email : ""}
-                            validators={["required", "matchRegexp:^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"]}
+                            value={form_user.email}
+                            validators={["required", "isEmail"]}
                             errorMessages={["This field is required", "Invalid email format"]}
-                            error={form_user == null || form_user.email === "" || form_user.email === undefined}
+                            error={form_user.email === "" || form_user.email === undefined} 
                             helperText={handleEmailError()}
                         />
                     </Grid>
-                    <Grid item lg={6} md={6} sm={10} xs={10}>
+                    <Grid  
+                        item lg={6} md={6} sm={10} xs={10}>
                         <TextValidator
                             className="w-100 mx-24 my-16"
                             label="Phone number"
@@ -152,22 +182,14 @@ const UserForm = (props) => {
                         />
                     </Grid>
                     { history ?
-                    <div className="flex flex-space-start flex-middle mx-24 my-16">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                            disabled={handleValid()}
-                        >
-                            Save
-                        </Button>
+                    <div className="flex flex-end mx-24 my-16">
                         <Button
                             className="ml-24"
                             variant="contained"
                             color="secondary"
                             onClick={handleClose}
                         >
-                            Cancel
+                            Home
                         </Button>
                     </div> : null }
                 </ValidatorForm>

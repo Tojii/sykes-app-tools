@@ -18,13 +18,35 @@ import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
 import { GetImages } from "../../../redux/actions/CommonActions";
 import NotFound from "../../sessions/NotFound"
+import { makeStyles } from '@material-ui/core/styles';
 import { GetCampaignItemsById, DeleteCampaignItem, GetCampaignsItems } from "../../../redux/actions/CampaignActions";
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
+
+const useStyles = makeStyles({
+  sectionbutton: {
+      "@media (min-width: 0px)": {
+        maxWidth: "140px",
+        marginLeft: "0%" 
+      },
+      "@media (min-width: 1024px)": {
+        maxWidth: "300px",
+      }
+  },
+  tableMargin: {     
+    "@media (min-width: 0px)": {
+        marginBottom: "25%",
+    },
+    "@media (min-width: 1024px)": {
+        marginBottom: "5%",
+    },
+  },
+});
 
 const InventarioTable = () => {
     const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
     const dispatch = useDispatch();
-    const user = useSelector(state => state.user.user);
+    const classes = useStyles();
+    const user = useSelector(state => state.user);
     const image = null;
     const campaignitem = useSelector(state => state.campaign.campaignitems);
     const successCampaignItems = useSelector(state => state.campaign.success);
@@ -68,11 +90,13 @@ const InventarioTable = () => {
       );
     }
 
+  
+
     const showImage = (item) => {
       return (
-        item.image ? <img
-        height={"257px"}
-        width={"195px"}                                         
+        item.image ?
+        <img
+        className={classes.sectionbutton}                                         
         alt="..."
         src={`${item.image}`}
         /> : ""
@@ -217,10 +241,13 @@ const InventarioTable = () => {
         return campaignitem[dataIndex][1] != "Attorney";
       },
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar el artículo "} index={2} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
+        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar el artículo "} index={3} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
       ),
       print:false,
       download: true,
+      onDownload: (buildHead, buildBody, columns, data) => {
+        return "\uFEFF" + buildHead(columns) + buildBody(data); 
+      }, 
       downloadOptions: {
         filename: 'Inventario.csv',
         filterOptions: {
@@ -281,8 +308,8 @@ const InventarioTable = () => {
     console.log(campaignitem),
     (isLoading || !user) ? <Loading /> :
       admin ?
-        <div className="m-sm-30">
-          <ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />
+        <div className={classes.tableMargin + " m-sm-30"}>
+          {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               {/* { isLoading ? <Loading /> :   */}

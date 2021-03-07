@@ -5,7 +5,8 @@ import {
 } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
-import { GetCampaignsById, UpdateCampaign, AddCampaign } from "../../../redux/actions/CampaignActions";
+import {addRaft} from "../../../redux/actions/RaftActions";
+import { GetCampaignsById, UpdateCampaign, AddCampaign, GetCampaigns } from "../../../redux/actions/CampaignActions";
 import { useSelector, useDispatch } from 'react-redux';
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -31,7 +32,13 @@ const useStyles = makeStyles({
              marginLeft: "25%",
              width: "50%",
              marginTop: "3%",
-         }
+         }, 
+         "& .MuiInputBase-root.Mui-disabled": {
+            color: "darkgray"
+         },
+         "& .MuiFormLabel-root.Mui-disabled": {
+            color: "rgba(74, 70, 109, 0.43)" 
+         },
      },
     formcard: {
         "@media (min-width: 0px)": {
@@ -166,7 +173,7 @@ const FormAdminCampaign = () => {
 
     return (
         <div className="p-24">
-            <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
+            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading && id) ? <Loading/> : admin ? <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Campaña" : "Agregar Campaña"}</h2> : null}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>                 
@@ -224,13 +231,13 @@ const FormAdminCampaign = () => {
                         </MuiPickersUtilsProvider>
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Límite Máximo Campaña*"
+                            label="Límite Máximo de Artículos por Usuario*"
                             onChange={handleChange}
                             type="text"
                             name="maxLimitPerPerson"
                             value={campaignform.maxLimitPerPerson}
-                            validators={["required","isNumber","isPositive"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos"]}
+                            validators={["required","isNumber","isPositive","maxStringLength:7"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos", "Máximo 7 carácteres"]}
                         />
                         <div className={classes.sectionbutton}>
                             <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">

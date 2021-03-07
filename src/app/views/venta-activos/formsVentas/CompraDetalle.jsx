@@ -108,7 +108,7 @@ const CompraDetalle = (props) => {
         if (history.location.prev) { 
             history.push(history.location.prev);
         } else {
-            history.push("/VentasHome");
+            history.push("/Ventas/Home");
         }
     }
 

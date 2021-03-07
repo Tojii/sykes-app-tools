@@ -39,7 +39,7 @@ class CustomToolbarSelect extends React.Component {
 
   handleClickEdit = () => {
     //console.log("edit", this.props.selectedRows.data[0].dataIndex)
-    this.props.editar(this.props.displayData[this.props.selectedRows.data[0].dataIndex].data[0]);
+    this.props.editar(this.props.selectedRows.data[0].dataIndex > (this.props.displayData.length -1) ? this.props.displayData[this.props.selectedRows.data[0].index].data[0] : this.props.displayData[this.props.selectedRows.data[0].dataIndex].data[0]);
   };
 
   handleClickDelete = () => {
@@ -50,6 +50,7 @@ class CustomToolbarSelect extends React.Component {
     const { classes } = this.props;
     //console.log(this.props.displayData)
     return (
+      //console.log("displayData", this.props.displayData, "selectedRows", this.props.selectedRows ),
       <div className={classes.iconContainer}>
         <Tooltip title={"Editar"}>
           <IconButton className={classes.iconButton} onClick={this.handleClickEdit}>
@@ -68,7 +69,7 @@ class CustomToolbarSelect extends React.Component {
             aria-labelledby="confirm-dialog"
             >
             <DialogTitle id="confirm-dialog">{"Confirmación"}</DialogTitle>
-            <DialogContent>{<h4>{this.props.question} {this.props.displayData[this.props.selectedRows.data[0].dataIndex].data[this.props.index]}?</h4>}</DialogContent>
+            <DialogContent>{<h4>{this.props.question} {this.props.selectedRows.data[0].dataIndex > (this.props.displayData.length -1) ? this.props.displayData[this.props.selectedRows.data[0].index].data[this.props.index] : this.props.displayData[this.props.selectedRows.data[0].dataIndex].data[this.props.index]}?</h4>}</DialogContent>
             <DialogActions>
                 <Button
                 variant="contained"
@@ -81,7 +82,7 @@ class CustomToolbarSelect extends React.Component {
                 variant="contained"
                 onClick={() => {
                     this.setState({ "setShouldOpenConfirmationDialog": false });
-                    this.props.eliminar(this.props.displayData[this.props.selectedRows.data[0].dataIndex].data[0]);
+                    this.props.eliminar(this.props.selectedRows.data[0].dataIndex > (this.props.displayData.length -1) ? this.props.displayData[this.props.selectedRows.data[0].index].data[0] : this.props.displayData[this.props.selectedRows.data[0].dataIndex].data[0]);
                 }}
                 color="primary"
                 >

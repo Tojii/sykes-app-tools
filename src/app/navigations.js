@@ -27,7 +27,7 @@ export const navigations = [
     children:[
     {
       name: "Ventas Home",
-      path: "/VentasHome",
+      path: "/Ventas/Home",
       iconText: "AC",
       display: "none"
     },

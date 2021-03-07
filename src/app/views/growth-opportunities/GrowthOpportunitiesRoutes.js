@@ -16,26 +16,44 @@ const Metrics = MatxLoadable({
   loader: () => import("./metrics")
 });
 
+const settings = {
+  activeLayout: "layout1",
+  layout1Settings: {
+    topbar: {
+      show: true
+    },
+    leftSidebar: {
+      show: true,
+      mode: 'full'
+    }
+  },
+  likeDislikeButtons: { show: true }
+};
+
 const growthOpportunitiesRoutes = [
   {
     exact: true,
     path: "/growth-opportunities",
-    component: GrowthOpportunities
+    component: GrowthOpportunities,
+    settings
   },
   {
     exact: true,
     path: "/growth-opportunities/:opp_id",
-    component: OpportunityDetail
+    component: OpportunityDetail,
+    settings
   },
   {
     exact: true,
     path: "/growth-opportunities/:opp_id/apply",
-    component: ApplySteps
+    component: ApplySteps,
+    settings
   },
   {
     exact: true,
     path: "/my-metrics",
-    component: Metrics
+    component: Metrics,
+    settings
   }
 ];
 

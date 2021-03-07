@@ -8,6 +8,18 @@ import {
 import { getGrowthOpportunities, getJobsApplied } from "../../redux/actions/GrowthOpportunityActions"
 import { connect } from "react-redux";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+    tableMargin: {     
+        "@media (min-width: 0px)": {
+            marginBottom: "25%",
+        },
+        "@media (min-width: 1024px)": {
+            marginBottom: "5%",
+        },
+    },
+})
 
 const GrowthOpportunities = (props) => {
     const { 
@@ -18,6 +30,7 @@ const GrowthOpportunities = (props) => {
         user,
         loading
     } = props
+    const classes = useStyles();
 
     useEffect(() => {
         getGrowthOpportunities();
@@ -34,7 +47,7 @@ const GrowthOpportunities = (props) => {
                         <GrowthOppTable props={props}/>
                     </Grid>
                 </Card>
-                <Card className="m-sm-30">
+                <Card className={classes.tableMargin + " m-sm-30"}>
                     <Grid container>
                         <ApplicationsTable jobs_applied={jobs_applied}/>
                     </Grid>

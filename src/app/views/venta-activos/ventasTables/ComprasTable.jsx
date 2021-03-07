@@ -24,9 +24,23 @@ import {
   } from "@material-ui/pickers";
 import moment from "moment";
 import NotFound from "../../sessions/NotFound"
+import ComprasItems from "./ComprasItemsTable"
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+    tableMargin: {     
+        "@media (min-width: 0px)": {
+            marginBottom: "25%",
+        },
+        "@media (min-width: 1024px)": {
+            marginBottom: "5%",
+        },
+    },
+})
 
 const ComprasTable = (props) => {
     const dispatch = useDispatch();
+    const classes = useStyles();
     const orders = useSelector(state => state.order.orders);
     const isLoading  = useSelector(state => state.order.loading);
     const user = useSelector(state => state.user.user);
@@ -361,6 +375,9 @@ const ComprasTable = (props) => {
           useDisplayedRowsOnly: true
         }
       },
+      onDownload: (buildHead, buildBody, columns, data) => {
+        return "\uFEFF" + buildHead(columns) + buildBody(data); 
+      }, 
       vertical: true,
       customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage, textLabels) => {
         return (
@@ -413,7 +430,7 @@ const ComprasTable = (props) => {
   return (
       (isLoading || !user) ? <Loading /> :
         (admin || !isAdmin) ?
-          <div className="m-sm-30">
+          <div className={classes.tableMargin + " m-sm-30"}>
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}

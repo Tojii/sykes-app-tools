@@ -11,7 +11,7 @@ import Layout1Sidenav from "./Layout1Sidenav";
 import Footer from "../SharedCompoents/Footer";
 import SecondarySidebar from "../SharedCompoents/SecondarySidebar";
 import AppContext from "app/appContext";
-
+import {LikesDislikesHome} from "../../views/likes-dislikes/LikesDislikesHome";
 
 const styles = theme => {
   return {
@@ -96,6 +96,7 @@ class Layout1 extends Component {
               {settings.footer.show && settings.footer.fixed && <Footer />}
             </div>
             {settings.secondarySidebar.show && <SecondarySidebar />}
+            {settings.likeDislikeButtons.show && <LikesDislikesHome/>}
           </div>
         )}
       </AppContext.Consumer>
