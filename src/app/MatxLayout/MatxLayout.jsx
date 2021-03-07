@@ -73,9 +73,6 @@ class MatxLayout extends Component {
     const matched = matchRoutes(routes, this.props.location.pathname)[0];
     let { defaultSettings, settings, setLayoutSettings, user } = this.props;
 
-    console.log("user", user);
-    console.log("update layout settings", settings.layout1Settings.topbar.show);
-
     if (matched && matched.route.settings) {
       // ROUTE HAS SETTINGS
       const updatedSettings = merge({}, settings, matched.route.settings);
@@ -90,8 +87,6 @@ class MatxLayout extends Component {
 
   render() {
     const { settings } = this.props;
-    console.log("user", this.props.user);
-    console.log("matx layout", settings.layout1Settings.topbar.show);
     
     const Layout = MatxLayouts[settings.activeLayout];
 

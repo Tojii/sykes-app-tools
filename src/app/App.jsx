@@ -14,8 +14,6 @@ import { Store, Persistor } from "./redux/Store";
 import Auth from "./auth/Auth";
 import MatxLayout from "./MatxLayout/MatxLayout";
 import AuthGuard from "./auth/AuthGuard";
-import { createBrowserHistory } from 'history';
-import IdleSignOut from './views/sessions/IdleSignOut';
 
 const App = () => {
   return (
@@ -26,7 +24,6 @@ const App = () => {
           <Auth>
             <Router history={history}>
               <AuthGuard>
-                <IdleSignOut />
                 <MatxLayout />
               </AuthGuard>
             </Router>

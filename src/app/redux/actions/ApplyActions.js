@@ -1,4 +1,4 @@
-import api from "../Api";
+import  api, { globalErrorHandler } from "../Api"
 import history from "history.js";
 
 export const SET_APPLY_DATA = "SET_APPLY_DATA";
@@ -70,7 +70,7 @@ export const saveJobApplication = (payload) => dispatch => {
     dispatch({
         type: RE_LOADING
     });
-    api.post(`/api/GrowthOpportunity/SaveJobApplication`, formData, config).then(res => {
+    api.post(`/GrowthOpportunity/SaveJobApplication`, formData, config).then(res => {
         dispatch({
             type: SAVE_JOB_APPLICATION,
             payload: res.data
@@ -81,14 +81,14 @@ export const saveJobApplication = (payload) => dispatch => {
             });
             history.replace({ pathname: "/growth-opportunities" });
         }
-    }); 
+    }).catch(globalErrorHandler);
 };
 
 export const setValidations = (badge, jobId) => dispatch => {
-    api.get(`/api/GrowthOpportunity/CallValidations?badgeId=${badge}&jobId=${jobId}`).then(res => 
+    api.get(`/GrowthOpportunity/CallValidations?badgeId=${badge}&jobId=${jobId}`).then(res => 
         dispatch({
             type: SET_VALIDATIONS,
             payload: res.data
         })
-    ); 
+    ).catch(globalErrorHandler);
 };

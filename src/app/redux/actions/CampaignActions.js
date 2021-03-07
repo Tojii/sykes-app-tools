@@ -1,4 +1,4 @@
-import api from "../Api";
+import  api, { globalErrorHandler } from "../Api"
 import moment from "moment"
 
 export const GET_CAMPAIGNS = "GET_CAMPAIGNS";
@@ -32,7 +32,7 @@ export const GetCampaignsActive = () => {
           type: GET_CAMPAIGNS_ACTIVE,
           data: res.data
           })
-      ); 
+      ).catch(globalErrorHandler);
     };
 };
 
@@ -46,7 +46,7 @@ export const GetCampaigns = () => {
         type: GET_CAMPAIGNS,
         data: res.data
         })
-    ); 
+    ).catch(globalErrorHandler); 
   };
 };
 
@@ -60,7 +60,7 @@ export const GetCampaignsItems = () => {
         type: GET_CAMPAIGNS_ITEMS,
         data: res.data
         })
-    );
+    ).catch(globalErrorHandler);
   };
 };
 
@@ -74,7 +74,7 @@ export const GetCampaignsById = (id) => {
         type: GET_CAMPAIGNSBYID,
         data: res.data
         })
-    ); 
+    ).catch(globalErrorHandler);
   };
 };
 
@@ -88,7 +88,7 @@ export const GetCampaignItemsById = (id) => {
         type: GET_CAMPAIGNITEMSBYID,
         data: res.data
         });
-    });
+    }).catch(globalErrorHandler);
   }
 };
 
@@ -105,7 +105,7 @@ export const AddCampaign = (payload) => {
               type: ADD_CAMPAIGN,
               payload: res.data
           })
-      ); 
+      ).catch(globalErrorHandler);
   };
 };
 
@@ -130,7 +130,7 @@ export const AddCampaignItems = (id, payload, files) => {
               type: ADD_CAMPAIGN_ITEMS,
               payload: res.data
           })
-      ); 
+      ).catch(globalErrorHandler);
   };
 };
 
@@ -144,7 +144,7 @@ export const UpdateCampaign = (id, payload) => dispatch => {
           type: UPDATE_CAMPAIGN,
           payload: res.data
       })
-  ); 
+  ).catch(globalErrorHandler);
 };
 
 export const UpdateCampaignItems = (id, payload, files) => dispatch => {
@@ -165,7 +165,7 @@ export const UpdateCampaignItems = (id, payload, files) => dispatch => {
           type: UPDATE_CAMPAIGN_ITEMS,
           payload: res.data
       })
-  ); 
+  ).catch(globalErrorHandler);
 };
 
 export const DeleteCampaign = (id) => dispatch => {
@@ -177,7 +177,7 @@ export const DeleteCampaign = (id) => dispatch => {
             type: DELETE_CAMPAIGN,
             payload: res.data
         })
-    ); 
+    ).catch(globalErrorHandler);
 };
 
 export const DeleteCampaignItem = (id) => dispatch => {
@@ -190,5 +190,5 @@ export const DeleteCampaignItem = (id) => dispatch => {
           type: DELETE_CAMPAIGN_ITEM,
           payload: res.data
       })
-  ); 
+  ).catch(globalErrorHandler);
 };

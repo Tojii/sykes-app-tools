@@ -1,4 +1,4 @@
-import api from "../Api";
+import  api, { globalErrorHandler } from "../Api"
 
 export const GET_IMAGES = "GET_IMAGES";
 export const RE_LOADING = "RE_LOADING";
@@ -13,6 +13,6 @@ export const GetImages = () => {
         type: GET_IMAGES,
         data: res.data
         })
-    ); 
+    ).catch(globalErrorHandler);
   };
 };

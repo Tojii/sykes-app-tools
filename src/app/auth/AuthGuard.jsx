@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import AppContext from "app/appContext";
-import IdleSignOut from '../views/sessions/IdleSignOut';
+
 
 class AuthGuard extends Component {
   constructor(props, context) {
@@ -60,9 +60,9 @@ class AuthGuard extends Component {
     let { children } = this.props;
     const { authenticated } = this.state;
 
+
     return authenticated ? 
                       <Fragment>
-                        <IdleSignOut />
                         {children}
                       </Fragment> : null;
   }

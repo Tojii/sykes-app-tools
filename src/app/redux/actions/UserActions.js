@@ -13,12 +13,16 @@ export const setUserData = user => dispatch => {
 };
 
 export function logoutUser() {
+  history.push("/session/signin");
+
   return dispatch => {
-    history.push("/session/signin");
-    
-    dispatch({
-      type: USER_LOGGED_OUT
+    api.delete(`/Authenticate`).then(res => {
+      dispatch({
+        type: USER_LOGGED_OUT
+      });
     });
+
+    
   };
 }
 
@@ -35,7 +39,7 @@ export const updateUserData = (payload) => dispatch => {
     }
   }
   //console.log("formdata", formData)
-  api.post(`/api/GrowthOpportunity/UpdatePersonalInformation`, formData, config).then(res => {
+  api.post(`/GrowthOpportunity/UpdatePersonalInformation`, formData, config).then(res => {
     setUserData(res.data);
   }); 
 }

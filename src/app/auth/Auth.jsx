@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { refreshtoken } from "../redux/actions/LoginActions";
 import history from "history.js";
+import IdleSignOut from '../views/sessions/IdleSignOut';
 
 class Auth extends Component {
   state = {};
@@ -23,7 +24,7 @@ class Auth extends Component {
 
   render() {
     const { children } = this.props;
-    return <Fragment>{children}</Fragment>;
+    return <Fragment>{ Object.keys(this.props.user).length > 0 && <IdleSignOut /> }{children}</Fragment>;
   }
 }
 

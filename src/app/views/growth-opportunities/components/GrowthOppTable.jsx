@@ -34,7 +34,7 @@ const GrowthOppTable = ({
     const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
     
     const handleDetailsClick = (item) => {
-        setGrowthOpportunity(item);
+        //setGrowthOpportunity(item);
         history.push(`${match.path}/${item.id}`);
     }
 

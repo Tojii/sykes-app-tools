@@ -55,7 +55,7 @@ export function login({ email, password, force }) {
 
 export const refreshtoken = (refreshtoken) => {
   return async dispatch => {
-    const response = await api.post(`/Authenticate/Refresh`, `"${refreshtoken}"`);
+    const response = await api.post(`/authenticate/refresh`, `"${refreshtoken}"`);
     dispatch({
       type: LOGIN_SUCCESS,
       data: response.data
