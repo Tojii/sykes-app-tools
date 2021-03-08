@@ -1,5 +1,6 @@
 import history from "history.js";
-import api from "../Api"
+import api from "../Api";
+import { clearLogin } from "./LoginActions";
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
@@ -20,9 +21,9 @@ export function logoutUser() {
       dispatch({
         type: USER_LOGGED_OUT
       });
+      clearLogin();
+      
     });
-
-    
   };
 }
 

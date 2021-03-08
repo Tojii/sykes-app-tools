@@ -26,12 +26,17 @@ const CampaignTable = (props) => {
     const isAdmin = props.admin != undefined ? props.admin : true;
     const user = useSelector(state => state.user);
     const campaigns = useSelector(state => state.campaign.campaigns);
+    // const purchases = useSelector(state => state.order.purchases);
+    // const addCampaign = useSelector(state => state.campaign.addCampaign);
     const successCampaign = useSelector(state => state.campaign.success);
     const campaignsActive = useSelector(state => state.campaign.campaignsActive);
     const isLoading  = useSelector(state => state.campaign.loading);
     const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
     const [open, setOpen] = useState(false);
-    const admin = (user != null && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    // const [purchaseList, setPurchaseList] = useState([]);
+    
+
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
   
     useEffect(() => {
         dispatch(CleanPurchase());

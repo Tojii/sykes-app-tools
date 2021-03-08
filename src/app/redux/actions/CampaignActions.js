@@ -1,5 +1,9 @@
-import  api, { globalErrorHandler } from "../Api"
+import api, { globalErrorHandler } from "../Api";
+import { logoutUser } from '../actions/UserActions';
+import { setError } from "./LoginActions"
+import history from "history.js";
 import moment from "moment"
+import { format } from 'date-fns';
 
 export const GET_CAMPAIGNS = "GET_CAMPAIGNS";
 export const GET_CAMPAIGNS_ITEMS = "GET_CAMPAIGNS_ITEMS";
@@ -15,101 +19,217 @@ export const GET_CAMPAIGNITEMSBYID = "GET_CAMPAIGNITEMSBYID"
 export const CA_LOADING = "CA_LOADING";
 export const CA_ERROR = "CA_ERROR";
 
-const config = {
-  headers: {
-      'content-type': 'application/json',
-  }
-}  
-
 export const GetCampaignsActive = () => {
-    
+    const config = {
+        headers: {
+            'content-type': 'application/json',
+        }
+      }  
     return async dispatch => {
       dispatch({
         type: CA_LOADING
       });
-      await api.get(`/Campaign/Active`,config).then(res => 
+      await api.get(`/Campaign/Active`,config).then(res => {
         dispatch({
           type: GET_CAMPAIGNS_ACTIVE,
           data: res.data
-          })
-      ).catch(globalErrorHandler);
+          });
+        //console.log("imagenes",res.data)
+      })
+      .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
+        if (error.response) {
+            console.log(error.response.data);
+        } else if (error.request) {
+            console.log(error.request);
+        } else {
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+      }); 
+    };
+  };
+
+  export const GetCampaigns = () => {
+    const config = {
+        headers: {
+            'content-type': 'application/json',
+        }
+      }  
+    return async dispatch => {
+      dispatch({
+        type: CA_LOADING
+      });
+      await api.get(`/Campaign`,config).then(res => {
+        dispatch({
+          type: GET_CAMPAIGNS,
+          data: res.data
+          });
+
+        //console.log("imagenes",res.data)
+      })
+      .catch((error) => {
+        // Error
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the 
+            // browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+      }); 
+    };
+  };
+
+  export const GetCampaignsItems = () => {
+    const config = {
+        headers: {
+            'content-type': 'application/json',
+        }
+      }  
+    return async dispatch => {
+      dispatch({
+        type: CA_LOADING
+      });
+
+      await api.get(`/Campaign/Items`,config).then(res => {
+        dispatch({
+          type: GET_CAMPAIGNS_ITEMS,
+          data: res.data
+          });
+        //console.log("imagenes",res.data)
+      })
+      .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
+        if (error.response) {
+            console.log(error.response.data);
+        } else if (error.request) {
+            console.log(error.request);
+        } else {
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+      }); 
+    };
+  };
+
+  export const GetCampaignsById = (id) => {
+    return async dispatch => {
+      dispatch({
+        type: CA_LOADING
+      });
+      
+      await api.get(`${process.env.REACT_APP_API_URL}/Campaign/${id}`).then(res => {
+        dispatch({
+          type: GET_CAMPAIGNSBYID,
+          data: res.data
+          });
+
+        //console.log("imagenesby",res.data)
+      })
+      .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
+        if (error.response) {
+            console.log(error.response.data);
+        } else if (error.request) {
+            console.log(error.request);
+        } else {
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+      }); 
+    };
+  };
+
+  export const GetCampaignItemsById = (id) => {
+    return async dispatch => {
+      dispatch({
+        type: CA_LOADING
+      });
+
+      await api.get(`/Campaign/Items/${id}`).then(res => {
+        dispatch({
+          type: GET_CAMPAIGNITEMSBYID,
+          data: res.data
+          });
+
+        //console.log("imagenesby",res.data)
+      })
+      .catch((error) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
+        if (error.response) {
+            console.log(error.response.data);
+        } else if (error.request) {
+            console.log(error.request);
+        } else {
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+      }); 
+    };
+  };
+
+  export const AddCampaign = (payload) => {
+    const config = {
+        headers: {
+            'content-type': 'application/json',
+        }
+    }  
+    //console.log("add campaña", payload)
+    return async dispatch => {
+        dispatch({
+            type: CA_LOADING
+        });
+
+        api.post(`/Campaign`, 
+        { "name": payload.name, "description": payload.description, "startDate": moment(payload.startDate).format('YYYY-MM-DD HH:mm:ss'), "endDate": moment(payload.endDate).format('YYYY-MM-DD HH:mm:ss'), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10)
+        }, config).then(res => {
+            dispatch({
+                type: ADD_CAMPAIGN,
+                payload: res.data
+            });
+            console.log(res.data)
+        })
+        .catch((error) => {
+            dispatch({
+              type: CA_ERROR
+            });
+            if (error.response.status === 401 || error.response.status === 403) {
+              dispatch(setError("Your session expired!"));
+            }
+            if (error.response) {
+                console.log(error.response.data);
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log('Error', error.message);
+            }
+            console.log(error.config);
+        }); 
     };
 };
 
-export const GetCampaigns = () => {
-  return async dispatch => {
-    dispatch({
-      type: CA_LOADING
-    });
-    await api.get(`/Campaign`,config).then(res => 
-      dispatch({
-        type: GET_CAMPAIGNS,
-        data: res.data
-        })
-    ).catch(globalErrorHandler); 
-  };
-};
-
-export const GetCampaignsItems = () => {
-  return async dispatch => {
-    dispatch({
-      type: CA_LOADING
-    });
-    await api.get(`/Campaign/Items`,config).then(res => 
-      dispatch({
-        type: GET_CAMPAIGNS_ITEMS,
-        data: res.data
-        })
-    ).catch(globalErrorHandler);
-  };
-};
-
-export const GetCampaignsById = (id) => {
-  return async dispatch => {
-    dispatch({
-      type: CA_LOADING
-    });
-    await api.get(`/Campaign/${id}`).then(res => 
-      dispatch({
-        type: GET_CAMPAIGNSBYID,
-        data: res.data
-        })
-    ).catch(globalErrorHandler);
-  };
-};
-
-export const GetCampaignItemsById = (id) => {
-  return async dispatch => {
-    dispatch({
-      type: CA_LOADING
-    });
-    await api.get(`/Campaign/Items/${id}`).then(res => {
-      dispatch({
-        type: GET_CAMPAIGNITEMSBYID,
-        data: res.data
-        });
-    }).catch(globalErrorHandler);
-  }
-};
-
-export const AddCampaign = (payload) => {
-  return async dispatch => {
-      dispatch({
-          type: CA_LOADING
-      });
-
-      api.post(`/Campaign`, 
-      { "name": payload.name, "description": payload.description, "startDate": moment(payload.startDate).format('YYYY-MM-DD HH:mm:ss'), "endDate": moment(payload.endDate).format('YYYY-MM-DD HH:mm:ss'), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10)
-      }, config).then(res =>
-          dispatch({
-              type: ADD_CAMPAIGN,
-              payload: res.data
-          })
-      ).catch(globalErrorHandler);
-  };
-};
-
 export const AddCampaignItems = (id, payload, files) => {
+  //console.log("addver", payload, files)
   var formData = new FormData();
     formData.append('name', payload.name);
     formData.append('description', payload.description);
@@ -118,35 +238,81 @@ export const AddCampaignItems = (id, payload, files) => {
     formData.append('unitPrice', payload.unitPrice.replace(".", ","));
     formData.append('maxLimitPerPerson', parseInt(payload.maxLimitPerPerson, 10));
     formData.append('files', files);
+    console.log("add", payload.unitPrice.replace(".", ","))
+    const config = {
+        headers: {
+            'content-type': 'multipart/form-data',
+        }
+    }
   return async dispatch => {
       dispatch({
           type: CA_LOADING
       });
 
       api.post(`/Campaign/${id}/Items`, 
-      formData, config).then(res =>
+      formData, config).then(res => {
           dispatch({
               type: ADD_CAMPAIGN_ITEMS,
               payload: res.data
-          })
-      ).catch(globalErrorHandler);
+          });
+          console.log(res.data)
+      })
+      .catch((error) => {
+          dispatch({
+            type: CA_ERROR
+          });
+          if (error.response.status === 401 || error.response.status === 403) {
+            dispatch(setError("Your session expired!"));
+          }
+          if (error.response) {
+              console.log(error.response.data);
+          } else if (error.request) {
+              console.log(error.request);
+          } else {
+              console.log('Error', error.message);
+          }
+          console.log(error.config);
+      }); 
   };
 };
 
-export const UpdateCampaign = (id, payload) => dispatch => {
-  dispatch({
-      type: CA_LOADING
-  });
-  api.put(`/Campaign/${id}`, { "name": payload.name, "description": payload.description, "startDate": moment(payload.startDate).format('YYYY-MM-DD HH:mm:ss'), "endDate": moment(payload.endDate).format('YYYY-MM-DD HH:mm:ss'), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10)
-  }).then(res => 
-      dispatch({
-          type: UPDATE_CAMPAIGN,
-          payload: res.data
-      })
-  ).catch(globalErrorHandler);
+  export const UpdateCampaign = (id, payload) => dispatch => {
+    dispatch({
+        type: CA_LOADING
+    });
+    
+    api.put(`/Campaign/${id}`, { "name": payload.name, "description": payload.description, "startDate": moment(payload.startDate).format('YYYY-MM-DD HH:mm:ss'), "endDate": moment(payload.endDate).format('YYYY-MM-DD HH:mm:ss'), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10)
+    }).then(res => {
+        dispatch({
+            type: UPDATE_CAMPAIGN,
+            payload: res.data
+        });
+    })
+    .catch((error) => {
+        dispatch({
+          type: CA_ERROR
+        });
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
+        if (error.response) {
+            console.log(error.response.data);
+        } else if (error.request) {
+            console.log(error.request);
+        } else {
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+    }); 
 };
 
 export const UpdateCampaignItems = (id, payload, files) => dispatch => {
+  const config = {
+    headers: {
+        'content-type': 'multipart/form-data',
+    }
+  }  
+  //console.log("updatever", files)
   var formData = new FormData();
     formData.append('name', payload.name);
     formData.append('description', payload.description);
@@ -158,36 +324,90 @@ export const UpdateCampaignItems = (id, payload, files) => dispatch => {
   dispatch({
       type: CA_LOADING
   });
+
   api.put(`/Campaign/Items/${id}`, 
-  formData, config).then(res => 
+  formData, config).then(res => {
       dispatch({
           type: UPDATE_CAMPAIGN_ITEMS,
           payload: res.data
-      })
-  ).catch(globalErrorHandler);
+      });
+  })
+  .catch((error) => {
+      dispatch({
+        type: CA_ERROR
+      });
+      if (error.response.status === 401 || error.response.status === 403) {
+        dispatch(setError("Your session expired!"));
+      }
+      if (error.response) {
+          console.log(error.response.data);
+      } else if (error.request) {
+          console.log(error.request);
+      } else {
+          console.log('Error', error.message);
+      }
+      console.log(error.config);
+  }); 
 };
 
 export const DeleteCampaign = (id) => dispatch => {
     dispatch({
         type: CA_LOADING
     });
-    api.delete(`/Campaign/${id}`).then(res => 
+    
+    api.delete(`${process.env.REACT_APP_API_URL}/Campaign/${id}`).then(res => {
         dispatch({
             type: DELETE_CAMPAIGN,
             payload: res.data
-        })
-    ).catch(globalErrorHandler);
+        });
+    })
+    .catch((error) => {
+        dispatch({
+          type: CA_ERROR
+        });
+        if (error.response.status === 401 || error.response.status === 403) {
+          dispatch(setError("Your session expired!"));
+        }
+        if (error.response) {
+            console.log(error.response.data);
+        } else if (error.request) {
+            console.log(error.request);
+        } else {
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
+    }); 
 };
 
 export const DeleteCampaignItem = (id) => dispatch => {
   dispatch({
       type: CA_LOADING
   });
-
-  api.delete(`/Campaign/Items/${id}`).then(res => 
+  
+  api.delete(`/Campaign/Items/${id}`).then(res => {
       dispatch({
           type: DELETE_CAMPAIGN_ITEM,
           payload: res.data
-      })
-  ).catch(globalErrorHandler);
+      });
+      
+  })
+  .catch((error) => {
+      dispatch({
+        type: CA_ERROR
+      });
+      if (error.response.status === 401 || error.response.status === 403) {
+        dispatch(setError("Your session expired!"));
+      }
+      if (error.response) {
+          console.log(error.response.data);
+      } else if (error.request) {
+          console.log(error.request);
+      } else {
+          console.log('Error', error.message);
+      }
+      console.log(error.config);
+  }); 
 };
+
+
+  

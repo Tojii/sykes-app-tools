@@ -52,7 +52,7 @@ const InventarioTable = () => {
     const successCampaignItems = useSelector(state => state.campaign.success);
     const isLoading  = useSelector(state => state.campaign.loading);
     const [open, setOpen] = useState(false);
-    const admin = (user != null && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     
 
     useEffect(() => {
@@ -305,8 +305,7 @@ const InventarioTable = () => {
   }
 
   return (
-    console.log(campaignitem),
-    (isLoading || !user) ? <Loading /> :
+    (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={classes.tableMargin + " m-sm-30"}>
           {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}

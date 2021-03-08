@@ -2,7 +2,9 @@ import {
   LOGIN_LOADING,
   LOGIN_SUCCESS,
   LOGIN_ERROR_SESSION_ACTIVE,
+  LOGIN_CLEAR,
   LOGIN_ERROR,
+  CA_SET_ERROR
 } from "../actions/LoginActions";
 
 const initialState = {
@@ -34,6 +36,9 @@ const LoginReducer = function(state = initialState, action) {
         error: null
       };
     }
+    case LOGIN_CLEAR: {
+      return initialState;
+    }
     case LOGIN_ERROR: {
       return {
         success: false,
@@ -49,14 +54,14 @@ const LoginReducer = function(state = initialState, action) {
         error: action.data
       };
     }
-    // case CA_SET_ERROR: {
-    //   return {
-    //     success: false,
-    //     loading: false,
-    //     errorSession: action.data,
-    //     error: undefined
-    //   };
-    // }
+    case CA_SET_ERROR: {
+      return {
+        success: false,
+        loading: false,
+        errorSession: action.data,
+        error: undefined
+      };
+    }
     default: {
       return state;
     }

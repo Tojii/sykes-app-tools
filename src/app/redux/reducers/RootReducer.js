@@ -18,7 +18,7 @@ import CampaignReducer from "./CampaignReducer";
 import OrderReducer from "./OrderReducer";
 import LocationReducer from "./LocationReducer";
 
-const appReducer = combineReducers({
+const RootReducer = combineReducers({
   login: LoginReducer,
   user: UserReducer,
   layout: LayoutReducer,
@@ -36,15 +36,5 @@ const appReducer = combineReducers({
   metrics: MetricsReducer,
   apply: ApplyReducer,
 });
-
-const RootReducer = (state, action) => {
-  if (action.type === 'USER_LOGGED_OUT') {
-    // for all keys defined in your persistConfig(s)
-    // persistStore.removeItem('persist:root')
-    // storage.removeItem('persist:otherKey')
-    // state = undefined;
-  }
-  return appReducer(state, action)
-}
 
 export default RootReducer;

@@ -56,7 +56,7 @@ Sidenav.propTypes = {
 const mapStateToProps = state => ({
   setLayoutSettings: PropTypes.func.isRequired,
   settings: state.layout.settings,
-  user: state.user.user
+  user: state.user
 });
 export default withRouter(
   connect(

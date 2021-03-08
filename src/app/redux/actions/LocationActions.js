@@ -1,4 +1,4 @@
-import api from "../Api";
+import  api, { globalErrorHandler } from "../Api"
 
 export const GET_PROVINCE = "GET_PROVINCE";
 export const GET_CANTONS = "GET_CANTONS";
@@ -22,7 +22,7 @@ export const GetProvince = () => {
         type: GET_PROVINCE,
         data: res.data
         })
-    ); 
+      ).catch(globalErrorHandler); 
   };
 };
 
@@ -37,7 +37,7 @@ export const GetCantons = (id) => {
         type: GET_CANTONS,
         data: res.data
       })
-    ); 
+    ).catch(globalErrorHandler);
   };
 };
 
@@ -51,6 +51,6 @@ export const GetDistricts = (provinceId, cantonId) => {
         type: GET_DISTRICTS,
         data: res.data
       })
-    ); 
+    ).catch(globalErrorHandler);
   };
 };

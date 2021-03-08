@@ -106,10 +106,10 @@ const FormRaft = () => {
     };
     
     const [raftform, setRaftForm] = useState({
-        badge: user != null ? user.badge : "",
-        fullName: user != null ? user.fullname : "",
-        personalEmail: user != null ? user.email : "",
-        personalPhone: user != null ? user.phone : "",
+        badge: user.badge,
+        fullName: user.fullname,
+        personalEmail: user.email,
+        personalPhone: user.phone,
         identificationNumber: "",
         firstName: "",
         secondName: "",

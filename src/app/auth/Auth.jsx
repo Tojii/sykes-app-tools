@@ -20,6 +20,13 @@ class Auth extends Component {
     // Check if the Token Expired.
     if (!(Date.now() <= this.props.user.exp * 1000) || this.props.user)
       refreshtoken(this.props.user.refreshtoken);
+
+    if (Object.keys(this.props.user).length <= 0) {
+      history.push({
+        pathname: "/session/signin",
+        prev: history.location.pathname
+      });
+    }
   };
 
   render() {
@@ -30,7 +37,8 @@ class Auth extends Component {
 
 const mapStateToProps = state => ({
   refreshtoken: PropTypes.func.isRequired,
-  user: state.user
+  user: state.user,
+  login: state.login
 });
 
 export default connect(

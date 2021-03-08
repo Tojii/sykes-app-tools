@@ -112,6 +112,16 @@ const CompraDetalle = (props) => {
         }
     }
 
+    const [disponibles, setDisponibles] = useState([
+        {id:1, name: "Monitor MSI",
+        quantity: 3,
+        unitPrice: 10000},
+        {id:2,name: "Audifonos MSI",
+        quantity: 4,
+        unitPrice: 12000,
+        },
+    ]);
+
     return (
         <div className="m-sm-30">
             {(isLoading) ? <Loading/> : 
@@ -119,7 +129,7 @@ const CompraDetalle = (props) => {
                 <Grid item md={12} xs={12}> 
                     <Card className={classes.formcard} elevation={6}>                              
                             <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">Datos del usuario:</h2>
-                            <Table>
+                             <Table>
                                 <TableBody>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Badge:</h6></TableCell>
@@ -180,72 +190,72 @@ const CompraDetalle = (props) => {
                                     </TableRow>
                                     <TableRow>
                                         <TableCell colSpan={3} className="px-sm-24 border-none">
-                                            {<h5 className={classes.cardcarrito}>Articulos añadidos a la compra:</h5>}
-                                            <Card className={classes.cardcarrito} elevation={2}>
-                                                <div className="p-16">
-                                                    <Grid
-                                                        container
-                                                        spacing={2}
-                                                        justify="center"
-                                                        alignItems="center"
-                                                        direction="row"
-                                                    >
-                                                        <Grid item lg={3} md={3} sm={3} xs={3}>
-                                                        Articulo
-                                                        </Grid>
-                                                        <Grid item lg={2} md={2} sm={2} xs={2}>
-                                                        Cant
-                                                        </Grid>
-                                                        <Grid item lg={4} md={4} sm={4} xs={4}>
-                                                        Subtotal
-                                                        </Grid>
-                                                        <Grid item lg={3} md={3} sm={3} xs={3}>
-                                                        Acciones
-                                                        </Grid>
+                                        {<h5 className={classes.cardcarrito}>Articulos añadidos a la compra:</h5>}
+                                        <Card className={classes.cardcarrito} elevation={2}>
+                                            <div className="p-16">
+                                            <Grid
+                                                container
+                                                spacing={2}
+                                                justify="center"
+                                                alignItems="center"
+                                                direction="row"
+                                            >
+                                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                Articulo
+                                                </Grid>
+                                                <Grid item lg={2} md={2} sm={2} xs={2}>
+                                                Cant
+                                                </Grid>
+                                                <Grid item lg={4} md={4} sm={4} xs={4}>
+                                                Subtotal
+                                                </Grid>
+                                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                Acciones
+                                                </Grid>
+                                            </Grid>
+                                            </div>
+
+                                            {(order[0] == undefined || order[0].detail == undefined || order[0].detail.length == 0) && <p className="px-16">No hay ningun artículo</p>}
+
+                                            {(order[0] != undefined && order[0].detail != undefined) ? order[0].detail.map((item, index) => {
+                                            return ( 
+                                                <div className="px-16 py-16" key={item.item.id}>
+                                                <Grid
+                                                    container
+                                                    spacing={2}
+                                                    justify="center"
+                                                    alignItems="center"
+                                                    direction="row"
+                                                >
+                                                    <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                    {item.itemName}
                                                     </Grid>
+                                                    <Grid item lg={2} md={2} sm={2} xs={2}>
+                                                    {item.amount}
+                                                    </Grid>
+                                                    <Grid item lg={4} md={4} sm={4} xs={4}>
+                                                    ₡ {item.subTotal}
+                                                    </Grid>
+                                                    <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                    <div className="flex">
+                                                    
+                                                        <Button
+                                                        variant="contained"
+                                                        className="bg-primary"
+                                                        style={{color: "white"}}
+                                                        onClick={() => setShouldOpenDetailsDialog({open: true, id: item.item.id, index: index})}
+                                                        >
+                                                        Detalles
+                                                        </Button>
+                                                    </div>
+                                                    </Grid>
+                                                </Grid>
                                                 </div>
-
-                                                {(order[0] == undefined || order[0].detail == undefined || order[0].detail.length == 0) && <p className="px-16">No hay ningun artículo</p>}
-
-                                                {(order[0] != undefined && order[0].detail != undefined) ? order[0].detail.map((item, index) => {
-                                                    return ( 
-                                                        <div className="px-16 py-16" key={item.item.id}>
-                                                            <Grid
-                                                                container
-                                                                spacing={2}
-                                                                justify="center"
-                                                                alignItems="center"
-                                                                direction="row"
-                                                            >
-                                                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                                                {item.itemName}
-                                                                </Grid>
-                                                                <Grid item lg={2} md={2} sm={2} xs={2}>
-                                                                {item.amount}
-                                                                </Grid>
-                                                                <Grid item lg={4} md={4} sm={4} xs={4}>
-                                                                ₡ {item.subTotal}
-                                                                </Grid>
-                                                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                                                <div className="flex">
-                                                                
-                                                                    <Button
-                                                                    variant="contained"
-                                                                    className="bg-primary"
-                                                                    style={{color: "white"}}
-                                                                    onClick={() => setShouldOpenDetailsDialog({open: true, id: item.item.id, index: index})}
-                                                                    >
-                                                                    Detalles
-                                                                    </Button>
-                                                                </div>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </div>
-                                                    ); 
-                                                })
-                                                : null }
-                                            </Card>
-                                            <br/>
+                                            ); 
+                                            })
+                                            : null }
+                                        </Card>
+                                        <br/>
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>
@@ -257,7 +267,7 @@ const CompraDetalle = (props) => {
                             </div>
                             <Dialog fullWidth maxWidth="md" onClose={handleClose} open={shouldOpenDetailsDialog.open}>
                                 <DialogTitle  id="customized-dialog-title" onClose={handleClose}>
-                                    Detalles del artículo:
+                                Detalles del artículo:
                                 </DialogTitle>
                                 <AgregarDialog type={"detalles"} close={handleClose}  order={(order[0] != undefined && order[0].detail != undefined) ? order[0].detail : [{}]} id={shouldOpenDetailsDialog.id} index={shouldOpenDetailsDialog.index} />
                             </Dialog>  
