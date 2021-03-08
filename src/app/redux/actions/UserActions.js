@@ -1,12 +1,6 @@
 import history from "history.js";
-<<<<<<< HEAD
-import apiAuthService from "../../services/apiAuthService";
-import { setError } from "./LoginActions"
-import api from "../Api";
-import jwtDecode from 'jwt-decode';
-=======
 import api from "../Api"
->>>>>>> 725ec2712e5dec45d875f68fc1f787d1d0bbfb1f
+import jwtDecode from 'jwt-decode';
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
@@ -51,11 +45,14 @@ export const updateUserData = (payload) => dispatch => {
   }); 
 }
 
-export const updateUserDataV2 = ({username, email, phone}) => {
+export const setUserDataV2 = ({username, personalEmail, personalPhone}) => {
   const parameters = {
-    username: username,
-    email: email,
-    phone: phone
+    personalEmail: personalEmail,
+    personalPhone: personalPhone
   }
-  
+  return api.put(`/user/${username}`, parameters).then(response => {
+    console.log("Response", response);
+    //Set user
+    setUserData(jwtDecode(response.data.token));
+  });
 }

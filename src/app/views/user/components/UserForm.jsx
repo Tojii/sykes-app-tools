@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { setApplyData } from "../../../redux/actions/ApplyActions";
-import { setUserData } from "../../../redux/actions/UserActions";
+import { setUserData, setUserDataV2 } from "../../../redux/actions/UserActions";
 import { validateEmail } from '../../../../utils';
 import { connect } from "react-redux";
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
@@ -55,38 +55,22 @@ const UserForm = (props) => {
     const handleUserEmail = (event) => {
         if (event.target.value !== "" && validateEmail(event.target.value))
         { 
-            const payload = {
-                phone: user.phone,
-                email: event.target.value,
-                badge: user.badge
-            }
-            user.email = event.target.value;
-            dispatch(setUserData(user));
+            dispatch(setUserDataV2(user.username, event.target.value, user.phone));
             apply['phone'] = form_user.phone;
             apply['email'] = event.target.value;
             apply['badge'] = user.badge;
             setApplyData(apply);
-            //handleSubmitCallback(payload);
         }
     }
 
     const handleUserPhone = (event) => {
         if (event.target.value !== "" && event.target.value.length < 8 && validatePhone(event.target.phone))
         {       
-            const payload = {
-                phone: event.target.value,
-                email: user.email,
-                badge: user.badge
-            }
-            user.email = form_user.email;
-            user.phone = event.target.value;
-            dispatch(setUserData(user));
-            
+            dispatch(setUserDataV2(user.username, user.email,event.target.value));
             apply['phone'] = event.target.value.phone;
             apply['email'] = user.email;
             apply['badge'] = user.badge;
             setApplyData(apply);
-            //handleSubmitCallback(payload);
         }
     }
 
