@@ -97,3 +97,12 @@ export const updateUserData = (payload) => dispatch => {
     console.log(error.config);
   }); 
 }
+
+export const updateUserDataV2 = ({username, email, phone}) => {
+  const parameters = {
+    username: username,
+    email: email,
+    phone: phone
+  }
+  
+}
