@@ -8,7 +8,7 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_LOADING = "LOGIN_LOADING";
 export const LOGIN_ERROR_SESSION_ACTIVE = "LOGIN_ERROR_SESSION_ACTIVE";
 
-export function login({ email, password, force }) {
+export function login(email, password, force) {
   return dispatch => {
     dispatch({
       type: LOGIN_LOADING
