@@ -1,4 +1,4 @@
-import React, { useState, Component, useRef, useEffect } from "react";
+import React, { useState, Component, useRef } from "react";
 import {
   Button,
   Card,
@@ -10,7 +10,7 @@ import {
 import MenuItem from '@material-ui/core/MenuItem';
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
-import { AddOrder } from "../../../redux/actions/OrderActions";
+import {addRaft} from "../../../redux/actions/RaftActions";
 import { useSelector, useDispatch } from 'react-redux';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
@@ -19,14 +19,6 @@ import Typography from '@material-ui/core/Typography';
 import AgregarDialog from './AgregarArticulo'
 import moment from "moment";
 import { useParams } from "react-router";
-import { GetUserPurchased } from "../../../redux/actions/OrderActions";
-import { GetCampaignsById } from "../../../redux/actions/CampaignActions";
-import { GetProvince, GetCantons, GetDistricts } from "../../../redux/actions/LocationActions";
-import Campaigns from "app/views/dashboard/shared/Campaigns";
-import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
-import { updateUserData, setUserData } from "../../../redux/actions/UserActions"
-import Loading from "../../../../matx/components/MatxLoadable/Loading";
-import history from "history.js";
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -39,13 +31,7 @@ const useStyles = makeStyles({
             marginLeft: "25%",
             width: "50%",
             marginTop: "3%",
-        },
-        "& .MuiInputBase-root.Mui-disabled": {
-            color: "darkgray" 
-        },
-        "& .MuiFormLabel-root.Mui-disabled": {
-            color: "rgba(74, 70, 109, 0.43)" 
-        },
+        }
     },
     gridtext: {
         "@media (min-width: 0px)": {
@@ -69,11 +55,6 @@ const useStyles = makeStyles({
             width: "50%",
         }
      
-    },
-    titulo: {
-        color: "red", 
-        textAlign: "center", 
-        marginTop: "2%"
     },
     sectionbutton: {
         marginLeft: "25%",
@@ -114,26 +95,10 @@ const DialogTitle = withStyles(styles)((props) => {
 const FormVentas = () => {
     
     const user = useSelector(state => state.user);
-    const campaign = useSelector(state => state.campaign.campaign);
-    const [cantidad, setCantidad] = useState([]);
-    const [indexlist, setIndexlist] = useState([0]);
-    const [maximolist, setMaximolist] = useState([0]);
-    const addOrder = useSelector(state => state.order.addOrder);
-    const successOrder = useSelector(state => state.order.success);
-    const purchases = useSelector(state => state.order.purchases);
-    const provinces = useSelector(state => state.locations.provinces);
-    const cantons = useSelector(state => state.locations.cantons);
-    const districts = useSelector(state => state.locations.districts);
-    const isLoadingCampaign  = useSelector(state => state.campaign.loading);
-    const isLoadingOrder  = useSelector(state => state.order.loading);
+    const [campaign, setCampaign] = useState([]) 
+    let indexCampaign;
     let { idcampaign } = useParams();
     const dispatch = useDispatch();
-    const [open, setOpen] = useState(false);
-    const [openPurchase, setOpenPurchase] = useState(false);
-    const [disableCarrito, setDisableCarrito] = useState(false);
-    const [disableMaximo, setDisableMaximo] = useState(false);
-    const [disableCanton, setDisableCanton] = useState(true);
-    const [disableDistrict, setDisableDistrict] = useState(true);
     const classes = useStyles();
     const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(
         {
@@ -141,57 +106,19 @@ const FormVentas = () => {
             index: 0
         }   
     );
-
-    useEffect(() => {
-        setOpenPurchase(false);
-        dispatch(GetUserPurchased(idcampaign));
-        dispatch(GetCampaignsById(idcampaign));
-        dispatch(GetProvince());
-    }, []);
-
-    useEffect(() => {
-        if (cantidad[0] == undefined) {handleCantidad();}
-        if ((ventasform.badge == undefined && ventasform.name == undefined) || ventasform.email == user.email && ventasform.phone == user.phone) {
-            setVentasForm({
-            ...ventasform,
-            badge: user.badge,
-            name: user.fullname,
-            email: user.email,
-            phone: user.phone,
-            campaignName: campaign[0] != undefined ? campaign[0].name : "",
-            campaign: {id: campaign[0] != undefined ? campaign[0].id : ""},
-            fechaInicio: campaign[0] != undefined ? moment(new Date(campaign[0].startDate)).format("DD/MM/yyyy") : "",
-            fechaFinal: campaign[0] != undefined ? moment(new Date(campaign[0].endDate)).format("DD/MM/yyyy") : "",
-            maximo: campaign[0] != undefined ? campaign[0].maxLimitPerPerson : "",
-            compradosCampaign: purchases[0] != undefined ? purchases[0].totalPurchasedItems : ""
-            }) 
-        }
-
-        if (purchases[0] != undefined && purchases[0].canPurchase == false) {
-            setOpenPurchase(true);
-        } else {setOpenPurchase(false);}
-
-        if (campaign[0] != undefined) {
-            campaign[0].campaignItems.map((item, index) => {
-                if (!maximolist.includes(item.id) && purchases[0] != undefined && purchases[0].items[index] != undefined && (item.maxLimitPerPerson - purchases[0].items[index].totalPurchasedItems) == 0) { 
-                    //setMaximolist([...maximolist, item.id])
-                    maximolist.push(item.id);
-                }
-            })
-        }
-
-    }, [campaign, user, indexlist, purchases]);
     
     const handleSingleRemove = index => {
-        setDisableMaximo(false);
         let carritolist = [...carrito];
-        let tempindexlist = [...indexlist];
-        tempindexlist.splice(index + 1, 1);
-        setIndexlist([...tempindexlist]);
-
+        setDisponibles(
+            [...disponibles,
+            {articulo: carrito[index].articulo,
+            cantidad: carrito[index].disponibles,
+            valor: carrito[index].valor}
+            ]
+        )
         setVentasForm({
             ...ventasform,
-            totalComprados: ventasform.totalComprados - carrito[index].buyquantity,
+            totalComprados: ventasform.totalComprados - carrito[index].cantidad,
             totalCompra: ventasform.totalCompra - carrito[index].subtotal,
         })
         carritolist.splice(index, 1);
@@ -200,30 +127,48 @@ const FormVentas = () => {
 
     const handleClose = () => {
         setShouldOpenDetailsDialog({open: false, index: 0});
-    }
-    
-    const handleBack = () => {
-        history.push("/Ventas/Home");
-    }
-    
-    const handleCantidad = () => {
-        let i;
-        //console.log("cantidad", purchases[0] != undefined ? (purchases[0].allowedPendingPurchaseItems - ventasform.totalCompra) : "")
-        //console.log("cantidad", campaign[0] != undefined ? campaign[0].maxLimitPerPerson : "")
-        if (campaign[0] != undefined) {
-            for (i = 1; i <= campaign[0].maxLimitPerPerson && (purchases[0] != undefined && i <= (purchases[0].allowedPendingPurchaseItems - ventasform.totalCompra)); i++) {
-                cantidad.push(i);
-            }
-        } 
-    }
+      }
+
+    const cantidad = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    ]
+
+    const data = [
+        {
+          "id": "1613",
+          "name": "Campaña 1",
+          "description": "Temporary Quality",
+          "fechaInicio": "2021/01/03",
+          "fechaFinalizacion": "2021/01/31",
+          "limite": "10",
+        },
+        {
+          "id": "1222",
+          "name": "Campaña 2",
+          "description": "description",
+          "fechaInicio": "2021/01/13",
+          "fechaFinalizacion": "2021/01/28",
+          "limite": "5",
+        },
+    ];
+
+    {data.map((item, index) => {
+        if (item.id == idcampaign) {
+            indexCampaign = index
+        }
+    })}
 
     const [disponibles, setDisponibles] = useState([
-        {id:1, name: "Monitor MSI",
-        quantity: 3,
-        unitPrice: 10000},
-        {id:2,name: "Audifonos MSI",
-        quantity: 4,
-        unitPrice: 12000,
+        {articulo: "Monitor MSI",
+        cantidad: 3,
+        valor: 10000},
+        {articulo: "Audifonos MSI",
+        cantidad: 4,
+        valor: 12000,
         },
     ]);
 
@@ -231,57 +176,38 @@ const FormVentas = () => {
     
     const [ventasform, setVentasForm] = useState({
         badge: user.badge,
-        name: user.fullname,
-        email: user.email,
-        phone: user.phone,
-        province: "",
-        canton: "",
-        district: "",
-        provinceCode: "",
-        cantonCode: "",
-        districtCode: "",
+        fullName: user.fullname,
+        personalEmail: user.email,
+        personalPhone: user.phone,
+        identificationNumber: "",
+        provincia: "",
+        firstName: "",
+        secondName: "",
         fecha: moment(new Date()).format("DD/MM/yyyy"),
-        address: "",
-        campaign: {id: campaign[0] != undefined ? campaign[0].id : ""},
-        campaignName: campaign[0] != undefined ? campaign[0].name : "",
-        fechaInicio: campaign[0] != undefined ? moment(new Date(campaign[0].startDate)).format("DD/MM/yyyy") : "",
-        fechaFinal: campaign[0] != undefined ? moment(new Date(campaign[0].endDate)).format("DD/MM/yyyy") : "",
-        notes: "",
+        lastName: "",
+        campaign: data[indexCampaign].name,
+        phone: "",
+        candidateEmail: "",
+        englishLevel: "English",
+        locationPreference: "",
+        othersDetails: "",
+        candidateProfile: "Profile",
+        academicGrade: "Grade",
+        isResumeActive: true,
+        isResumeRequired: true,
+        isExternalreference: true,
+        paymentMethod: "Money",
+        workType: "",
+        resumeUrl: "",
+        file: null,
+        isEmpty: false,
         totalComprados: 0,
         totalCompra: 0,
-        maximo: campaign[0] != undefined ? campaign[0].maxLimitPerPerson : "",
-        compradosCampaign: purchases[0] != undefined ? purchases[0].totalPurchasedItems : ""
+        maximo: data[indexCampaign].limite
     });
 
     const handleFormSubmit = async () => {
-        if (carrito.length > 0 && (purchases[0] != undefined && ventasform.totalComprados <= (ventasform.maximo - purchases[0].totalPurchasedItems))) {
-            setDisableCarrito(false);
-            let details = carrito.map(item => {
-                return (
-                    {
-                        item:{
-                            id: item.id
-                        },
-                        amount: item.buyquantity,
-                        itemName: item.name,
-                        itemDescription: item.description,
-                        itemUnitPrice: item.unitPrice,
-                    }
-                )
-            })
-            await dispatch(AddOrder({...ventasform, detail: details}));
-            const payloadUser = {
-                email: ventasform.email,
-                phone: ventasform.phone,
-                badge: ventasform.badge,
-            }
-            await dispatch(setUserData(payloadUser));
-            await dispatch(updateUserData(payloadUser));
-            setOpen(true);
-        } else {
-            if(carrito.length <= 0) {setDisableCarrito(true);}
-            if((purchases[0] != undefined && ventasform.totalComprados > (ventasform.maximo - purchases[0].totalPurchasedItems))) {setDisableMaximo(true);}
-        }
+        // await dispatch(addRaft(raftform));
     };
     
     const handleChange = (event) => {
@@ -292,467 +218,355 @@ const FormVentas = () => {
         });
     };
 
-    const handleChangeProvince = (event) => {
-        let provinceName = "";
-        setDisableCanton(false);
-        setDisableDistrict(true);
-        dispatch(GetCantons(event.target.value));
-        provinces.map(province => (
-           (province.code == event.target.value) ? provinceName = province.name : null
-        ));
-        const name = event.target.name;
-        setVentasForm({
-          ...ventasform,
-          [name]: event.target.value,
-          province: provinceName,
-          canton: "",
-          district: "",
-          cantonCode: "",
-          districtCode: "",
-        });
-    };
-
-    const handleChangeCanton = (event) => {
-        let cantonName = "";
-        setDisableDistrict(false);
-        dispatch(GetDistricts(ventasform.provinceCode, event.target.value));
-        cantons.map(canton => (
-            (canton.code == event.target.value) ? cantonName = canton.name : null
-         ));
-        const name = event.target.name;
-        setVentasForm({
-          ...ventasform,
-          [name]: event.target.value,
-          canton: cantonName,
-          district: "",
-          districtCode: "",
-        });
-    };
-
-    const handleChangeDistrict = (event) => {
-        let districtName = "";
-        districts.map(district => (
-            (district.code == event.target.value) ? districtName = district.name : null
-         ));
-        const name = event.target.name;
-        setVentasForm({
-          ...ventasform,
-          [name]: event.target.value,
-          district: districtName
-        });
-    };
-
     const handleChangeCantidad = (index, event) => {
         let carritolist = [...carrito];
-        let totalcomprados = ventasform.totalComprados - carrito[index].buyquantity;
+        let totalcomprados = ventasform.totalComprados - carrito[index].cantidad;
         let totalcompra = ventasform.totalCompra - carrito[index].subtotal;
         carritolist[index] = {
-            id: carrito[index].id,
-            name: carrito[index].name,
-            buyquantity: event.target.value,
-            unitPrice: carrito[index].unitPrice,
-            quantity: carrito[index].quantity,
-            subtotal: event.target.value * carrito[index].unitPrice,
-            maxLimitPerPerson: carrito[index].maxLimitPerPerson,
-            stockQuantity: carrito[index].stockQuantity,
-            limiteActual: carrito[index].limiteActual,
+            articulo: carrito[index].articulo,
+            cantidad: event.target.value,
+            valor: carrito[index].valor,
+            disponibles: carrito[index].disponibles,
+            subtotal: event.target.value * carrito[index].valor,
         };
         setCarrito([...carritolist]);
         setVentasForm({
             ...ventasform,
             totalComprados: totalcomprados + event.target.value,
-            totalCompra: totalcompra + event.target.value * carrito[index].unitPrice,
+            totalCompra: totalcompra + event.target.value * carrito[index].valor,
         })
-        if((purchases[0] != undefined && (totalcomprados + event.target.value) > (ventasform.maximo - purchases[0].totalPurchasedItems))) {
-            setDisableMaximo(true);
-        } else {
-            setDisableMaximo(false);
-        }
     }
 
     return (
         <div className="m-sm-30">
-            {/* { console.log("purchases", maximolist)} */}
-            {/* { console.log("carrito", carrito)} */}
-            <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={(successOrder) ? "Success!" : "Error!"} save={() => {}} message={(successOrder) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
-            {(isLoadingCampaign || isLoadingOrder) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={"¡Lo sentimos!"} save={() => {}} message={"¡Ya se ha alcanzado el máximo de artículos comprados en esta campaña!"} setOpen={setOpenPurchase} open={openPurchase && !isLoadingCampaign} />}
+            { }
             <Card className={classes.formcard} elevation={6}>
-                {(isLoadingCampaign || isLoadingOrder) ? <Loading/> : <h4 className={classes.titulo}>*El rebajo de artículos comprados se hará de planilla</h4>}
-                {(isLoadingCampaign || isLoadingOrder) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">Datos del usuario</h2>}
+                <h4 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">El rebajo de artículos comprados se hará de planilla</h4>
+                <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">Datos del usuario</h2>
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>                 
-                    {(isLoadingCampaign || isLoadingOrder) ? <Loading/> :
-                    <>
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Badge*"
-                            onChange={handleChange}
-                            type="text"
-                            name="badge"
-                            disabled={true}
-                            value={ventasform.badge}
-                            validators={["required","maxStringLength:5"]}
-                            errorMessages={["Este campo es requerido", "Máximo 5 carácteres"]}
-                        />
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Nombre*"
-                            onChange={handleChange}
-                            type="text"
-                            name="name"
-                            disabled={true}
-                            value={ventasform.name}
-                            validators={["required","maxStringLength:150"]}
-                            errorMessages={["Este campo es requerido", "Máximo 150 carácteres"]}
-                        />
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Correo electronico*"
-                            onChange={handleChange}
-                            type="text"
-                            name="email"
-                            value={ventasform.email}
-                            validators={["required", "matchRegexp:^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"]}
-                            errorMessages={["Este campo es requerido", "Correo no válido"]} 
-                        />
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Telefono*"
-                            onChange={handleChange}
-                            type="text"
-                            name="phone"
-                            value={ventasform.phone}
-                            validators={["required","isNumber", "isPositive","maxStringLength:8","minStringLength:8"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos", "Máximo 8 carácteres", "Mínimo 8 carácteres"]}
-                        />
-                        <SelectValidator 
-                            label="Provincia*" 
-                            name="provinceCode"
-                            className={classes.textvalidator} 
-                            value={ventasform.provinceCode} 
-                            onChange={handleChangeProvince} 
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
+                    <TextValidator
+                        className={classes.textvalidator}
+                        label="Badge*"
+                        onChange={handleChange}
+                        type="text"
+                        name="badge"
+                        disabled={true}
+                        value={ventasform.badge}
+                        validators={["required","maxStringLength:5"]}
+                        errorMessages={["Este campo es requerido", "Máximo 5 carácteres"]}
+                    />
+                    <TextValidator
+                        className={classes.textvalidator}
+                        label="Nombre*"
+                        onChange={handleChange}
+                        type="text"
+                        name="fullName"
+                        disabled={true}
+                        value={ventasform.fullName}
+                        validators={["required","maxStringLength:150"]}
+                        errorMessages={["Este campo es requerido", "Máximo 150 carácteres"]}
+                    />
+                    <TextValidator
+                        className={classes.textvalidator}
+                        label="Correo electronico*"
+                        onChange={handleChange}
+                        type="text"
+                        name="personalEmail"
+                        value={ventasform.personalEmail}
+                        validators={["required", "matchRegexp:^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+([a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+(;[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+([a-z0-9](?:[a-z0-9-]*[a-z0-9])?))*$"]}
+                        errorMessages={["Este campo es requerido", "Correo no válido"]} 
+                    />
+                    <TextValidator
+                        className={classes.textvalidator}
+                        label="Telefono*"
+                        onChange={handleChange}
+                        type="text"
+                        name="personalPhone"
+                        value={ventasform.personalPhone}
+                        validators={["required","isNumber","maxStringLength:8"]}
+                        errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 8 carácteres"]}
+                    />
+                    <SelectValidator 
+                        label="Provincia *" 
+                        name="provincia"
+                        className={classes.textvalidator} 
+                        value={ventasform.provincia} 
+                        onChange={handleChange} 
+                        //validators={["required"]}
+                        errorMessages={["Este campo es requerido"]}
+                    >
+                        {/* {categoriasDeEstudio.map(categoria => (
+                                        <MenuItem key={`categoria-${categoria.id}`} value={categoria.item ? categoria.item : ""}>
+                                        {categoria.item || " "}
+                                        </MenuItem>
+                                    ))} */}
+                        <MenuItem key="" value="">
+                            Seleccionar
+                        </MenuItem>
+                    </SelectValidator> 
+                    <SelectValidator 
+                        label="Cantón *" 
+                        name="canton"
+                        className={classes.textvalidator} 
+                        value={ventasform.paymentMethod} 
+                        onChange={handleChange} 
+                        disabled={true}
+                        //validators={["required"]}
+                        errorMessages={["Este campo es requerido"]}
+                    >
+                        {/* {categoriasDeEstudio.map(categoria => (
+                                        <MenuItem key={`categoria-${categoria.id}`} value={categoria.item ? categoria.item : ""}>
+                                        {categoria.item || " "}
+                                        </MenuItem>
+                                    ))} */}
+                        <MenuItem key="" value="">
+                            Seleccionar
+                        </MenuItem>
+                    </SelectValidator> 
+                    <SelectValidator 
+                        label="Distrito *" 
+                        name="distrito"
+                        className={classes.textvalidator} 
+                        value={ventasform.paymentMethod} 
+                        onChange={handleChange} 
+                        disabled={true}
+                        //validators={["required"]}
+                        errorMessages={["Este campo es requerido"]}
+                    >
+                        {/* {categoriasDeEstudio.map(categoria => (
+                                        <MenuItem key={`categoria-${categoria.id}`} value={categoria.item ? categoria.item : ""}>
+                                        {categoria.item || " "}
+                                        </MenuItem>
+                                    ))} */}
+                        <MenuItem key="" value="">
+                            Seleccionar
+                        </MenuItem>
+                    </SelectValidator> 
+                    <TextValidator
+                        className={classes.textvalidator}
+                        label="Dirección Exacta"
+                        onChange={handleChange}
+                        //disabled={true}
+                        type="text"
+                        name="lastName"
+                        value={ventasform.lastName}
+                        validators={["required"]}
+                        errorMessages={["Este campo es requerido"]}
+                    />
+                    <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">Datos de la compra:</h2>
+                    <TextValidator
+                        className={classes.textvalidator}
+                        label="Campaña"
+                        onChange={handleChange}
+                        disabled={true}
+                        type="text"
+                        name="campaign"
+                        value={ventasform.campaign}
+                        validators={["required"]}
+                        errorMessages={["Este campo es requerido"]}
+                    />
+                    <TextValidator
+                        className={classes.textvalidator}
+                        label="Fecha"
+                        onChange={handleChange}
+                        type="text"
+                        name="fecha"
+                        value={ventasform.fecha}
+                        disabled={true}
+                        validators={["required"]}
+                        errorMessages={["Este campo es requerido"]}
+                    />
+                    <TextValidator
+                        className={classes.textvalidator}
+                        label="Notas"
+                        onChange={handleChange}
+                        type="text"
+                        name="candidateEmail"
+                        value={ventasform.candidateEmail}
+                        validators={[]}
+                        errorMessages={[]}
+                    />
+                    <br/>
+                    {<h5 className={classes.textvalidator}>Articulos disponibles para compra:</h5>}
+                    <Card className={classes.gridtext} elevation={2}>
+                        <div className="p-16">
+                        <Grid
+                            container
+                            spacing={2}
+                            justify="center"
+                            alignItems="center"
+                            direction="row"
                         >
-                            {provinces.map(province => (
-                                            <MenuItem key={`province-${province.code}`} id={province.code} value={province.code ? province.code : ""}>
-                                            {province.name || " "}
-                                            </MenuItem>
-                                        ))}
-                        </SelectValidator> 
-                        <SelectValidator 
-                            label="Cantón*" 
-                            name="cantonCode"
-                            className={classes.textvalidator} 
-                            value={ventasform.cantonCode} 
-                            onChange={handleChangeCanton} 
-                            disabled={disableCanton}
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        >
-                            {cantons.map(canton => (
-                                            <MenuItem key={`canton-${canton.code}`} value={canton.code ? canton.code : ""}>
-                                            {canton.name || " "}
-                                            </MenuItem>
-                                        ))}
-                        </SelectValidator> 
-                        <SelectValidator 
-                            label="Distrito*" 
-                            name="districtCode"
-                            className={classes.textvalidator} 
-                            value={ventasform.districtCode} 
-                            onChange={handleChangeDistrict} 
-                            disabled={disableDistrict}
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        >
-                            {districts.map(district => (
-                                            <MenuItem key={`district-${district.code}`} value={district.code ? district.code : ""}>
-                                            {district.name || " "}
-                                            </MenuItem>
-                                        ))}
-                        </SelectValidator> 
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Dirección Exacta*"
-                            onChange={handleChange}
-                            //disabled={true}
-                            type="text"
-                            name="address"
-                            value={ventasform.address}
-                            validators={["required","minStringLength:30"]}
-                            errorMessages={["Este campo es requerido","La dirección debe ser de al menos 30 caracteres"]}
-                        />
-                        <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">Datos de la compra:</h2>
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Campaña"
-                            onChange={handleChange}
-                            disabled={true}
-                            type="text"
-                            name="campaignName"
-                            value={ventasform.campaignName}
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        />
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Fecha Inicio Campaña"
-                            onChange={handleChange}
-                            type="text"
-                            name="fechaInicio"
-                            value={ventasform.fechaInicio}
-                            disabled={true}
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        />
-                         <TextValidator
-                            className={classes.textvalidator}
-                            label="Fecha Final Campaña"
-                            onChange={handleChange}
-                            type="text"
-                            name="fechaFinal"
-                            value={ventasform.fechaFinal}
-                            disabled={true}
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        />
-                         <TextValidator
-                            className={classes.textvalidator}
-                            label="Cant máxima artículos para compra"
-                            onChange={handleChange}
-                            type="text"
-                            name="maximo"
-                            value={ventasform.maximo}
-                            disabled={true}
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        />
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Cant artículos comprados en la campaña"
-                            onChange={handleChange}
-                            type="text"
-                            name="maximo"
-                            value={ventasform.compradosCampaign}
-                            disabled={true}
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        />
-                         {/* <TextValidator
-                            className={classes.textvalidator}
-                            label="Fecha compra"
-                            onChange={handleChange}
-                            type="text"
-                            name="fecha"
-                            value={ventasform.fecha}
-                            disabled={true}
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        /> */}
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Notas"
-                            onChange={handleChange}
-                            type="text"
-                            name="notes"
-                            value={ventasform.notes}
-                            validators={[]}
-                            errorMessages={[]}
-                        />
-                        <br/>
-                        {<h5 className={classes.textvalidator}>Articulos disponibles para compra:</h5>}
-                        <Card className={classes.gridtext} elevation={2}>
-                            <div className="p-16">
-                            <Grid
-                                container
-                                spacing={2}
-                                justify="center"
-                                alignItems="center"
-                                direction="row"
-                            >
-                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                Articulo
-                                </Grid>
-                                <Grid item lg={2} md={2} sm={2} xs={2}>
-                                Cant
-                                </Grid>
-                                <Grid item lg={4} md={4} sm={4} xs={4}>
-                                Valor
-                                </Grid>
-                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                Acciones
-                                </Grid>
+                            <Grid item lg={3} md={3} sm={3} xs={3}>
+                            Articulo
                             </Grid>
-                            </div>
-                            <Divider></Divider>
-
-                            {(campaign[0] == undefined || campaign[0].campaignItems == undefined || campaign[0].campaignItems.length == 0 || (indexlist.length > 1 && campaign[0].campaignItems.length == (indexlist.length + maximolist.length - 2))) && <p className="px-16">No hay ningun artículo disponible para compra</p>}
-
-                            {(campaign[0] == undefined || campaign[0].campaignItems.length == maximolist.length - 1) && <p className="px-16">Ha alcanzado el límite de compra de todos los artículos disponibles</p>}
-
-                            {(campaign[0] != undefined && campaign[0].campaignItems != undefined) ? campaign[0].campaignItems.map((item, index) => {
-                            return (
-                                (!indexlist.includes(item.id) && item.stockQuantity > 0 && (purchases[0] != undefined && purchases[0].items[index] != undefined && (item.maxLimitPerPerson - purchases[0].items[index].totalPurchasedItems) > 0)) ?
-                                <div className="px-16 py-16" key={item.id}>
-                                <Grid
-                                    container
-                                    spacing={2}
-                                    justify="center"
-                                    alignItems="center"
-                                    direction="row"
-                                >
-                                    <Grid item lg={3} md={3} sm={3} xs={3}>
-                                    {item.name}
-                                    </Grid>
-                                    <Grid item lg={2} md={2} sm={2} xs={2}>
-                                    {item.stockQuantity}
-                                    </Grid>
-                                    <Grid item lg={4} md={4} sm={4} xs={4}>
-                                    ₡{item.unitPrice}
-                                    </Grid>
-                                    <Grid item lg={3} md={3} sm={3} xs={3}>
-                                    <div className="flex">
-                                    
-                                        <Button
-                                        variant="contained"
-                                        className= {(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0) ) ? "bg-default" : "bg-primary"}
-                                        style={{color: (ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0) ) ? "gray" : "white"}}
-                                        disabled={(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0) )}
-                                        onClick={() => setShouldOpenDetailsDialog({open: true, id: item.id, index: index})}
-                                        >
-                                        Agregar
-                                        </Button>
-                                    </div>
-                                    </Grid>
-                                </Grid>
-                                </div> : null
-                            
-                            ); 
-                            }) 
-                            : null }
-                        </Card>
-                        <label style={{color: "red", display: (ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0)) ? null : "none"}} className={classes.textvalidator} id="image">Los artículos añadidos han alcanzado el límite de artículos permitidos para la compra</label>
-                        <br/>
-                        {<h5 className={classes.textvalidator}>Articulos añadidos a la compra:</h5>}
-                        <Card className={classes.gridtext} elevation={2}>
-                            <div className="p-16">
-                            <Grid
-                                container
-                                spacing={2}
-                                justify="center"
-                                alignItems="center"
-                                direction="row"
-                            >
-                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                Articulo
-                                </Grid>
-                                <Grid item lg={2} md={2} sm={2} xs={2}>
-                                Cant
-                                </Grid>
-                                <Grid item lg={4} md={4} sm={4} xs={4}>
-                                Subtotal
-                                </Grid>
-                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                Acciones
-                                </Grid>
+                            <Grid item lg={2} md={2} sm={2} xs={2}>
+                            Cant
                             </Grid>
-                            </div>
-                            <Divider></Divider>
-
-                            {carrito.length == 0 && <p className="px-16">No hay ningun artículo</p>}
-
-                            {carrito.map((item, index) => {
-                            return ( 
-                                <div className="px-16 py-16" key={item.id}>
-                                <Grid
-                                    container
-                                    spacing={2}
-                                    justify="center"
-                                    alignItems="center"
-                                    direction="row"
-                                >
-                                    <Grid item lg={3} md={3} sm={3} xs={3}>
-                                    {item.name}
-                                    </Grid>
-                                    <Grid item lg={2} md={2} sm={2} xs={2}>
-                                    <SelectValidator  
-                                        name="buyquantity"
-                                        value={item.buyquantity} 
-                                        onChange={(e) => handleChangeCantidad(index, e)} 
-                                        validators={["required"]}
-                                        errorMessages={["Este campo es requerido"]}
-                                    >
-                                        { //console.log("cant carrito", item.limiteActual),
-                                        cantidad.map(cantidaditem => (
-                                                        (cantidaditem <= item.maxLimitPerPerson && cantidaditem <= item.stockQuantity && cantidaditem <= item.limiteActual) ?
-                                                        <MenuItem key={`cantidad-${cantidaditem}`} value={cantidaditem ? cantidaditem : ""}>
-                                                        {cantidaditem || " "}
-                                                        </MenuItem> : null
-                                                    ))}
-                                    </SelectValidator>
-                                    </Grid>
-                                    <Grid item lg={4} md={4} sm={4} xs={4}>
-                                    ₡{item.subtotal}
-                                    </Grid>
-                                    <Grid item lg={3} md={3} sm={3} xs={3}>
-                                    <div className="flex">
-                                    
-                                        <Button
-                                        variant="contained"
-                                        className="bg-error"
-                                        onClick={() => handleSingleRemove(index)}
-                                        >
-                                        Eliminar
-                                        </Button>
-                                    </div>
-                                    </Grid>
-                                </Grid>
-                                </div>
-                            );
-                            })} 
-                        </Card>
-                        <label style={{color: "red", display: disableCarrito ? null : "none"}} className={classes.textvalidator} id="image2">Se debe añadir al menos un artículo a la compra</label>
-                        <label style={{color: "red", display: disableMaximo ? null : "none"}} className={classes.textvalidator} id="image2">{`¡Ha superado la cantidad máxima de artículos para la compra!`}</label>
-                        
-                        <br/>
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Total de artículos comprados*"
-                            onChange={handleChange}
-                            type="text"
-                            name="totalComprados"
-                            disabled={true}
-                            value={ventasform.totalComprados}
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        /> 
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Total Compra*"
-                            onChange={handleChange}
-                            type="text"
-                            name="totalCompra"
-                            disabled={true}
-                            value={ventasform.totalCompra}
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        />                          
-                        <div className={classes.sectionbutton}>
-                            <Button style={{margin: "1%", width: "105.92px"}} variant="contained" color="primary" type="submit">
-                                ENVIAR
-                            </Button>
-                            <Button style={{margin: "1%"}} variant="contained" onClick={handleBack} color="default">
-                                CANCELAR
-                            </Button>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                            Valor
+                            </Grid>
+                            <Grid item lg={3} md={3} sm={3} xs={3}>
+                            Acciones
+                            </Grid>
+                        </Grid>
                         </div>
-                    </> 
-                    }
+                        <Divider></Divider>
+
+                        {disponibles.length == 0 && <p className="px-16">No hay ningun artículo</p>}
+
+                        {disponibles.map((item, index) => {
+                        return (
+                            <div className="px-16 py-16" key={item.articulo}>
+                            <Grid
+                                container
+                                spacing={2}
+                                justify="center"
+                                alignItems="center"
+                                direction="row"
+                            >
+                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                {item.articulo}
+                                </Grid>
+                                <Grid item lg={2} md={2} sm={2} xs={2}>
+                                {item.cantidad}
+                                </Grid>
+                                <Grid item lg={4} md={4} sm={4} xs={4}>
+                                {item.valor}
+                                </Grid>
+                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                <div className="flex">
+                                
+                                    <Button
+                                    variant="contained"
+                                    className="bg-primary"
+                                    style={{color: "white"}}
+                                    onClick={() => setShouldOpenDetailsDialog({open: true, index: index})}
+                                    >
+                                    Agregar
+                                    </Button>
+                                </div>
+                                </Grid>
+                            </Grid>
+                            </div>
+                        ); 
+                        })} 
+                    </Card>
+
+                    <br/>
+                    {<h5 className={classes.textvalidator}>Articulos añadidos a la compra:</h5>}
+                    <Card className={classes.gridtext} elevation={2}>
+                        <div className="p-16">
+                        <Grid
+                            container
+                            spacing={2}
+                            justify="center"
+                            alignItems="center"
+                            direction="row"
+                        >
+                            <Grid item lg={3} md={3} sm={3} xs={3}>
+                            Articulo
+                            </Grid>
+                            <Grid item lg={2} md={2} sm={2} xs={2}>
+                            Cant
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                            Subtotal
+                            </Grid>
+                            <Grid item lg={3} md={3} sm={3} xs={3}>
+                            Acciones
+                            </Grid>
+                        </Grid>
+                        </div>
+                        <Divider></Divider>
+
+                        {carrito.length == 0 && <p className="px-16">No hay ningun artículo</p>}
+
+                        {carrito.map((item, index) => {
+                        return ( 
+                            <div className="px-16 py-16" key={item.articulo}>
+                            <Grid
+                                container
+                                spacing={2}
+                                justify="center"
+                                alignItems="center"
+                                direction="row"
+                            >
+                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                {item.articulo}
+                                </Grid>
+                                <Grid item lg={2} md={2} sm={2} xs={2}>
+                                <SelectValidator 
+                                    //label="Cantidad*" 
+                                    name="cantidad"
+                                    //className={classes.textvalidator} 
+                                    value={item.cantidad} 
+                                    onChange={(e) => handleChangeCantidad(index, e)} 
+                                    validators={["required"]}
+                                    errorMessages={["Este campo es requerido"]}
+                                >
+                                    {cantidad.map(cantidaditem => (
+                                                    (cantidaditem <= item.disponibles) ?
+                                                    <MenuItem key={`cantidad-${cantidaditem}`} value={cantidaditem ? cantidaditem : ""}>
+                                                    {cantidaditem || " "}
+                                                    </MenuItem> : null
+                                                ))}
+                                </SelectValidator>
+                                </Grid>
+                                <Grid item lg={4} md={4} sm={4} xs={4}>
+                                {item.subtotal}
+                                </Grid>
+                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                <div className="flex">
+                                
+                                    <Button
+                                    variant="contained"
+                                    className="bg-error"
+                                    onClick={() => handleSingleRemove(index)}
+                                    >
+                                    Eliminar
+                                    </Button>
+                                </div>
+                                </Grid>
+                            </Grid>
+                            </div>
+                        );
+                        })} 
+                    </Card>
+
+                    <TextValidator
+                        className={classes.textvalidator}
+                        label="Total de artículos comprados*"
+                        onChange={handleChange}
+                        type="text"
+                        name="totalComprados"
+                        disabled={true}
+                        value={ventasform.totalComprados}
+                        validators={["required"]}
+                        errorMessages={["Este campo es requerido"]}
+                    /> 
+                    <TextValidator
+                        className={classes.textvalidator}
+                        label="Total Compra*"
+                        onChange={handleChange}
+                        type="text"
+                        name="totalCompra"
+                        disabled={true}
+                        value={ventasform.totalCompra}
+                        validators={["required"]}
+                        errorMessages={["Este campo es requerido"]}
+                    />                          
+                    <div className={classes.sectionbutton}>
+                        <Button variant="contained" color="primary" type="submit">
+                            ENVIAR
+                        </Button>
+                    </div>
                 </ValidatorForm>
                 <Dialog fullWidth maxWidth="md" onClose={handleClose} open={shouldOpenDetailsDialog.open}>
                 <DialogTitle  id="customized-dialog-title" onClose={handleClose}>
                 Detalles del artículo:
                  </DialogTitle>
-                <AgregarDialog type={"agregar"} close={handleClose} purchases={purchases} ventas={ventasform} setventas={setVentasForm} indexlist={indexlist} setIndex={setIndexlist} carrito={carrito} setCarrito={setCarrito} order={[{}]} setDisponibles={setDisponibles} id={shouldOpenDetailsDialog.id} index={shouldOpenDetailsDialog.index} />
+                <AgregarDialog type={"agregar"} close={handleClose} ventas={ventasform} setventas={setVentasForm} carrito={carrito} setCarrito={setCarrito} disponibles={disponibles} setDisponibles={setDisponibles} index={shouldOpenDetailsDialog.index} />
                 </Dialog>
             </Card>
         </div>

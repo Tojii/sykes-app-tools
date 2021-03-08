@@ -99,6 +99,7 @@ class MatxVerticalNav extends Component {
   };
 
   render() {
+    console.log("nav user", this.props.user);
     return (
       <div className="navigation">
         {this.renderLevels(this.props.navigation, this.props.user)}

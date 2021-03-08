@@ -91,20 +91,20 @@ const UserForm = (props) => {
     }
 
     const handlePhoneError = () => {
-        if (form_user.phone === "" || form_user.phone === undefined) return "This field is required"
+        if (form_user === null || form_user.phone === "" || form_user.phone === undefined) return "This field is required"
         else if (form_user.phone.length < 8) return "This field is too short"
         else if(!validatePhone(form_user.phone)) return "Phone number invalid format"
         return ""
     }
 
     const handleEmailError = () => {
-        if (form_user.email === "" || form_user.email === undefined) return "This field is required"
+        if (form_user === null || form_user.email === "" || form_user.email === undefined) return "This field is required"
         return ""
     }
 
     const handleNext = () => {
         if (!setDisableNext) return false;
-        if (form_user.phone === undefined || form_user.email === undefined || form_user.phone.length < 8 || !validatePhone(form_user.phone) || form_user.email === "" || !validateEmail(form_user.email))
+        if (form_user === null || form_user.phone === undefined || form_user.email === undefined || form_user.phone.length < 8 || !validatePhone(form_user.phone) || form_user.email === "" || !validateEmail(form_user.email))
         return setDisableNext(true)
         user.email = form_user.email;
         user.phone = form_user.phone;
@@ -113,16 +113,16 @@ const UserForm = (props) => {
     }
 
     const handleValid = () => {
-        return (form_user.phone === undefined || form_user.email === undefined || form_user.phone.length < 8 || !validatePhone(form_user.phone) ||  form_user.email === "" || !validateEmail(form_user.email))
+        return (form_user === null || form_user.phone === undefined || form_user.email === undefined || form_user.phone.length < 8 || !validatePhone(form_user.phone) ||  form_user.email === "" || !validateEmail(form_user.email))
     }
 
     useEffect(() => {
         handleNext();
         handleValid();
-        if (form_user.phone === undefined || form_user.email === undefined) {
+        if (form_user === null || form_user.phone === undefined || form_user.email === undefined) {
             setUserForm(user)
         }
-    }, [form_user]);
+    }, [user]);
 
     const onSubmit = () => {
         // const payload = {
@@ -174,7 +174,7 @@ const UserForm = (props) => {
                             onBlur={handleUserPhone}
                             type="text"
                             name="phone"
-                            value={form_user.phone}
+                            value={form_user != null ? form_user.phone : ""}
                             validators={["required"]}
                             errorMessages={["This field is required"]}
                             error={ handlePhoneError().length > 0 }
@@ -199,13 +199,10 @@ const UserForm = (props) => {
     )
 }
 
-const mapStateToProps = ({ user, applyReducer }) => {
-    const { apply } = applyReducer;
-    return {
-        user,
-        apply,
-    };
-};
+const mapStateToProps = state => ({
+    apply: state.apply.apply,
+    user: state.user,
+});
 
 export default connect(mapStateToProps, {
     setApplyData,

@@ -57,16 +57,12 @@ const GrowthOpportunities = (props) => {
     )
 }
 
-const mapStateToProps = ({ growthReducer, user, applyReducer }) => {
-    const { growth_opportunities, jobs_applied } = growthReducer;
-    const { loading } = applyReducer;
-    return {
-        growth_opportunities,
-        jobs_applied,
-        user,
-        loading,
-    };
-};
+const mapStateToProps = state => ({
+    growth_opportunities: state.growth.growth_opportunities, 
+    jobs_applied: state.growth.jobs_applied,
+    user: state.user,
+    loading: state.apply.loading,
+});
 
 export default connect(mapStateToProps, {
     getGrowthOpportunities,

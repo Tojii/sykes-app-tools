@@ -10,6 +10,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { connect } from "react-redux";
 import { setApplyData } from "../../../redux/actions/ApplyActions"
 import format from "date-fns/format";
+import { StateChangeTypes } from "downshift";
 
 const daysCount = [
     "Monday",
@@ -141,12 +142,9 @@ const ScheduleStep = (props) => {
     );
 }
 
-const mapStateToProps = ({ applyReducer }) => {
-    const { apply } = applyReducer;
-    return {
-        apply,
-    };
-};
+const mapStateToProps = state => ({
+    apply: state.apply.apply,
+});
 
 export default connect(mapStateToProps, {
     setApplyData,

@@ -5,11 +5,11 @@ import LayoutReducer from "./LayoutReducer";
 import ScrumBoardReducer from "./ScrumBoardReducer";
 import NotificationReducer from "./NotificationReducer";
 import EcommerceReducer from "./EcommerceReducer";
-import MantenimientoReducer from "./MantenimientoReducer";
 import LSSReducer from "./LSSReducer";
-import growthReducer from "./GrowthOpportunityReducer";
-import metricsReducer from "./MetricsReducer";
-import applyReducer from "./ApplyReducer";
+import GrowthReducer from "./GrowthOpportunityReducer";
+import MetricsReducer from "./MetricsReducer";
+import ApplyReducer from "./ApplyReducer";
+//import ReembolsosEducativosReducer from "./ReembolsoEducativoReducer";
 import RaftReducer from "./RaftReducer";
 import RefoundsReducer from "./RefoundReducer";
 import CommonReducer from "./CommonReducer";
@@ -25,7 +25,6 @@ const appReducer = combineReducers({
   scrumboard: ScrumBoardReducer,
   notification: NotificationReducer,
   ecommerce: EcommerceReducer,
-  mantenimientos: MantenimientoReducer,
   lss: LSSReducer,
   raft: RaftReducer,
   refound: RefoundsReducer,
@@ -33,9 +32,9 @@ const appReducer = combineReducers({
   campaign: CampaignReducer,
   order: OrderReducer,
   locations: LocationReducer,
-  growthReducer,
-  metricsReducer,
-  applyReducer,
+  growth: GrowthReducer,
+  metrics: MetricsReducer,
+  apply: ApplyReducer,
 });
 
 const RootReducer = (state, action) => {
@@ -43,7 +42,7 @@ const RootReducer = (state, action) => {
     // for all keys defined in your persistConfig(s)
     // persistStore.removeItem('persist:root')
     // storage.removeItem('persist:otherKey')
-    state = undefined;
+    // state = undefined;
   }
   return appReducer(state, action)
 }

@@ -15,7 +15,7 @@ class NotFound extends Component {
             color="primary"
             onClick={() => history.push(`/`)}
           >
-            Back to Dashboard
+            Back to Home
           </Button>
         </div>
       </div>

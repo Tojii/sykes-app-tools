@@ -3,10 +3,11 @@ import { createStore, applyMiddleware, compose } from "redux";
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 import RootReducer from "./reducers/RootReducer";
+import { middleware } from './middlewares/catchError';
 
 const initialState = {};
 
-const middlewares = [thunk];
+const middlewares = [thunk, middleware];
 
 const persistConfig = {
   key: 'root',
@@ -16,15 +17,14 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, RootReducer)
 
-export default () => {
-  let Store = createStore(
-    persistedReducer,
-    initialState,
-    compose(
-      applyMiddleware(...middlewares),
-      // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
+const Store = createStore(
+  persistedReducer,
+  initialState,
+  compose(
+    applyMiddleware(...middlewares),
+    // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   )
-  let Persistor = persistStore(Store)
-  return { Store, Persistor }
-}
+);
+
+const Persistor = persistStore(Store)
+export { Store, Persistor }

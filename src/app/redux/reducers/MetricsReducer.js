@@ -2,11 +2,11 @@ import {
     GET_METRICS,
 } from "../actions/MetricsActions";
 
-const INIT_STATE = {
+const initialState = {
     metrics: null,
 };
 
-export default (state = INIT_STATE, action) => {
+const GrowthReducer = function(state = initialState, action){
     switch (action.type) {
         case GET_METRICS:
             return { ...state, metrics: action.payload };
@@ -14,3 +14,5 @@ export default (state = INIT_STATE, action) => {
             return { ...state };
      }
 };
+
+export default GrowthReducer

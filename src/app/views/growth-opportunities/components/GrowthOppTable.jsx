@@ -22,6 +22,7 @@ import MyMetrics from '../metrics';
 import { string } from "yup";
 import moment from "moment";
 import CustomFooter from '../../muidatatable/CustomFooter';
+import { StateChangeTypes } from "downshift";
 
 const GrowthOppTable = ({
     growth_opportunities,
@@ -33,7 +34,7 @@ const GrowthOppTable = ({
     const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
     
     const handleDetailsClick = (item) => {
-        setGrowthOpportunity(item);
+        //setGrowthOpportunity(item);
         history.push(`${match.path}/${item.id}`);
     }
 
@@ -190,12 +191,9 @@ const GrowthOppTable = ({
     )
 }
 
-const mapStateToProps = ({ growthReducer }) => {
-    const { growth_opportunities } = growthReducer;
-    return {
-        growth_opportunities,
-    };
-};
+const mapStateToProps = state => ({
+    growth_opportunities: state.growth.growth_opportunities,
+});
 
 export default connect(mapStateToProps, {
     setGrowthOpportunity,

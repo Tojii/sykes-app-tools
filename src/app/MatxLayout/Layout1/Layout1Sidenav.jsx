@@ -15,7 +15,6 @@ import {
   setLayoutSettings,
   setDefaultSettings
 } from "app/redux/actions/LayoutActions";
-import { logoutUser } from "app/redux/actions/UserActions";
 import { withRouter } from "react-router-dom";
 import { MatxMenu } from "matx";
 import Sidenav from "../SharedCompoents/Sidenav";
@@ -91,10 +90,6 @@ class Layout1Sidenav extends Component {
     this.setState({ sidenavToggleChecked: !sidenavToggleChecked });
   };
 
-  handleSignOut = () => {
-    this.props.logoutUser();
-  };
-
   renderLogoSwitch = () => (
     // Open Brand component file to replace logo and text
     <Brand>
@@ -133,16 +128,12 @@ class Layout1Sidenav extends Component {
 Layout1Sidenav.propTypes = {
   setLayoutSettings: PropTypes.func.isRequired,
   setDefaultSettings: PropTypes.func.isRequired,
-  logoutUser: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
   settings: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   setDefaultSettings: PropTypes.func.isRequired,
   setLayoutSettings: PropTypes.func.isRequired,
-  logoutUser: PropTypes.func.isRequired,
-  user: state.user,
   settings: state.layout.settings
 });
 
@@ -150,8 +141,7 @@ export default withStyles(styles, { withTheme: true })(
   withRouter(
     connect(mapStateToProps, {
       setLayoutSettings,
-      setDefaultSettings,
-      logoutUser
+      setDefaultSettings
     })(Layout1Sidenav)
   )
 );

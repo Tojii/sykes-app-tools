@@ -35,7 +35,7 @@ const HomeVentas = () => {
 
     return (
         <>
-        {(user.badge == undefined) 
+        {(user == null) 
             ? <Loading /> :
              admin ? <>
                 {/* <Card className="m-sm-30"> */}
@@ -54,15 +54,8 @@ const HomeVentas = () => {
     )
 }
 
-const mapStateToProps = ({ growthReducer, user, applyReducer }) => {
-    const { growth_opportunities, jobs_applied } = growthReducer;
-    const { loading } = applyReducer;
-    return {
-        growth_opportunities,
-        jobs_applied,
-        user,
-        loading,
-    };
-};
+// const mapStateToProps = state => ({
+//     user: state.user,
+// });
 
 export default HomeVentas;

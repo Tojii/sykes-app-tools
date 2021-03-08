@@ -1,19 +1,18 @@
 import {
-  LOGIN_SUCCESS,
-  LOGIN_ERROR,
   LOGIN_LOADING,
-  RESET_PASSWORD,
-  CA_SET_ERROR
+  LOGIN_SUCCESS,
+  LOGIN_ERROR_SESSION_ACTIVE,
+  LOGIN_ERROR,
 } from "../actions/LoginActions";
 
 const initialState = {
   success: false,
   loading: false,
-  error: {
-    username: null,
-    password: null
-  },
-  errorSession: ""
+  token: null,
+  token_type: null,
+  refreshtoken: null,
+  error: null,
+  force: false,
 };
 
 const LoginReducer = function(state = initialState, action) {
@@ -28,14 +27,11 @@ const LoginReducer = function(state = initialState, action) {
       return {
         ...state,
         success: true,
-        loading: false
-      };
-    }
-    case RESET_PASSWORD: {
-      return {
-        ...state,
-        success: true,
-        loading: false
+        loading: false,
+        token: action.data.token,
+        refreshtoken: action.data.refreshtoken,
+        token_type: action.data.token_type,
+        error: null
       };
     }
     case LOGIN_ERROR: {
@@ -45,14 +41,22 @@ const LoginReducer = function(state = initialState, action) {
         error: action.data
       };
     }
-    case CA_SET_ERROR: {
+    case LOGIN_ERROR_SESSION_ACTIVE: {
       return {
         success: false,
         loading: false,
-        errorSession: action.data,
-        error: undefined
+        force: true,
+        error: action.data
       };
     }
+    // case CA_SET_ERROR: {
+    //   return {
+    //     success: false,
+    //     loading: false,
+    //     errorSession: action.data,
+    //     error: undefined
+    //   };
+    // }
     default: {
       return state;
     }

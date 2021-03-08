@@ -1,67 +1,35 @@
-import axios from "axios";
 import history from "history.js";
+<<<<<<< HEAD
 import apiAuthService from "../../services/apiAuthService";
 import { setError } from "./LoginActions"
 import api from "../Api";
 import jwtDecode from 'jwt-decode';
+=======
+import api from "../Api"
+>>>>>>> 725ec2712e5dec45d875f68fc1f787d1d0bbfb1f
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
 export const USER_LOGGED_OUT = "USER_LOGGED_OUT";
-export const UPDATE_USER_DATA = "UPDATE_USER_DATA";
-
-const axiosInstance = axios.create();
-
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    //if (error.response.status === 401) {
-        apiAuthService.logout(); 
-        history.state = history.location.pathname != "/session/signin" ? history.location.pathname : history.state;
-        history.push({
-          pathname: "/session/signin"
-        });
-    //}
-
-    return Promise.reject(error);
-  }
-)
 
 export const setUserData = user => dispatch => {
-  //console.log("entré",user)
-  axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-  axiosInstance.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, user).then(res => {
-    dispatch({
-      type: SET_USER_DATA,
-      data: user
-    });
-  })
-  .catch((error) => {
-    if (error.response.status === 401 || error.response.status === 403) {
-      dispatch(setError("Your session expired!"));
-    }
-    if (error.response) {
-        console.log(error.response.data);
-    } else if (error.request) {
-        console.log(error.request);
-    } else {
-        console.log('Error', error.message);
-    }
-    console.log(error.config);
-  }); 
+  dispatch({
+    type: SET_USER_DATA,
+    data: user
+  });
 };
 
 export function logoutUser() {
+  history.push("/session/signin");
+
   return dispatch => {
-    apiAuthService.logout();
-
-    history.push({
-      pathname: "/session/signin"
+    api.delete(`/Authenticate`).then(res => {
+      dispatch({
+        type: USER_LOGGED_OUT
+      });
     });
 
-    dispatch({
-      type: USER_LOGGED_OUT
-    });
+    
   };
 }
 
@@ -78,25 +46,8 @@ export const updateUserData = (payload) => dispatch => {
     }
   }
   //console.log("formdata", formData)
-  axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-  axiosInstance.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, formData, config).then(res => {
-    dispatch({
-      type: UPDATE_USER_DATA,
-      data: res.data
-    });
-  })
-  .catch((error) => {
-    if (error.response.status === 401 || error.response.status === 403) {
-      dispatch(setError("Your session expired!"));
-    }
-    if (error.response) {
-        console.log(error.response.data);
-    } else if (error.request) {
-        console.log(error.request);
-    } else {
-        console.log('Error', error.message);
-    }
-    console.log(error.config);
+  api.post(`/GrowthOpportunity/UpdatePersonalInformation`, formData, config).then(res => {
+    setUserData(res.data);
   }); 
 }
 

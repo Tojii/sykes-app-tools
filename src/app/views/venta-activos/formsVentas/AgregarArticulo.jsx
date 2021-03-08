@@ -1,4 +1,4 @@
-import React, { useState, Component, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Button,
   Card,
@@ -9,9 +9,8 @@ import {
   TableRow
 } from "@material-ui/core";
 import MenuItem from '@material-ui/core/MenuItem';
-import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
+import { ValidatorForm, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
-import {addRaft} from "../../../redux/actions/RaftActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import { GetCampaignItemsById } from "../../../redux/actions/CampaignActions";
@@ -64,23 +63,21 @@ const useStyles = makeStyles({
 
 const AgregarArticulo = (props) => {
     
-    const campaignItems = useSelector(state => state.campaign.campaignitem);
-    const detail = props.order[props.index] != undefined ? props.order[props.index] : [{}];
-    const isLoading  = useSelector(state => state.campaign.loading);
-    const max = props.type == "agregar" ? props.ventas.maximo - props.ventas.totalComprados : 0;
-    const cantComprada = props.type == "agregar" && props.purchases[0] != undefined ? props.purchases[0].items[props.index].totalPurchasedItems : 0
-    //const cantCompradaArticulo = props.type == "agregar" && props.purchases[0] != undefined ? props.purchases[0].items[props.index].totalPurchasedItems : 0
-    const cantCompradaAnterior = props.type == "agregar" && props.purchases[0] != undefined ? props.purchases[0].allowedPendingPurchaseItems - props.ventas.totalComprados : 0
-    const [cantidadArticulo, setCantidadArticulo] = useState(1);
     const classes = useStyles();
     const dispatch = useDispatch();
+    const campaignItems = useSelector(state => state.campaign.campaignitem);
+    const [cantidadArticulo, setCantidadArticulo] = useState(1);
+    const detail = props.order[props.index] != undefined ? props.order[props.index] : [{}];
+    const max = props.type == "agregar" ? props.ventas.maximo - props.ventas.totalComprados : 0;
+    const cantComprada = props.type == "agregar" && props.purchases[0] != undefined ? props.purchases[0].items[props.index].totalPurchasedItems : 0
+    const cantCompradaAnterior = props.type == "agregar" && props.purchases[0] != undefined ? props.purchases[0].allowedPendingPurchaseItems - props.ventas.totalComprados : 0
+    const cantidad = [];
+    
 
     useEffect(() => {
         dispatch(GetCampaignItemsById(props.id));
         handleCantidad();
     }, []);
-
-    const cantidad = [];
 
     const handleCantidad = () => {
         let i;
@@ -117,7 +114,6 @@ const AgregarArticulo = (props) => {
             });
 
             props.close();
-
             props.setIndex([...props.indexlist, props.id])
         }
     };
@@ -134,7 +130,8 @@ const AgregarArticulo = (props) => {
                 <Grid item md={12} xs={12}> 
                     <Card className={classes.formcard} elevation={6}>
                         <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>                 
-                            { campaignItems[0] == undefined ? <Loading /> : <Table>
+                            { campaignItems[0] == undefined ? <Loading /> : 
+                            <Table>
                                 <TableBody>
                                     <TableRow>
                                         <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Artículo:</h6></TableCell>
@@ -157,8 +154,7 @@ const AgregarArticulo = (props) => {
                                                 />
                                             </div>
                                         </TableCell>
-                                    </TableRow> : null
-                                    }
+                                    </TableRow> : null}
                                     <TableRow>
                                         <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Valor del artículo:</h6></TableCell>
                                         <TableCell className="px-sm-24 border-none">{ campaignItems[0] == undefined ? "" : "₡" + campaignItems[0].unitPrice }</TableCell>
@@ -176,10 +172,10 @@ const AgregarArticulo = (props) => {
                                             >
                                                 {handleCantidad()}
                                                 {cantidad.map(categoria => (
-                                                                <MenuItem key={`categoria-${categoria}`} value={categoria ? categoria : ""}>
-                                                                {categoria || " "}
-                                                                </MenuItem>
-                                                            ))}
+                                                    <MenuItem key={`categoria-${categoria}`} value={categoria ? categoria : ""}>
+                                                    {categoria || " "}
+                                                    </MenuItem>
+                                                ))}
                                             </SelectValidator> 
                                         </TableCell>
                                         : <TableCell className="px-sm-24 border-none">{ detail.amount }</TableCell>}

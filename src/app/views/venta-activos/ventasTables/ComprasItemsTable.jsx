@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
 import { GetAllOrderItems } from "../../../redux/actions/OrderActions";
 import { GetCampaigns } from "../../../redux/actions/CampaignActions";
@@ -12,9 +12,7 @@ import {
     FormControl,
     InputLabel
 } from "@material-ui/core";
-import Details from "@material-ui/icons/Details";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
-import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -49,7 +47,7 @@ const ComprasItems = (props) => {
     const isLoadingCampaign  = useSelector(state => state.campaign.loading);
     const user = useSelector(state => state.user);
     const isAdmin = props.admin != undefined ? props.admin : true;
-    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const admin = (user != null && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
     const [campaignform, setCampaignForm] = useState({
       campaign: "",
@@ -528,11 +526,10 @@ const ComprasItems = (props) => {
   return (
       //console.log("campaña",campaigns),
       <ValidatorForm onSubmit={() => {}}>
-        {(isLoading || isLoadingCampaign) ? <Loading /> :
+        {(isLoading || isLoadingCampaign || !user) ? <Loading /> :
           (admin || !isAdmin) ?
           <div className={classes.tableMargin + " m-sm-30"}>
               <Grid container spacing={2}>
-                 
                 <Grid item md={12} xs={12}>
                   {/* { isLoading ? <Loading /> :   */}
                           <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>

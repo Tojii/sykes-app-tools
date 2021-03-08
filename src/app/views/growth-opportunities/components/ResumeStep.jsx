@@ -172,12 +172,9 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
     );
 }
 
-const mapStateToProps = ({ applyReducer }) => {
-    const { apply } = applyReducer;
-    return {
-        apply,
-    };
-};
+const mapStateToProps = state => ({
+    apply: state.apply.apply,
+});
 
 export default connect(mapStateToProps, {
     setApplyData,

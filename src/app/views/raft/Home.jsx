@@ -16,18 +16,18 @@ import AddIcon from "@material-ui/icons/Add";
 
 const Home = () => {
     const raft = useSelector(state => state.raft.raftlist);
-    const user = useSelector(state => state.user.badge);
+    const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     const columns = ["Primer Nombre", "Segundo Nombre", "Primer Apellido", "Segundo Apellido", "Telefono", "Detalle", "Fecha Referencia", "Badge", "RAFTID", "Puesto", "Campaña"];
 
     useEffect(() => {
         async function fetchData() {
             // You can await here
-            await dispatch(getAllRaft(user));
+            await dispatch(getAllRaft(user != null ? user.badge : ""));
           }
           fetchData();
         console.log("raft list", raft);
-        console.log("user", user)
+        console.log("user", user != null ? user.badge : "")
     }, []);
 
     // const getMuiTheme = () =>

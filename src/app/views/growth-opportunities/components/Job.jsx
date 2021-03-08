@@ -106,13 +106,9 @@ const Job = (props) => {
     )
 }
 
-const mapStateToProps = ({ growthReducer, applyReducer }) => {
-    const { growth_opportunity } = growthReducer;
-    const { apply } = applyReducer;
-    return {
-        growth_opportunity,
-        apply,
-    };
-};
+const mapStateToProps = state => ({
+    growth_opportunity: state.growth.growth_opportunity,
+    apply: state.apply.apply,
+});
 
 export default connect(mapStateToProps, {setLoading})(Job);

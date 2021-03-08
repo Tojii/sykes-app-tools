@@ -1,13 +1,10 @@
 import {
   SET_USER_DATA,
   REMOVE_USER_DATA,
-  USER_LOGGED_OUT,
-  UPDATE_USER_DATA,
+  USER_LOGGED_OUT
 } from "../actions/UserActions";
 
-const initialState = {
-  user: null,
-};
+const initialState = {};
 
 const userReducer = function(state = initialState, action) {
   switch (action.type) {
@@ -25,12 +22,7 @@ const userReducer = function(state = initialState, action) {
       };
     }
     case USER_LOGGED_OUT: {
-      return state;
-    }
-    case UPDATE_USER_DATA: {
-      return {
-        ...state,
-      };
+      return initialState;
     }
     default: {
       return state;

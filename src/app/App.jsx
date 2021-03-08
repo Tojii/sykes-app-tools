@@ -10,13 +10,10 @@ import history from "history.js";
 import Loading from "../matx/components/MatxLoadable/Loading";
 
 import routes from "./RootRoutes";
-import configureStore from "./redux/Store";
+import { Store, Persistor } from "./redux/Store";
 import Auth from "./auth/Auth";
 import MatxLayout from "./MatxLayout/MatxLayout";
 import AuthGuard from "./auth/AuthGuard";
-import { createBrowserHistory } from 'history';
-
-const { Store, Persistor } = configureStore();
 
 const App = () => {
   return (

@@ -9,7 +9,6 @@ import {
   MuiThemeProvider
 } from "@material-ui/core";
 import { connect } from "react-redux";
-import localStorageService from "../../services/localStorageService";
 import { setLayoutSettings } from "app/redux/actions/LayoutActions";
 import { logoutUser } from "app/redux/actions/UserActions";
 import { PropTypes } from "prop-types";
@@ -17,9 +16,8 @@ import { MatxMenu, MatxSearchBox } from "matx";
 import { isMdScreen } from "utils";
 import NotificationBar from "../SharedCompoents/NotificationBar";
 import { Link } from "react-router-dom";
-import history from "history.js";
-// import ShoppingCart from "../SharedCompoents/ShoppingCart";
 import Button from '@material-ui/core/Button';
+import { ContourSeries } from "react-vis";
 
 const styles = theme => ({
   root: {
@@ -28,8 +26,6 @@ const styles = theme => ({
 });
 
 class Layout1Topbar extends Component {
-  // state = {user: localStorage.getItem("user")};
-  // console.log(settings.layout1Settings)
 
   updateSidebarMode = sidebarSettings => {
     let { settings, setLayoutSettings } = this.props;
@@ -60,12 +56,12 @@ class Layout1Topbar extends Component {
   };
 
   handleSignOut = () => {
-    history.state = "/session/signin";
     this.props.logoutUser();
   };
 
   render() {
     let { theme, settings, className, style } = this.props;
+
     const topbarTheme =
       settings.themes[settings.layout1Settings.topbar.theme] || theme;
     return (
@@ -101,7 +97,7 @@ class Layout1Topbar extends Component {
                 <NotificationBar /> */}
 
                 {/* <ShoppingCart></ShoppingCart> */}
-
+                { Object.keys(this.props.user).length != 0 && 
                 <MatxMenu
                   menuButton={
                     // <img
@@ -115,7 +111,7 @@ class Layout1Topbar extends Component {
                       variant="contained"
                       color="secondary"
                     >
-                      { this.props.user.fullname }
+                      { this.props.user.fullname ? this.props.user.fullname : "" }
                     </Button>
                   }
                 >
@@ -156,6 +152,7 @@ class Layout1Topbar extends Component {
                     <span className="pl-16"> Logout </span>
                   </MenuItem>
                 </MatxMenu>
+              }
               </div>
             </div>
           </div>

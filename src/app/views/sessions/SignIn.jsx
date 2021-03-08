@@ -13,7 +13,7 @@ import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { withRouter } from "react-router-dom";
-import { loginWithEmailAndPassword } from "../../redux/actions/LoginActions";
+import { login } from "../../redux/actions/LoginActions";
 
 const styles = theme => ({
   wrapper: {
@@ -35,8 +35,9 @@ class SignIn extends Component {
   state = {
     email: "",
     password: "",
-    agreement: ""
+    force: this.props.loginState.force
   };
+
   handleChange = event => {
     event.persist();
     this.setState({
@@ -44,20 +45,21 @@ class SignIn extends Component {
     });
   };
   handleFormSubmit = event => {
-    this.props.loginWithEmailAndPassword({ ...this.state });
+    this.setState({
+      force: this.props.loginState.force
+    }, () => this.props.login({ ...this.state }));
   };
   
   render() {
-    //console.log("sig in", this.props.login.errorSession)
-    const error = this.props.login.error && !this.props.success ? null : 
-      <Alert variant="outlined" severity="error">{this.props.login.errorSession ? this.props.login.errorSession : "The username or password is incorrect!"}</Alert>
+    const error = !this.props.loginState.error ? null : 
+      <Alert variant="outlined" severity="error">{this.props.loginState.error}</Alert>
 
     let { email, password } = this.state;
     let { classes } = this.props;
     return (
-      <div className="signup flex flex-center w-100 h-100vh">
+      <div className="signin flex flex-center w-100 h-100vh">
         <div className="p-8">
-          <Card className="signup-card position-relative y-center">
+          <Card className="signin-card position-relative y-center">
             <Grid container>
               <Grid item lg={5} md={5} sm={5} xs={12}>
                 <div className={"p-32 flex flex-center flex-middle flex-column h-100 " + classes.logoWrapper }>
@@ -92,6 +94,7 @@ class SignIn extends Component {
                       value={password}
                       validators={["required"]}
                       errorMessages={["this field is required"]}
+                      autoComplete="on"
                     />
                     {/* <FormControlLabel
                       className="mb-8"
@@ -107,12 +110,12 @@ class SignIn extends Component {
                         <Button
                           variant="contained"
                           color="primary"
-                          disabled={this.props.login.loading}
+                          disabled={this.props.loginState.loading}
                           type="submit"
                         >
                           Sign in 
                         </Button>
-                        {this.props.login.loading && (
+                        {this.props.loginState.loading && (
                           <CircularProgress
                             size={24}
                             className={classes.buttonProgress}
@@ -122,15 +125,6 @@ class SignIn extends Component {
                       </div>
                     </div>
                     {error}
-
-                    {/*<Button
-                      className="text-primary"
-                      onClick={() =>
-                        this.props.history.push("/session/forgot-password")
-                      }
-                    >
-                      Forgot password?
-                    </Button>*/}
                   </ValidatorForm>
                 </div>
               </Grid>
@@ -143,14 +137,14 @@ class SignIn extends Component {
 }
 
 const mapStateToProps = state => ({
-  loginWithEmailAndPassword: PropTypes.func.isRequired,
-  login: state.login
+  login: PropTypes.func.isRequired,
+  loginState: state.login
 });
 export default withStyles(styles, { withTheme: true })(
   withRouter(
     connect(
       mapStateToProps,
-      { loginWithEmailAndPassword }
+      { login }
     )(SignIn)
   )
 );

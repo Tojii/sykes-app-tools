@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
-import { GetOrder, GetAllOrder, GetAllOrderItems } from "../../../redux/actions/OrderActions";
+import { GetOrder, GetAllOrder } from "../../../redux/actions/OrderActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import {
@@ -12,7 +12,7 @@ import {
     FormGroup
 } from "@material-ui/core";
 import Details from "@material-ui/icons/Details";
-import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
 import "date-fns";
@@ -45,7 +45,7 @@ const ComprasTable = (props) => {
     const isLoading  = useSelector(state => state.order.loading);
     const user = useSelector(state => state.user);
     const isAdmin = props.admin != undefined ? props.admin : true;
-    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const admin = (user != null && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
 
     useEffect(() => {
@@ -428,7 +428,7 @@ const ComprasTable = (props) => {
   }
 
   return (
-      (isLoading) ? <Loading /> :
+      (isLoading || !user) ? <Loading /> :
         (admin || !isAdmin) ?
           <div className={classes.tableMargin + " m-sm-30"}>
             <Grid container spacing={2}>

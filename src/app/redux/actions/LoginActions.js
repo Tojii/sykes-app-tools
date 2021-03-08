@@ -1,65 +1,66 @@
-import apiAuthService from "../../services/apiAuthService";
-import { setUserData } from "./UserActions";
+import { setUserData, logoutUser } from "./UserActions";
 import history from "history.js";
-import configureStore from "../Store";
+import api from "../Api";
+import jwtDecode from 'jwt-decode';
 
 export const LOGIN_ERROR = "LOGIN_ERROR";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_LOADING = "LOGIN_LOADING";
-export const RESET_PASSWORD = "RESET_PASSWORD";
-export const CA_SET_ERROR = "CA_SET_ERROR";
+export const LOGIN_ERROR_SESSION_ACTIVE = "LOGIN_ERROR_SESSION_ACTIVE";
 
-const { Store, Persistor } = configureStore();
-
-export function loginWithEmailAndPassword({ email, password }) {
+export function login({ email, password, force }) {
   return dispatch => {
     dispatch({
       type: LOGIN_LOADING
     });
 
-    apiAuthService
-      .loginWithEmailAndPassword(email, password)
-      .then(user => {
-        dispatch(setUserData(user));
-        //console.log("history",history)
-        if (history.location.prev) {
-          history.push({
-            pathname: history.location.pathname != history.location.prev ? history.location.prev : "/"
-          });
-        } else {
-          history.push({
-            pathname: (history.state && history.state != "/session/signin") ? history.state :  "/"
-          });
-        }
+    const parameters = {
+      username: email,
+      password: password,
+      force: force
+    }
+    return api.post(`/authenticate`, parameters).then(response => {
+      // Set user
+      dispatch(setUserData(jwtDecode(response.data.token)));
 
-        return dispatch({
-          type: LOGIN_SUCCESS
+      if (history.location.prev) {
+        history.push({
+          pathname: history.location.pathname != history.location.prev ? history.location.prev : "/"
         });
-      })
-      .catch(error => {
+      } else {
+        history.push({
+          pathname: (history.state && history.state != "/session/signin") ? history.state :  "/"
+        });
+      }
+
+      return dispatch({
+        type: LOGIN_SUCCESS,
+        data: response.data
+      });
+    })
+    .catch(error => {
+      if (error.response.status === 409)
+        return dispatch({
+          type: LOGIN_ERROR_SESSION_ACTIVE,
+          data: `${error.response.data}. If you want to continue and close the active session click Sign in again.`
+        });
+      else 
         return dispatch({
           type: LOGIN_ERROR,
-          payload: error
+          data: error.response.data
         });
-      });
-  };
-}
-
-export const setError = error => {
-  // console.log("mensaje de error", error)
-  return dispatch => {
-    dispatch({
-      data: error,
-      type: CA_SET_ERROR
     });
   };
 }
 
-export function resetPassword({ email }) {
-  return dispatch => {
+export const refreshtoken = (refreshtoken) => {
+  return async dispatch => {
+    const response = await api.post(`/authenticate/refresh`, `"${refreshtoken}"`);
     dispatch({
-      payload: email,
-      type: RESET_PASSWORD
+      type: LOGIN_SUCCESS,
+      data: response.data
     });
+    dispatch(setUserData(jwtDecode(response.data.token)));
+    return response.data.token;
   };
-}
+};

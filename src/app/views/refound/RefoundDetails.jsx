@@ -18,7 +18,7 @@ const RefoundDetails = () => {
     const user = useSelector(state => state.user);
 
     useEffect(() => {
-        dispatch(GetRefoundListByUser(user.badge));
+        dispatch(GetRefoundListByUser(user != null ? user.badge : ""));
     }, []);
 
     const getMuiTheme = () =>

@@ -1,8 +1,5 @@
-import axios from "axios";
 import { format } from 'date-fns';
-import apiAuthService from "../../services/apiAuthService";
-import history from "history.js";
-import { setError } from "./LoginActions"
+import  api, { globalErrorHandler } from "../Api"
 
 export const GET_REFOUND_LIST_BY_USER = "GET_REFOUND_LIST_BY_USER";
 export const SAVE_REFOUND = "SAVE_REFOUND";
@@ -11,39 +8,14 @@ export const GET_INFORMATION_LISTS = "GET_INFORMATION_LISTS";
 export const GET_STUDIES_CATEGORY = "GET_STUDIES_CATEGORY";
 export const CLEAN_SAVEREFOUND =  "CLEAN_SAVEREFOUND";
 
-const axiosInstance = axios.create();
-
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    //if (error.response.status === 401) {
-        apiAuthService.logout(); 
-        //apiAuthService.removeUser();
-        history.state = history.location.pathname != "/session/signin" ? history.location.pathname : history.state;
-        history.push({
-          pathname: "/session/signin"
-        });
-    //}
-
-    return Promise.reject(error);
-  }
-)
-
 export const GetRefoundListByUser = (badgeId) => {
   return async dispatch =>{
-    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-      await axiosInstance.get(`${process.env.REACT_APP_API_URL}/api/Refund/GetListByUser?badgeId=${badgeId}`).then((res => {
+      await api.get(`/api/Refund/GetListByUser?badgeId=${badgeId}`).then((res => {
         dispatch({
             type: GET_REFOUND_LIST_BY_USER,
             data: res.data
             });
-            //console.log(res.data)
-      })).catch(function(error){
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        console.log("Error", error);
-      });
+      })).catch(globalErrorHandler);
   } 
 };
 
@@ -101,8 +73,7 @@ export const SaveRefund = (Data, Files, badge, fullname) => {
         dispatch({
             type: RE_LOADING
           });
-        axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-        await axiosInstance.post(`${process.env.REACT_APP_API_URL}/api/Refund/SaveRefund`,formData, config 
+        await api.post(`/api/Refund/SaveRefund`,formData, config 
           ).then((res => {
           dispatch({
                 type: SAVE_REFOUND,
@@ -110,27 +81,7 @@ export const SaveRefund = (Data, Files, badge, fullname) => {
           });
           //console.log(res.data)
         }))
-        .catch((error) => {
-          // Error
-          if (error.response.status === 401 || error.response.status === 403) {
-            dispatch(setError("Your session expired!"));
-          }
-          if (error.response) {
-              // The request was made and the server responded with a status code
-              // that falls out of the range of 2xx
-              console.log(error.response.data);
-          } else if (error.request) {
-              // The request was made but no response was received
-              // `error.request` is an instance of XMLHttpRequest in the 
-              // browser and an instance of
-              // http.ClientRequest in node.js
-              console.log(error.request);
-          } else {
-              // Something happened in setting up the request that triggered an Error
-              console.log('Error', error.message);
-          }
-          console.log(error.config);
-        }); 
+        .catch(globalErrorHandler);
         
     }
 }
@@ -140,67 +91,25 @@ export const GetIformationLists = () => {
     dispatch({
         type: RE_LOADING
       });
-    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    await axiosInstance.get(`${process.env.REACT_APP_API_URL}/api/Refund/GetInformationLists`).then((res => {
+    await api.get(`/api/Refund/GetInformationLists`).then((res => {
       dispatch({
             type: GET_INFORMATION_LISTS,
             data: res.data
         });
     }))
-    .catch((error) => {
-      // Error
-      if (error.response.status === 401 || error.response.status === 403) {
-        dispatch(setError("Your session expired!"));
-      }
-      if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-      } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the 
-          // browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-      } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-      }
-      console.log(error.config);
-    }); 
-}
+    .catch(globalErrorHandler);
+  }
 }
 
 export const getStudiesCatergory = () => {
   return async dispatch => {
-    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-    await axiosInstance.get(`${process.env.REACT_APP_API_URL}/api/Refund/GetStudiesCategory`).then((res => {
+    await api.get(`/api/Refund/GetStudiesCategory`).then((res => {
       dispatch({
         type: GET_STUDIES_CATEGORY,
         data: res.data
       });
     }))
-    .catch((error) => {
-      // Error
-      if (error.response.status === 401 || error.response.status === 403) {
-        dispatch(setError("Your session expired!"));
-      }
-      if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-      } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the 
-          // browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-      } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-      }
-      console.log(error.config);
-    }); 
+    .catch(globalErrorHandler);
   }
 }
 

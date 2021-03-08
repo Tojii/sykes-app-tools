@@ -69,13 +69,10 @@ const Metrics = (props) => {
     )
 }
 
-const mapStateToProps = ({ metricsReducer, user }) => {
-    const { metrics } = metricsReducer;
-    return {
-        metrics,
-        user
-    };
-};
+const mapStateToProps = state => ({
+  metrics: state.metrics.metrics,
+  user: state.user,
+});
 
 export default connect(mapStateToProps, {
     getMetrics,

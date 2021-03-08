@@ -58,7 +58,7 @@ class SimpleForm extends Component {
   state = {
     rate: ["","Nunca","Casi nunca", "A veces", "Casi siempre", "Siempre"],
     positions: "",
-    username: this.props.user.username,
+    username: this.props.user != null ? this.props.user.username : "",
     title: "titulo",
     relacion_equipo_rating1: 0,
     CimaDeConfianza: "",

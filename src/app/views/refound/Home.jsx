@@ -266,7 +266,7 @@ const Home = () => {
     }
 
     useEffect(() => {
-        dispatch(GetRefoundListByUser(user.badge));
+        dispatch(GetRefoundListByUser(user != null ? user.badge : ""));
     }, [user]);
 
     return (
