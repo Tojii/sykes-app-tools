@@ -2,6 +2,8 @@ import axios from "axios";
 import history from "history.js";
 import apiAuthService from "../../services/apiAuthService";
 import { setError } from "./LoginActions"
+import api from "../Api";
+import jwtDecode from 'jwt-decode';
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
