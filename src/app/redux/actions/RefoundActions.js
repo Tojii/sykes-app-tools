@@ -15,7 +15,7 @@ export const GetRefoundListByUser = (badgeId) => {
             type: GET_REFOUND_LIST_BY_USER,
             data: res.data
             });
-      }));
+      })).catch(globalErrorHandler);
   } 
 };
 
