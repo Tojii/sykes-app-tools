@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { getGrowthOpportunity } from "app/redux/actions/GrowthOpportunityActions";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import { makeStyles } from '@material-ui/core/styles';
+import { useParams } from "react-router";
 
 const useStyles = makeStyles({
     tableMargin: {     
@@ -19,9 +20,11 @@ const useStyles = makeStyles({
 
 const ApplySteps = (props) => {
     const classes = useStyles();
+    let { opp_id } = useParams();
+
 
     useEffect(() => {
-        props.getGrowthOpportunity();
+        props.getGrowthOpportunity(opp_id);
     }, []);
 
     return (

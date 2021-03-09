@@ -1,6 +1,6 @@
 import history from "history.js";
 import api from "../Api";
-import { clearLogin } from "./LoginActions";
+import { LOGIN_CLEAR, LOGIN_ERROR } from "./LoginActions";
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
@@ -13,7 +13,7 @@ export const setUserData = user => dispatch => {
   });
 };
 
-export function logoutUser() {
+export function logoutUser(error) {
   history.push("/session/signin");
 
   return dispatch => {
@@ -21,8 +21,15 @@ export function logoutUser() {
       dispatch({
         type: USER_LOGGED_OUT
       });
-      clearLogin();
-      
+      if (error)
+        dispatch({
+          type: LOGIN_ERROR,
+          data: error
+        });
+      else 
+        dispatch({
+          type: LOGIN_CLEAR
+        });
     });
   };
 }

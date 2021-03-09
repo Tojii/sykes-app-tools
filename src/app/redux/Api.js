@@ -48,15 +48,9 @@ export const HeaderContentTypeJson = () => {
 
 export const globalErrorHandler = async (error) => {
     console.log("something went wrong");
-    //if (error.response.status === 403) {
-    //await Store.dispatch(logout());
-    Store.dispatch(logoutUser());
-
-    // console.log("URL AFTHER DISPATCH", history);
-    // history.push({
-    //     pathname: "/"
-    // });
-    //history.replace({ pathname: "/growth-opportunities" });
-    //window.location.reload(false);
-  //}
+    if (error.response.status === 401 || error.response.status === 403) {
+      Store.dispatch(logoutUser("Your session has expired."));
+    }
+    else
+      Store.dispatch(logoutUser());
 };

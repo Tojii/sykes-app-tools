@@ -55,15 +55,6 @@ export function login({ email, password, force }) {
   };
 }
 
-export const clearLogin = () => {
-  // console.log("mensaje de error", error)
-  return dispatch => {
-    dispatch({
-      type: LOGIN_CLEAR
-    });
-  };
-}
-
 export const setError = error => {
   // console.log("mensaje de error", error)
   return dispatch => {
