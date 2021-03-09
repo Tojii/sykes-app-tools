@@ -1,6 +1,7 @@
 import history from "history.js";
 import api from "../Api";
 import { clearLogin } from "./LoginActions";
+import jwtDecode from 'jwt-decode';
 
 export const SET_USER_DATA = "USER_SET_DATA";
 export const REMOVE_USER_DATA = "USER_REMOVE_DATA";
@@ -44,3 +45,16 @@ export const updateUserData = (payload) => dispatch => {
     setUserData(res.data);
   }); 
 }
+
+// export const setUserDataV2 = (username, personalEmail, personalPhone) => dispatch => {
+//   console.log("Values", username, personalEmail, personalPhone);
+//   const parameters = {
+//     personalEmail: personalEmail,
+//     personalPhone: personalPhone
+//   }
+//   return api.put(`/user/${username}`, parameters).then(response => {
+//     console.log("Response", response);
+//     //Set user
+//     setUserData(jwtDecode(response.data.token));
+//   });
+// }

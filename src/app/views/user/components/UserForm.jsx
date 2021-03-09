@@ -66,7 +66,6 @@ const UserForm = (props) => {
             apply['email'] = event.target.value;
             apply['badge'] = user.badge;
             setApplyData(apply);
-            //handleSubmitCallback(payload);
         }
     }
 
@@ -86,7 +85,6 @@ const UserForm = (props) => {
             apply['email'] = user.email;
             apply['badge'] = user.badge;
             setApplyData(apply);
-            //handleSubmitCallback(payload);
         }
     }
 
