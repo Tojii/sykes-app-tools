@@ -3,8 +3,12 @@ import {
     Button,
     Card
   } from "@material-ui/core";
-  import { makeStyles } from '@material-ui/core/styles';
-  import { Tabs, useTabState, Panel } from '@bumaga/tabs'
+import { makeStyles } from '@material-ui/core/styles';
+import { Tabs, useTabState, Panel } from '@bumaga/tabs'
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import ButtonBase from '@material-ui/core/ButtonBase';
 
   const cn = (...args) => args.filter(Boolean).join(' ')
 
@@ -110,6 +114,37 @@ const HomeVentas = () => {
                             and behind local variations in the surface phenomena there are
                             constant laws of abstract structure".
                             </p>
+                            </div>
+                        </Panel>
+                        <Panel>
+                            <div style={{backgroundColor: "lightgray"}}>
+                                <Paper style={{width: "50%"}}>
+                                    <Grid container spacing={2}>
+                                        {/* <Grid item>
+                                            <ButtonBase className={classes.image}>
+                                            
+                                            </ButtonBase>
+                                        </Grid> */}
+                                        <Grid item xs={12} sm container>
+                                            <Grid item xs container direction="column" spacing={2}>
+                                                <Grid item xs>
+                                                    <Typography gutterBottom variant="subtitle1">
+                                                    Descripción
+                                                    </Typography>
+                                                    <Typography style={{marginLeft: "2%"}} variant="body2" gutterBottom>
+                                                    If you want to refer a friend press the button!
+                                                    </Typography>
+                                                    {/* <Typography variant="body2" color="textSecondary">
+                                                    ID: 1030114
+                                                    </Typography> */}
+                                                </Grid>
+                                            </Grid>
+                                            {/* <Grid item>
+                                            <Typography variant="subtitle1">$19.00</Typography>
+                                            </Grid> */}
+                                        </Grid>
+                                    </Grid>
+                                </Paper>
                             </div>
                         </Panel>
                         </div>
