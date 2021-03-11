@@ -64,5 +64,11 @@ export const navigations = [
   //   icon: "person_add_alt_1",
   //   display: null
   // },
+  {
+    name: "Benefits",
+    path: "/Benefits/Detalle",
+    icon: "add_business",
+    display: null
+  },
   
 ];

@@ -8,6 +8,7 @@ import sykesHomeRoutes from './views/sykesHome/sykesHomeRoutes';
 import sessionRoutes from "./views/sessions/SessionRoutes";
 import growthOpportunitiesRoutes from "./views/growth-opportunities/GrowthOpportunitiesRoutes";
 import userRoutes from "./views/user/UserRoutes";
+import benefitsRoutes from "./views/benefits/BenefitsRoutes";
  
 /*
   Required if you are going to use Evelynn Landing page
@@ -37,6 +38,7 @@ const routes = [
   ...growthOpportunitiesRoutes,
   ...userRoutes,
   ...ventasRoutes,
+  ...benefitsRoutes,
   //...lssRoutes,
   ...raftRoutes,
   ...redirectRoute,
