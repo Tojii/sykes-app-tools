@@ -404,7 +404,7 @@ const ComprasItems = (props) => {
       return (
         <React.Fragment>
           <FormControl>
-          <InputLabel shrink style={{marginTop: "-15%"}} htmlFor="age-native-label-placeholder">
+          <InputLabel shrink style={{marginTop: "-7px"}} htmlFor="age-native-label-placeholder">
           Campaña*
           </InputLabel>
          

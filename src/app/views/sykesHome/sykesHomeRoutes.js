@@ -1,4 +1,5 @@
 import { MatxLoadable } from "matx";
+import { isMdScreen, getQueryParam } from "utils";
 
 const Home = MatxLoadable({
     loader: () => import("./Home")
@@ -11,7 +12,7 @@ const settings = {
       },
       leftSidebar: {
         show: true,
-        mode: 'full'
+        mode: isMdScreen() ? "close" : "full"
       }
     },
     likeDislikeButtons: { show: false }
