@@ -1,4 +1,5 @@
 import { MatxLoadable } from "matx";
+import { isMdScreen, getQueryParam } from "utils";
 
 const GrowthOpportunities = MatxLoadable({
   loader: () => import("./growth-opportunities")
@@ -24,7 +25,7 @@ const settings = {
     },
     leftSidebar: {
       show: true,
-      mode: 'full'
+      mode: isMdScreen() ? "close" : "full"
     }
   },
   likeDislikeButtons: { show: true }

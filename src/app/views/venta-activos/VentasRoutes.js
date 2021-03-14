@@ -1,5 +1,6 @@
 import { MatxLoadable } from "matx";
 import jwtDecode from 'jwt-decode';
+import { isMdScreen, getQueryParam } from "utils";
 
 const Campaign = MatxLoadable({
   loader: () => import("./ventasTables/CampaignTable")
@@ -49,7 +50,7 @@ const settings = {
     },
     leftSidebar: {
       show: true,
-      mode: 'full'
+      mode: isMdScreen() ? "close" : "full"
     }
   },
   likeDislikeButtons: { show: true }

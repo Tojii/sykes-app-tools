@@ -57,8 +57,12 @@ const useStyles = makeStyles({
              marginLeft: "25%",
              width: "50%",
              marginTop: "3%",
-         }
+         },
+         
      },
+    gridtexttable: {
+        wordWrap: "break-word"
+    },
     formcard: {
         "@media (min-width: 1023px)": {
             marginLeft: "0%",
@@ -593,7 +597,7 @@ const FormVentas = () => {
                             {(campaign[0] != undefined && campaign[0].campaignItems != undefined) ? campaign[0].campaignItems.map((item, index) => {
                             return (
                                 (!indexlist.includes(item.id) && item.stockQuantity > 0 && (purchases[0] != undefined && purchases[0].items[index] != undefined && (item.maxLimitPerPerson - purchases[0].items[index].totalPurchasedItems) > 0)) ?
-                                <div className="px-16 py-16" key={item.id}>
+                                <div className={classes.gridtexttable + " px-16 py-16"} key={item.id}>
                                 <Grid
                                     container
                                     spacing={2}
