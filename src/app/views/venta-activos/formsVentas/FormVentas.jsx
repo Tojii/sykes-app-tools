@@ -615,8 +615,7 @@ const FormVentas = () => {
                                     ₡{item.unitPrice}
                                     </Grid>
                                     <Grid item lg={3} md={3} sm={3} xs={3}>
-                                    <div className="flex">
-                                    
+                                    <div className="flex">       
                                         <Button
                                         variant="contained"
                                         className= {(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0) ) ? "bg-default" : "bg-primary"}

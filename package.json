@@ -21,6 +21,7 @@
     "echarts-for-react": "^2.0.15-beta.0",
     "firebase": "^6.6.1",
     "formik": "^2.1.4",
+    "google-maps-react": "^2.0.6",
     "history": "^4.10.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",

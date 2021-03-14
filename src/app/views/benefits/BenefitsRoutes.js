@@ -35,6 +35,12 @@ const benefitsRoutes = [
     component: DetallesBenefits,
     settings
   },
+  // {
+  //   path: "/Benefits/AdminForm",
+  //   component: DetallesBenefits,
+  //   settings
+  // },
+  
   
 ];
 
