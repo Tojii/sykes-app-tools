@@ -106,7 +106,8 @@ const AgregarArticulo = (props) => {
                     subtotal: cantidadArticulo * campaignItems[0].unitPrice,
                     maxLimitPerPerson: campaignItems[0].maxLimitPerPerson - cantComprada,
                     stockQuantity: campaignItems[0].stockQuantity,
-                    limiteActual: props.ventas.maximo - props.ventas.totalComprados + cantidadArticulo
+                    limiteActual: props.ventas.maximo - props.ventas.totalComprados + cantidadArticulo,
+                    image: campaignItems[0].image
                 },    
             ]);
 
