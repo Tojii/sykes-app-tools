@@ -10,6 +10,10 @@ const DetallesBenefits = MatxLoadable({
   loader: () => import("./detalleLinks")
 });
 
+const AdminBenefits = MatxLoadable({
+  loader: () => import("./adminBenefitsLinks")
+});
+
 const settings = {
   activeLayout: "layout1",
   layout1Settings: {
@@ -35,11 +39,11 @@ const benefitsRoutes = [
     component: DetallesBenefits,
     settings
   },
-  // {
-  //   path: "/Benefits/AdminForm",
-  //   component: DetallesBenefits,
-  //   settings
-  // },
+  {
+    path: "/Benefits/AdminForm",
+    component: AdminBenefits,
+    settings
+  },
   
   
 ];
