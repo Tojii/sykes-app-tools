@@ -99,7 +99,7 @@ const CompraDetalle = (props) => {
     useEffect(() => {
         dispatch(GetOrderById(id));
     }, []);
-
+    
     const handleClose = () => {
         setShouldOpenDetailsDialog({open: false, index: 0});
       }
