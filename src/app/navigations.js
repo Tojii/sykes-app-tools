@@ -77,7 +77,7 @@ export const navigations = [
     },
     {
       name: "Admin Benefits",
-      path: "/Benefits/AdminForm",
+      path: "/Benefits/AdminFormBenefits",
       iconText: "AB",
       display: null
     }

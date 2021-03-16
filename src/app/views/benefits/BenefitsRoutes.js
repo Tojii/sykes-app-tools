@@ -14,6 +14,10 @@ const AdminBenefits = MatxLoadable({
   loader: () => import("./adminBenefitsLinks")
 });
 
+const FormAdminBenefits = MatxLoadable({
+  loader: () => import("./FormAdminBenefit")
+});
+
 const settings = {
   activeLayout: "layout1",
   layout1Settings: {
@@ -40,8 +44,18 @@ const benefitsRoutes = [
     settings
   },
   {
-    path: "/Benefits/AdminForm",
+    path: "/Benefits/AdminFormBenefits",
     component: AdminBenefits,
+    settings
+  },
+  {
+    path: "/Benefits/FormAdminBenefits/:id",
+    component: FormAdminBenefits,
+    settings
+  },
+  {
+    path: "/Benefits/FormAdminBenefits",
+    component: FormAdminBenefits,
     settings
   },
   
