@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { setApplyData } from "../../../redux/actions/ApplyActions";
-import { setUserData } from "../../../redux/actions/UserActions";
+import { updateUserData } from "../../../redux/actions/UserActions";
 import { validateEmail } from '../../../../utils';
 import { connect } from "react-redux";
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
@@ -53,15 +53,17 @@ const UserForm = (props) => {
     }
 
     const handleUserEmail = (event) => {
+        console.log("Validate Email", validateEmail(event.target.value));
         if (event.target.value !== "" && validateEmail(event.target.value))
         { 
+            console.log("Inside handle User email");
             const payload = {
                 phone: user.phone,
                 email: event.target.value,
                 badge: user.badge
             }
             user.email = event.target.value;
-            dispatch(setUserData(user));
+            dispatch(updateUserData(user));
             apply['phone'] = form_user.phone;
             apply['email'] = event.target.value;
             apply['badge'] = user.badge;
@@ -70,8 +72,9 @@ const UserForm = (props) => {
     }
 
     const handleUserPhone = (event) => {
-        if (event.target.value !== "" && event.target.value.length < 8 && validatePhone(event.target.phone))
-        {       
+        console.log("Inside handle Phone email", validatePhone(event.target.value));
+        if (event.target.value !== "" && event.target.value.length <= 8 && validatePhone(event.target.value))
+        {   console.log("Inside handle Phone email");
             const payload = {
                 phone: event.target.value,
                 email: user.email,
@@ -79,7 +82,7 @@ const UserForm = (props) => {
             }
             user.email = form_user.email;
             user.phone = event.target.value;
-            dispatch(setUserData(user));
+            dispatch(updateUserData(user));
             
             apply['phone'] = event.target.value.phone;
             apply['email'] = user.email;
