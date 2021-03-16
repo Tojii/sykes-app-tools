@@ -6,7 +6,8 @@ import {
     Divider,
     Dialog,
     IconButton,
-    CardContent
+    CardContent,
+    CardActions
 } from "@material-ui/core";
 import MenuItem from '@material-ui/core/MenuItem';
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
@@ -84,8 +85,11 @@ const useStyles = makeStyles({
         textAlign: "center"
     },
     card__root: {
-        display: 'flex',
         marginBottom: '5%'
+    },
+
+    card__flex: {
+        display: 'flex',
     },
     details: {
         display: 'flex',
@@ -97,12 +101,21 @@ const useStyles = makeStyles({
     content: {
         flex: '1 0 auto',
     },
-    action_btn: {
+    action__btn: {
         display: 'flex',
-        alignItems: 'center',
-        margin: 'auto',
-        marginBottom: '10%'
+        justifyContent: 'center',
+        marginBottom: '5%',
+        marginTop: '5%'
     },
+    img__container: {
+        display: 'flex',
+        justifyContent: 'center',
+        margin: 'auto',
+    },
+    img__size: {
+        width: '90%',
+        height: 'auto',
+    }
 });
 
 const styles = (theme) => ({
@@ -596,34 +609,37 @@ const FormVentas = () => {
                                         (!indexlist.includes(item.id) && item.stockQuantity > 0 && (purchases[0] != undefined && purchases[0].items[index] != undefined && (item.maxLimitPerPerson - purchases[0].items[index].totalPurchasedItems) > 0)) ?
                                             <>
                                                 <Card className={classes.card__root}>
-                                                    <div className={classes.details}>
-                                                        <CardContent className={classes.content}>
-                                                            <label className={classes.label__bold}>Articulo:</label>
-                                                            <br />
-                                                            <span>{item.name}</span>
-                                                            <br />
-                                                            <label className={classes.label__bold}>Cantidad:</label>
-                                                            <br />
-                                                            <span>{item.stockQuantity}</span>
-                                                            <br />
-                                                            <label className={classes.label__bold}>Precio:</label>
-                                                            <br />
-                                                            <span>₡{item.unitPrice}</span>
-                                                        </CardContent>
-                                                        <div className={classes.action_btn}>
-                                                            <Button
-                                                                variant="contained"
-                                                                className={(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0)) ? "bg-default" : "bg-primary"}
-                                                                style={{ color: (ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0)) ? "gray" : "white" }}
-                                                                disabled={(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0))}
-                                                                onClick={() => setShouldOpenDetailsDialog({ open: true, id: item.id, index: index })}
-                                                            >
-                                                                Agregar
-                                                                </Button>
+                                                    <div className={classes.card__flex}>
+                                                        <div className={classes.details}>
+                                                            <CardContent className={classes.content}>
+                                                                <label className={classes.label__bold}>Articulo:</label>
+                                                                <br />
+                                                                <span>{item.name}</span>
+                                                                <br />
+                                                                <label className={classes.label__bold}>Cantidad:</label>
+                                                                <br />
+                                                                <span>{item.stockQuantity}</span>
+                                                                <br />
+                                                                <label className={classes.label__bold}>Precio:</label>
+                                                                <br />
+                                                                <span>₡{item.unitPrice}</span>
+                                                            </CardContent>
+
+                                                        </div>
+                                                        <div className={classes.img__container}>
+                                                            <img className={classes.img__size} src={item.image} alt={item.name} />
                                                         </div>
                                                     </div>
-                                                    <div>
-                                                        <img src={item.image} alt={item.name} />
+                                                    <div className={classes.action__btn}>
+                                                        <Button
+                                                            variant="contained"
+                                                            className={(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0)) ? "bg-default" : "bg-primary"}
+                                                            style={{ color: (ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0)) ? "gray" : "white" }}
+                                                            disabled={(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0))}
+                                                            onClick={() => setShouldOpenDetailsDialog({ open: true, id: item.id, index: index })}
+                                                        >
+                                                            Agregar
+                                                        </Button>
                                                     </div>
                                                 </Card>
                                             </>
@@ -633,9 +649,9 @@ const FormVentas = () => {
                                     : null}
                             </div>
                             <div className={classes.gridtext}>
-                            <span style={{ color: "red", display: (ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0)) ? null : "none" }} className={classes.textvalidator + "text-center"} id="image">Los artículos añadidos han alcanzado el límite de artículos permitidos para la compra</span>
+                                <span style={{ color: "red", display: (ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0)) ? null : "none" }} className={classes.textvalidator + "text-center"} id="image">Los artículos añadidos han alcanzado el límite de artículos permitidos para la compra</span>
                             </div>
-                            
+
                             {<h5 className={classes.textvalidator}>Articulos añadidos a la compra:</h5>}
                             <div className={classes.gridtext} elevation={2}>
                                 {carrito.length == 0 && <p className="px-16">No hay ningun artículo</p>}
@@ -643,46 +659,48 @@ const FormVentas = () => {
                                     return (
                                         <>
                                             <Card className={classes.card__root}>
-                                                <div className={classes.details}>
-                                                    <CardContent className={classes.content}>
-                                                        <label className={classes.label__bold}>Articulo:</label>
-                                                        <br />
-                                                        <span>{item.name}</span>
-                                                        <br />
-                                                        <label className={classes.label__bold}>Cantidad:</label>
-                                                        <br />
-                                                        <SelectValidator
-                                                            name="buyquantity"
-                                                            value={item.buyquantity}
-                                                            onChange={(e) => handleChangeCantidad(index, e)}
-                                                            validators={["required"]}
-                                                            errorMessages={["Este campo es requerido"]}
-                                                        >
-                                                            { //console.log("cant carrito", item.limiteActual),
-                                                                cantidad.map(cantidaditem => (
-                                                                    (cantidaditem <= item.maxLimitPerPerson && cantidaditem <= item.stockQuantity && cantidaditem <= item.limiteActual) ?
-                                                                        <MenuItem key={`cantidad-${cantidaditem}`} value={cantidaditem ? cantidaditem : ""}>
-                                                                            {cantidaditem || " "}
-                                                                        </MenuItem> : null
-                                                                ))}
-                                                        </SelectValidator>
-                                                        <br />
-                                                        <label className={classes.label__bold}>Precio:</label>
-                                                        <br />
+                                                <div className={classes.card__flex}>
+                                                    <div className={classes.details}>
+                                                        <CardContent className={classes.content}>
+                                                            <label className={classes.label__bold}>Articulo:</label>
+                                                            <br />
+                                                            <span>{item.name}</span>
+                                                            <br />
+                                                            <label className={classes.label__bold}>Cantidad:</label>
+                                                            <br />
+                                                            <SelectValidator
+                                                                name="buyquantity"
+                                                                value={item.buyquantity}
+                                                                onChange={(e) => handleChangeCantidad(index, e)}
+                                                                validators={["required"]}
+                                                                errorMessages={["Este campo es requerido"]}
+                                                            >
+                                                                { //console.log("cant carrito", item.limiteActual),
+                                                                    cantidad.map(cantidaditem => (
+                                                                        (cantidaditem <= item.maxLimitPerPerson && cantidaditem <= item.stockQuantity && cantidaditem <= item.limiteActual) ?
+                                                                            <MenuItem key={`cantidad-${cantidaditem}`} value={cantidaditem ? cantidaditem : ""}>
+                                                                                {cantidaditem || " "}
+                                                                            </MenuItem> : null
+                                                                    ))}
+                                                            </SelectValidator>
+                                                            <br />
+                                                            <label className={classes.label__bold}>Precio:</label>
+                                                            <br />
                                                             ₡{item.subtotal}
-                                                    </CardContent>
-                                                    <div className={classes.action_btn}>
-                                                        <Button
-                                                            variant="contained"
-                                                            className="bg-error"
-                                                            onClick={() => handleSingleRemove(index)}
-                                                        >
-                                                            Eliminar
-                                                          </Button>
+                                                        </CardContent>
+                                                    </div>
+                                                    <div className={classes.img__container}>
+                                                            <img className={classes.img__size} src={item.image} alt={item.name} />
                                                     </div>
                                                 </div>
-                                                <div>
-                                                    <img src={item.image} alt={item.name} />
+                                                <div className={classes.action__btn}>
+                                                    <Button
+                                                        variant="contained"
+                                                        className="bg-error"
+                                                        onClick={() => handleSingleRemove(index)}
+                                                    >
+                                                        Eliminar
+                                                    </Button>
                                                 </div>
                                             </Card>
                                         </>
