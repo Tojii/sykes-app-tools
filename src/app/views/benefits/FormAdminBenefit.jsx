@@ -10,12 +10,11 @@ import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
-import InputAdornment from '@material-ui/core/InputAdornment';
 import { GetCampaignItemsById, UpdateCampaignItems, AddCampaignItems, GetCampaigns, GetCampaignsActive, GetCampaignsItems } from "../../redux/actions/CampaignActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
-import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
+import LocationsTable from "./ubicacionesTable";
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -100,7 +99,6 @@ const FormAdminBenefits = () => {
         description: "",
         logo: null,
         detail: "",
-        benefit: "",
         link: "",
         facebook: "",
         instagram: "",
@@ -204,7 +202,6 @@ const FormAdminBenefits = () => {
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {console.log("idbenefit",id, useParams())}
              {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminForm"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Beneficio" : "Agregar Beneficio"}</h2>}
@@ -213,7 +210,7 @@ const FormAdminBenefits = () => {
                     <>               
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Nombre*"
+                            label="Name*"
                             onChange={handleChange}
                             type="text"
                             name="name"
@@ -240,17 +237,6 @@ const FormAdminBenefits = () => {
                             value={benefitsform.description}
                             validators={["required"]}
                             errorMessages={["Este campo es requerido"]}
-                        />
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Benefit*"
-                            onChange={handleChange}
-                            type="text"
-                            name="benefit"
-                            //disabled={true}
-                            value={benefitsform.benefit}
-                            validators={["required","maxStringLength:100"]}
-                            errorMessages={["Este campo es requerido","Máximo 100 carácteres"]}
                         />
                         <TextValidator
                             className={classes.textvalidator}
@@ -299,19 +285,18 @@ const FormAdminBenefits = () => {
                             <Input type="file" name="files" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect} 
                                  />  
                             <FormHelperText error={errorFile.error} id="my-helper-text">{errorFile.errorMessage}</FormHelperText>                               
-                        </FormControl> 
-
+                        </FormControl>
                         <div className={classes.sectionbutton}>
-                        {benefitsform.logo ? 
-                            <img
-                            className={classes.imageadd}                                          
-                            alt="..."
-                            src={`${benefitsform.logo}`}
-                            />
-                            : null
-                        }
+                            {benefitsform.logo ? 
+                                <img
+                                className={classes.imageadd}                                          
+                                alt="..."
+                                src={`${benefitsform.logo}`}
+                                />
+                                : null
+                            }
                         </div>
-                    
+                        {id ? <LocationsTable idBenefit={id} /> : null}
                         <div className={classes.sectionbutton}>
                             <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
                                 ENVIAR  

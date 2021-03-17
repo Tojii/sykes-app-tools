@@ -8,7 +8,10 @@ import {
     Button,
     Card,
     Grid,
-    Tooltip
+    Tooltip,
+    Dialog,
+    Typography,
+    IconButton,
 } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
@@ -19,6 +22,9 @@ import NotFound from "../sessions/NotFound"
 import { makeStyles } from '@material-ui/core/styles';
 import { GetCampaignItemsById, DeleteCampaignItem, GetCampaignsItems } from "../../redux/actions/CampaignActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
+import AgregarDialog from "./FormLocations"
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles({
   sectionbutton: {
@@ -32,15 +38,42 @@ const useStyles = makeStyles({
   },
   tableMargin: {     
     "@media (min-width: 0px)": {
-        marginBottom: "25%",
     },
     "@media (min-width: 1024px)": {
-        marginBottom: "5%",
+        width: "62%",
+        marginLeft: "19%"
     },
   },
 });
 
-const AdminBenefitsTable = () => {
+const styles = (theme) => ({
+  root: {
+    margin: "auto",
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+});
+
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
+
+const LocationsTable = (props) => {
     const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
     const dispatch = useDispatch();
     const classes = useStyles();
@@ -48,21 +81,19 @@ const AdminBenefitsTable = () => {
     const image = null;
     const campaignitem = [
         {id: "3",
-        idCategory: "3",
-        name: "nombre",
-        detail: "detail",
-        description: "description",
-        logo: null,
-        link: "www.link.com",
-        facebook: "www.facebook.com",
-        instagram: "www.intagram.com",
-        email: "email",}
+        idBenefit: "3",
+        address: "San José, Avenida 2, Calle 15. Frente a la Plaza de la democracia",
+        province: "San José",
+        canton: "San José", 
+        phone: "2222-2222",
+        whatsapp: "+ (506) 8888-2222",
+        }
     ];
     const successCampaignItems = useSelector(state => state.campaign.success);
     const isLoading  = useSelector(state => state.campaign.loading);
     const [open, setOpen] = useState(false);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
-    
+    const [shouldOpenNewDialog, setShouldOpenNewDialog] = useState({ open: false, type: "new" });
 
     useEffect(() => {
       //dispatch(GetCampaignsItems());
@@ -78,16 +109,20 @@ const AdminBenefitsTable = () => {
     };
 
     const handleEdit= (id) => {
-      history.push(`/Benefits/FormAdminBenefits/${id}`);
+      setShouldOpenNewDialog({ open: true, type: "edit", id: id, idBenefit: props.idBenefit })
       
     };
+
+    const handleClose = () => {
+      setShouldOpenNewDialog({open: false, index: 0});
+    }
 
     const addButton = () => {
       return (
           <React.Fragment>
             <Tooltip title={"Nuevo"}>
               <Button
-                component={Link} to="/Benefits/FormAdminBenefits"
+                onClick={() => setShouldOpenNewDialog({ open: true, type: "new", idBenefit: props.idBenefit })}
                 variant="contained"
                 color="primary"
                 startIcon={<AddIcon />}
@@ -99,37 +134,23 @@ const AdminBenefitsTable = () => {
       );
     }
 
-    const showImage = (item) => {
-      return (
-        item.logo ?
-        <img
-        className={classes.sectionbutton}                                         
-        alt="..."
-        src={`${item.logo}`}
-        /> : ""
-      );
-    }
-
     const builddata = campaignitem.map(item => {
       if (item != undefined) {
       return [
           item.id,
-          item.idCategory,
-          item.name,
-          item.detail,
-          item.description,
-          item.link,
-          item.facebook,
-          item.instagram,
-          item.email,
-          showImage(item),
+          item.idBenefit,
+          item.address,
+          item.province,
+          item.canton,
+          item.phone,
+          item.whatsapp,
       ]}
     })
 
     const columns = [
         {
           name: "id",
-          label: "ID Benefit",
+          label: "ID Location",
           options: {
             filter: false,
             sort: true,
@@ -138,8 +159,8 @@ const AdminBenefitsTable = () => {
           }
         },
         {
-            name: "idCategory",
-            label: "ID Category",
+            name: "idBenefit",
+            label: "ID Benefit",
             options: {
              filter: false,
              sort: true,
@@ -148,8 +169,8 @@ const AdminBenefitsTable = () => {
             }
         },
         {
-          name: "name",
-          label: "Name",
+          name: "address",
+          label: "Address",
           options: {
            filter: true,
            sort: true,
@@ -159,10 +180,36 @@ const AdminBenefitsTable = () => {
             fullWidth: window.screen.width <= 1024 ? true : false
            }
           }
-      },
+        },
         {
-          name: "detail",
-          label: "Detail",
+          name: "province",
+          label: "Province",
+          options: {
+           filter: true,
+           sort: true,
+           display: true,
+           //viewColumns: false,
+           filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+           }
+          }
+        },
+        {
+          name: "canton",
+          label: "Canton",
+          options: {
+           filter: true,
+           sort: true,
+           display: true,
+           //viewColumns: false,
+           filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+           }
+          }
+        },
+        {
+          name: "phone",
+          label: "Phone",
           options: {
            filter: true,
            sort: true,
@@ -172,8 +219,8 @@ const AdminBenefitsTable = () => {
           }
         },
         {
-          name: "description",
-          label: "Description",
+          name: "whatsapp",
+          label: "WhatsApp",
           options: {
             filter: true,
             sort: true,
@@ -182,63 +229,6 @@ const AdminBenefitsTable = () => {
             }
           }
         },
-        {
-          name: "link",
-          label: "Link",
-          options: {
-            filter: true,
-            sort: true,
-            filterOptions: { 
-              fullWidth: window.screen.width <= 1024 ? true : false
-            }
-          }
-        },
-        {
-          name: "facebook",
-          label: "Facebook",
-          options: {
-            filter: true,
-            sort: true,
-            filterOptions: { 
-              fullWidth: window.screen.width <= 1024 ? true : false
-            }
-          }
-        },
-        {
-          name: "instagram",
-          label: "Instagram",
-          options: {
-            filter: true,
-            sort: true,
-            filterOptions: { 
-              fullWidth: window.screen.width <= 1024 ? true : false
-            }
-          }
-        },
-        {
-            name: "email",
-            label: "Email",
-            options: {
-              filter: true,
-              sort: true,
-              filterOptions: { 
-                fullWidth: window.screen.width <= 1024 ? true : false
-              }
-            }
-          },
-        {
-            name: "logo",
-            label: " ",
-            options: {
-              download: false,
-              viewColumns: false,
-              filter: false,
-              sort: true,
-              filterOptions: { 
-                fullWidth: window.screen.width <= 1024 ? true : false
-              }
-            }
-          },
     ]
 
     const options = {
@@ -251,7 +241,7 @@ const AdminBenefitsTable = () => {
         return campaignitem[dataIndex][1] != "Attorney";
       },
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar el beneficio "} index={2} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
+        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar la localización "} index={2} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
       ),
       print:false,
       download: false,
@@ -297,7 +287,7 @@ const AdminBenefitsTable = () => {
           titleAria: "Show/Hide Table Columns",
         },
         selectedRows: {
-          text: "Linea(s) seleccionadas",
+          text: "fila seleccionada",
           delete: "Delete",
           deleteAria: "Delete Selected Rows",
         },
@@ -308,14 +298,14 @@ const AdminBenefitsTable = () => {
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={classes.tableMargin + " m-sm-30"}>
-          {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
+          {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Ventas/AdminFormBenefits"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               {/* { isLoading ? <Loading /> :   */}
                       <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                           <MuiThemeProvider theme={getMuiTheme()}>
                             <MUIDataTable  className="w-100"
-                                title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Administración de Beneficios</h4></div>}
+                                title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Localizaciones</h4></div>}
                                 data={builddata}
                                 columns={columns}
                                 options={options}
@@ -325,9 +315,15 @@ const AdminBenefitsTable = () => {
               {/* } */}
             </Grid>
           </Grid>
+          <Dialog fullWidth maxWidth="md" onClose={handleClose} open={shouldOpenNewDialog.open}>
+          <DialogTitle  id="customized-dialog-title" onClose={handleClose}>
+          
+            </DialogTitle>
+          <AgregarDialog type={shouldOpenNewDialog.type} close={handleClose} id={shouldOpenNewDialog.id} idBenefit={shouldOpenNewDialog.idBenefit} />
+          </Dialog>
         </div> 
       : <NotFound/>
   )
 }
 
-export default AdminBenefitsTable
+export default LocationsTable
