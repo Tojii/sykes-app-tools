@@ -1,13 +1,12 @@
-import React, { useState, Component, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
     Button,
     Card,
     Grid,
-    Divider,
     Dialog,
     IconButton,
     CardContent,
-    CardActions
+    CardHeader
 } from "@material-ui/core";
 import MenuItem from '@material-ui/core/MenuItem';
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
@@ -15,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { AddOrder } from "../../../redux/actions/OrderActions";
 import { useSelector, useDispatch } from 'react-redux';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import AgregarDialog from './AgregarArticulo'
@@ -24,11 +23,13 @@ import { useParams } from "react-router";
 import { GetUserPurchased } from "../../../redux/actions/OrderActions";
 import { GetCampaignsById } from "../../../redux/actions/CampaignActions";
 import { GetProvince, GetCantons, GetDistricts } from "../../../redux/actions/LocationActions";
-import Campaigns from "app/views/dashboard/shared/Campaigns";
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 import { updateUserData, setUserData } from "../../../redux/actions/UserActions"
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import history from "history.js";
+import './FormVentas.css';
+import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -85,22 +86,20 @@ const useStyles = makeStyles({
         textAlign: "center"
     },
     card__root: {
-        marginBottom: '5%'
+        marginBottom: '8%',
+        boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19)',
     },
 
-    card__flex: {
-        display: 'flex',
+    card__header: {
+        color: "#fff",
+        backgroundColor: '#3497D3',
     },
-    details: {
-        display: 'flex',
-        flexDirection: 'column',
+
+    card__title:{
+        margin: "10px 10px 0 0",
+        padding: "5px 10px"
     },
-    label__bold: {
-        fontWeight: 'bold'
-    },
-    content: {
-        flex: '1 0 auto',
-    },
+
     action__btn: {
         display: 'flex',
         justifyContent: 'center',
@@ -110,12 +109,16 @@ const useStyles = makeStyles({
     img__container: {
         display: 'flex',
         justifyContent: 'center',
-        margin: 'auto',
+        padding: '5px',
+        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+        borderRadius: '4px',
     },
     img__size: {
-        width: '90%',
+        borderRadius: '4px',
+        width: '80%',
         height: 'auto',
-    }
+        margin: '5px'
+    },
 });
 
 const styles = (theme) => ({
@@ -577,16 +580,16 @@ const FormVentas = () => {
                                 errorMessages={["Este campo es requerido"]}
                             />
                             {/* <TextValidator
-                            className={classes.textvalidator}
-                            label="Fecha compra"
-                            onChange={handleChange}
-                            type="text"
-                            name="fecha"
-                            value={ventasform.fecha}
-                            disabled={true}
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        /> */}
+                                className={classes.textvalidator}
+                                label="Fecha compra"
+                                onChange={handleChange}
+                                type="text"
+                                name="fecha"
+                                value={ventasform.fecha}
+                                disabled={true}
+                                validators={["required"]}
+                                errorMessages={["Este campo es requerido"]}
+                            /> */}
                             <TextValidator
                                 className={classes.textvalidator}
                                 label="Notas"
@@ -609,27 +612,50 @@ const FormVentas = () => {
                                         (!indexlist.includes(item.id) && item.stockQuantity > 0 && (purchases[0] != undefined && purchases[0].items[index] != undefined && (item.maxLimitPerPerson - purchases[0].items[index].totalPurchasedItems) > 0)) ?
                                             <>
                                                 <Card className={classes.card__root}>
-                                                    <div className={classes.card__flex}>
-                                                        <div className={classes.details}>
-                                                            <CardContent className={classes.content}>
-                                                                <label className={classes.label__bold}>Articulo:</label>
-                                                                <br />
-                                                                <span>{item.name}</span>
-                                                                <br />
-                                                                <label className={classes.label__bold}>Cantidad:</label>
-                                                                <br />
-                                                                <span>{item.stockQuantity}</span>
-                                                                <br />
-                                                                <label className={classes.label__bold}>Precio:</label>
-                                                                <br />
-                                                                <span>₡{item.unitPrice}</span>
-                                                            </CardContent>
+                                                    {/* <CardHeader
+                                                        className={classes.card__header}
+                                                        title={item.name}
+                                                    ></CardHeader> */}
+                                                     <Grid className={classes.card__header} container spacing={3}>
+                                                        <Grid item xs={12}>
+                                                            <h5 className={classes.card__title}>{item.name}</h5> 
+                                                        </Grid>
+                                                    </Grid>   
 
-                                                        </div>
-                                                        <div className={classes.img__container}>
-                                                            <img className={classes.img__size} src={item.image} alt={item.name} />
-                                                        </div>
-                                                    </div>
+                                                    <CardContent>
+                                                        <Grid container spacing={1}>
+                                                            <Grid item xs={12}>
+                                                                <div className={classes.img__container}>
+                                                                    <img className={classes.img__size} src={item.image} alt={item.name} />
+                                                                </div>
+                                                            </Grid>
+                                                            <Grid item xs={12}>
+                                                                <Grid item xs container direction="row"
+                                                                    justify="center"
+                                                                    alignItems="center"
+                                                                    spacing={2}>
+                                                                    <Grid item zeroMinWidth xs={6}>
+                                                                        <Typography gutterBottom variant="subtitle1">
+                                                                            Cantidad:
+                                                                        </Typography>
+                                                                        <Typography variant="body2" color="textSecondary" component="p">
+                                                                            {item.stockQuantity}
+                                                                        </Typography>
+
+                                                                    </Grid>
+                                                                    <Grid item zeroMinWidth xs={6}>
+                                                                        <Typography gutterBottom variant="subtitle1">
+                                                                            Precio:
+                                                                    </Typography>
+                                                                        <Typography variant="body2" color="textSecondary" component="p">
+                                                                            ₡{item.unitPrice}
+                                                                        </Typography>
+                                                                    </Grid>
+
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </CardContent>
                                                     <div className={classes.action__btn}>
                                                         <Button
                                                             variant="contained"
@@ -637,9 +663,10 @@ const FormVentas = () => {
                                                             style={{ color: (ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0)) ? "gray" : "white" }}
                                                             disabled={(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0))}
                                                             onClick={() => setShouldOpenDetailsDialog({ open: true, id: item.id, index: index })}
-                                                        >
+                                                            startIcon={<AddIcon/>}
+                                                            >
                                                             Agregar
-                                                        </Button>
+                                                            </Button>
                                                     </div>
                                                 </Card>
                                             </>
@@ -659,49 +686,67 @@ const FormVentas = () => {
                                     return (
                                         <>
                                             <Card className={classes.card__root}>
-                                                <div className={classes.card__flex}>
-                                                    <div className={classes.details}>
-                                                        <CardContent className={classes.content}>
-                                                            <label className={classes.label__bold}>Articulo:</label>
-                                                            <br />
-                                                            <span>{item.name}</span>
-                                                            <br />
-                                                            <label className={classes.label__bold}>Cantidad:</label>
-                                                            <br />
-                                                            <SelectValidator
-                                                                name="buyquantity"
-                                                                value={item.buyquantity}
-                                                                onChange={(e) => handleChangeCantidad(index, e)}
-                                                                validators={["required"]}
-                                                                errorMessages={["Este campo es requerido"]}
-                                                            >
-                                                                { //console.log("cant carrito", item.limiteActual),
-                                                                    cantidad.map(cantidaditem => (
-                                                                        (cantidaditem <= item.maxLimitPerPerson && cantidaditem <= item.stockQuantity && cantidaditem <= item.limiteActual) ?
-                                                                            <MenuItem key={`cantidad-${cantidaditem}`} value={cantidaditem ? cantidaditem : ""}>
-                                                                                {cantidaditem || " "}
-                                                                            </MenuItem> : null
-                                                                    ))}
-                                                            </SelectValidator>
-                                                            <br />
-                                                            <label className={classes.label__bold}>Precio:</label>
-                                                            <br />
-                                                            ₡{item.subtotal}
-                                                        </CardContent>
-                                                    </div>
-                                                    <div className={classes.img__container}>
-                                                            <img className={classes.img__size} src={item.image} alt={item.name} />
-                                                    </div>
-                                                </div>
+                                                <CardHeader
+                                                    className={classes.card__header}
+                                                    title={item.name}
+                                                />
+                                                <CardContent>
+                                                    <Grid container spacing={3}>
+                                                        <Grid item xs={12}>
+                                                            <div className={classes.img__container}>
+                                                                <img className={classes.img__size} src={item.image} alt={item.name} />
+                                                            </div>
+                                                        </Grid>
+                                                        <Grid item xs={12}>
+                                                            <Grid item xs container direction="row"
+                                                                justify="center"
+                                                                a lignItems="center"
+                                                                spacing={2}>
+                                                                <Grid item zeroMinWidth xs={6}>
+                                                                    <Typography gutterBottom variant="subtitle1">
+                                                                        Cantidad:
+                                                                        </Typography>
+                                                                    <SelectValidator
+                                                                        name="buyquantity"
+                                                                        value={item.buyquantity}
+                                                                        onChange={(e) => handleChangeCantidad(index, e)}
+                                                                        validators={["required"]}
+                                                                        errorMessages={["Este campo es requerido"]}
+                                                                    >
+                                                                        { //console.log("cant carrito", item.limiteActual),
+                                                                            cantidad.map(cantidaditem => (
+                                                                                (cantidaditem <= item.maxLimitPerPerson && cantidaditem <= item.stockQuantity && cantidaditem <= item.limiteActual) ?
+                                                                                    <MenuItem key={`cantidad-${cantidaditem}`} value={cantidaditem ? cantidaditem : ""}>
+                                                                                        {cantidaditem || " "}
+                                                                                    </MenuItem> : null
+                                                                            ))}
+                                                                    </SelectValidator>
+
+                                                                </Grid>
+                                                                <Grid item zeroMinWidth xs={6}>
+                                                                    <Typography gutterBottom variant="subtitle1">
+                                                                        Precio:
+                                                                    </Typography>
+                                                                    <Typography variant="body2" color="textSecondary" component="p">
+                                                                        ₡{item.subtotal}
+                                                                    </Typography>
+                                                                </Grid>
+
+                                                            </Grid>
+                                                        </Grid>
+                                                    </Grid>
+                                                </CardContent>
                                                 <div className={classes.action__btn}>
                                                     <Button
                                                         variant="contained"
                                                         className="bg-error"
                                                         onClick={() => handleSingleRemove(index)}
+                                                        startIcon={<DeleteIcon />}
                                                     >
                                                         Eliminar
-                                                    </Button>
+                                                        </Button>
                                                 </div>
+
                                             </Card>
                                         </>
                                     );
@@ -736,10 +781,10 @@ const FormVentas = () => {
                             <div className={classes.sectionbutton}>
                                 <Button style={{ margin: "1%", width: "105.92px" }} variant="contained" color="primary" type="submit">
                                     ENVIAR
-                            </Button>
+                                </Button>
                                 <Button style={{ margin: "1%" }} variant="contained" onClick={handleBack} color="default">
                                     CANCELAR
-                            </Button>
+                                </Button>
                             </div>
                         </>
                     }
@@ -747,7 +792,7 @@ const FormVentas = () => {
                 <Dialog fullWidth maxWidth="md" onClose={handleClose} open={shouldOpenDetailsDialog.open}>
                     <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                         Detalles del artículo:
-                 </DialogTitle>
+                    </DialogTitle>
                     <AgregarDialog type={"agregar"} close={handleClose} purchases={purchases} ventas={ventasform} setventas={setVentasForm} indexlist={indexlist} setIndex={setIndexlist} carrito={carrito} setCarrito={setCarrito} order={[{}]} setDisponibles={setDisponibles} id={shouldOpenDetailsDialog.id} index={shouldOpenDetailsDialog.index} />
                 </Dialog>
             </Card>

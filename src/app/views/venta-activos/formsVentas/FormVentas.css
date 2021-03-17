@@ -1,0 +1,7 @@
+.MuiCardHeader-title {
+    font-size: 1.0rem;
+    color: #fff;
+    display:block;
+    width:48%;
+    word-wrap:break-word;
+}
