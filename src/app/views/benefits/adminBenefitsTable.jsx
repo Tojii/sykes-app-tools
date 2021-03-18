@@ -19,6 +19,7 @@ import NotFound from "../sessions/NotFound"
 import { makeStyles } from '@material-ui/core/styles';
 import { GetCampaignItemsById, DeleteCampaignItem, GetCampaignsItems } from "../../redux/actions/CampaignActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
+import Details from "@material-ui/icons/Details";
 
 const useStyles = makeStyles({
   sectionbutton: {
@@ -92,7 +93,31 @@ const AdminBenefitsTable = () => {
                 color="primary"
                 startIcon={<AddIcon />}
               >
-                Nuevo
+                New
+              </Button>
+            </Tooltip>
+          </React.Fragment>
+      );
+    }
+
+    const handleDetalle = (item) => {    
+      history.push({
+        pathname: `/Benefits/AdminFormBenefitsDetails/${item.id}`,
+        prev: history.location.pathname
+      });
+    };
+  
+    const detallesButton = (item) => {
+      return (
+          <React.Fragment>
+            <Tooltip title={"Detalles"}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleDetalle(item)}
+                startIcon={<Details />}
+              >
+                Details
               </Button>
             </Tooltip>
           </React.Fragment>
@@ -123,6 +148,7 @@ const AdminBenefitsTable = () => {
           item.instagram,
           item.email,
           showImage(item),
+          detallesButton(item)
       ]}
     })
 
@@ -238,7 +264,17 @@ const AdminBenefitsTable = () => {
                 fullWidth: window.screen.width <= 1024 ? true : false
               }
             }
-          },
+        },
+        {
+          name: "detalles",
+          label: " ",
+          options: {
+            filter: false,
+            sort: true,
+            viewColumns: false,
+            download: false
+          }
+        },
     ]
 
     const options = {
@@ -269,39 +305,7 @@ const AdminBenefitsTable = () => {
         );
       },
       customSort: (data, colIndex, order) => { return data.sort((a, b) => { if (colIndex === 5 || colIndex === 6) { return (new Date(a.data[colIndex]) < new Date(b.data[colIndex]) ? -1: 1 ) * (order === 'desc' ? 1 : -1); } else { return (a.data[colIndex] < b.data[colIndex] ? -1: 1 ) * (order === 'desc' ? 1 : -1); } }); },
-      textLabels: {
-        body: {
-          noMatch: "Lo sentimos, no se encontraron registros",
-          toolTip: "Sort",
-          columnHeaderTooltip: column => `Ordenar por ${column.label}`
-        },
-        pagination: {
-          next: "Siguiente",
-          previous: "Regresar",
-          rowsPerPage: "Filas por página:",
-          displayRows: "de",
-        },
-        toolbar: {
-          search: "Buscar",
-          downloadCsv: "Descargar CSV",
-          viewColumns: "Ver Columnas",
-          filterTable: "Filtrar tabla",
-        },
-        filter: {
-          all: "Todas",
-          title: "Filtradas",
-          reset: "Eliminar filtros",
-        },
-        viewColumns: {
-          title: "Mostrar Columnas",
-          titleAria: "Show/Hide Table Columns",
-        },
-        selectedRows: {
-          text: "Linea(s) seleccionadas",
-          delete: "Delete",
-          deleteAria: "Delete Selected Rows",
-        },
-      }
+      
   }
 
   return (
@@ -315,7 +319,7 @@ const AdminBenefitsTable = () => {
                       <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                           <MuiThemeProvider theme={getMuiTheme()}>
                             <MUIDataTable  className="w-100"
-                                title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Administración de Beneficios</h4></div>}
+                                title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Benefits Administration</h4></div>}
                                 data={builddata}
                                 columns={columns}
                                 options={options}

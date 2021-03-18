@@ -233,7 +233,8 @@ const LocationsTable = (props) => {
 
     const options = {
       selectableRowsHeader: false,
-      selectableRowsOnClick: true,
+      selectableRowsOnClick: props.type != "detail" ? true : false,
+      selectableRowsHideCheckboxes: props.type == "detail" ? true : false,
       isRowSelectable: (dataIndex, selectedRows) => {
         //prevents selection of any additional row after the third
         if (selectedRows.data.length > 0 && selectedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
@@ -297,7 +298,7 @@ const LocationsTable = (props) => {
   return (
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
-        <div className={classes.tableMargin + " m-sm-30"}>
+        <div className={props.type != "detail" ? classes.tableMargin + " m-sm-30" : "m-sm-30"}>
           {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Ventas/AdminFormBenefits"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
@@ -305,7 +306,7 @@ const LocationsTable = (props) => {
                       <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                           <MuiThemeProvider theme={getMuiTheme()}>
                             <MUIDataTable  className="w-100"
-                                title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Localizaciones</h4></div>}
+                                title={<div style={{display: "inline-flex"}}>{props.type != "detail" ? addButton() : null} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Localizaciones</h4></div>}
                                 data={builddata}
                                 columns={columns}
                                 options={options}

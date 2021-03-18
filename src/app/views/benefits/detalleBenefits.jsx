@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import {
     Button,
@@ -13,15 +13,16 @@ import {
     GetImages
 } from "../../redux/actions/CommonActions";
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import ReactDOM from 'react-dom';
 
   const cn = (...args) => args.filter(Boolean).join(' ')
 
-  const Tab = ({ children }) => {
+  const Tab = ({ children, scroll }) => {
     const { isActive, onClick } = useTabState()
     const classes = useStyles();
   
     return (
-      <button className={cn(classes.tab, isActive && classes.tabActive)} onClick={onClick}>
+      <button className={cn(classes.tab)} onClick={() => {console.log("click!", isActive, onClick); scroll() } }>
         {children}
       </button>
     )
@@ -132,6 +133,13 @@ const DetalleBenefits = (props) => {
     const classes = useStyles();
     const images = useSelector(state => state.common.images);
     const dispatch = useDispatch();
+    const descriptionRef = useRef(null);
+    const benefiRef = useRef(null);
+    const ubicationRef = useRef(null);
+
+    const executeScrollDescription = () => descriptionRef.current.scrollIntoView()   
+    const executeScrollBenefit = () => benefiRef.current.scrollIntoView()   
+    const executeScrollUbication = () => ubicationRef.current.scrollIntoView()    
     // const user = useSelector(state => state.user);
     //const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     //console.log("user",user)
@@ -144,6 +152,7 @@ const DetalleBenefits = (props) => {
 
     return (
         <>
+            
             <div className={classes.margindiv}>
                 <h1 style={{ color: "limegreen", marginTop: "2%", fontWeight: "bold"}} className="mb-20">RESTAURANTS</h1>
                 <h5> All Sykes employees can take advantage of these exclusive agreements. </h5>
@@ -152,13 +161,13 @@ const DetalleBenefits = (props) => {
                     <Tabs style={{marginLeft: "2%", marginTop: "2%",}}>
                         <div className={classes.tabs}>
                         <div className={classes.tabList} >
-                            <Tab>DESCRIPCIÓN</Tab>
+                            <Tab scroll={executeScrollDescription}>DESCRIPCIÓN</Tab>
 
-                            <Tab>BENEFICIO</Tab>
+                            <Tab scroll={executeScrollBenefit}>BENEFICIO</Tab>
 
-                            <Tab>UBICACIÓN</Tab>
+                            <Tab scroll={executeScrollUbication}>UBICACIÓN</Tab>
                         </div>
-                        <Panel >
+                        <Panel>
                             <div style={{backgroundColor: "lightgray"}}>
                                 <Grid container spacing={2} direction="row">
                                     <Grid className={classes.gridtext} item lg={7} md={7} sm={7} xs={12}>
@@ -167,7 +176,7 @@ const DetalleBenefits = (props) => {
                                                 <Grid item xs={12} sm container>
                                                     <Grid item xs container direction="column" spacing={2}>
                                                         <Grid item xs>
-                                                            <Typography className={classes.lineTypo} style={{marginLeft: "2%"}} gutterBottom variant="subtitle1">
+                                                            <Typography ref={descriptionRef} className={classes.lineTypo} style={{marginLeft: "2%"}} gutterBottom variant="subtitle1">
                                                                 DESCRIPCIÓN
                                                             </Typography>
                                                             <Typography style={{marginLeft: "3%", textAlign: "justify",}} variant="body2" gutterBottom>
@@ -177,6 +186,56 @@ const DetalleBenefits = (props) => {
                                                                 esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt 
                                                                 in culpa qui officia deserunt mollit anim id est laborum.
                                                             </Typography>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        </Paper>
+                                        <Paper className={classes.paper}>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={12} sm container>
+                                                    <Grid item xs container direction="column" spacing={2}>
+                                                        <Grid item xs>
+                                                            <Typography ref={benefiRef} className={classes.lineTypo} style={{marginLeft: "2%"}} gutterBottom variant="subtitle1">
+                                                                BENEFICIO
+                                                            </Typography>
+                                                            <Typography style={{width:"75%", marginLeft: "3%", textAlign: "justify", display:"inline-block", verticalAlign: "top"}} variant="body2" gutterBottom>
+                                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
+                                                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+                                                                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit 
+                                                                esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt 
+                                                                in culpa qui officia deserunt mollit anim id est laborum.
+                                                            </Typography>
+                                                            <img
+                                                                style={{marginLeft: "3%", maxWidth: "100px"}}
+                                                                alt="..."
+                                                                src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
+                                                            />
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        </Paper>
+                                        <Paper className={classes.paper}>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={12} sm container>
+                                                    <Grid item xs container direction="row" spacing={2}>
+                                                        <Grid item xs>
+                                                            <Typography ref={ubicationRef} style={{marginLeft: "2%"}} gutterBottom variant="subtitle1">
+                                                                UBICACIÓN
+                                                            </Typography>
+                                                            <div>
+                                                            {/* <Map
+                                                                google={props.google}
+                                                                zoom={8}
+                                                                style={mapStyles}
+                                                                initialCenter={{ lat: 47.444, lng: -122.176}}
+                                                                >
+                                                                <Marker position={{ lat: 48.00, lng: -122.00}} />
+                                                                <Marker position={{ lat: 46.00, lng: -117.00}} />
+                                                                </Map> */}
+                                                            </div>
+                                                        
                                                         </Grid>
                                                     </Grid>
                                                 </Grid>
@@ -312,61 +371,6 @@ const DetalleBenefits = (props) => {
                                     </Grid>
                                 </Grid>
                             </div>
-                        </Panel>
-                        <Panel>
-                            <div style={{backgroundColor: "lightgray"}}>
-                                <Paper className={classes.paper}>
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} sm container>
-                                            <Grid item xs container direction="column" spacing={2}>
-                                                <Grid item xs>
-                                                    <Typography className={classes.lineTypo} style={{marginLeft: "2%"}} gutterBottom variant="subtitle1">
-                                                        BENEFICIO
-                                                    </Typography>
-                                                    <Typography style={{width:"75%", marginLeft: "3%", textAlign: "justify", display:"inline-block", verticalAlign: "top"}} variant="body2" gutterBottom>
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
-                                                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-                                                        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit 
-                                                        esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt 
-                                                        in culpa qui officia deserunt mollit anim id est laborum.
-                                                    </Typography>
-                                                    <img
-                                                        style={{marginLeft: "3%", maxWidth: "100px"}}
-                                                        alt="..."
-                                                        src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
-                                                    />
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            </div>
-                        </Panel>
-                        <Panel>
-                            <Paper className={classes.paper}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm container>
-                                        <Grid item xs container direction="row" spacing={2}>
-                                            <Grid item xs>
-                                                <Typography style={{marginLeft: "2%"}} gutterBottom variant="subtitle1">
-                                                    UBICACIÓN
-                                                </Typography>
-                                                <div>
-                                                <Map
-                                                    google={props.google}
-                                                    zoom={8}
-                                                    style={mapStyles}
-                                                    initialCenter={{ lat: 47.444, lng: -122.176}}
-                                                    >
-                                                    <Marker position={{ lat: 48.00, lng: -122.00}} />
-                                                    </Map>
-                                                </div>
-                                            
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </Paper>
                         </Panel>
                         </div>
                     </Tabs>
