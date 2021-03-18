@@ -17,7 +17,8 @@ import history from "history.js";
 import CustomFooter from '../muidatatable/CustomFooter';
 import NotFound from "../sessions/NotFound"
 import { makeStyles } from '@material-ui/core/styles';
-import { GetCampaignItemsById, DeleteCampaignItem, GetCampaignsItems } from "../../redux/actions/CampaignActions";
+import { GetCampaignItemsById, DeleteCampaignItem, GetCampaignsItems, DeleteCampaign } from "../../redux/actions/CampaignActions";
+import { GetBenefitsById, DeleteBenefit, GetBenefits } from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import Details from "@material-ui/icons/Details";
 import Chip from '@material-ui/core/Chip';
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
         marginLeft: "0%" 
       },
       "@media (min-width: 1024px)": {
-        maxWidth: "300px",
+        maxWidth: "150px",
       }
   },
   tableMargin: {     
@@ -48,6 +49,8 @@ const AdminBenefitsTable = () => {
     const classes = useStyles();
     const user = useSelector(state => state.user);
     const image = null;
+    const benefits = useSelector(state => state.benefit.benefits);
+
     const campaignitem = [
         {id: "3",
         idCategory: "3",
@@ -63,14 +66,14 @@ const AdminBenefitsTable = () => {
         locations:[{province: "Alajuela", canton: "cantonAlajuela"},{province: "Cartago", canton: "cantonSanJose"}], 
       }
     ];
-    const successCampaignItems = useSelector(state => state.campaign.success);
-    const isLoading  = useSelector(state => state.campaign.loading);
+    const successBenefit = useSelector(state => state.benefit.success);
+    const isLoading  = useSelector(state => state.benefit.loading);
     const [open, setOpen] = useState(false);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     
 
     useEffect(() => {
-      //dispatch(GetCampaignsItems());
+      dispatch(GetBenefits());
     }, []);
 
     const getMuiTheme = () =>
@@ -78,7 +81,7 @@ const AdminBenefitsTable = () => {
     });
 
     const handleDelete = async (id) => {
-      await dispatch(DeleteCampaignItem(id));
+      await dispatch(DeleteBenefit(id));
       setOpen(true);
     };
 
@@ -106,7 +109,7 @@ const AdminBenefitsTable = () => {
 
     const handleDetalle = (item) => {    
       history.push({
-        pathname: `/Benefits/AdminFormBenefitsDetails/${item.id}`,
+        pathname: `/Benefits/AdminFormBenefitsDetails/${item.idBenefit}`,
         prev: history.location.pathname
       });
     };
@@ -139,11 +142,11 @@ const AdminBenefitsTable = () => {
       );
     }
 
-    const builddata = campaignitem.map(item => {
+    const builddata = benefits.map(item => {
       if (item != undefined) {
       return [
-          item.id,
-          item.idCategory,
+          item.idBenefit,
+          item.category.idCategory,
           item.name,
           item.detail,
           item.description,
@@ -151,11 +154,12 @@ const AdminBenefitsTable = () => {
           item.facebook,
           item.instagram,
           item.email,
-          item.isActive ? ["Active"] : ["Inactive"],
+          item.active ? ["Active"] : ["Inactive"],
+          ["Alajuela","San José"],
+          ["Alajuela","San José"],
+          // item.locations.map(item2 => {return item2.province }),
+          // item.locations.map(item2 => {return item2.canton }),
           showImage(item),
-          //["Alajuela","San José"],
-          item.locations.map(item2 => {return item2.province }),
-          item.locations.map(item2 => {return item2.canton }),
           detallesButton(item)
       ]}
     })
@@ -232,6 +236,7 @@ const AdminBenefitsTable = () => {
           label: "Facebook",
           options: {
             filter: true,
+            display: false,
             sort: true,
             filterOptions: { 
               fullWidth: window.screen.width <= 1024 ? true : false
@@ -243,6 +248,7 @@ const AdminBenefitsTable = () => {
           label: "Instagram",
           options: {
             filter: true,
+            display: false,
             sort: true,
             filterOptions: { 
               fullWidth: window.screen.width <= 1024 ? true : false
@@ -254,6 +260,7 @@ const AdminBenefitsTable = () => {
             label: "Email",
             options: {
               filter: true,
+              display: false,
               sort: true,
               filterOptions: { 
                 fullWidth: window.screen.width <= 1024 ? true : false
@@ -274,25 +281,12 @@ const AdminBenefitsTable = () => {
           }
         },  
         {
-            name: "logo",
-            label: " ",
-            options: {
-              download: false,
-              viewColumns: false,
-              filter: false,
-              sort: true,
-              filterOptions: { 
-                fullWidth: window.screen.width <= 1024 ? true : false
-              }
-            }
-        },
-        {
           name: "Provinces",
           options: {
             filter: true,
             //filterType: 'multiselect',
             customBodyRenderLite: (dataIndex) => {
-              let value = builddata[dataIndex][11];
+              let value = builddata[dataIndex][10];
               return value.map((val, key) => {
                 return <Chip style={{backgroundColor: "#039be5", margin: "1%", color: "white"}} label={val} key={key} />;
               });
@@ -305,11 +299,24 @@ const AdminBenefitsTable = () => {
             filter: true,
             //filterType: 'multiselect',
             customBodyRenderLite: (dataIndex) => {
-              let value = builddata[dataIndex][12];
+              let value = builddata[dataIndex][11];
               return value.map((val, key) => {
                 return <Chip style={{backgroundColor: "#039be5", margin: "1%", color: "white"}} label={val} key={key} />;
               });
             },
+          }
+        },
+        {
+          name: "logo",
+          label: "Logo",
+          options: {
+            download: false,
+            viewColumns: false,
+            filter: false,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
           }
         },
         {
@@ -331,7 +338,7 @@ const AdminBenefitsTable = () => {
         //prevents selection of any additional row after the third
         if (selectedRows.data.length > 0 && selectedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
         //prevents selection of row with title "Attorney"
-        return campaignitem[dataIndex][1] != "Attorney";
+        return benefits[dataIndex][1] != "Attorney";
       },
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
         <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar el beneficio "} index={2} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
@@ -359,8 +366,8 @@ const AdminBenefitsTable = () => {
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={classes.tableMargin + " m-sm-30"}>
-          {console.log(builddata)}
-          {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
+          {console.log(benefits)}
+          {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               {/* { isLoading ? <Loading /> :   */}

@@ -20,6 +20,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 //import AgregarDialog from './AgregarArticulo'
 import { GetOrderById } from "../../redux/actions/OrderActions";
+import { GetBenefitsById } from "../../redux/actions/BenefitsActions";
 import history from "history.js";
 import { useParams } from "react-router";
 import moment from "moment";
@@ -68,10 +69,10 @@ const styles = (theme) => ({
     },
 });
 
-const CompraDetalle = (props) => {
+const AdminBenefitDetalle = (props) => {
     
-    const order = useSelector(state => state.order.order);
-    const isLoading  = useSelector(state => state.order.loading);
+    const benefit = useSelector(state => state.benefit.benefit);
+    const isLoading  = useSelector(state => state.benefit.loading);
     const dispatch = useDispatch();
     const classes = useStyles();
     let { id } = useParams();
@@ -84,7 +85,7 @@ const CompraDetalle = (props) => {
     );
 
     useEffect(() => {
-        dispatch(GetOrderById(id));
+        dispatch(GetBenefitsById(id));
     }, []);
 
     const handleClose = () => {
@@ -106,37 +107,37 @@ const CompraDetalle = (props) => {
                                 <TableBody>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Name:</h6></TableCell>
-                                        {/* <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].badge }</TableCell> */}
+                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].name }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Detail:</h6></TableCell>
-                                        {/* <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].name }</TableCell> */}
+                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].detail }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Description:</h6></TableCell>
-                                        {/* <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].email }</TableCell> */}
+                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].description }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Link:</h6> </TableCell>
-                                        {/* <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].phone }</TableCell> */}
+                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].link }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Facebook:</h6> </TableCell>
-                                        {/* <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].province }</TableCell> */}
+                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].facebook }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Instagram:</h6> </TableCell>
-                                        {/* <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].canton }</TableCell> */}
+                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].instagram }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Email:</h6> </TableCell>
-                                        {/* <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].district }</TableCell> */}
+                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].email }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"100%"} className={classes.cellspace + " pl-sm-24"}>
-                                            <LocationsTable type={"detail"} />
+                                            <h6>Localizaciones:</h6>
                                         </TableCell>
-                                        {/* <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].address }</TableCell> */}
+                                        <TableCell className="px-sm-24"><LocationsTable type={"detail"} /></TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -247,4 +248,4 @@ const CompraDetalle = (props) => {
     );
 }
 
-export default CompraDetalle
+export default AdminBenefitDetalle

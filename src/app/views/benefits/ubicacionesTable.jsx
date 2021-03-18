@@ -21,6 +21,7 @@ import CustomFooter from '../muidatatable/CustomFooter';
 import NotFound from "../sessions/NotFound"
 import { makeStyles } from '@material-ui/core/styles';
 import { GetCampaignItemsById, DeleteCampaignItem, GetCampaignsItems } from "../../redux/actions/CampaignActions";
+import { GetBenefitsLocations } from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import AgregarDialog from "./FormLocations"
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -79,6 +80,7 @@ const LocationsTable = (props) => {
     const classes = useStyles();
     const user = useSelector(state => state.user);
     const image = null;
+    //const benefitslocations = useSelector(state => state.benefit.benefitslocations);
     const campaignitem = [
         {id: "3",
         idBenefit: "3",
@@ -96,7 +98,8 @@ const LocationsTable = (props) => {
     const [shouldOpenNewDialog, setShouldOpenNewDialog] = useState({ open: false, type: "new" });
 
     useEffect(() => {
-      //dispatch(GetCampaignsItems());
+      //dispatch(GetBenefitsLocations());
+      console.log("effect")
     }, []);
 
     const getMuiTheme = () =>
@@ -109,6 +112,7 @@ const LocationsTable = (props) => {
     };
 
     const handleEdit= (id) => {
+      console.log(id)
       setShouldOpenNewDialog({ open: true, type: "edit", id: id, idBenefit: props.idBenefit })
       
     };
@@ -134,16 +138,16 @@ const LocationsTable = (props) => {
       );
     }
 
-    const builddata = campaignitem.map(item => {
+    const builddata = props.benefitslocations.map(item => {
       if (item != undefined) {
       return [
-          item.id,
-          item.idBenefit,
+          item.idLocation,
+          item.benefit.idBenefit,
           item.address,
-          item.province,
+          item.provincia,
           item.canton,
           item.phone,
-          item.whatsapp,
+          item.whatsApp,
       ]}
     })
 
@@ -239,7 +243,7 @@ const LocationsTable = (props) => {
         //prevents selection of any additional row after the third
         if (selectedRows.data.length > 0 && selectedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
         //prevents selection of row with title "Attorney"
-        return campaignitem[dataIndex][1] != "Attorney";
+        return props.benefitslocations[dataIndex][1] != "Attorney";
       },
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
         <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar la localización "} index={2} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
@@ -296,10 +300,11 @@ const LocationsTable = (props) => {
   }
 
   return (
-    (isLoading || user.badge == undefined) ? <Loading /> :
+    (false || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={props.type != "detail" ? classes.tableMargin + " m-sm-30" : "m-sm-30"}>
-          {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Ventas/AdminFormBenefits"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
+          {console.log(props.benefitslocations)}
+          {(false) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/AdminFormBenefits"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               {/* { isLoading ? <Loading /> :   */}

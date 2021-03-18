@@ -15,6 +15,7 @@ import RefoundsReducer from "./RefoundReducer";
 import CommonReducer from "./CommonReducer";
 import { persistStore } from 'redux-persist'
 import CampaignReducer from "./CampaignReducer";
+import BenefitReducer from "./BenefitsReducer";
 import OrderReducer from "./OrderReducer";
 import LocationReducer from "./LocationReducer";
 
@@ -30,6 +31,7 @@ const RootReducer = combineReducers({
   refound: RefoundsReducer,
   common: CommonReducer,
   campaign: CampaignReducer,
+  benefit: BenefitReducer,
   order: OrderReducer,
   locations: LocationReducer,
   growth: GrowthReducer,

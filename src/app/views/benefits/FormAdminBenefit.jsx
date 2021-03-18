@@ -13,10 +13,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
 import { GetCampaignItemsById, UpdateCampaignItems, AddCampaignItems, GetCampaigns, GetCampaignsActive, GetCampaignsItems } from "../../redux/actions/CampaignActions";
+import { GetBenefitsById, UpdateBenefit, AddBenefit, GetBenefits, GetBenefitsActive, GetBenefitsCategory, GetBenefitsLocations } from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import history from "history.js";
 import LocationsTable from "./ubicacionesTable";
+import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -85,18 +87,21 @@ const FormAdminBenefits = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
     let { id } = useParams();
-    const campaignitem = useSelector(state => state.campaign.campaignitem);
-    const campaigns = useSelector(state => state.campaign.campaigns);
-    const addCampaignItems = useSelector(state => state.campaign.addCampaignItems);
-    const successCampaignItems = useSelector(state => state.campaign.success);
-    const isLoading  = useSelector(state => state.campaign.loading);
+    const benefit = useSelector(state => state.benefit.benefit);
+    const benefitscategories = useSelector(state => state.benefit.benefitscategories);
+    const benefitslocations = useSelector(state => state.benefit.benefitslocations);
+    const addCampaignItems = useSelector(state => state.campaign.addBenefit);
+    const successBenefit = useSelector(state => state.benefit.success);
+    const isLoading  = useSelector(state => state.benefit.loading);
     const [open, setOpen] = useState(false);
     const [files, setFiles] = useState(null);
     const [logo, setLogo] = useState(null);
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
     
     const [benefitsform, setBenefitsForm] = useState({
-        idcampaign: "",
+        idBenefit: "",
+        idCategory: "",
+        benefitInfo: "",
         name: "",
         description: "",
         logo: null,
@@ -105,15 +110,15 @@ const FormAdminBenefits = () => {
         facebook: "",
         instagram: "",
         email: "",
-        isActive: false
+        active: false
     });
 
     const handleFormSubmit = async () => {
         if (((id && benefitsform.logo != null))) {
-            await dispatch(UpdateCampaignItems(id, benefitsform));
+            await dispatch(UpdateBenefit(id, benefitsform, files));
             setOpen(true);
         } else if ((benefitsform.logo != null)) {
-            await dispatch(AddCampaignItems(benefitsform.idcampaign,benefitsform));
+            await dispatch(AddBenefit(benefitsform, files));
             setOpen(true);
         }
     };
@@ -129,32 +134,34 @@ const FormAdminBenefits = () => {
     }
 
     useEffect(() => {
-        // dispatch(GetCampaigns());
-        // if (id) {
-        //     dispatch(GetCampaignItemsById(id));
-        // } 
+        dispatch(GetBenefitsCategory());
+        dispatch(GetBenefitsLocations());
+        if (id) {
+            dispatch(GetBenefitsById(id));
+        } 
     }, []);
 
     useEffect(() => {
-        // if(id && campaignitem != [] && campaignitem[0] != [""] && campaignitem[0] != undefined) {setBenefitsForm({
-        //     idcampaign: campaignitem[0].campaign.id,
-        //     name: campaignitem[0].name,
-        //     description: campaignitem[0].description ? campaignitem[0].description : "",
-        //     logo: campaignitem[0].logo,
-        //     quantity: campaignitem[0].quantity != undefined ? campaignitem[0].quantity.toString() : null,
-        //     stockQuantity: campaignitem[0].stockQuantity != undefined ? campaignitem[0].stockQuantity.toString() : null,
-        //     unitPrice: campaignitem[0].unitPrice != undefined ? campaignitem[0].unitPrice.toString() : null,
-        //     maxLimitPerPerson: campaignitem[0].maxLimitPerPerson != undefined ? campaignitem[0].maxLimitPerPerson.toString() : "0",
-        //     files: null
-        // });}
-
-
-    }, [campaignitem]);
+        if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined) {setBenefitsForm({
+            idBenefit: benefit[0].idBenefit,
+            idCategory: benefit[0].category.idCategory,
+            name: benefit[0].name,
+            description: benefit[0].description ? benefit[0].description : "",
+            logo: benefit[0].logo,
+            detail: benefit[0].detail,
+            benefitInfo: benefit[0].benefitInfo,
+            link: benefit[0].link,
+            facebook: benefit[0].facebook ? benefit[0].facebook : "",
+            instagram: benefit[0].instagram ? benefit[0].instagram : "",
+            email: benefit[0].email ? benefit[0].email : "",
+            active: benefit[0].active,
+        });}
+    }, [benefit]);
 
 
     const handleChange = (event) => {
         const name = event.target.name;
-        if (name == "isActive") {
+        if (name == "active") {
             setBenefitsForm({
                 ...benefitsform,
                 [name]: event.target.checked,
@@ -212,12 +219,29 @@ const FormAdminBenefits = () => {
 
     return (
         <div className={classes.margindiv + " p-24"}>
-             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminForm"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {console.log(benefitsform)}
+             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Beneficio" : "Agregar Beneficio"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
                     {(isLoading) ? <Loading/> :
-                    <>               
+                    <>  
+                        <SelectValidator 
+                            label="Categoría*" 
+                            name="idCategory"
+                            className={classes.textvalidator} 
+                            value={benefitsform.idCategory} 
+                            onChange={handleChange} 
+                            validators={["required"]}
+                            //disabled={id != undefined}
+                            errorMessages={["Este campo es requerido"]}
+                        >
+                            {benefitscategories.map(category => (
+                                <MenuItem key={`category-${category.idCategory}`} id={category.idCategory} value={category.idCategory ? category.idCategory : ""}>
+                                {category.name || " "}
+                                </MenuItem> 
+                            ))}
+                        </SelectValidator>           
                         <TextValidator
                             className={classes.textvalidator}
                             label="Name*"
@@ -245,6 +269,16 @@ const FormAdminBenefits = () => {
                             type="text"
                             name="description"
                             value={benefitsform.description}
+                            validators={["required"]}
+                            errorMessages={["Este campo es requerido"]}
+                        />
+                        <TextValidator
+                            className={classes.textvalidator}
+                            label="Benefit Information*"
+                            onChange={handleChange}
+                            type="text"
+                            name="benefitInfo"
+                            value={benefitsform.benefitInfo}
                             validators={["required"]}
                             errorMessages={["Este campo es requerido"]}
                         />
@@ -295,8 +329,8 @@ const FormAdminBenefits = () => {
                             label="Active Benefit"
                             control={
                                 <Switch
-                                checked={benefitsform.isActive}
-                                name="isActive"
+                                checked={benefitsform.active}
+                                name="active"
                                 color="primary"
                                 onChange={handleChange}
                                 />
@@ -318,7 +352,7 @@ const FormAdminBenefits = () => {
                                 : null
                             }
                         </div>
-                        {id ? <LocationsTable idBenefit={id} /> : null}
+                        {id ? <LocationsTable benefitslocations={benefitslocations} idBenefit={id} /> : null}
                         <div className={classes.sectionbutton}>
                             <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
                                 ENVIAR  

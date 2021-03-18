@@ -36,19 +36,7 @@ export const GetCampaignsActive = () => {
           });
         //console.log("imagenes",res.data)
       })
-      .catch((error) => {
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        if (error.response) {
-            console.log(error.response.data);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
-        }
-        console.log(error.config);
-      }); 
+      .catch(globalErrorHandler);
     };
   };
 
@@ -70,27 +58,7 @@ export const GetCampaignsActive = () => {
 
         //console.log("imagenes",res.data)
       })
-      .catch((error) => {
-        // Error
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log(error.response.data);
-        } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the 
-            // browser and an instance of
-            // http.ClientRequest in node.js
-            console.log(error.request);
-        } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
-        }
-        console.log(error.config);
-      }); 
+      .catch(globalErrorHandler);
     };
   };
 
@@ -112,19 +80,7 @@ export const GetCampaignsActive = () => {
           });
         //console.log("imagenes",res.data)
       })
-      .catch((error) => {
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        if (error.response) {
-            console.log(error.response.data);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
-        }
-        console.log(error.config);
-      }); 
+      .catch(globalErrorHandler);
     };
   };
 
@@ -142,19 +98,7 @@ export const GetCampaignsActive = () => {
 
         //console.log("imagenesby",res.data)
       })
-      .catch((error) => {
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        if (error.response) {
-            console.log(error.response.data);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
-        }
-        console.log(error.config);
-      }); 
+      .catch(globalErrorHandler);
     };
   };
 
@@ -172,19 +116,7 @@ export const GetCampaignsActive = () => {
 
         //console.log("imagenesby",res.data)
       })
-      .catch((error) => {
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        if (error.response) {
-            console.log(error.response.data);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
-        }
-        console.log(error.config);
-      }); 
+      .catch(globalErrorHandler);
     };
   };
 
@@ -209,22 +141,7 @@ export const GetCampaignsActive = () => {
             });
             console.log(res.data)
         })
-        .catch((error) => {
-            dispatch({
-              type: CA_ERROR
-            });
-            if (error.response.status === 401 || error.response.status === 403) {
-              dispatch(setError("Your session expired!"));
-            }
-            if (error.response) {
-                console.log(error.response.data);
-            } else if (error.request) {
-                console.log(error.request);
-            } else {
-                console.log('Error', error.message);
-            }
-            console.log(error.config);
-        }); 
+        .catch(globalErrorHandler);
     };
 };
 
@@ -257,22 +174,7 @@ export const AddCampaignItems = (id, payload, files) => {
           });
           console.log(res.data)
       })
-      .catch((error) => {
-          dispatch({
-            type: CA_ERROR
-          });
-          if (error.response.status === 401 || error.response.status === 403) {
-            dispatch(setError("Your session expired!"));
-          }
-          if (error.response) {
-              console.log(error.response.data);
-          } else if (error.request) {
-              console.log(error.request);
-          } else {
-              console.log('Error', error.message);
-          }
-          console.log(error.config);
-      }); 
+      .catch(globalErrorHandler);
   };
 };
 
@@ -288,22 +190,7 @@ export const AddCampaignItems = (id, payload, files) => {
             payload: res.data
         });
     })
-    .catch((error) => {
-        dispatch({
-          type: CA_ERROR
-        });
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        if (error.response) {
-            console.log(error.response.data);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
-        }
-        console.log(error.config);
-    }); 
+    .catch(globalErrorHandler);
 };
 
 export const UpdateCampaignItems = (id, payload, files) => dispatch => {
@@ -332,22 +219,7 @@ export const UpdateCampaignItems = (id, payload, files) => dispatch => {
           payload: res.data
       });
   })
-  .catch((error) => {
-      dispatch({
-        type: CA_ERROR
-      });
-      if (error.response.status === 401 || error.response.status === 403) {
-        dispatch(setError("Your session expired!"));
-      }
-      if (error.response) {
-          console.log(error.response.data);
-      } else if (error.request) {
-          console.log(error.request);
-      } else {
-          console.log('Error', error.message);
-      }
-      console.log(error.config);
-  }); 
+  .catch(globalErrorHandler);
 };
 
 export const DeleteCampaign = (id) => dispatch => {
@@ -361,22 +233,7 @@ export const DeleteCampaign = (id) => dispatch => {
             payload: res.data
         });
     })
-    .catch((error) => {
-        dispatch({
-          type: CA_ERROR
-        });
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        if (error.response) {
-            console.log(error.response.data);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
-        }
-        console.log(error.config);
-    }); 
+    .catch(globalErrorHandler);
 };
 
 export const DeleteCampaignItem = (id) => dispatch => {
@@ -391,22 +248,7 @@ export const DeleteCampaignItem = (id) => dispatch => {
       });
       
   })
-  .catch((error) => {
-      dispatch({
-        type: CA_ERROR
-      });
-      if (error.response.status === 401 || error.response.status === 403) {
-        dispatch(setError("Your session expired!"));
-      }
-      if (error.response) {
-          console.log(error.response.data);
-      } else if (error.request) {
-          console.log(error.request);
-      } else {
-          console.log('Error', error.message);
-      }
-      console.log(error.config);
-  }); 
+  .catch(globalErrorHandler);
 };
 
 

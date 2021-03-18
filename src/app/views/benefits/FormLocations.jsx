@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { GetCampaignItemsById, UpdateCampaignItems, AddCampaignItems, GetCampaigns, GetCampaignsActive, GetCampaignsItems } from "../../redux/actions/CampaignActions";
+import { AddBenefitLocation, GetBenefitsLocations, GetBenefitsLocationsById} from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
@@ -78,7 +79,7 @@ const FormAdminBenefits = (props) => {
     const dispatch = useDispatch();
     const classes = useStyles();
     
-    const campaignitem = useSelector(state => state.campaign.campaignitem);
+    const location = useSelector(state => state.benefit.location);
     const campaigns = useSelector(state => state.campaign.campaigns);
     const addCampaignItems = useSelector(state => state.campaign.addCampaignItems);
     const successCampaignItems = useSelector(state => state.campaign.success);
@@ -94,6 +95,7 @@ const FormAdminBenefits = (props) => {
     const districts = useSelector(state => state.locations.districts);
     
     const [locationsform, setLocationsForm] = useState({
+        idBenefit: props.id,
         address: "",
         province: "",
         provinceCode: "",
@@ -105,14 +107,15 @@ const FormAdminBenefits = (props) => {
         whatsapp: "",
         latitude: "",
         longitude: "",
+        active: false
     });
 
     const handleFormSubmit = async () => {
-        if (((props.id && locationsform.logo != null))) {
+        if (props.id) {
             await dispatch(UpdateCampaignItems(props.id, locationsform));
             setOpen(true);
-        } else if ((locationsform.logo != null)) {
-            await dispatch(AddCampaignItems(props.id, locationsform));
+        } else {
+            await dispatch(AddBenefitLocation(locationsform));
             setOpen(true);
         }
     };
@@ -128,28 +131,28 @@ const FormAdminBenefits = (props) => {
     }
 
     useEffect(() => {
-        // dispatch(GetCampaigns());
-        // if (id) {
-        //     dispatch(GetCampaignItemsById(id));
-        // } 
+        //dispatch(GetCampaigns());
+        if (props.id) {
+            dispatch(GetBenefitsLocationsById(props.id));
+        } 
         dispatch(GetProvince());
     }, []);
 
     useEffect(() => {
-        // if(props.id && campaignitem != [] && campaignitem[0] != [""] && campaignitem[0] != undefined) {setLocationsForm({
-        //     idcampaign: campaignitem[0].campaign.id,
-        //     name: campaignitem[0].name,
-        //     description: campaignitem[0].description ? campaignitem[0].description : "",
-        //     logo: campaignitem[0].logo,
-        //     quantity: campaignitem[0].quantity != undefined ? campaignitem[0].quantity.toString() : null,
-        //     stockQuantity: campaignitem[0].stockQuantity != undefined ? campaignitem[0].stockQuantity.toString() : null,
-        //     unitPrice: campaignitem[0].unitPrice != undefined ? campaignitem[0].unitPrice.toString() : null,
-        //     maxLimitPerPerson: campaignitem[0].maxLimitPerPerson != undefined ? campaignitem[0].maxLimitPerPerson.toString() : "0",
-        //     files: null
-        // });}
+        if(props.id && location != [] && location[0] != [""] && location[0] != undefined) {setLocationsForm({
+            idBenefit: location.idBenefits,
+            province: location.provincia,
+            canton: location.canton,
+            district: location.distrito,
+            address: location.address,
+            latitude: location.latitude,
+            longitude: location.longitude,
+            phone: location.phone,
+            whatsapp: location.whatsapp,
+            active: location.active,
+        });}
 
-
-    }, [campaignitem]);
+    }, [location]);
 
 
     const handleChange = (event) => {
@@ -159,20 +162,6 @@ const FormAdminBenefits = (props) => {
         [name]: event.target.value,
         })
     };
-
-    const getBase64 = (file) => {
-        let reader = new FileReader();
-        let imageupload = ""
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            imageupload = reader.result
-            setLogo(imageupload)
-            setLocationsForm({...locationsform, logo: imageupload});
-        };
-        reader.onerror = function (error) {
-            console.log('Error: ', error);
-        };
-    }
 
     const handleChangeProvince = (event) => {
         let provinceName = "";
@@ -226,7 +215,7 @@ const FormAdminBenefits = (props) => {
 
     return (
         <div className={"p-24"}>
-            {console.log("Benefit", props.idBenefit)}
+            {console.log("Benefit", location)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminForm"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{props.id ? "Editar Localización" : "Agregar Localización"}</h2>}
