@@ -95,7 +95,7 @@ const useStyles = makeStyles({
         backgroundColor: '#3497D3',
     },
 
-    card__title:{
+    card__title: {
         margin: "10px 10px 0 0",
         padding: "5px 10px"
     },
@@ -112,6 +112,8 @@ const useStyles = makeStyles({
         padding: '5px',
         boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
         borderRadius: '4px',
+        marginTop: '5%',
+        marginBottom: '5%'
     },
     img__size: {
         borderRadius: '4px',
@@ -612,25 +614,23 @@ const FormVentas = () => {
                                         (!indexlist.includes(item.id) && item.stockQuantity > 0 && (purchases[0] != undefined && purchases[0].items[index] != undefined && (item.maxLimitPerPerson - purchases[0].items[index].totalPurchasedItems) > 0)) ?
                                             <>
                                                 <Card className={classes.card__root}>
-                                                    {/* <CardHeader
-                                                        className={classes.card__header}
-                                                        title={item.name}
-                                                    ></CardHeader> */}
-                                                     <Grid className={classes.card__header} container spacing={3}>
+                                                    <Grid className={classes.card__header} container spacing={3}>
                                                         <Grid item xs={12}>
-                                                            <h5 className={classes.card__title}>{item.name}</h5> 
+                                                            <h5 className={classes.card__title}>{item.name}</h5>
                                                         </Grid>
-                                                    </Grid>   
-
+                                                    </Grid>
                                                     <CardContent>
+                                                        <Grid container
+                                                            justify="center"
+                                                            alignItems="center">
+                                                            <div className={classes.img__container}>
+                                                                <img className={classes.img__size} src={item.image} alt={item.name} />
+                                                            </div>
+                                                        </Grid>
                                                         <Grid container spacing={1}>
                                                             <Grid item xs={12}>
-                                                                <div className={classes.img__container}>
-                                                                    <img className={classes.img__size} src={item.image} alt={item.name} />
-                                                                </div>
-                                                            </Grid>
-                                                            <Grid item xs={12}>
-                                                                <Grid item xs container direction="row"
+                                                                <Grid xs container 
+                                                                    direction="row"
                                                                     justify="center"
                                                                     alignItems="center"
                                                                     spacing={2}>
@@ -663,8 +663,8 @@ const FormVentas = () => {
                                                             style={{ color: (ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0)) ? "gray" : "white" }}
                                                             disabled={(ventasform.maximo - ventasform.totalComprados <= 0 || (purchases[0] != undefined && purchases[0].allowedPendingPurchaseItems - ventasform.totalComprados <= 0))}
                                                             onClick={() => setShouldOpenDetailsDialog({ open: true, id: item.id, index: index })}
-                                                            startIcon={<AddIcon/>}
-                                                            >
+                                                            startIcon={<AddIcon />}
+                                                        >
                                                             Agregar
                                                             </Button>
                                                     </div>
@@ -686,23 +686,29 @@ const FormVentas = () => {
                                     return (
                                         <>
                                             <Card className={classes.card__root}>
-                                                <CardHeader
-                                                    className={classes.card__header}
-                                                    title={item.name}
-                                                />
+                                                <Grid className={classes.card__header} container spacing={3}>
+                                                    <Grid item xs={12}>
+                                                        <h5 className={classes.card__title}>{item.name}</h5>
+                                                    </Grid>
+                                                </Grid>
                                                 <CardContent>
+                                                    <Grid container
+                                                        justify="center"
+                                                        alignItems="center">
+                                                        <div className={classes.img__container}>
+                                                            <img className={classes.img__size} src={item.image} alt={item.name} />
+                                                        </div>
+                                                    </Grid>
                                                     <Grid container spacing={3}>
                                                         <Grid item xs={12}>
-                                                            <div className={classes.img__container}>
-                                                                <img className={classes.img__size} src={item.image} alt={item.name} />
-                                                            </div>
-                                                        </Grid>
-                                                        <Grid item xs={12}>
-                                                            <Grid item xs container direction="row"
+                                                            <Grid co ntainer direction="row"
                                                                 justify="center"
-                                                                a lignItems="center"
+                                                                alignItems="center"
                                                                 spacing={2}>
-                                                                <Grid item zeroMinWidth xs={6}>
+                                                                <Grid
+                                                                    item zeroMinWidth xs={6}
+                                                                    alignContent="center"
+                                                                >
                                                                     <Typography gutterBottom variant="subtitle1">
                                                                         Cantidad:
                                                                         </Typography>
@@ -746,7 +752,6 @@ const FormVentas = () => {
                                                         Eliminar
                                                         </Button>
                                                 </div>
-
                                             </Card>
                                         </>
                                     );
