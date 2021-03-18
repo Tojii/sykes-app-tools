@@ -20,6 +20,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { GetCampaignItemsById, DeleteCampaignItem, GetCampaignsItems } from "../../redux/actions/CampaignActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import Details from "@material-ui/icons/Details";
+import Chip from '@material-ui/core/Chip';
 
 const useStyles = makeStyles({
   sectionbutton: {
@@ -57,7 +58,10 @@ const AdminBenefitsTable = () => {
         link: "www.link.com",
         facebook: "www.facebook.com",
         instagram: "www.intagram.com",
-        email: "email",}
+        email: "email",
+        isActive: true,
+        locations:[{province: "Alajuela", canton: "cantonAlajuela"},{province: "Cartago", canton: "cantonSanJose"}], 
+      }
     ];
     const successCampaignItems = useSelector(state => state.campaign.success);
     const isLoading  = useSelector(state => state.campaign.loading);
@@ -147,7 +151,11 @@ const AdminBenefitsTable = () => {
           item.facebook,
           item.instagram,
           item.email,
+          item.isActive ? ["Active"] : ["Inactive"],
           showImage(item),
+          //["Alajuela","San José"],
+          item.locations.map(item2 => {return item2.province }),
+          item.locations.map(item2 => {return item2.canton }),
           detallesButton(item)
       ]}
     })
@@ -251,7 +259,20 @@ const AdminBenefitsTable = () => {
                 fullWidth: window.screen.width <= 1024 ? true : false
               }
             }
-          },
+        },
+        {
+          name: "Active",
+          options: {
+            filter: true,
+            //filterType: 'multiselect',
+            customBodyRenderLite: (dataIndex) => {
+              let value = builddata[dataIndex][9];
+              return value.map((val, key) => {
+                return <Chip style={{backgroundColor: val == "Active" ? "green" : "red", margin: "1%", color: "white"}} label={val} key={key} />;
+              });
+            },
+          }
+        },  
         {
             name: "logo",
             label: " ",
@@ -264,6 +285,32 @@ const AdminBenefitsTable = () => {
                 fullWidth: window.screen.width <= 1024 ? true : false
               }
             }
+        },
+        {
+          name: "Provinces",
+          options: {
+            filter: true,
+            //filterType: 'multiselect',
+            customBodyRenderLite: (dataIndex) => {
+              let value = builddata[dataIndex][11];
+              return value.map((val, key) => {
+                return <Chip style={{backgroundColor: "#039be5", margin: "1%", color: "white"}} label={val} key={key} />;
+              });
+            },
+          }
+        },
+        {
+          name: "Cantons",
+          options: {
+            filter: true,
+            //filterType: 'multiselect',
+            customBodyRenderLite: (dataIndex) => {
+              let value = builddata[dataIndex][12];
+              return value.map((val, key) => {
+                return <Chip style={{backgroundColor: "#039be5", margin: "1%", color: "white"}} label={val} key={key} />;
+              });
+            },
+          }
         },
         {
           name: "detalles",
@@ -312,6 +359,7 @@ const AdminBenefitsTable = () => {
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={classes.tableMargin + " m-sm-30"}>
+          {console.log(builddata)}
           {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>

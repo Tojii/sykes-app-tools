@@ -2,7 +2,9 @@ import React, { useState, Component, useRef, useEffect } from "react";
 import {
   Button,
   Card,
-  FormHelperText
+  FormHelperText,
+  FormControlLabel,
+  Switch
 } from "@material-ui/core";
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
@@ -102,7 +104,8 @@ const FormAdminBenefits = () => {
         link: "",
         facebook: "",
         instagram: "",
-        email: ""
+        email: "",
+        isActive: false
     });
 
     const handleFormSubmit = async () => {
@@ -151,10 +154,17 @@ const FormAdminBenefits = () => {
 
     const handleChange = (event) => {
         const name = event.target.name;
-        setBenefitsForm({
-        ...benefitsform,
-        [name]: event.target.value,
-        })
+        if (name == "isActive") {
+            setBenefitsForm({
+                ...benefitsform,
+                [name]: event.target.checked,
+            })
+        } else {
+            setBenefitsForm({
+                ...benefitsform,
+                [name]: event.target.value,
+            })
+        }
     };
 
     const getBase64 = (file) => {
@@ -279,6 +289,18 @@ const FormAdminBenefits = () => {
                             value={benefitsform.email}
                             validators={["maxStringLength:200"]}
                             errorMessages={["Máximo 200 carácteres"]}
+                        />
+                        <FormControlLabel
+                            className={classes.textvalidator}
+                            label="Active Benefit"
+                            control={
+                                <Switch
+                                checked={benefitsform.isActive}
+                                name="isActive"
+                                color="primary"
+                                onChange={handleChange}
+                                />
+                            }
                         />
                         <FormControl className={classes.textvalidator}>
                             <label className={classes.filelabel} id="logo">Logo (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>
