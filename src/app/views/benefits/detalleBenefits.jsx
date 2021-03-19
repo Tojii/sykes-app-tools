@@ -13,7 +13,8 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import {
     GetImages
 } from "../../redux/actions/CommonActions";
-import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+// import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import MapSection from '../../components/maps/Maps';
 
   const cn = (...args) => args.filter(Boolean).join(' ')
 
@@ -159,6 +160,15 @@ const HomeVentas = (props) => {
     //console.log("user",user)
     const promociones = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     //const promociones = "";
+    const location = {
+        address: '1600 Amphitheatre Parkway, Mountain View, california.',
+        lat: 40.856795, lng: -73.954298
+      } // our location object from earlier
+
+    const onChangeLocation = (lat, lng) => {
+        console.log("lat", lat);
+        console.log("lng", lng);
+    }
 
     useEffect(() => {
         dispatch(GetImages());
@@ -481,14 +491,15 @@ const HomeVentas = (props) => {
                                                 UBICACIÓN
                                                 </Typography>
                                                 <div>
-                                                <Map
+                                                <MapSection lat={location.lat} lng={location.lng} zoomLevel={10} draggable={true} onChangeLocation={onChangeLocation} /> {/* include it here */}    
+                                                {/* <Map
                                                     google={props.google}
                                                     zoom={8}
                                                     style={mapStyles}
                                                     initialCenter={{ lat: 47.444, lng: -122.176}}
                                                     >
                                                     <Marker position={{ lat: 48.00, lng: -122.00}} />
-                                                    </Map>
+                                                    </Map> */}
                                                 </div>
                                             
                                             </Grid>
@@ -511,9 +522,9 @@ const HomeVentas = (props) => {
     )
 }
 
-//export default HomeVentas;
+export default HomeVentas;
 
 
-export default GoogleApiWrapper({
-    apiKey: 'AIzaSyB3-J3RDKzLfnq123ytQGHFxXSxU_SizaU'
-  })(HomeVentas);
+// export default GoogleApiWrapper({
+//     apiKey: 'AIzaSyCjTwsOnh1PVEg-rKhxEuW0xJ-sZxAucgw'
+//   })(HomeVentas);
