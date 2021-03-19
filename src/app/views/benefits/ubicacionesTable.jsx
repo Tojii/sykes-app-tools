@@ -41,8 +41,8 @@ const useStyles = makeStyles({
     "@media (min-width: 0px)": {
     },
     "@media (min-width: 1024px)": {
-        width: "62%",
-        marginLeft: "19%"
+        width: "64%",
+        marginLeft: "18%"
     },
   },
 });

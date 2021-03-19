@@ -113,7 +113,7 @@ import Loading from "../../../matx/components/MatxLoadable/Loading";
 
     miniatureimage: {
         margin: "5%",
-        maxWidth: "20px"
+        maxWidth: "30px"
     },
 
     margindiv: {
@@ -205,9 +205,9 @@ const DetalleBenefits = (props) => {
                                                                 {benefit[0] ? benefit[0].benefitInfo : ""}
                                                             </Typography>
                                                             <img
-                                                                style={{marginLeft: "3%", maxWidth: "100px"}}
+                                                                style={{marginLeft: "3%", maxWidth: "170px"}}
                                                                 alt="..."
-                                                                src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
+                                                                src={require('./images/gafete_sykes.png')}
                                                             />
                                                         </Grid>
                                                     </Grid>
@@ -255,7 +255,7 @@ const DetalleBenefits = (props) => {
                                                         <img
                                                             className={classes.miniatureimage}
                                                             alt="..."
-                                                            src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
+                                                            src={require('./images/ubicacion.png')}
                                                         />
                                                     </div>
                                                 </Grid>
@@ -269,7 +269,7 @@ const DetalleBenefits = (props) => {
                                                         <img
                                                             className={classes.miniatureimage}
                                                             alt="..."
-                                                            src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
+                                                            src={require('./images/phone.png')}
                                                         />
                                                     </div>
                                                 </Grid>
@@ -283,7 +283,7 @@ const DetalleBenefits = (props) => {
                                                         <img
                                                             className={classes.miniatureimage}
                                                             alt="..."
-                                                            src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
+                                                            src={require('./images/whatsApp.png')}
                                                         />
                                                     </div>
                                                 </Grid>
@@ -297,7 +297,7 @@ const DetalleBenefits = (props) => {
                                                         <img
                                                             className={classes.miniatureimage}
                                                             alt="..."
-                                                            src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
+                                                            src={require('./images/link.png')}
                                                         />
                                                     </div>
                                                 </Grid>
@@ -317,18 +317,6 @@ const DetalleBenefits = (props) => {
                                                         />
                                                     </div>
                                                 </Grid> */}
-                                                {benefit[0] && benefit[0].facebook ?
-                                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                                    <div style={{textAlignLast: "center"}}>
-                                                        <a href={`https://${benefit[0] ? benefit[0].facebook : ""}`}>
-                                                            <img
-                                                                className={classes.miniatureimage}
-                                                                alt="..."
-                                                                src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
-                                                            />
-                                                        </a>
-                                                    </div>
-                                                </Grid> : null}
                                                 {benefit[0] && benefit[0].instagram ?
                                                 <Grid item lg={3} md={3} sm={3} xs={3}>
                                                     <div style={{textAlignLast: "center"}}>
@@ -336,7 +324,19 @@ const DetalleBenefits = (props) => {
                                                             <img
                                                                 className={classes.miniatureimage}
                                                                 alt="..."
-                                                                src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
+                                                                src={require('./images/instagram.png')}
+                                                            />
+                                                        </a>
+                                                    </div>
+                                                </Grid> : null}
+                                                {benefit[0] && benefit[0].facebook ?
+                                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                    <div style={{textAlignLast: "center"}}>
+                                                        <a href={`https://${benefit[0] ? benefit[0].facebook : ""}`}> 
+                                                            <img
+                                                                className={classes.miniatureimage}
+                                                                alt="..."
+                                                                src={require('./images/facebook.png')}
                                                             />
                                                         </a>
                                                     </div>
@@ -348,7 +348,7 @@ const DetalleBenefits = (props) => {
                                                             <img
                                                                 className={classes.miniatureimage}
                                                                 alt="..."
-                                                                src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
+                                                                src={require('./images/correo.png')}
                                                             />
                                                         </a>
                                                     </div>

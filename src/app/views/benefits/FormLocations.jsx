@@ -146,7 +146,10 @@ const FormAdminBenefits = (props) => {
             phone: location[0].phone,
             whatsapp: location[0].whatsApp,
             active: location[0].active,
-        });}
+            });
+            //dispatch(GetCantons(location[0].provinceCode));
+            //dispatch(GetDistricts(location[0].provinceCode, location[0].cantonCode));
+        }
     }, [location]);
 
 

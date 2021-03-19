@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import CustomToolbarSelect from "../venta-activos/ventasTables/CustomSelect"
 import {
-    Icon,
     Button,
     Card,
     Grid,
@@ -17,7 +16,6 @@ import history from "history.js";
 import CustomFooter from '../muidatatable/CustomFooter';
 import NotFound from "../sessions/NotFound"
 import { makeStyles } from '@material-ui/core/styles';
-import { GetCampaignItemsById, DeleteCampaignItem, GetCampaignsItems, DeleteCampaign } from "../../redux/actions/CampaignActions";
 import { GetBenefitsById, DeleteBenefit, GetBenefits } from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import Details from "@material-ui/icons/Details";
@@ -44,33 +42,14 @@ const useStyles = makeStyles({
 });
 
 const AdminBenefitsTable = () => {
-    const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
     const dispatch = useDispatch();
     const classes = useStyles();
     const user = useSelector(state => state.user);
-    const image = null;
     const benefits = useSelector(state => state.benefit.benefits);
-
-    const campaignitem = [
-        {id: "3",
-        idCategory: "3",
-        name: "nombre",
-        detail: "detail",
-        description: "description",
-        logo: null,
-        link: "www.link.com",
-        facebook: "www.facebook.com",
-        instagram: "www.intagram.com",
-        email: "email",
-        isActive: true,
-        locations:[{province: "Alajuela", canton: "cantonAlajuela"},{province: "Cartago", canton: "cantonSanJose"}], 
-      }
-    ];
     const successBenefit = useSelector(state => state.benefit.success);
     const isLoading  = useSelector(state => state.benefit.loading);
     const [open, setOpen] = useState(false);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
-    
 
     useEffect(() => {
       dispatch(GetBenefits());
@@ -147,6 +126,7 @@ const AdminBenefitsTable = () => {
       return [
           item.idBenefit,
           item.category.idCategory,
+          item.category.name,
           item.name,
           item.detail,
           item.description,
@@ -185,6 +165,16 @@ const AdminBenefitsTable = () => {
              display: false,
              //viewColumns: false,
             }
+        },
+        {
+          name: "category",
+          label: "Category",
+          options: {
+           filter: true,
+           sort: true,
+           display: true,
+           //viewColumns: false,
+          }
         },
         {
           name: "name",
@@ -283,9 +273,8 @@ const AdminBenefitsTable = () => {
           name: "Active",
           options: {
             filter: true,
-            //filterType: 'multiselect',
             customBodyRenderLite: (dataIndex) => {
-              let value = builddata[dataIndex][10];
+              let value = builddata[dataIndex][11];
               return value.map((val, key) => {
                 return <Chip style={{backgroundColor: val == "Active" ? "green" : "red", margin: "1%", color: "white"}} label={val} key={key} />;
               });
@@ -296,9 +285,8 @@ const AdminBenefitsTable = () => {
           name: "Provinces",
           options: {
             filter: true,
-            //filterType: 'multiselect',
             customBodyRenderLite: (dataIndex) => {
-              let value = builddata[dataIndex][11];
+              let value = builddata[dataIndex][12];
               return value.map((val, key) => {
                 return <Chip style={{backgroundColor: "#039be5", margin: "1%", color: "white"}} label={val} key={key} />;
               });
@@ -309,9 +297,8 @@ const AdminBenefitsTable = () => {
           name: "Cantons",
           options: {
             filter: true,
-            //filterType: 'multiselect',
             customBodyRenderLite: (dataIndex) => {
-              let value = builddata[dataIndex][11];
+              let value = builddata[dataIndex][13];
               return value.map((val, key) => {
                 return <Chip style={{backgroundColor: "#039be5", margin: "1%", color: "white"}} label={val} key={key} />;
               });
@@ -347,9 +334,7 @@ const AdminBenefitsTable = () => {
       selectableRowsHeader: false,
       selectableRowsOnClick: true,
       isRowSelectable: (dataIndex, selectedRows) => {
-        //prevents selection of any additional row after the third
         if (selectedRows.data.length > 0 && selectedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
-        //prevents selection of row with title "Attorney"
         return benefits[dataIndex][1] != "Attorney";
       },
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
