@@ -64,11 +64,23 @@ export const navigations = [
   //   icon: "person_add_alt_1",
   //   display: null
   // },
-  {
+  { 
     name: "Benefits",
-    path: "/Benefits/Detalle",
     icon: "add_business",
-    display: null
+    display: null,
+    children:[
+    {
+      name: "Benefits Home",
+      path: "/Benefits/Detalle",
+      iconText: "BH",
+      display: null
+    },
+    {
+      name: "Admin Benefits",
+      path: "/Benefits/AdminFormBenefits",
+      iconText: "AB",
+      display: null
+    }
+    ]
   },
-  
 ];
