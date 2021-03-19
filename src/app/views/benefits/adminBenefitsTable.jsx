@@ -150,6 +150,7 @@ const AdminBenefitsTable = () => {
           item.name,
           item.detail,
           item.description,
+          item.benefitInfo,
           item.link,
           item.facebook,
           item.instagram,
@@ -221,6 +222,17 @@ const AdminBenefitsTable = () => {
           }
         },
         {
+          name: "benefitInfo",
+          label: "Benefit Information",
+          options: {
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
+          }
+        },
+        {
           name: "link",
           label: "Link",
           options: {
@@ -273,7 +285,7 @@ const AdminBenefitsTable = () => {
             filter: true,
             //filterType: 'multiselect',
             customBodyRenderLite: (dataIndex) => {
-              let value = builddata[dataIndex][9];
+              let value = builddata[dataIndex][10];
               return value.map((val, key) => {
                 return <Chip style={{backgroundColor: val == "Active" ? "green" : "red", margin: "1%", color: "white"}} label={val} key={key} />;
               });
@@ -286,7 +298,7 @@ const AdminBenefitsTable = () => {
             filter: true,
             //filterType: 'multiselect',
             customBodyRenderLite: (dataIndex) => {
-              let value = builddata[dataIndex][10];
+              let value = builddata[dataIndex][11];
               return value.map((val, key) => {
                 return <Chip style={{backgroundColor: "#039be5", margin: "1%", color: "white"}} label={val} key={key} />;
               });

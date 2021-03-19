@@ -9,7 +9,9 @@ import {
     ADD_BENEFIT_LOCATION,
     UPDATE_BENEFIT,
     DELETE_BENEFIT,
+    DELETE_BENEFIT_LOCATION,
     BE_LOADING,
+    BE_LOADING_LOCATION,
     BE_ERROR,
 } from "../actions/BenefitsActions"
 
@@ -19,8 +21,9 @@ const initialState = {
     benefitslocations: [],
     benefitsActive: [],
     loading: false,
+    loadingLocation: false,
     benefit: [],
-    location: [],
+    benefitlocation: [],
     addBenefit: null,
     addBenefitLocation: null,
     success: true,
@@ -32,6 +35,12 @@ const BenefitReducer = function(state = initialState, action){
             return {
               ...state,
               loading: true
+            }
+        }
+        case BE_LOADING_LOCATION: {
+            return {
+              ...state,
+              loadingLocation: true
             }
         }
         case BE_ERROR: {
@@ -79,8 +88,8 @@ const BenefitReducer = function(state = initialState, action){
         case GET_BENEFITS_LOCATIONSBYID: {
             return {
                 ...state,
-                location: action.data,
-                loading: false
+                benefitlocation: [action.data],
+                loadingLocation: false
             }
         }
         case ADD_BENEFIT: {
@@ -108,6 +117,13 @@ const BenefitReducer = function(state = initialState, action){
             }
         }
         case DELETE_BENEFIT: {
+            return {
+                ...state,
+                success: true,
+                loading: false
+            }
+        }
+        case DELETE_BENEFIT_LOCATION: {
             return {
                 ...state,
                 success: true,

@@ -21,7 +21,7 @@ import CustomFooter from '../muidatatable/CustomFooter';
 import NotFound from "../sessions/NotFound"
 import { makeStyles } from '@material-ui/core/styles';
 import { GetCampaignItemsById, DeleteCampaignItem, GetCampaignsItems } from "../../redux/actions/CampaignActions";
-import { GetBenefitsLocations } from "../../redux/actions/BenefitsActions";
+import { GetBenefitsLocations, DeleteBenefitLocation } from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import AgregarDialog from "./FormLocations"
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -92,7 +92,7 @@ const LocationsTable = (props) => {
         }
     ];
     const successCampaignItems = useSelector(state => state.campaign.success);
-    const isLoading  = useSelector(state => state.campaign.loading);
+    const isLoading  = false;
     const [open, setOpen] = useState(false);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const [shouldOpenNewDialog, setShouldOpenNewDialog] = useState({ open: false, type: "new" });
@@ -107,7 +107,7 @@ const LocationsTable = (props) => {
     });
 
     const handleDelete = async (id) => {
-      await dispatch(DeleteCampaignItem(id));
+      await dispatch(DeleteBenefitLocation(id));
       setOpen(true);
     };
 
@@ -303,8 +303,8 @@ const LocationsTable = (props) => {
     (false || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={props.type != "detail" ? classes.tableMargin + " m-sm-30" : "m-sm-30"}>
-          {console.log(props.benefitslocations)}
-          {(false) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/AdminFormBenefits"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
+          {console.log(history.location.pathname)}
+          {(false) ? <Loading /> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsLocations());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               {/* { isLoading ? <Loading /> :   */}

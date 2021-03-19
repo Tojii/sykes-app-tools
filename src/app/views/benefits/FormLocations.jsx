@@ -2,7 +2,9 @@ import React, { useState, Component, useRef, useEffect } from "react";
 import {
   Button,
   Card,
-  FormHelperText
+  FormHelperText,
+  FormControlLabel,
+  Switch
 } from "@material-ui/core";
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
@@ -79,11 +81,11 @@ const FormAdminBenefits = (props) => {
     const dispatch = useDispatch();
     const classes = useStyles();
     
-    const location = useSelector(state => state.benefit.location);
+    const location = useSelector(state => state.benefit.benefitlocation);
     const campaigns = useSelector(state => state.campaign.campaigns);
     const addCampaignItems = useSelector(state => state.campaign.addCampaignItems);
-    const successCampaignItems = useSelector(state => state.campaign.success);
-    const isLoading  = useSelector(state => state.campaign.loading);
+    const successCampaignItems = useSelector(state => state.benefit.success);
+    const isLoading  = false;
     const [open, setOpen] = useState(false);
     const [files, setFiles] = useState(null);
     const [logo, setLogo] = useState(null);
@@ -95,7 +97,7 @@ const FormAdminBenefits = (props) => {
     const districts = useSelector(state => state.locations.districts);
     
     const [locationsform, setLocationsForm] = useState({
-        idBenefit: props.id,
+        idBenefit: props.idBenefit,
         address: "",
         province: "",
         provinceCode: "",
@@ -105,14 +107,14 @@ const FormAdminBenefits = (props) => {
         district: "",
         phone: "",
         whatsapp: "",
-        latitude: "",
-        longitude: "",
+        latitude: "5",
+        longitude: "5",
         active: false
     });
 
-    const handleFormSubmit = async () => {
+    const handleFormSubmitLocation = async () => {
         if (props.id) {
-            await dispatch(UpdateCampaignItems(props.id, locationsform));
+            //await dispatch(UpdateCampaignItems(props.id, locationsform));
             setOpen(true);
         } else {
             await dispatch(AddBenefitLocation(locationsform));
@@ -120,47 +122,47 @@ const FormAdminBenefits = (props) => {
         }
     };
 
-    const presave = () => {
-        if (locationsform.logo == null) {
-            setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
-        }
-    }
-
     const handleBack = () => {
         history.push("/Benefits/AdminFormBenefits");
     }
 
     useEffect(() => {
         //dispatch(GetCampaigns());
+        dispatch(GetProvince());
         if (props.id) {
             dispatch(GetBenefitsLocationsById(props.id));
         } 
-        dispatch(GetProvince());
     }, []);
 
     useEffect(() => {
         if(props.id && location != [] && location[0] != [""] && location[0] != undefined) {setLocationsForm({
-            idBenefit: location.idBenefits,
-            province: location.provincia,
-            canton: location.canton,
-            district: location.distrito,
-            address: location.address,
-            latitude: location.latitude,
-            longitude: location.longitude,
-            phone: location.phone,
-            whatsapp: location.whatsapp,
-            active: location.active,
+            idBenefit: location[0].idBenefits,
+            province: location[0].provincia,
+            canton: location[0].canton,
+            district: location[0].distrito,
+            address: location[0].address,
+            latitude: location[0].latitude,
+            longitude: location[0].longitude,
+            phone: location[0].phone,
+            whatsapp: location[0].whatsApp,
+            active: location[0].active,
         });}
-
     }, [location]);
 
 
     const handleChange = (event) => {
         const name = event.target.name;
-        setLocationsForm({
-        ...locationsform,
-        [name]: event.target.value,
-        })
+        if (name == "active") {
+            setLocationsForm({
+                ...locationsform,
+                [name]: event.target.checked,
+            })
+        } else {
+            setLocationsForm({
+            ...locationsform,
+            [name]: event.target.value,
+            })
+        }
     };
 
     const handleChangeProvince = (event) => {
@@ -216,10 +218,10 @@ const FormAdminBenefits = (props) => {
     return (
         <div className={"p-24"}>
             {console.log("Benefit", location)}
-            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminForm"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsLocations());}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{props.id ? "Editar Localización" : "Agregar Localización"}</h2>}
-                <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
+                <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmitLocation}>  
                     {(isLoading) ? <Loading/> :
                     <>               
                         <TextValidator
@@ -299,9 +301,21 @@ const FormAdminBenefits = (props) => {
                             validators={["required","maxStringLength:15", "isNumber", "isPositive"]}
                             errorMessages={["Este campo es requerido","Máximo 15 carácteres", "Solo se permiten números", "Solo se permiten positivos"]}
                         />
+                        <FormControlLabel
+                            className={classes.textvalidator}
+                            label="Active Location"
+                            control={
+                                <Switch
+                                checked={locationsform.active}
+                                name="active"
+                                color="primary"
+                                onChange={handleChange}
+                                />
+                            }
+                        />
                     
                         <div className={classes.sectionbutton}>
-                            <Button style={{margin: "1%", marginTop: "10%", marginBottom: "5%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
+                            <Button style={{margin: "1%", marginTop: "10%", marginBottom: "5%", width: "105.92px"}} onClick={handleFormSubmitLocation} variant="contained" color="primary">
                                 ENVIAR  
                             </Button>
 

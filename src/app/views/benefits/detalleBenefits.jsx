@@ -14,6 +14,8 @@ import {
 } from "../../redux/actions/CommonActions";
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import ReactDOM from 'react-dom';
+import { GetBenefitsById, DeleteBenefit, GetBenefits } from "../../redux/actions/BenefitsActions";
+import Loading from "../../../matx/components/MatxLoadable/Loading";
 
   const cn = (...args) => args.filter(Boolean).join(' ')
 
@@ -136,6 +138,8 @@ const DetalleBenefits = (props) => {
     const descriptionRef = useRef(null);
     const benefiRef = useRef(null);
     const ubicationRef = useRef(null);
+    const benefit = useSelector(state => state.benefit.benefit);
+    const isLoading  = useSelector(state => state.benefit.loading);
 
     const executeScrollDescription = () => descriptionRef.current.scrollIntoView()   
     const executeScrollBenefit = () => benefiRef.current.scrollIntoView()   
@@ -148,16 +152,18 @@ const DetalleBenefits = (props) => {
 
     useEffect(() => {
         dispatch(GetImages());
+        dispatch(GetBenefitsById("6"));
     }, [])
 
     return (
         <>
-            
+            {console.log(benefit)}
+            { isLoading ? <Loading/> :
             <div className={classes.margindiv}>
-                <h1 style={{ color: "limegreen", marginTop: "2%", fontWeight: "bold"}} className="mb-20">RESTAURANTS</h1>
+                <h1 style={{ color: "limegreen", marginTop: "2%", fontWeight: "bold"}} className="mb-20">{benefit[0] ? benefit[0].category.name.toUpperCase() : ""}</h1>
                 <h5> All Sykes employees can take advantage of these exclusive agreements. </h5>
                 <Card className={classes.cardContainer} elevation={6}>
-                    <h2 style={{ color: "orange", marginLeft: "2%", marginTop: "2%",}} className="mb-20">Restaurante: TONI's PIZZA</h2>      
+                    <h2 style={{ color: "orange", marginLeft: "2%", marginTop: "2%",}} className="mb-20">Restaurante: {benefit[0] ? benefit[0].name : ""}</h2>      
                     <Tabs style={{marginLeft: "2%", marginTop: "2%",}}>
                         <div className={classes.tabs}>
                         <div className={classes.tabList} >
@@ -180,11 +186,7 @@ const DetalleBenefits = (props) => {
                                                                 DESCRIPCIÓN
                                                             </Typography>
                                                             <Typography style={{marginLeft: "3%", textAlign: "justify",}} variant="body2" gutterBottom>
-                                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
-                                                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-                                                                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit 
-                                                                esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt 
-                                                                in culpa qui officia deserunt mollit anim id est laborum.
+                                                                {benefit[0] ? benefit[0].description : ""}
                                                             </Typography>
                                                         </Grid>
                                                     </Grid>
@@ -200,11 +202,7 @@ const DetalleBenefits = (props) => {
                                                                 BENEFICIO
                                                             </Typography>
                                                             <Typography style={{width:"75%", marginLeft: "3%", textAlign: "justify", display:"inline-block", verticalAlign: "top"}} variant="body2" gutterBottom>
-                                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
-                                                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-                                                                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit 
-                                                                esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt 
-                                                                in culpa qui officia deserunt mollit anim id est laborum.
+                                                                {benefit[0] ? benefit[0].benefitInfo : ""}
                                                             </Typography>
                                                             <img
                                                                 style={{marginLeft: "3%", maxWidth: "100px"}}
@@ -248,8 +246,8 @@ const DetalleBenefits = (props) => {
                                                 <img
                                                     style={{maxWidth: "100px", margin: "5%"}}
                                                     alt="..."
-                                                    src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
-                                                />
+                                                    src={`${benefit[0] ? benefit[0].logo : null}`}
+                                                /> 
                                             </div>
                                             <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
                                                 <Grid item lg={3} md={3} sm={3} xs={3}>
@@ -304,13 +302,13 @@ const DetalleBenefits = (props) => {
                                                     </div>
                                                 </Grid>
                                                 <Grid item lg={9} md={9} sm={9} xs={9}>
-                                                <a href="https://www.tonispizza.com" style={{color: "#039be5"}}>
-                                                    www.tonispizza.com
+                                                <a href={`https://${benefit[0] ? benefit[0].link : ""}`} style={{color: "#039be5"}}>
+                                                    {benefit[0] ? benefit[0].link : ""}
                                                 </a>
                                                 </Grid>
                                             </Grid>
                                             <Grid container spacing={2} justify="center" alignItems="center" direction="row">
-                                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                {/* <Grid item lg={3} md={3} sm={3} xs={3}>
                                                     <div style={{textAlignLast: "center"}}>
                                                         <img
                                                             className={classes.miniatureimage}
@@ -318,28 +316,11 @@ const DetalleBenefits = (props) => {
                                                             src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
                                                         />
                                                     </div>
-                                                </Grid>
+                                                </Grid> */}
+                                                {benefit[0] && benefit[0].facebook ?
                                                 <Grid item lg={3} md={3} sm={3} xs={3}>
                                                     <div style={{textAlignLast: "center"}}>
-                                                        <img
-                                                            className={classes.miniatureimage}
-                                                            alt="..."
-                                                            src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
-                                                        />
-                                                    </div>
-                                                </Grid>
-                                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                                    <div style={{textAlignLast: "center"}}>
-                                                        <img
-                                                            className={classes.miniatureimage}
-                                                            alt="..."
-                                                            src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
-                                                        />
-                                                    </div>
-                                                </Grid>
-                                                <Grid item lg={3} md={3} sm={3} xs={3}>
-                                                    <div style={{textAlignLast: "center"}}>
-                                                        <a href={images[0] ? images[0].url : null}>
+                                                        <a href={`https://${benefit[0] ? benefit[0].facebook : ""}`}>
                                                             <img
                                                                 className={classes.miniatureimage}
                                                                 alt="..."
@@ -347,7 +328,31 @@ const DetalleBenefits = (props) => {
                                                             />
                                                         </a>
                                                     </div>
-                                                </Grid>
+                                                </Grid> : null}
+                                                {benefit[0] && benefit[0].instagram ?
+                                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                    <div style={{textAlignLast: "center"}}>
+                                                        <a href={`https://${benefit[0] ? benefit[0].instagram : ""}`}>
+                                                            <img
+                                                                className={classes.miniatureimage}
+                                                                alt="..."
+                                                                src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
+                                                            />
+                                                        </a>
+                                                    </div>
+                                                </Grid> : null}
+                                                {benefit[0] && benefit[0].email ?
+                                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                    <div style={{textAlignLast: "center"}}>
+                                                        <a href={`https://${benefit[0] ? benefit[0].email : ""}`}>
+                                                            <img
+                                                                className={classes.miniatureimage}
+                                                                alt="..."
+                                                                src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
+                                                            />
+                                                        </a>
+                                                    </div>
+                                                </Grid> : null}
                                             </Grid>
                                         </Paper> 
                                         {promociones != "" ?
@@ -375,7 +380,7 @@ const DetalleBenefits = (props) => {
                         </div>
                     </Tabs>
                 </Card>
-            </div>
+            </div>}
         </>
     )
 }

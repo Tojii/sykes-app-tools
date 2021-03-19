@@ -6,18 +6,12 @@ import moment from "moment"
 import { format } from 'date-fns';
 
 export const GET_BENEFITS = "GET_BENEFITS";
-export const GET_BENEFITS_CATEGORY = "GET_BENEFITS_CATEGORY";
-export const GET_BENEFITS_LOCATIONS = "GET_BENEFITS_LOCATIONS";
 export const GET_BENEFITS_ACTIVE = "GET_BENEFITS_ACTIVE";
 export const GET_BENEFITSBYID = "GET_BENEFITSBYID";
-export const GET_BENEFITS_LOCATIONSBYID= "GET_BENEFITS_LOCATIONSBYID";
 export const ADD_BENEFIT = "ADD_BENEFIT";
-export const ADD_BENEFIT_LOCATION = "ADD_BENEFIT_LOCATION";
 export const UPDATE_BENEFIT = "UPDATE_BENEFIT";
 export const DELETE_BENEFIT = "DELETE_BENEFIT";
-export const DELETE_BENEFIT_LOCATION = "DELETE_BENEFIT_LOCATION";
 export const BE_LOADING = "BE_LOADING";
-export const BE_LOADING_LOCATION = "BE_LOADING_LOCATION";
 export const BE_ERROR = "BE_ERROR";
 
 export const GetBenefitsActive = () => {
@@ -58,72 +52,6 @@ export const GetBenefitsActive = () => {
           });
 
         //console.log("imagenes",res.data)
-      })
-      .catch(globalErrorHandler);
-    };
-  };
-
-  export const GetBenefitsCategory = () => {
-    const config = {
-        headers: {
-            'content-type': 'application/json',
-        }
-      }  
-    return async dispatch => {
-      dispatch({
-        type: BE_LOADING
-      });
-      await api.get(`/BenefitsCategory`,config).then(res => {
-        dispatch({
-          type: GET_BENEFITS_CATEGORY,
-          data: res.data
-          });
-
-        //console.log("imagenes",res.data)
-      })
-      .catch(globalErrorHandler);
-    };
-  };
-
-  export const GetBenefitsLocations = () => {
-    const config = {
-        headers: {
-            'content-type': 'application/json',
-        }
-      }  
-    return async dispatch => {
-      dispatch({
-        type: BE_LOADING
-      });
-      await api.get(`/BenefitsLocation`,config).then(res => {
-        dispatch({
-          type: GET_BENEFITS_LOCATIONS,
-          data: res.data
-          });
-
-        //console.log("imagenes",res.data)
-      })
-      .catch(globalErrorHandler);
-    };
-  };
-
-  export const GetBenefitsLocationsById = (id) => {
-    const config = {
-        headers: {
-            'content-type': 'application/json',
-        }
-      }  
-    return async dispatch => {
-      dispatch({
-        type: BE_LOADING_LOCATION
-      });
-      await api.get(`/BenefitsLocation/${id}`,config).then(res => {
-        dispatch({
-          type: GET_BENEFITS_LOCATIONSBYID,
-          data: res.data
-          });
-
-        console.log("imagenes",res.data)
       })
       .catch(globalErrorHandler);
     };
@@ -175,48 +103,12 @@ export const AddBenefit = (payload, Logo) => {
               type: ADD_BENEFIT,
               payload: res.data
           });
-          console.log(res.data)
-          //history.push(`http://localhost:3000/Benefits/FormAdminBenefits/${id}`);
       })
       .catch(globalErrorHandler);
   };
 };
 
-export const AddBenefitLocation = (payload) => {
-  //console.log("addver", payload, files)
-  var formData = new FormData();
-    formData.append('idBenefits', payload.idBenefit);
-    formData.append('Provincia', payload.province);
-    formData.append('Canton', payload.canton);
-    formData.append('Distrito', payload.district);
-    formData.append('Address', payload.address);
-    formData.append('Latitude', payload.latitude);
-    formData.append('Longitude', payload.longitude);
-    formData.append('Phone', payload.phone);
-    formData.append('WhatsApp', payload.whatsapp);
-    formData.append('Active', payload.active);
-    const config = {
-        headers: {
-            'content-type': 'multipart/form-data',
-        }
-    }
-  return async dispatch => {
-      dispatch({
-          type: BE_LOADING_LOCATION
-      });
-
-      api.post(`/BenefitsLocation`, 
-      formData, config).then(res => {
-          dispatch({
-              type: ADD_BENEFIT_LOCATION,
-              payload: res.data
-          });
-          console.log(res.data)
-          //history.push(`/Benefits/FormAdminBenefits/${id}`);
-      })
-      .catch(globalErrorHandler);
-  };
-}; 
+ 
 
 export const UpdateBenefit = (id, payload) => dispatch => {
   var formData = new FormData();
@@ -262,20 +154,6 @@ export const DeleteBenefit = (id) => dispatch => {
         });
     })
     .catch(globalErrorHandler);
-};
-
-export const DeleteBenefitLocation = (id) => dispatch => {
-  dispatch({
-      type: BE_LOADING_LOCATION
-  });
-  
-  api.delete(`/BenefitsLocation/${id}`).then(res => {
-      dispatch({
-          type: DELETE_BENEFIT_LOCATION,
-          payload: res.data
-      });
-  })
-  .catch(globalErrorHandler);
 };
 
 

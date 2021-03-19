@@ -20,11 +20,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 //import AgregarDialog from './AgregarArticulo'
 import { GetOrderById } from "../../redux/actions/OrderActions";
-import { GetBenefitsById } from "../../redux/actions/BenefitsActions";
+import { GetBenefitsById, GetBenefitsLocations} from "../../redux/actions/BenefitsActions";
 import history from "history.js";
 import { useParams } from "react-router";
 import moment from "moment";
 import LocationsTable from "./ubicacionesTable"
+import Chip from '@material-ui/core/Chip';
 
 
 const useStyles = makeStyles({
@@ -73,6 +74,8 @@ const AdminBenefitDetalle = (props) => {
     
     const benefit = useSelector(state => state.benefit.benefit);
     const isLoading  = useSelector(state => state.benefit.loading);
+    const isLoadingLocation  = useSelector(state => state.benefit.loadingLocation);
+    const benefitslocations = useSelector(state => state.benefit.benefitslocations);
     const dispatch = useDispatch();
     const classes = useStyles();
     let { id } = useParams();
@@ -86,6 +89,7 @@ const AdminBenefitDetalle = (props) => {
 
     useEffect(() => {
         dispatch(GetBenefitsById(id));
+        dispatch(GetBenefitsLocations());
     }, []);
 
     const handleClose = () => {
@@ -98,7 +102,7 @@ const AdminBenefitDetalle = (props) => {
 
     return (
         <div className="m-sm-30">
-            {(isLoading) ? <Loading/> : 
+            {(isLoading || isLoadingLocation) ? <Loading/> : 
             <Grid container spacing={2}>
                 <Grid item md={12} xs={12}> 
                     <Card className={classes.formcard} elevation={6}>                              
@@ -134,10 +138,26 @@ const AdminBenefitDetalle = (props) => {
                                         <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].email }</TableCell>
                                     </TableRow>
                                     <TableRow>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Active:</h6> </TableCell>
+                                        <TableCell className="px-sm-24">{ 
+                                            benefit[0] == undefined ? "" :  <Chip style={{backgroundColor: benefit[0].active ? "green" : "red", margin: "1%", color: "white"}} label={benefit[0].active ? "Active" : "Inactive"} key={benefit[0].active ? "Active" : "Inactive"} />}
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Logo:</h6> </TableCell>
+                                        <TableCell className="px-sm-24">{
+                                             benefit[0] == undefined ? null : <img
+                                             className={classes.sectionbutton}                                         
+                                             alt="..."
+                                             src={`${benefit[0].logo}`}
+                                             />
+                                        }</TableCell>
+                                    </TableRow>
+                                    <TableRow>
                                         <TableCell width={"100%"} className={classes.cellspace + " pl-sm-24"}>
                                             <h6>Localizaciones:</h6>
                                         </TableCell>
-                                        <TableCell className="px-sm-24"><LocationsTable type={"detail"} /></TableCell>
+                                        <TableCell className="px-sm-24"><LocationsTable benefitslocations={benefitslocations} type={"detail"} /></TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>

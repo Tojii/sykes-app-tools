@@ -227,7 +227,7 @@ const FormAdminBenefits = () => {
                     {(isLoading) ? <Loading/> :
                     <>  
                         <SelectValidator 
-                            label="Categoría*" 
+                            label="Category*" 
                             name="idCategory"
                             className={classes.textvalidator} 
                             value={benefitsform.idCategory} 
