@@ -21,6 +21,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
 import LocationsTable from "./ubicacionesTable";
 import { GetProvince, GetCantons, GetDistricts } from "../../redux/actions/LocationActions";
+import MapSection from '../../components/maps/Maps';
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -95,7 +96,6 @@ const FormAdminBenefits = (props) => {
     const provinces = useSelector(state => state.locations.provinces);
     const cantons = useSelector(state => state.locations.cantons);
     const districts = useSelector(state => state.locations.districts);
-    
     const [locationsform, setLocationsForm] = useState({
         idBenefit: props.idBenefit,
         address: "",
@@ -107,10 +107,24 @@ const FormAdminBenefits = (props) => {
         district: "",
         phone: "",
         whatsapp: "",
-        latitude: "5",
-        longitude: "5",
+        latitude: "",
+        longitude: "",
         active: false
     });
+    const locationMap = {
+        address: 'San José, Costa Rica',
+        lat: 9.903329970416294, lng: -84.08271419551181
+      } // our location object from earlier
+
+    const onChangeLocation = (lat, lng) => {
+        console.log("lat", lat);
+        console.log("lng", lng);
+        setLocationsForm({
+            ...locationsform,
+            latitude: lat,
+            longitude: lng,
+            })
+    }
 
     const handleFormSubmitLocation = async () => {
         if (props.id) {
@@ -121,10 +135,6 @@ const FormAdminBenefits = (props) => {
             setOpen(true);
         }
     };
-
-    const handleBack = () => {
-        history.push("/Benefits/AdminFormBenefits");
-    }
 
     useEffect(() => {
         //dispatch(GetCampaigns());
@@ -220,7 +230,7 @@ const FormAdminBenefits = (props) => {
 
     return (
         <div className={"p-24"}>
-            {console.log("Benefit", location)}
+            {console.log("Benefit", locationsform)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsLocations());}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{props.id ? "Editar Localización" : "Agregar Localización"}</h2>}
@@ -316,7 +326,31 @@ const FormAdminBenefits = (props) => {
                                 />
                             }
                         />
-                    
+                        <div className={classes.textvalidator}>
+                            <MapSection defaultlat={locationMap.lat} defaultlng={locationMap.lng} lat={locationMap.lat} lng={locationMap.lng} zoomLevel={8} draggable={true} onChangeLocation={onChangeLocation} /> {/* include it here */}
+                        </div>
+                        <TextValidator
+                            className={classes.textvalidator}
+                            label="Latitude*"
+                            onChange={handleChange}
+                            type="text"
+                            name="latitude"
+                            disabled={true}
+                            value={locationsform.latitude}
+                            validators={["required"]}
+                            errorMessages={["Este campo es requerido"]}
+                        />
+                        <TextValidator
+                            className={classes.textvalidator}
+                            label="Longitude*"
+                            onChange={handleChange}
+                            type="text"
+                            name="longitude"
+                            disabled={true}
+                            value={locationsform.longitude}
+                            validators={["required"]}
+                            errorMessages={["Este campo es requerido"]}
+                        />
                         <div className={classes.sectionbutton}>
                             <Button style={{margin: "1%", marginTop: "10%", marginBottom: "5%", width: "105.92px"}} onClick={handleFormSubmitLocation} variant="contained" color="primary">
                                 ENVIAR  

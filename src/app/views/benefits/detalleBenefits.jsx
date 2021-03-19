@@ -231,7 +231,7 @@ const DetalleBenefits = (props) => {
                                                                 UBICACIÓN
                                                             </Typography>
                                                             <div>
-                                                            <MapSection lat={location.lat} lng={location.lng} zoomLevel={10} draggable={true} onChangeLocation={onChangeLocation} /> {/* include it here */}
+                                                            <MapSection defaultlat={location.lat} defaultlng={location.lng} lat={location.lat} lng={location.lng} zoomLevel={10} draggable={true} onChangeLocation={onChangeLocation} /> {/* include it here */}
                                                             {/* <Map
                                                                 google={props.google}
                                                                 zoom={8}
