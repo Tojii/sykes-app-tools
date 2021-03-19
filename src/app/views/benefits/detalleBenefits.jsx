@@ -21,11 +21,10 @@ import MapSection from '../../components/maps/Maps';
   const cn = (...args) => args.filter(Boolean).join(' ')
 
   const Tab = ({ children, scroll }) => {
-    const { isActive, onClick } = useTabState()
     const classes = useStyles();
   
     return (
-      <button className={cn(classes.tab)} onClick={() => {console.log("click!", isActive, onClick); scroll() } }>
+      <button className={cn(classes.tab)} onClick={() => {scroll() } }>
         {children}
       </button>
     )
@@ -161,7 +160,6 @@ const DetalleBenefits = (props) => {
     }
 
     useEffect(() => {
-        dispatch(GetImages());
         dispatch(GetBenefitsById("6"));
     }, [])
 
@@ -396,7 +394,7 @@ const DetalleBenefits = (props) => {
     )
 }
 
-export default HomeVentas;
+export default DetalleBenefits;
 
 
 // export default GoogleApiWrapper({
