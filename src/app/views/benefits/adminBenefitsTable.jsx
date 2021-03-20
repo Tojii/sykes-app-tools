@@ -136,10 +136,9 @@ const AdminBenefitsTable = () => {
           item.benefit.instagram,
           item.benefit.email,
           item.benefit.active ? ["Active"] : ["Inactive"],
-          ["Alajuela","San José"],
-          ["Alajuela","San José"],
-          // item.locations.map(item2 => {return item2.province }),
-          // item.locations.map(item2 => {return item2.canton }),
+          item.locations.map(item2 => {return item2.provincia }),
+          item.locations.map(item2 => {return item2.canton }),
+          item.locations.map(item2 => {return item2.distrito }),
           showImage(item),
           detallesButton(item)
       ]}
@@ -306,6 +305,19 @@ const AdminBenefitsTable = () => {
           }
         },
         {
+          name: "Districts",
+          options: {
+            filter: true,
+            display: false,
+            customBodyRenderLite: (dataIndex) => {
+              let value = builddata[dataIndex][14];
+              return value.map((val, key) => {
+                return <Chip style={{backgroundColor: "#039be5", margin: "1%", color: "white"}} label={val} key={key} />;
+              });
+            },
+          }
+        },
+        {
           name: "logo",
           label: "Logo",
           options: {
@@ -362,9 +374,9 @@ const AdminBenefitsTable = () => {
   return (
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
-        <div className={classes.tableMargin + " m-sm-30"}>
-          {console.log(benefits)}
-          {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
+        <div className={classes.tableMargin + " m-sm-20"}>
+          {console.log("BN", benefits)}
+          {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el beneficio no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               {/* { isLoading ? <Loading /> :   */}

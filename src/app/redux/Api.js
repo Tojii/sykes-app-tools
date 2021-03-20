@@ -51,6 +51,6 @@ export const globalErrorHandler = async (error) => {
     if (error.response && error.response.status === 401 || error.response && error.response.status === 403) {
       Store.dispatch(logoutUser("Your session has expired."));
     }
-    else
-      Store.dispatch(logoutUser());
+    // else
+    //   Store.dispatch(logoutUser());
 };

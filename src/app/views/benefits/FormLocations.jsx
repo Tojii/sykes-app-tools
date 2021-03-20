@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { GetCampaignItemsById, UpdateCampaignItems, AddCampaignItems, GetCampaigns, GetCampaignsActive, GetCampaignsItems } from "../../redux/actions/CampaignActions";
-import { AddBenefitLocation, GetBenefitsLocations, GetBenefitsLocationsById} from "../../redux/actions/BenefitsActions";
+import { AddBenefitLocation, GetBenefitsLocations, GetBenefitsLocationsById, UpdateBenefitLocation, GetBenefitsById} from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
@@ -86,7 +86,8 @@ const FormAdminBenefits = (props) => {
     const campaigns = useSelector(state => state.campaign.campaigns);
     const addCampaignItems = useSelector(state => state.campaign.addCampaignItems);
     const successCampaignItems = useSelector(state => state.benefit.success);
-    const isLoading  = false;
+    const isLoadingLocation  = useSelector(state => state.benefit.loadingLocation);
+    const isLoading  = useSelector(state => state.benefit.loading);
     const [open, setOpen] = useState(false);
     const [files, setFiles] = useState(null);
     const [logo, setLogo] = useState(null);
@@ -119,7 +120,7 @@ const FormAdminBenefits = (props) => {
 
     const handleFormSubmitLocation = async () => {
         if (props.id) {
-            //await dispatch(UpdateCampaignItems(props.id, locationsform));
+            await dispatch(UpdateBenefitLocation(props.id, locationsform, locationsMapform));
             setOpen(true);
         } else {
             await dispatch(AddBenefitLocation(locationsform, locationsMapform));
@@ -137,7 +138,7 @@ const FormAdminBenefits = (props) => {
 
     useEffect(() => {
         if(props.id && location != [] && location[0] != [""] && location[0] != undefined) {setLocationsForm({
-            idBenefit: location[0].idBenefits,
+            idBenefit: location[0].benefit.idBenefit,
             province: location[0].provincia,
             canton: location[0].canton,
             district: location[0].distrito,
@@ -238,12 +239,12 @@ const FormAdminBenefits = (props) => {
 
     return (
         <div className={"p-24"}>
-            {console.log("Benefit", locationsform)}
-            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsLocations());}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {console.log("Benefit", locationsform, locationsMapform)}
+            {(isLoading || isLoadingLocation) ? <Loading/> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsById(props.idBenefit))}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
-                {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{props.id ? "Editar Localización" : "Agregar Localización"}</h2>}
+                {(isLoading || isLoadingLocation) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{props.id ? "Editar Localización" : "Agregar Localización"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmitLocation}>  
-                    {(isLoading) ? <Loading/> :
+                    {(isLoading || isLoadingLocation) ? <Loading/> :
                     <>               
                         <TextValidator
                             className={classes.textvalidator}

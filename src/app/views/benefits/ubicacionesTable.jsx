@@ -21,7 +21,7 @@ import CustomFooter from '../muidatatable/CustomFooter';
 import NotFound from "../sessions/NotFound"
 import { makeStyles } from '@material-ui/core/styles';
 import { GetCampaignItemsById, DeleteCampaignItem, GetCampaignsItems } from "../../redux/actions/CampaignActions";
-import { GetBenefitsLocations, DeleteBenefitLocation } from "../../redux/actions/BenefitsActions";
+import { GetBenefitsLocations, DeleteBenefitLocation, GetBenefitsById } from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import AgregarDialog from "./FormLocations"
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -41,8 +41,8 @@ const useStyles = makeStyles({
     "@media (min-width: 0px)": {
     },
     "@media (min-width: 1024px)": {
-        width: "64%",
-        marginLeft: "18%"
+        width: "70%",
+        marginLeft: "15%"
     },
   },
 });
@@ -91,8 +91,9 @@ const LocationsTable = (props) => {
         whatsapp: "+ (506) 8888-2222",
         }
     ];
-    const successCampaignItems = useSelector(state => state.campaign.success);
-    const isLoading  = false;
+    const successCampaignItems = useSelector(state => state.benefit.success);
+    const isLoadingLocation  = useSelector(state => state.benefit.loadingLocation);
+    const isLoading  = useSelector(state => state.benefit.loading);
     const [open, setOpen] = useState(false);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const [shouldOpenNewDialog, setShouldOpenNewDialog] = useState({ open: false, type: "new" });
@@ -300,11 +301,11 @@ const LocationsTable = (props) => {
   }
 
   return (
-    (false || user.badge == undefined) ? <Loading /> :
+    (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={props.type != "detail" ? classes.tableMargin + " m-sm-30" : "m-sm-30"}>
-          {console.log(history.location.pathname)}
-          {(false) ? <Loading /> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsLocations());}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el artículo no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
+          {console.log(successCampaignItems)}
+          {(isLoading || isLoadingLocation) ? <Loading /> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsById(props.idBenefit))}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la localización no pudo ser eliminada!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               {/* { isLoading ? <Loading /> :   */}

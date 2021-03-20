@@ -89,9 +89,8 @@ const FormAdminBenefits = () => {
     let { id } = useParams();
     const benefit = useSelector(state => state.benefit.benefit);
     const benefitscategories = useSelector(state => state.benefit.benefitscategories);
-    const benefitslocations = useSelector(state => state.benefit.benefitslocations);
-    const addCampaignItems = useSelector(state => state.campaign.addBenefit);
     const successBenefit = useSelector(state => state.benefit.success);
+    const isLoadingLocation  = useSelector(state => state.benefit.loadingLocation);
     const isLoading  = useSelector(state => state.benefit.loading);
     const [open, setOpen] = useState(false);
     const [files, setFiles] = useState(null);
@@ -220,7 +219,7 @@ const FormAdminBenefits = () => {
     return (
         <div className={classes.margindiv + " p-24"}>
             {console.log(benefitsform)}
-             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+             {(isLoading || isLoadingLocation) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Beneficio" : "Agregar Beneficio"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
@@ -352,7 +351,7 @@ const FormAdminBenefits = () => {
                                 : null
                             }
                         </div>
-                        {id ? <LocationsTable benefitslocations={benefitslocations} idBenefit={id} /> : null}
+                        {id ? <LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} idBenefit={id} /> : null}
                         <div className={classes.sectionbutton}>
                             <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
                                 ENVIAR  

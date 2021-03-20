@@ -8,6 +8,7 @@ import {
     ADD_BENEFIT,
     ADD_BENEFIT_LOCATION,
     UPDATE_BENEFIT,
+    UPDATE_BENEFIT_LOCATION,
     DELETE_BENEFIT,
     DELETE_BENEFIT_LOCATION,
     BE_LOADING,
@@ -47,49 +48,56 @@ const BenefitReducer = function(state = initialState, action){
             return {
               ...state,
               success: false,
-              loading: false
+              loading: false,
+              loadingLocation: false,
             }
         }
         case GET_BENEFITS: {
             return {
                 ...state,
                 benefits: [...action.data],
-                loading: false
+                loading: false,
+                success: true,
             }
         }
         case GET_BENEFITS_CATEGORY: {
             return {
                 ...state,
                 benefitscategories: [...action.data],
-                loading: false
+                loading: false,
+                success: true,
             }
         }
         case GET_BENEFITS_LOCATIONS: {
             return {
                 ...state,
                 benefitslocations: [...action.data],
-                loading: false
+                loading: false,
+                success: true,
             }
         }
         case GET_BENEFITS_ACTIVE: {
             return {
                 ...state,
                 benefitsActive: [...action.data],
-                loading: false
+                loading: false,
+                success: true,
             }
         }
         case GET_BENEFITSBYID: {
             return {
                 ...state,
                 benefit: [action.data],
-                loading: false
+                loading: false,
+                success: true,
             }
         }
         case GET_BENEFITS_LOCATIONSBYID: {
             return {
                 ...state,
                 benefitlocation: [action.data],
-                loadingLocation: false
+                loadingLocation: false,
+                success: true,
             }
         }
         case ADD_BENEFIT: {
@@ -105,7 +113,7 @@ const BenefitReducer = function(state = initialState, action){
                 ...state,
                 addBenefitLocation : action.data,
                 success: true,
-                loading: false
+                loadingLocation: false
             }
         }
         case UPDATE_BENEFIT: {
@@ -114,6 +122,14 @@ const BenefitReducer = function(state = initialState, action){
                 addBenefit : action.data,
                 success: true,
                 loading: false
+            }
+        }
+        case UPDATE_BENEFIT_LOCATION: {
+            return {
+                ...state,
+                addBenefitLocation : action.data,
+                success: true,
+                loadingLocation: false
             }
         }
         case DELETE_BENEFIT: {
@@ -127,7 +143,7 @@ const BenefitReducer = function(state = initialState, action){
             return {
                 ...state,
                 success: true,
-                loading: false
+                loadingLocation: false
             }
         }
         default: {

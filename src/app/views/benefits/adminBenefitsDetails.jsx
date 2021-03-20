@@ -52,7 +52,6 @@ const AdminBenefitDetalle = (props) => {
     const benefit = useSelector(state => state.benefit.benefit);
     const isLoading  = useSelector(state => state.benefit.loading);
     const isLoadingLocation  = useSelector(state => state.benefit.loadingLocation);
-    const benefitslocations = useSelector(state => state.benefit.benefitslocations);
     const dispatch = useDispatch();
     const classes = useStyles();
     let { id } = useParams();
@@ -127,7 +126,7 @@ const AdminBenefitDetalle = (props) => {
                                         <TableCell width={"100%"} className={classes.cellspace + " pl-sm-24"}>
                                             <h6>Localizaciones:</h6>
                                         </TableCell>
-                                        <TableCell ><LocationsTable benefitslocations={benefitslocations} type={"detail"} /></TableCell>
+                                        <TableCell ><LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} type={"detail"} /></TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>

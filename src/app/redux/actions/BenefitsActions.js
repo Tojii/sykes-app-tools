@@ -14,6 +14,7 @@ export const GET_BENEFITS_LOCATIONSBYID= "GET_BENEFITS_LOCATIONSBYID";
 export const ADD_BENEFIT = "ADD_BENEFIT";
 export const ADD_BENEFIT_LOCATION = "ADD_BENEFIT_LOCATION";
 export const UPDATE_BENEFIT = "UPDATE_BENEFIT";
+export const UPDATE_BENEFIT_LOCATION = "UPDATE_BENEFIT_LOCATION";
 export const DELETE_BENEFIT = "DELETE_BENEFIT";
 export const DELETE_BENEFIT_LOCATION = "DELETE_BENEFIT_LOCATION";
 export const BE_LOADING = "BE_LOADING";
@@ -178,7 +179,12 @@ export const AddBenefit = (payload, Logo) => {
           console.log(res.data)
           history.push(`/Benefits/FormAdminBenefits/${res.data}`);
       })
-      .catch(globalErrorHandler);
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR
+        })
+      });
   };
 };
 
@@ -193,8 +199,8 @@ export const AddBenefitLocation = (payload, payloadMap) => {
     formData.append('codCanton', payload.cantonCode);
     formData.append('codDistrito', payload.districtCode);
     formData.append('Address', payload.address);
-    formData.append('Latitude', payloadMap.latitude);
-    formData.append('Longitude', payloadMap.longitude);
+    formData.append('Latitude', payloadMap.latitude.toString().replace(".", ","));
+    formData.append('Longitude', payloadMap.longitude.toString().replace(".", ","));
     formData.append('Phone', payload.phone);
     formData.append('WhatsApp', payload.whatsapp);
     formData.append('Active', payload.active);
@@ -217,7 +223,12 @@ export const AddBenefitLocation = (payload, payloadMap) => {
           console.log(res.data)
           //history.push(`/Benefits/FormAdminBenefits/${id}`);
       })
-      .catch(globalErrorHandler);
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR
+        })
+      });
   };
 }; 
 
@@ -251,7 +262,52 @@ export const UpdateBenefit = (id, payload, files) => dispatch => {
           payload: res.data
       });
   })
-  .catch(globalErrorHandler);
+  .catch((error) => {
+    globalErrorHandler(error);
+    dispatch({
+      type: BE_ERROR
+    })
+  });
+};
+
+export const UpdateBenefitLocation = (id, payload, payloadMap) => dispatch => {
+  console.log("update",payload, payloadMap)
+  var formData = new FormData();
+    formData.append('idBenefits', payload.idBenefit);
+    formData.append('Provincia', payload.province);
+    formData.append('Canton', payload.canton);
+    formData.append('Distrito', payload.district);
+    formData.append('codProvincia', payload.provinceCode);
+    formData.append('codCanton', payload.cantonCode);
+    formData.append('codDistrito', payload.districtCode);
+    formData.append('Address', payload.address);
+    formData.append('Latitude', payloadMap.latitude.toString().replace(".", ","));
+    formData.append('Longitude', payloadMap.longitude.toString().replace(".", ","));
+    formData.append('Phone', payload.phone);
+    formData.append('WhatsApp', payload.whatsapp);
+    formData.append('Active', payload.active);
+    const config = {
+        headers: {
+            'content-type': 'multipart/form-data',
+        }
+    }
+  dispatch({
+      type: BE_LOADING_LOCATION
+  });
+
+  api.put(`/BenefitsLocation/${id}`, 
+  formData, config).then(res => {
+      dispatch({
+          type: UPDATE_BENEFIT_LOCATION,
+          payload: res.data
+      });
+  })
+  .catch((error) => {
+    globalErrorHandler(error);
+    dispatch({
+      type: BE_ERROR
+    })
+  });
 };
 
 export const DeleteBenefit = (id) => dispatch => {
@@ -265,7 +321,12 @@ export const DeleteBenefit = (id) => dispatch => {
             payload: res.data
         });
     })
-    .catch(globalErrorHandler);
+    .catch((error) => {
+      globalErrorHandler(error);
+      dispatch({
+        type: BE_ERROR
+      })
+    });
 };
 
 export const DeleteBenefitLocation = (id) => dispatch => {
@@ -279,7 +340,12 @@ export const DeleteBenefitLocation = (id) => dispatch => {
           payload: res.data
       });
   })
-  .catch(globalErrorHandler);
+  .catch((error) => {
+    globalErrorHandler(error);
+    dispatch({
+      type: BE_ERROR
+    })
+  });
 };
 
 
