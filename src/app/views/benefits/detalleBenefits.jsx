@@ -168,10 +168,10 @@ const DetalleBenefits = (props) => {
             {console.log(benefit)}
             { isLoading ? <Loading/> :
             <div className={classes.margindiv}>
-                <h1 style={{ color: "limegreen", marginTop: "2%", fontWeight: "bold"}} className="mb-20">{benefit[0] ? benefit[0].category.name.toUpperCase() : ""}</h1>
+                <h1 style={{ color: "limegreen", marginTop: "2%", fontWeight: "bold"}} className="mb-20">{benefit[0] ? benefit[0].benefit.category.name.toUpperCase() : ""}</h1>
                 <h5> All Sykes employees can take advantage of these exclusive agreements. </h5>
                 <Card className={classes.cardContainer} elevation={6}>
-                    <h2 style={{ color: "orange", marginLeft: "2%", marginTop: "2%",}} className="mb-20">Restaurante: {benefit[0] ? benefit[0].name : ""}</h2>      
+                    <h2 style={{ color: "orange", marginLeft: "2%", marginTop: "2%",}} className="mb-20">Restaurante: {benefit[0] ? benefit[0].benefit.name : ""}</h2>      
                     <Tabs style={{marginLeft: "2%", marginTop: "2%",}}>
                         <div className={classes.tabs}>
                         <div className={classes.tabList} >
@@ -194,7 +194,7 @@ const DetalleBenefits = (props) => {
                                                                 DESCRIPCIÓN
                                                             </Typography>
                                                             <Typography style={{marginLeft: "3%", textAlign: "justify",}} variant="body2" gutterBottom>
-                                                                {benefit[0] ? benefit[0].description : ""}
+                                                                {benefit[0] ? benefit[0].benefit.description : ""}
                                                             </Typography>
                                                         </Grid>
                                                     </Grid>
@@ -210,7 +210,7 @@ const DetalleBenefits = (props) => {
                                                                 BENEFICIO
                                                             </Typography>
                                                             <Typography style={{width:"75%", marginLeft: "3%", textAlign: "justify", display:"inline-block", verticalAlign: "top"}} variant="body2" gutterBottom>
-                                                                {benefit[0] ? benefit[0].benefitInfo : ""}
+                                                                {benefit[0] ? benefit[0].benefit.benefitInfo : ""}
                                                             </Typography>
                                                             <img
                                                                 style={{marginLeft: "3%", maxWidth: "170px"}}
@@ -255,7 +255,7 @@ const DetalleBenefits = (props) => {
                                                 <img
                                                     style={{maxWidth: "100px", margin: "5%"}}
                                                     alt="..."
-                                                    src={`${benefit[0] ? benefit[0].logo : null}`}
+                                                    src={`${benefit[0] ? benefit[0].benefit.logo : null}`}
                                                 /> 
                                             </div>
                                             <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
@@ -311,8 +311,8 @@ const DetalleBenefits = (props) => {
                                                     </div>
                                                 </Grid>
                                                 <Grid item lg={9} md={9} sm={9} xs={9}>
-                                                <a href={`https://${benefit[0] ? benefit[0].link : ""}`} style={{color: "#039be5"}}>
-                                                    {benefit[0] ? benefit[0].link : ""}
+                                                <a href={`https://${benefit[0] ? benefit[0].benefit.link : ""}`} style={{color: "#039be5"}}>
+                                                    {benefit[0] ? benefit[0].benefit.link : ""}
                                                 </a>
                                                 </Grid>
                                             </Grid>
@@ -326,10 +326,10 @@ const DetalleBenefits = (props) => {
                                                         />
                                                     </div>
                                                 </Grid> */}
-                                                {benefit[0] && benefit[0].instagram ?
+                                                {benefit[0] && benefit[0].benefit.instagram ?
                                                 <Grid item lg={3} md={3} sm={3} xs={3}>
                                                     <div style={{textAlignLast: "center"}}>
-                                                        <a href={`https://${benefit[0] ? benefit[0].instagram : ""}`}>
+                                                        <a href={`https://${benefit[0] ? benefit[0].benefit.instagram : ""}`}>
                                                             <img
                                                                 className={classes.miniatureimage}
                                                                 alt="..."
@@ -338,10 +338,10 @@ const DetalleBenefits = (props) => {
                                                         </a>
                                                     </div>
                                                 </Grid> : null}
-                                                {benefit[0] && benefit[0].facebook ?
+                                                {benefit[0] && benefit[0].benefit.facebook ?
                                                 <Grid item lg={3} md={3} sm={3} xs={3}>
                                                     <div style={{textAlignLast: "center"}}>
-                                                        <a href={`https://${benefit[0] ? benefit[0].facebook : ""}`}> 
+                                                        <a href={`https://${benefit[0] ? benefit[0].benefit.facebook : ""}`}> 
                                                             <img
                                                                 className={classes.miniatureimage}
                                                                 alt="..."
@@ -350,10 +350,10 @@ const DetalleBenefits = (props) => {
                                                         </a>
                                                     </div>
                                                 </Grid> : null}
-                                                {benefit[0] && benefit[0].email ?
+                                                {benefit[0] && benefit[0].benefit.email ?
                                                 <Grid item lg={3} md={3} sm={3} xs={3}>
                                                     <div style={{textAlignLast: "center"}}>
-                                                        <a href={`https://${benefit[0] ? benefit[0].email : ""}`}>
+                                                        <a href={`https://${benefit[0] ? benefit[0].benefit.email : ""}`}>
                                                             <img
                                                                 className={classes.miniatureimage}
                                                                 alt="..."
@@ -395,8 +395,3 @@ const DetalleBenefits = (props) => {
 }
 
 export default DetalleBenefits;
-
-
-// export default GoogleApiWrapper({
-//     apiKey: 'AIzaSyCjTwsOnh1PVEg-rKhxEuW0xJ-sZxAucgw'
-//   })(HomeVentas);

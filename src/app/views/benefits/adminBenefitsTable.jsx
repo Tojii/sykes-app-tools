@@ -88,7 +88,7 @@ const AdminBenefitsTable = () => {
 
     const handleDetalle = (item) => {    
       history.push({
-        pathname: `/Benefits/AdminFormBenefitsDetails/${item.idBenefit}`,
+        pathname: `/Benefits/AdminFormBenefitsDetails/${item.benefit.idBenefit}`,
         prev: history.location.pathname
       });
     };
@@ -112,11 +112,11 @@ const AdminBenefitsTable = () => {
 
     const showImage = (item) => {
       return (
-        item.logo ?
+        item.benefit.logo ?
         <img
         className={classes.sectionbutton}                                         
         alt="..."
-        src={`${item.logo}`}
+        src={`${item.benefit.logo}`}
         /> : ""
       );
     }
@@ -124,18 +124,18 @@ const AdminBenefitsTable = () => {
     const builddata = benefits.map(item => {
       if (item != undefined) {
       return [
-          item.idBenefit,
-          item.category.idCategory,
-          item.category.name,
-          item.name,
-          item.detail,
-          item.description,
-          item.benefitInfo,
-          item.link,
-          item.facebook,
-          item.instagram,
-          item.email,
-          item.active ? ["Active"] : ["Inactive"],
+          item.benefit.idBenefit,
+          item.benefit.category.idCategory,
+          item.benefit.category.name,
+          item.benefit.name,
+          item.benefit.detail,
+          item.benefit.description,
+          item.benefit.benefitInfo,
+          item.benefit.link,
+          item.benefit.facebook,
+          item.benefit.instagram,
+          item.benefit.email,
+          item.benefit.active ? ["Active"] : ["Inactive"],
           ["Alajuela","San José"],
           ["Alajuela","San José"],
           // item.locations.map(item2 => {return item2.province }),

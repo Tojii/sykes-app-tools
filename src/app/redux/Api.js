@@ -24,7 +24,7 @@ instance.interceptors.request.use(
     return response
   }, async function (error) {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const access_token = await Store.dispatch(refreshtoken(Store.getState().login.refreshtoken));
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;

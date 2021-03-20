@@ -158,7 +158,7 @@ export const AddBenefit = (payload, Logo) => {
     formData.append('Instagram', payload.instagram);
     formData.append('Email', payload.email);
     formData.append('Active', payload.active);
-    formData.append('Logo', Logo);
+    formData.append('files', Logo);
     const config = {
         headers: {
             'content-type': 'multipart/form-data',
@@ -176,22 +176,25 @@ export const AddBenefit = (payload, Logo) => {
               payload: res.data
           });
           console.log(res.data)
-          //history.push(`http://localhost:3000/Benefits/FormAdminBenefits/${id}`);
+          history.push(`/Benefits/FormAdminBenefits/${res.data}`);
       })
       .catch(globalErrorHandler);
   };
 };
 
-export const AddBenefitLocation = (payload) => {
+export const AddBenefitLocation = (payload, payloadMap) => {
   //console.log("addver", payload, files)
   var formData = new FormData();
     formData.append('idBenefits', payload.idBenefit);
     formData.append('Provincia', payload.province);
     formData.append('Canton', payload.canton);
     formData.append('Distrito', payload.district);
+    formData.append('codProvincia', payload.provinceCode);
+    formData.append('codCanton', payload.cantonCode);
+    formData.append('codDistrito', payload.districtCode);
     formData.append('Address', payload.address);
-    formData.append('Latitude', payload.latitude);
-    formData.append('Longitude', payload.longitude);
+    formData.append('Latitude', payloadMap.latitude);
+    formData.append('Longitude', payloadMap.longitude);
     formData.append('Phone', payload.phone);
     formData.append('WhatsApp', payload.whatsapp);
     formData.append('Active', payload.active);
@@ -218,7 +221,7 @@ export const AddBenefitLocation = (payload) => {
   };
 }; 
 
-export const UpdateBenefit = (id, payload) => dispatch => {
+export const UpdateBenefit = (id, payload, files) => dispatch => {
   var formData = new FormData();
   formData.append('idCategory', payload.idCategory);
   formData.append('Name', payload.name);
@@ -231,6 +234,7 @@ export const UpdateBenefit = (id, payload) => dispatch => {
   formData.append('Email', payload.email);
   formData.append('Active', payload.active);
   formData.append('Logo', payload.logo);
+  formData.append('files', files);
   const config = {
       headers: {
           'content-type': 'multipart/form-data',

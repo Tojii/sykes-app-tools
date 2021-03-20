@@ -41,7 +41,7 @@ export function login({ email, password, force }) {
       });
     })
     .catch(error => {
-      if (error.response.status === 409)
+      if (error.response && error.response.status === 409)
         return dispatch({
           type: LOGIN_ERROR_SESSION_ACTIVE,
           data: `${error.response.data}. If you want to continue and close the active session click Sign in again.`

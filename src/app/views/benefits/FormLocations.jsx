@@ -96,6 +96,7 @@ const FormAdminBenefits = (props) => {
     const provinces = useSelector(state => state.locations.provinces);
     const cantons = useSelector(state => state.locations.cantons);
     const districts = useSelector(state => state.locations.districts);
+    const [locationsMapform, setLocationsMapForm] = useState({ latitude: "", longitude: "",})
     const [locationsform, setLocationsForm] = useState({
         idBenefit: props.idBenefit,
         address: "",
@@ -116,22 +117,12 @@ const FormAdminBenefits = (props) => {
         lat: 9.903329970416294, lng: -84.08271419551181
       } // our location object from earlier
 
-    const onChangeLocation = (lat, lng) => {
-        console.log("lat", lat);
-        console.log("lng", lng);
-        setLocationsForm({
-            ...locationsform,
-            latitude: lat,
-            longitude: lng,
-            })
-    }
-
     const handleFormSubmitLocation = async () => {
         if (props.id) {
             //await dispatch(UpdateCampaignItems(props.id, locationsform));
             setOpen(true);
         } else {
-            await dispatch(AddBenefitLocation(locationsform));
+            await dispatch(AddBenefitLocation(locationsform, locationsMapform));
             setOpen(true);
         }
     };
@@ -150,6 +141,9 @@ const FormAdminBenefits = (props) => {
             province: location[0].provincia,
             canton: location[0].canton,
             district: location[0].distrito,
+            provinceCode: location[0].codProvincia,
+            cantonCode: location[0].codCanton,
+            districtCode: location[0].codDistrito,
             address: location[0].address,
             latitude: location[0].latitude,
             longitude: location[0].longitude,
@@ -157,8 +151,14 @@ const FormAdminBenefits = (props) => {
             whatsapp: location[0].whatsApp,
             active: location[0].active,
             });
-            //dispatch(GetCantons(location[0].provinceCode));
-            //dispatch(GetDistricts(location[0].provinceCode, location[0].cantonCode));
+            setLocationsMapForm({
+                latitude: location[0].latitude,
+                longitude: location[0].longitude,
+            })
+            dispatch(GetCantons(location[0].codProvincia));
+            dispatch(GetDistricts(location[0].codProvincia, location[0].codCanton));
+            setDisableCanton(false);
+            setDisableDistrict(false);
         }
     }, [location]);
 
@@ -177,6 +177,14 @@ const FormAdminBenefits = (props) => {
             })
         }
     };
+
+     const onChangeLocation = (lat, lng) => {
+        console.log("lat", locationsform);
+        setLocationsMapForm({
+            latitude: lat,
+            longitude: lng,
+        })
+    }
 
     const handleChangeProvince = (event) => {
         let provinceName = "";
@@ -332,22 +340,22 @@ const FormAdminBenefits = (props) => {
                         <TextValidator
                             className={classes.textvalidator}
                             label="Latitude*"
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             name="latitude"
                             disabled={true}
-                            value={locationsform.latitude}
+                            value={locationsMapform.latitude}
                             validators={["required"]}
                             errorMessages={["Este campo es requerido"]}
                         />
                         <TextValidator
                             className={classes.textvalidator}
                             label="Longitude*"
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             name="longitude"
                             disabled={true}
-                            value={locationsform.longitude}
+                            value={locationsMapform.longitude}
                             validators={["required"]}
                             errorMessages={["Este campo es requerido"]}
                         />
