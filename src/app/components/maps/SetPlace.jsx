@@ -2,8 +2,9 @@ import React, { useState, Component, useRef, useEffect } from "react";
 import GoogleMap from './GoogleMap';
 import SearchBox from './SearchBox';
 
-const SetPlace = ({ lat, lng, zoomLevel, onChangeLocation, location }) => {
+const SetPlace = ({ lat, lng, zoomLevel, draggable, onChangeLocation, location, showSearcBox }) => {
   let marker = null;
+  let markers = [];
   const [mapLoaded, setMapLoaded] = useState(null);
   const [mapApi, setMapApi] = useState(null);
   const [mapInstance, setMapInstance] = useState(false);
@@ -31,21 +32,23 @@ const SetPlace = ({ lat, lng, zoomLevel, onChangeLocation, location }) => {
 
     if (location) {
       marker = new maps.Marker({
-        position: { lat: location.lat, lng: location.lng },
+        position: { lat: location[0].lat, lng: location[0].lng },
         map,
         draggable: draggable,
-        defaultAnimation: 2,
+        defaultAnimation: 2, 
       });
       
-      map.addListener('click', function(e) {
-        clearOverlays();
-        let marker = new window.google.maps.Marker({
-          position: e.latLng,
-          map: map
-        });
+      marker.addListener("dragend", function(e) {
+        
+        //clearOverlays();
+        // let marker = new window.google.maps.Marker({
+        //   position: e.latLng,
+        //   map: map
+        // });
         map.panTo(e.latLng);
         markers.push(marker);
-        onChangeLocation((e.latLng));
+        onChangeLocation(marker.getPosition().lat(), marker.getPosition().lng());
+        //console.log("hola", e.latLng)
       });
     }
   };
@@ -54,7 +57,7 @@ const SetPlace = ({ lat, lng, zoomLevel, onChangeLocation, location }) => {
       <>
         {mapLoaded && <SearchBox map={mapInstance} mapApi={mapApi} addplace={addPlace} />}
         <GoogleMap
-          defaultZoom={zoomLevel ? zoomLevel : 10}
+          defaultZoom={zoomLevel}
           defaultCenter={{ lat: lat, lng: lng }}
           bootstrapURLKeys={{
             key: process.env.REACT_APP_MAPS_KEY,
@@ -68,5 +71,5 @@ const SetPlace = ({ lat, lng, zoomLevel, onChangeLocation, location }) => {
   );
 }
 
-export default Map;
+export default SetPlace;
 // Aditional examples: https://github.com/google-map-react/google-map-react-examples/blob/master/src/examples/Searchbox.js

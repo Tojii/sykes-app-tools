@@ -4,6 +4,7 @@ import SearchBox from './SearchBox';
 
 const Map = ({ lat, lng, zoomLevel, draggable, onChangeLocation, locations, showSearcBox }) => {
   let markers = [];
+  const mylocation = [];
   
   const addPlace = (place) => {
     setPlaces(place);
@@ -33,16 +34,26 @@ const Map = ({ lat, lng, zoomLevel, draggable, onChangeLocation, locations, show
 
     if (locations) {
       locations.forEach(element => {
+        
         let marker = new maps.Marker({
-          position: { lat: element.lat, lng: element.lng },
+          position: { lat: parseFloat(element.latitude.replace(",", ".")), lng: parseFloat(element.longitude.replace(",", ".")) },
           map,
           draggable: draggable,
           defaultAnimation: 2,
         });
         
-        if (element.content) {
+        if (element.address) {
           const infowindow = new window.google.maps.InfoWindow({
-            content: element.content,
+            content: '<div id="content">' +
+            '<div id="siteNotice">' +
+            "</div>" +
+            `<h1 id="firstHeading" class="firstHeading">${element.benefit.name}</h1>` +
+            '<div id="bodyContent">' +
+            `<p><b>Address: </b> ${element.address} </p>` +
+            `<p><b>Phone: </b> ${element.phone} </p>` +
+            `<p><b>WhatsApp: </b> ${element.whatsApp} </p>` +
+            "</div>" +
+            "</div>",
           });
 
           marker.addListener("click", () => {
@@ -56,6 +67,7 @@ const Map = ({ lat, lng, zoomLevel, draggable, onChangeLocation, locations, show
   
   return (
       <>
+        {console.log("maps", mylocation)}
         {mapLoaded && showSearcBox && <SearchBox map={mapInstance} mapApi={mapApi} addplace={addPlace} />}
         <GoogleMap
           defaultZoom={zoomLevel}

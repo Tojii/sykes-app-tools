@@ -21,7 +21,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
 import LocationsTable from "./ubicacionesTable";
 import { GetProvince, GetCantons, GetDistricts } from "../../redux/actions/LocationActions";
-import Places from '../../components/maps/Places';
+import Places from '../../components/maps/SetPlace';
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -180,7 +180,7 @@ const FormAdminBenefits = (props) => {
     };
 
      const onChangeLocation = (lat, lng) => {
-        console.log("lat", locationsform);
+        console.log("lat", lat, lng);
         setLocationsMapForm({
             latitude: lat,
             longitude: lng,
@@ -335,8 +335,8 @@ const FormAdminBenefits = (props) => {
                                 />
                             }
                         />
-                        <div className={classes.textvalidator}>
-                            <Places locations={ [{ lat: locationMap.lat, lng: locationMap.lng }, { lat: 40.856795000000005, lng:-73.9982433125 }] } lng={locationMap.lng} zoomLevel={8} draggable={true} onChangeLocation={onChangeLocation} showSearcBox={true} /> {/* include it here */}
+                        <div style={{ height: "350px", marginLeft: "25%", marginBottom: "5%", width: "50%" }}>
+                        <Places location={ [{id: 1, lat: props.id && locationsform.latitude ? parseFloat(locationsform.latitude.replace(",", ".")) : locationMap.lat, lng: props.id && locationsform.longitude ? parseFloat(locationsform.longitude.replace(",", ".")) : locationMap.lng}] } lat={props.id && locationsform.latitude ? parseFloat(locationsform.latitude.replace(",", ".")) : locationMap.lat} lng={props.id && locationsform.longitude ? parseFloat(locationsform.longitude.replace(",", ".")) : locationMap.lng} zoomLevel={10} draggable={true} onChangeLocation={onChangeLocation} show /> {/* include it here */}
                         </div>
                         <TextValidator
                             className={classes.textvalidator}
