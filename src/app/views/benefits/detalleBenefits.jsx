@@ -188,7 +188,7 @@ const DetalleBenefits = (props) => {
 
     return (
         <>
-            {/* {console.log(benefit)} */}
+            {console.log(benefit)}
             { isLoading ? <Loading/> :
             <div className={classes.margindiv}>
                 <h1 style={{ color: "limegreen", marginTop: "2%", fontWeight: "bold"}} className="mb-20">{benefit[0] && benefit[0].benefit ? benefit[0].benefit.category.name.toUpperCase() : ""}</h1>
@@ -284,7 +284,7 @@ const DetalleBenefits = (props) => {
                                                     </div>
                                                 </Grid>
                                                 <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
-                                                    San José, Avenida 2, Calle 15. Frente a la Plaza de la democracia
+                                                    {`${benefit[0] && benefit[0].locations[0] ? benefit[0].locations[0].address : null}`}
                                                 </Grid>
                                             </Grid>
                                             <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
@@ -298,7 +298,7 @@ const DetalleBenefits = (props) => {
                                                     </div>
                                                 </Grid>
                                                 <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
-                                                    2222-2222
+                                                    {`${benefit[0] && benefit[0].locations[0] ? benefit[0].locations[0].phone : null}`}
                                                 </Grid>
                                             </Grid>
                                             <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
@@ -312,7 +312,7 @@ const DetalleBenefits = (props) => {
                                                     </div>
                                                 </Grid>
                                                 <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
-                                                    + (506) 8888-2222
+                                                    {`+ (506) ${benefit[0] && benefit[0].locations[0] ? benefit[0].locations[0].whatsApp : null}`}
                                                 </Grid>
                                             </Grid>
                                             <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
