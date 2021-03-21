@@ -16,7 +16,7 @@ import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import ReactDOM from 'react-dom';
 import { GetBenefitsById, DeleteBenefit, GetBenefits } from "../../redux/actions/BenefitsActions";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
-import MapSection from '../../components/maps/Maps';
+import Places from '../../components/maps/Places';
 
   const cn = (...args) => args.filter(Boolean).join(' ')
 
@@ -163,6 +163,28 @@ const DetalleBenefits = (props) => {
         dispatch(GetBenefitsById("6"));
     }, [])
 
+    const contentString =
+    '<div id="content">' +
+    '<div id="siteNotice">' +
+    "</div>" +
+    '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
+    '<div id="bodyContent">' +
+    "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " +
+    "sandstone rock formation in the southern part of the " +
+    "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " +
+    "south west of the nearest large town, Alice Springs; 450&#160;km " +
+    "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major " +
+    "features of the Uluru - Kata Tjuta National Park. Uluru is " +
+    "sacred to the Pitjantjatjara and Yankunytjatjara, the " +
+    "Aboriginal people of the area. It has many springs, waterholes, " +
+    "rock caves and ancient paintings. Uluru is listed as a World " +
+    "Heritage Site.</p>" +
+    '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
+    "https://en.wikipedia.org/w/index.php?title=Uluru</a> " +
+    "(last visited June 22, 2009).</p>" +
+    "</div>" +
+    "</div>";
+
     return (
         <>
             {/* {console.log(benefit)} */}
@@ -230,17 +252,8 @@ const DetalleBenefits = (props) => {
                                                             <Typography ref={ubicationRef} style={{marginLeft: "2%"}} gutterBottom variant="subtitle1">
                                                                 UBICACIÓN
                                                             </Typography>
-                                                            <div>
-                                                            <MapSection defaultlat={location.lat} defaultlng={location.lng} lat={location.lat} lng={location.lng} zoomLevel={10} draggable={true} onChangeLocation={onChangeLocation} /> {/* include it here */}
-                                                            {/* <Map
-                                                                google={props.google}
-                                                                zoom={8}
-                                                                style={mapStyles}
-                                                                initialCenter={{ lat: 47.444, lng: -122.176}}
-                                                                >
-                                                                <Marker position={{ lat: 48.00, lng: -122.00}} />
-                                                                <Marker position={{ lat: 46.00, lng: -117.00}} />
-                                                                </Map> */}
+                                                            <div style={{ height: "400px", padding: "75px", width: "100%" }}>
+                                                                <Places locations={ [{ id: 1, lat: location.lat, lng: location.lng, content:contentString }, { id:2, lat: 40.856795000000005, lng:-73.9982433125, content:contentString }] } lat={location.lat} lng={location.lng} zoomLevel={10} draggable={false} onChangeLocation={onChangeLocation} show /> {/* include it here */}
                                                             </div>
                                                         
                                                         </Grid>

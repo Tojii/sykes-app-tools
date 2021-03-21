@@ -21,7 +21,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
 import LocationsTable from "./ubicacionesTable";
 import { GetProvince, GetCantons, GetDistricts } from "../../redux/actions/LocationActions";
-import MapSection from '../../components/maps/Maps';
+import Places from '../../components/maps/Places';
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -336,7 +336,7 @@ const FormAdminBenefits = (props) => {
                             }
                         />
                         <div className={classes.textvalidator}>
-                            <MapSection defaultlat={locationMap.lat} defaultlng={locationMap.lng} lat={locationMap.lat} lng={locationMap.lng} zoomLevel={8} draggable={true} onChangeLocation={onChangeLocation} /> {/* include it here */}
+                            <Places locations={ [{ lat: locationMap.lat, lng: locationMap.lng }, { lat: 40.856795000000005, lng:-73.9982433125 }] } lng={locationMap.lng} zoomLevel={8} draggable={true} onChangeLocation={onChangeLocation} showSearcBox={true} /> {/* include it here */}
                         </div>
                         <TextValidator
                             className={classes.textvalidator}

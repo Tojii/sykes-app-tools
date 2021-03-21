@@ -66,3 +66,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+Maps additional examples: https://github.com/google-map-react/google-map-react-examples/blob/master/src/examples/Searchbox.js
+
+http://google-map-react.github.io/google-map-react/map/main/
