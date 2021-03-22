@@ -19,7 +19,9 @@ const SetPlace = ({ lat, lng, zoomLevel, draggable, onChangeLocation, location, 
       for (let i in markers) {
         markers[i].setMap(null);
       }
+      marker.setMap(null);
       markers = [];
+      marker = null;
     }
   }
 
@@ -38,13 +40,26 @@ const SetPlace = ({ lat, lng, zoomLevel, draggable, onChangeLocation, location, 
         defaultAnimation: 2, 
       });
       
-      marker.addListener("dragend", function(e) {
+      // marker.addListener("dragend", function(e) {
         
-        //clearOverlays();
-        // let marker = new window.google.maps.Marker({
-        //   position: e.latLng,
-        //   map: map
-        // });
+      //   //clearOverlays();
+      //   // let marker = new window.google.maps.Marker({
+      //   //   position: e.latLng,
+      //   //   map: map
+      //   // });
+      //   map.panTo(e.latLng);
+      //   markers.push(marker);
+      //   onChangeLocation(marker.getPosition().lat(), marker.getPosition().lng());
+      //   //console.log("hola", e.latLng)
+      // });
+
+      map.addListener("click", function(e) {
+        
+        clearOverlays();
+        marker = new window.google.maps.Marker({
+          position: e.latLng,
+          map: map
+        });
         map.panTo(e.latLng);
         markers.push(marker);
         onChangeLocation(marker.getPosition().lat(), marker.getPosition().lng());
