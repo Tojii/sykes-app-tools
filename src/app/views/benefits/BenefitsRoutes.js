@@ -1,6 +1,5 @@
 import { MatxLoadable } from "matx";
-import jwtDecode from 'jwt-decode';
-import { isMdScreen, getQueryParam } from "utils";
+import { isMdScreen } from "utils";
 
 const Home = MatxLoadable({
   loader: () => import("./HomeBenefits")
@@ -67,8 +66,6 @@ const benefitsRoutes = [
     component: FormAdminBenefits,
     settings
   },
-  
-  
 ];
 
 export default benefitsRoutes;

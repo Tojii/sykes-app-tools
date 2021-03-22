@@ -3,20 +3,15 @@ import MUIDataTable from "mui-datatables";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import CustomToolbarSelect from "../venta-activos/ventasTables/CustomSelect"
-import {
-    Button,
-    Card,
-    Grid,
-    Tooltip
-} from "@material-ui/core";
-import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { Button, Card, Grid, Tooltip } from "@material-ui/core";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import { Link } from 'react-router-dom';
 import history from "history.js";
 import CustomFooter from '../muidatatable/CustomFooter';
 import NotFound from "../sessions/NotFound"
 import { makeStyles } from '@material-ui/core/styles';
-import { GetBenefitsById, DeleteBenefit, GetBenefits } from "../../redux/actions/BenefitsActions";
+import { DeleteBenefit, GetBenefits } from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import Details from "@material-ui/icons/Details";
 import Chip from '@material-ui/core/Chip';
@@ -66,7 +61,6 @@ const AdminBenefitsTable = () => {
 
     const handleEdit= (id) => {
       history.push(`/Benefits/FormAdminBenefits/${id}`);
-      
     };
 
     const addButton = () => {
@@ -114,9 +108,9 @@ const AdminBenefitsTable = () => {
       return (
         item.benefit.logo ?
         <img
-        className={classes.sectionbutton}                                         
-        alt="..."
-        src={`${item.benefit.logo}`}
+          className={classes.sectionbutton}                                         
+          alt="..."
+          src={`${item.benefit.logo}`}
         /> : ""
       );
     }
@@ -152,7 +146,6 @@ const AdminBenefitsTable = () => {
             filter: false,
             sort: true,
             display: false,
-            //viewColumns: false,
           }
         },
         {
@@ -162,7 +155,6 @@ const AdminBenefitsTable = () => {
              filter: false,
              sort: true,
              display: false,
-             //viewColumns: false,
             }
         },
         {
@@ -172,7 +164,6 @@ const AdminBenefitsTable = () => {
            filter: true,
            sort: true,
            display: true,
-           //viewColumns: false,
           }
         },
         {
@@ -182,7 +173,6 @@ const AdminBenefitsTable = () => {
            filter: true,
            sort: true,
            display: true,
-           //viewColumns: false,
            filterOptions: { 
             fullWidth: window.screen.width <= 1024 ? true : false
            }
@@ -368,7 +358,6 @@ const AdminBenefitsTable = () => {
         );
       },
       customSort: (data, colIndex, order) => { return data.sort((a, b) => { if (colIndex === 5 || colIndex === 6) { return (new Date(a.data[colIndex]) < new Date(b.data[colIndex]) ? -1: 1 ) * (order === 'desc' ? 1 : -1); } else { return (a.data[colIndex] < b.data[colIndex] ? -1: 1 ) * (order === 'desc' ? 1 : -1); } }); },
-      
   }
 
   return (
@@ -379,18 +368,16 @@ const AdminBenefitsTable = () => {
           {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el beneficio no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
-              {/* { isLoading ? <Loading /> :   */}
-                      <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
-                          <MuiThemeProvider theme={getMuiTheme()}>
-                            <MUIDataTable  className="w-100"
-                                title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Benefits Administration</h4></div>}
-                                data={builddata}
-                                columns={columns}
-                                options={options}
-                            />
-                          </MuiThemeProvider>
-                      </Card>
-              {/* } */}
+              <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+                  <MuiThemeProvider theme={getMuiTheme()}>
+                    <MUIDataTable  className="w-100"
+                        title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Benefits Administration</h4></div>}
+                        data={builddata}
+                        columns={columns}
+                        options={options}
+                    />
+                  </MuiThemeProvider>
+              </Card>
             </Grid>
           </Grid>
         </div> 

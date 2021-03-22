@@ -3,25 +3,14 @@ import MUIDataTable from "mui-datatables";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import CustomToolbarSelect from "../venta-activos/ventasTables/CustomSelect"
-import {
-    Icon,
-    Button,
-    Card,
-    Grid,
-    Tooltip,
-    Dialog,
-    Typography,
-    IconButton,
-} from "@material-ui/core";
+import { Button, Card, Grid, Tooltip, Dialog, Typography, IconButton } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
-import { Link } from 'react-router-dom';
 import history from "history.js";
 import CustomFooter from '../muidatatable/CustomFooter';
 import NotFound from "../sessions/NotFound"
 import { makeStyles } from '@material-ui/core/styles';
-import { GetCampaignItemsById, DeleteCampaignItem, GetCampaignsItems } from "../../redux/actions/CampaignActions";
-import { GetBenefitsLocations, DeleteBenefitLocation, GetBenefitsById } from "../../redux/actions/BenefitsActions";
+import { DeleteBenefitLocation, GetBenefitsById } from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import AgregarDialog from "./FormLocations"
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -75,22 +64,10 @@ const DialogTitle = withStyles(styles)((props) => {
 });
 
 const LocationsTable = (props) => {
-    const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
     const dispatch = useDispatch();
     const classes = useStyles();
     const user = useSelector(state => state.user);
     const image = null;
-    //const benefitslocations = useSelector(state => state.benefit.benefitslocations);
-    const campaignitem = [
-        {id: "3",
-        idBenefit: "3",
-        address: "San José, Avenida 2, Calle 15. Frente a la Plaza de la democracia",
-        province: "San José",
-        canton: "San José", 
-        phone: "2222-2222",
-        whatsapp: "+ (506) 8888-2222",
-        }
-    ];
     const successCampaignItems = useSelector(state => state.benefit.success);
     const isLoadingLocation  = useSelector(state => state.benefit.loadingLocation);
     const isLoading  = useSelector(state => state.benefit.loading);
@@ -113,9 +90,8 @@ const LocationsTable = (props) => {
     };
 
     const handleEdit= (id) => {
-      console.log(id)
+      //console.log(id)
       setShouldOpenNewDialog({ open: true, type: "edit", id: id, idBenefit: props.idBenefit })
-      
     };
 
     const handleClose = () => {
@@ -160,7 +136,6 @@ const LocationsTable = (props) => {
             filter: false,
             sort: true,
             display: false,
-            //viewColumns: false,
           }
         },
         {
@@ -170,7 +145,6 @@ const LocationsTable = (props) => {
              filter: false,
              sort: true,
              display: false,
-             //viewColumns: false,
             }
         },
         {
@@ -180,7 +154,6 @@ const LocationsTable = (props) => {
            filter: true,
            sort: true,
            display: true,
-           //viewColumns: false,
            filterOptions: { 
             fullWidth: window.screen.width <= 1024 ? true : false
            }
@@ -193,7 +166,6 @@ const LocationsTable = (props) => {
            filter: true,
            sort: true,
            display: true,
-           //viewColumns: false,
            filterOptions: { 
             fullWidth: window.screen.width <= 1024 ? true : false
            }
@@ -206,7 +178,6 @@ const LocationsTable = (props) => {
            filter: true,
            sort: true,
            display: true,
-           //viewColumns: false,
            filterOptions: { 
             fullWidth: window.screen.width <= 1024 ? true : false
            }
@@ -309,24 +280,22 @@ const LocationsTable = (props) => {
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               {/* { isLoading ? <Loading /> :   */}
-                      <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
-                          <MuiThemeProvider theme={getMuiTheme()}>
-                            <MUIDataTable  className="w-100"
-                                title={<div style={{display: "inline-flex"}}>{props.type != "detail" ? addButton() : null} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Localizaciones</h4></div>}
-                                data={builddata}
-                                columns={columns}
-                                options={options}
-                            />
-                          </MuiThemeProvider>
-                      </Card>
+                <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+                    <MuiThemeProvider theme={getMuiTheme()}>
+                      <MUIDataTable  className="w-100"
+                          title={<div style={{display: "inline-flex"}}>{props.type != "detail" ? addButton() : null} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Localizaciones</h4></div>}
+                          data={builddata}
+                          columns={columns}
+                          options={options}
+                      />
+                    </MuiThemeProvider>
+                </Card>
               {/* } */}
             </Grid>
           </Grid>
           <Dialog fullWidth maxWidth="md" onClose={handleClose} open={shouldOpenNewDialog.open}>
-          <DialogTitle  id="customized-dialog-title" onClose={handleClose}>
-          
-            </DialogTitle>
-          <AgregarDialog type={shouldOpenNewDialog.type} close={handleClose} id={shouldOpenNewDialog.id} idBenefit={shouldOpenNewDialog.idBenefit} />
+            <DialogTitle  id="customized-dialog-title" onClose={handleClose}></DialogTitle>
+            <AgregarDialog type={shouldOpenNewDialog.type} close={handleClose} id={shouldOpenNewDialog.id} idBenefit={shouldOpenNewDialog.idBenefit} />
           </Dialog>
         </div> 
       : <NotFound/>

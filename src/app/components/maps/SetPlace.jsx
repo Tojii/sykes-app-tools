@@ -40,25 +40,26 @@ const SetPlace = ({ lat, lng, zoomLevel, draggable, onChangeLocation, location, 
         defaultAnimation: 2, 
       });
       
-      // marker.addListener("dragend", function(e) {
+      marker.addListener("dragend", function(e) {
         
-      //   //clearOverlays();
-      //   // let marker = new window.google.maps.Marker({
-      //   //   position: e.latLng,
-      //   //   map: map
-      //   // });
-      //   map.panTo(e.latLng);
-      //   markers.push(marker);
-      //   onChangeLocation(marker.getPosition().lat(), marker.getPosition().lng());
-      //   //console.log("hola", e.latLng)
-      // });
+        //clearOverlays();
+        // let marker = new window.google.maps.Marker({
+        //   position: e.latLng,
+        //   map: map
+        // });
+        map.panTo(e.latLng);
+        markers.push(marker);
+        onChangeLocation(marker.getPosition().lat(), marker.getPosition().lng());
+        console.log("hola", e.latLng)
+      });
 
       map.addListener("click", function(e) {
         
         clearOverlays();
         marker = new window.google.maps.Marker({
           position: e.latLng,
-          map: map
+          map: map,
+          //draggable: draggable,
         });
         map.panTo(e.latLng);
         markers.push(marker);

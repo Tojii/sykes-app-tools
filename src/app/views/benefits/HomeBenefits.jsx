@@ -1,12 +1,5 @@
 import React, { useEffect } from "react";
-// import CampaignTable from "./ventasTables/CampaignTable"
-// import ComprasTable from "./ventasTables/ComprasTable"
-import {
-    Card,
-    Grid,
-} from "@material-ui/core";
-import { getGrowthOpportunities, getJobsApplied } from "../../redux/actions/GrowthOpportunityActions"
-import { connect } from "react-redux";
+import { Grid } from "@material-ui/core";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import NotFound from "../sessions/NotFound"
 import { useSelector, useDispatch } from 'react-redux';

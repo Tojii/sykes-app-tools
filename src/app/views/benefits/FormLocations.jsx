@@ -1,25 +1,13 @@
-import React, { useState, Component, useRef, useEffect } from "react";
-import {
-  Button,
-  Card,
-  FormHelperText,
-  FormControlLabel,
-  Switch
-} from "@material-ui/core";
-import Input from '@material-ui/core/Input';
-import FormControl from '@material-ui/core/FormControl';
+import React, { useState, useRef, useEffect } from "react";
+import { Button, Card, FormControlLabel, Switch } from "@material-ui/core";
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from "react-router";
-import InputAdornment from '@material-ui/core/InputAdornment';
-import { GetCampaignItemsById, UpdateCampaignItems, AddCampaignItems, GetCampaigns, GetCampaignsActive, GetCampaignsItems } from "../../redux/actions/CampaignActions";
-import { AddBenefitLocation, GetBenefitsLocations, GetBenefitsLocationsById, UpdateBenefitLocation, GetBenefitsById} from "../../redux/actions/BenefitsActions";
+import { AddBenefitLocation, GetBenefitsLocationsById, UpdateBenefitLocation, GetBenefitsById} from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
-import LocationsTable from "./ubicacionesTable";
 import { GetProvince, GetCantons, GetDistricts } from "../../redux/actions/LocationActions";
 import Places from '../../components/maps/SetPlace';
 
@@ -83,8 +71,6 @@ const FormAdminBenefits = (props) => {
     const classes = useStyles();
     
     const location = useSelector(state => state.benefit.benefitlocation);
-    const campaigns = useSelector(state => state.campaign.campaigns);
-    const addCampaignItems = useSelector(state => state.campaign.addCampaignItems);
     const successCampaignItems = useSelector(state => state.benefit.success);
     const isLoadingLocation  = useSelector(state => state.benefit.loadingLocation);
     const isLoading  = useSelector(state => state.benefit.loading);
@@ -179,7 +165,7 @@ const FormAdminBenefits = (props) => {
         }
     };
 
-     const onChangeLocation = (lat, lng) => {
+    const onChangeLocation = (lat, lng) => {
         console.log("lat", lat, lng);
         setLocationsMapForm({
             latitude: lat,

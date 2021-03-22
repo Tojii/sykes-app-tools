@@ -1,4 +1,4 @@
-import React, { useState, Component, useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Card,
@@ -49,12 +49,12 @@ const useStyles = makeStyles({
 
 const AdminBenefitDetalle = (props) => {
     
+    const dispatch = useDispatch();
+    let { id } = useParams();
+    const classes = useStyles();
     const benefit = useSelector(state => state.benefit.benefit);
     const isLoading  = useSelector(state => state.benefit.loading);
     const isLoadingLocation  = useSelector(state => state.benefit.loadingLocation);
-    const dispatch = useDispatch();
-    const classes = useStyles();
-    let { id } = useParams();
 
     useEffect(() => {
         dispatch(GetBenefitsById(id));
@@ -109,7 +109,7 @@ const AdminBenefitDetalle = (props) => {
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Active:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ 
-                                            benefit[0] == undefined ? "" :  <Chip style={{backgroundColor: benefit[0].benefit.active ? "green" : "red", margin: "1%", color: "white"}} label={benefit[0].benefit.active ? "Active" : "Inactive"} key={benefit[0].benefit.active ? "Active" : "Inactive"} />}
+                                            benefit[0] == undefined ? "" : <Chip style={{backgroundColor: benefit[0].benefit.active ? "green" : "red", margin: "1%", color: "white"}} label={benefit[0].benefit.active ? "Active" : "Inactive"} key={benefit[0].benefit.active ? "Active" : "Inactive"} />}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow>
@@ -126,7 +126,9 @@ const AdminBenefitDetalle = (props) => {
                                         <TableCell width={"100%"} className={classes.cellspace + " pl-sm-24"}>
                                             <h6>Localizaciones:</h6>
                                         </TableCell>
-                                        <TableCell ><LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} type={"detail"} /></TableCell>
+                                        <TableCell> 
+                                            <LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} type={"detail"} /> 
+                                        </TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -137,7 +139,7 @@ const AdminBenefitDetalle = (props) => {
                             </div>
                     </Card>
                 </Grid>
-          </Grid>}
+            </Grid>}
         </div>
     );
 }

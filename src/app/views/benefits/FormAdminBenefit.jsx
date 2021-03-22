@@ -1,4 +1,4 @@
-import React, { useState, Component, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Button,
   Card,
@@ -12,7 +12,6 @@ import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
-import { GetCampaignItemsById, UpdateCampaignItems, AddCampaignItems, GetCampaigns, GetCampaignsActive, GetCampaignsItems } from "../../redux/actions/CampaignActions";
 import { GetBenefitsById, UpdateBenefit, AddBenefit, GetBenefits, GetBenefitsActive, GetBenefitsCategory, GetBenefitsLocations } from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
@@ -85,8 +84,8 @@ const FormAdminBenefits = () => {
     
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
-    const classes = useStyles();
     let { id } = useParams();
+    const classes = useStyles();
     const benefit = useSelector(state => state.benefit.benefit);
     const benefitscategories = useSelector(state => state.benefit.benefitscategories);
     const successBenefit = useSelector(state => state.benefit.success);
@@ -232,7 +231,6 @@ const FormAdminBenefits = () => {
                             value={benefitsform.idCategory} 
                             onChange={handleChange} 
                             validators={["required"]}
-                            //disabled={id != undefined}
                             errorMessages={["Este campo es requerido"]}
                         >
                             {benefitscategories.map(category => (
