@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
 export const setUserData = user => dispatch => {
   //console.log("entré",user)
   axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-  axiosInstance.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, user).then(res => {
+  axiosInstance.post(`${process.env.REACT_APP_API_URL}/GrowthOpportunityUser/UpdatePersonalInformation`, user).then(res => {
     dispatch({
       type: SET_USER_DATA,
       data: user
@@ -63,7 +63,7 @@ export const updateUserData = (payload) => dispatch => {
   }
   //console.log("formdata", formData)
   axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-  axiosInstance.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/UpdatePersonalInformation`, formData, config).then(res => {
+  axiosInstance.post(`${process.env.REACT_APP_API_URL}/GrowthOpportunityUser/UpdatePersonalInformation`, formData, config).then(res => {
     dispatch({
       type: UPDATE_USER_DATA,
       data: res.data

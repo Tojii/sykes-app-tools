@@ -23,7 +23,7 @@ axiosInstance.interceptors.response.use(
 
 export const getMetrics = (badge) => dispatch => {
     axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-    axiosInstance.get(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/GetMetrics?badgeId=${badge}`).then(res => {
+    axiosInstance.get(`${process.env.REACT_APP_API_URL}/GrowthOpportunityMetric`).then(res => {
       dispatch({
         type: GET_METRICS,
         payload: res.data

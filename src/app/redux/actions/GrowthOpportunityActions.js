@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
 
 export const getGrowthOpportunities = () => dispatch => {
     axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-    axiosInstance.get(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/GetJobOpenings`).then(res => {
+    axiosInstance.get(`${process.env.REACT_APP_API_URL}/GrowthOpportunityOpenings`).then(res => {
         dispatch({
             type: GET_GROWTH_OPPORTUNITIES,
             payload: res.data
@@ -56,7 +56,7 @@ export const getGrowthOpportunities = () => dispatch => {
 
 export const getJobsApplied = (badge) => dispatch => {
     axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-    axiosInstance.get(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/GetJobsApplied?badge=${badge}`).then(res => {
+    axiosInstance.get(`${process.env.REACT_APP_API_URL}/GrowthOpportunityApplication`).then(res => {
       dispatch({
         type: GET_JOBS_APPLIED,
         payload: res.data

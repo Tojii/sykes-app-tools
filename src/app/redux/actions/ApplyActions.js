@@ -67,12 +67,14 @@ export const saveJobApplication = (payload) => dispatch => {
     formData.append('EnglishApproved', payload.englishApproved);
     formData.append('EnglishScoreMinimum', payload.englishScoreMinimum);
     formData.append('EnglishScoreCurrent', payload.englishScoreCurrent);
-    formData.append('EnglishScoreCurrentDate', payload.englishScoreCurrentDate);
+
+    console.log('EnglishScoreCurrentDate', payload.englishScoreCurrentDate);
+    formData.append('EnglishScoreCurrentDate', payload.englishScoreCurrentDate ? payload.englishScoreCurrentDate : '');
     formData.append('EnglishListening', payload.englishListening);
     formData.append('EnglishGrammar', payload.englishGrammar);
     formData.append('EnglishOral', payload.englishOral);
     formData.append('EnglishReading_and_Writing', payload.englishReading_and_Writing);
-    formData.append('WarningCurrentDate', payload.warningCurrentDate);
+    formData.append('WarningCurrentDate', payload.warningCurrentDate ? payload.warningCurrentDate : "");
     formData.append('WarningCurrentType', payload.warningCurrentType);
     formData.append('DA_Category', payload.dA_Category);
     formData.append('WarningApproved', payload.warningApproved);
@@ -82,7 +84,7 @@ export const saveJobApplication = (payload) => dispatch => {
     formData.append('TenureRequired', payload.tenureRequired);
     formData.append('EnglishRequired', payload.englishRequired);
     formData.append('ApprovedFinal', payload.approvedFinal);
-    //formData.append('ApprovedFinal', false);
+    formData.append('ApprovedFinal', false);
 
     const config = {
         headers: {
@@ -93,7 +95,8 @@ export const saveJobApplication = (payload) => dispatch => {
         type: RE_LOADING
     });
     axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-    axiosInstance.post(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/SaveJobApplication`, formData, config).then(res => {
+
+    axiosInstance.post(`${process.env.REACT_APP_API_URL}/GrowthOpportunityApplication`, formData, config).then(res => {
         //console.log("RES: ", res);
         dispatch({
             type: SAVE_JOB_APPLICATION,
@@ -128,7 +131,7 @@ export const saveJobApplication = (payload) => dispatch => {
 
 export const setValidations = (badge, jobId) => dispatch => {
     axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-    axiosInstance.get(`${process.env.REACT_APP_API_URL}/api/GrowthOpportunity/CallValidations?badgeId=${badge}&jobId=${jobId}`).then(res => {
+    axiosInstance.get(`${process.env.REACT_APP_API_URL}/GrowthOpportunityMetric/Validate?jobId=${jobId}`).then(res => {
         dispatch({
             type: SET_VALIDATIONS,
             payload: res.data
