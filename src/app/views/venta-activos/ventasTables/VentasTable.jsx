@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
-import { GetRefoundListByUser } from "../../../redux/actions/RefoundActions";
+import { GetReimbursementListByUser } from "../../../redux/actions/EducationalReimbursementActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import {
@@ -12,14 +12,14 @@ import {
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import CustomFooter from '../../muidatatable/CustomFooter';
 
-const RefoundDetails = () => {
-    const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
+const EducationalReimbursementDetails = () => {
+    const employeeReimbursements = useSelector(state => state.reimbursement.employeeReimbursements.filter(item => item.anio != -1));
     const dispatch = useDispatch();
-    const isLoading  = useSelector(state => state.refound.loading);
+    const isLoading  = useSelector(state => state.reimbursement.loading);
     const user = useSelector(state => state.user);
 
     // useEffect(() => {
-    //     dispatch(GetRefoundListByUser(user.badge));
+    //     dispatch(GetReimbursementListByUser(user.badge));
     // }, []);
 
     const getMuiTheme = () =>
@@ -131,7 +131,7 @@ const RefoundDetails = () => {
                         <MuiThemeProvider theme={getMuiTheme()}>
                           <MUIDataTable  className="w-100"
                               title={`Ventas`}
-                              data={employeeRefunds.length > 0 ? employeeRefunds[0].balanceCategories : [] }
+                              data={employeeReimbursements.length > 0 ? employeeReimbursements[0].balanceCategories : [] }
                               columns={columns}
                               options={options}
                           />
@@ -144,4 +144,4 @@ const RefoundDetails = () => {
   )
 }
 
-export default RefoundDetails
+export default EducationalReimbursementDetails

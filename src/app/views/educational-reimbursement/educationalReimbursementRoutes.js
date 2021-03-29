@@ -8,11 +8,11 @@ const Form = MatxLoadable({
   loader: () => import("./Form")
 });
 
-const RefoundDetails = MatxLoadable({
-  loader: () => import("./RefoundDetails")
+const EducationalReimbursementDetails = MatxLoadable({
+  loader: () => import("./EducationalReimbursementDetails")
 });
 
-  const refoundRoutes = [
+  const educationalReimbursementRoutes = [
     {
       path: "/ReembolsoEducativo/Nuevo",
       component: Form
@@ -23,8 +23,8 @@ const RefoundDetails = MatxLoadable({
     },
     {
       path:"/ReembolsoEducativo/Detalle",
-      component: RefoundDetails
+      component: EducationalReimbursementDetails
     }
   ];
   
-  export default refoundRoutes;
+  export default educationalReimbursementRoutes;

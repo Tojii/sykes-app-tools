@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
-import { GetRefoundListByUser } from "../../../redux/actions/RefoundActions";
+import { GetReimbursementListByUser } from "../../../redux/actions/EducationalReimbursementActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import {
@@ -16,14 +16,14 @@ import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
 
 
-const RefoundDetails = () => {
-    const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
+const EducationalReimbursementDetails = () => {
+    const employeeReimbursements = useSelector(state => state.reimbursement.employeeReimbursements.filter(item => item.anio != -1));
     const dispatch = useDispatch();
-    const isLoading  = useSelector(state => state.refound.loading);
+    const isLoading  = useSelector(state => state.reimbursement.loading);
     const user = useSelector(state => state.user);
 
     // useEffect(() => {
-    //     dispatch(GetRefoundListByUser(user.badge));
+    //     dispatch(GetReimbursementListByUser(user.badge));
     // }, []);
 
     const getMuiTheme = () =>
@@ -207,4 +207,4 @@ const RefoundDetails = () => {
     )
 }
 
-export default RefoundDetails
+export default EducationalReimbursementDetails
