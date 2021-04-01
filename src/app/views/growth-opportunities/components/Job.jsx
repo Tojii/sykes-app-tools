@@ -38,7 +38,7 @@ const Job = (props) => {
                             <TableBody>
                                 <TableRow>
                                     <TableCell width={"25%"} className="pl-sm-24 border-none">OppeningID</TableCell>
-                                    <TableCell className="px-sm-24 border-none">{ growth_opportunity.id }</TableCell>
+                                    <TableCell className="px-sm-24 border-none">{ growth_opportunity.openingId }</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell width={"25%"} className="pl-sm-24 border-none">Job Position</TableCell>
