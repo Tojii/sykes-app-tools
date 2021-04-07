@@ -68,7 +68,6 @@ export const saveJobApplication = (payload) => dispatch => {
     formData.append('EnglishScoreMinimum', payload.englishScoreMinimum);
     formData.append('EnglishScoreCurrent', payload.englishScoreCurrent);
 
-    console.log('EnglishScoreCurrentDate', payload.englishScoreCurrentDate);
     formData.append('EnglishScoreCurrentDate', payload.englishScoreCurrentDate ? payload.englishScoreCurrentDate : '');
     formData.append('EnglishListening', payload.englishListening);
     formData.append('EnglishGrammar', payload.englishGrammar);

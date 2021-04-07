@@ -137,7 +137,7 @@ const ApplyStepper = (props) => {
         <div>
           {(isLoading || user.phone === undefined || user.email === undefined) ? <Loading /> :  
           <div>     
-            <ValidationModal idioma={"Ingles"} save={() => {}} path={"/growth-opportunities"} state={(saveApplication != null && !saveApplication.succces) == false ? "Success!" : "Error!"} message={(saveApplication != null && !saveApplication.succces) == false ? "Application done!" : "An error occurred, please try again!"} setOpen={setOpen} open={open} />
+            <ValidationModal idioma={"Ingles"} save={() => {}} path={"/growth-opportunities"} state={saveApplication ? "Success!" : "Error!"} message={saveApplication ? "Application done!" : "An error occurred, please try again!"} setOpen={setOpen} open={open} />
             <ScrollContainer nativeMobileScroll={false} className="scroll-container">
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map(label => (
@@ -151,8 +151,8 @@ const ApplyStepper = (props) => {
               {activeStep === steps.length ? (
                 <div>
                   <div className="text-center">
-                      <Icon color="primary" fontSize="large">{(saveApplication != null && !saveApplication.succces) == false ? 'done' : 'error'}</Icon>
-                      {(saveApplication != null && !saveApplication.succces) == false ? <p>Application done!</p> : <p>"An error occurred, please try again!"</p> }
+                      <Icon color="primary" fontSize="large">{saveApplication ? 'done' : 'error'}</Icon>
+                      {saveApplication ? <p>Application done!</p> : <p>"An error occurred, please try again!"</p> }
                   </div> 
                   {/* <Button variant="contained" color="secondary" onClick={handleReset}>
                     Close
