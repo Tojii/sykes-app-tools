@@ -17,6 +17,7 @@ import { persistStore } from 'redux-persist'
 import CampaignReducer from "./CampaignReducer";
 import OrderReducer from "./OrderReducer";
 import LocationReducer from "./LocationReducer";
+import BuildingReducer from "./BuildingReducer"
 
 const RootReducer = combineReducers({
   login: LoginReducer,
@@ -35,6 +36,7 @@ const RootReducer = combineReducers({
   growth: GrowthReducer,
   metrics: MetricsReducer,
   apply: ApplyReducer,
+  building: BuildingReducer,
 });
 
 export default RootReducer;

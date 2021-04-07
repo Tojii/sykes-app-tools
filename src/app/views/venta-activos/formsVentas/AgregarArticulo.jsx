@@ -98,6 +98,8 @@ const AgregarArticulo = (props) => {
             //console.log("se sobrepasa el limite")
         } else { 
             if (!props.indexlist.includes(props.id)) {
+                let totalCompraVentas = props.ventas.totalCompra + cantidadArticulo * campaignItems[0].unitPrice;
+                console.log("prueba",totalCompraVentas)
                 props.setCarrito(
                     [ 
                         ...props.carrito,
@@ -106,10 +108,11 @@ const AgregarArticulo = (props) => {
                         buyquantity: cantidadArticulo,
                         unitPrice: campaignItems[0].unitPrice,
                         quantity: campaignItems[0].quantity,
-                        subtotal: cantidadArticulo * campaignItems[0].unitPrice,
+                        subtotal: Math.round((cantidadArticulo * campaignItems[0].unitPrice) * 100) / 100,
                         maxLimitPerPerson: campaignItems[0].maxLimitPerPerson - cantComprada,
                         stockQuantity: campaignItems[0].stockQuantity,
                         limiteActual: props.ventas.maximo - props.ventas.totalComprados + cantidadArticulo,
+                        estimatedPrice: campaignItems[0].estimatedPrice,
                         image: campaignItems[0].image
                     },    
                 ]);
@@ -117,7 +120,8 @@ const AgregarArticulo = (props) => {
                 props.setventas({
                     ...props.ventas,
                     totalComprados: props.ventas.totalComprados + cantidadArticulo,
-                    totalCompra: props.ventas.totalCompra + cantidadArticulo * campaignItems[0].unitPrice,
+                    freightVentas: props.ventas.freightVentas + campaignItems[0].estimatedPrice,
+                    totalCompra: Math.round((totalCompraVentas) * 100) / 100,
                 });
 
                 props.close();
@@ -143,7 +147,7 @@ const AgregarArticulo = (props) => {
                 <Grid item md={12} xs={12}> 
                     <Card className={classes.formcard} elevation={6}>
                         <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>                 
-                            { campaignItems[0] == undefined ? <Loading /> : <Table>
+                            { campaignItems[0] == undefined || isLoading ? <Loading /> : <Table>
                                 <TableBody>
                                     <TableRow>
                                         <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Artículo:</h6></TableCell>
@@ -172,6 +176,10 @@ const AgregarArticulo = (props) => {
                                         <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Valor del artículo:</h6></TableCell>
                                         <TableCell className="px-sm-24 border-none">{ campaignItems[0] == undefined ? "" : "₡" + campaignItems[0].unitPrice }</TableCell>
                                     </TableRow>
+                                    {(props.ventas != undefined && props.ventas.sendMethod != "Recoger en edificio") ? <TableRow>
+                                        <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Precio estimado de envío:</h6></TableCell>
+                                        <TableCell className="px-sm-24 border-none">{ campaignItems[0] == undefined ? "" : "₡" + campaignItems[0].estimatedPrice }</TableCell>
+                                    </TableRow> : null}
                                     <TableRow>
                                         <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Cantidad:</h6></TableCell>
                                         { props.type == "agregar" ? <TableCell className="px-sm-24 border-none">
@@ -196,21 +204,21 @@ const AgregarArticulo = (props) => {
                                     <TableRow>
                                         <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}> <h6>Subtotal:</h6> </TableCell>
                                         { props.type == "agregar" ?
-                                            <TableCell className="px-sm-24 border-none">{campaignItems[0] == undefined ? "" : "₡" + cantidadArticulo * campaignItems[0].unitPrice}</TableCell>
-                                            : <TableCell className="px-sm-24 border-none">{detail == undefined ? "" : "₡" + detail.subTotal}</TableCell>
+                                            <TableCell className="px-sm-24 border-none">{campaignItems[0] == undefined ? "" : "₡" + Math.round((cantidadArticulo * campaignItems[0].unitPrice) * 100) / 100}</TableCell>
+                                            : <TableCell className="px-sm-24 border-none">{detail == undefined ? "" : "₡" + Math.round((detail.subTotal) * 100) / 100}</TableCell>
                                         }
                                     </TableRow>
                                 </TableBody>
                             </Table>}
                       
-                            <div className={classes.sectionbutton}>
+                            {campaignItems[0] == undefined || isLoading ? <Loading /> : <div className={classes.sectionbutton}>
                                 <Button variant="contained" color="primary" onClick={presave} disabled={disableAgregar} style={{margin: "1%", width: "105.92px", display: (campaignItems[0] == undefined || props.type == "detalles") ? "none" : null}} type="submit">
                                     AGREGAR
                                 </Button>
                                 <Button variant="contained" style={{margin: "1%", display: (campaignItems[0] == undefined || props.order == undefined)? "none" : null}} onClick={props.close} color="default">
                                     {props.type == "detalles" ? "VOLVER" : "CANCELAR"}
                                 </Button>
-                            </div> 
+                            </div>}
                         </ValidatorForm>
                     </Card>
                 </Grid>

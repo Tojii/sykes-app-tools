@@ -90,8 +90,6 @@ const InventarioTable = () => {
       );
     }
 
-  
-
     const showImage = (item) => {
       return (
         item.image ?
@@ -158,7 +156,14 @@ const InventarioTable = () => {
            sort: true,
            filterOptions: { 
             fullWidth: window.screen.width <= 1024 ? true : false
-           }
+           },
+           setCellProps: value => {
+            return {
+              style: {
+                wordBreak: "break-word"
+              }
+            };
+           },
           }
         },
         {
@@ -169,7 +174,14 @@ const InventarioTable = () => {
             sort: true,
             filterOptions: { 
               fullWidth: window.screen.width <= 1024 ? true : false
-            }
+            },
+            setCellProps: value => {
+              return {
+                style: {
+                  wordBreak: "break-word"
+                }
+              };
+            },
           }
         },
         {

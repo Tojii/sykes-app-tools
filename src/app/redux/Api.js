@@ -2,6 +2,7 @@ import axios from "axios";
 import { Store } from "./Store";
 import { refreshtoken } from './actions/LoginActions';
 import { logoutUser } from './actions/UserActions';
+import { setError } from "./actions/LoginActions"
 import history from "history.js";
 
 const instance = axios.create({
@@ -50,6 +51,7 @@ export const globalErrorHandler = async (error) => {
     console.log("something went wrong");
     if (error.response && (error.response.status === 401 || error.response.status === 403 || error.response.status === 415)) {
       Store.dispatch(logoutUser("Your session has expired."));
+      Store.dispatch(setError("Your session has expired."));
     }
     // else
     //   Store.dispatch(logoutUser());

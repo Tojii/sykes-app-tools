@@ -9,7 +9,8 @@ import {
     Button,
     Card,
     Grid,
-    Tooltip
+    Tooltip,
+    Chip
 } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
@@ -110,6 +111,9 @@ const CampaignTable = (props) => {
           item.startDate,
           item.endDate,
           item.maxLimitPerPerson,
+          item.pickUpInBuilding,
+          item.sentToHome,
+          item.message,
           stock,
           compraButton(item)
       ]
@@ -140,6 +144,9 @@ const CampaignTable = (props) => {
         item.startDate,
         item.endDate,
         item.maxLimitPerPerson,
+        item.pickUpInBuilding,
+        item.sentToHome,
+        item.message,
         stock,
         compraButton(item)
     ]
@@ -220,6 +227,50 @@ const CampaignTable = (props) => {
             filterOptions: { 
               fullWidth: window.screen.width <= 1024 ? true : false
             }
+          }
+        },
+        {
+          name: "Recoger en edificio",
+          options: {
+            filter: true,
+            display: false,
+            viewColumns: isAdmin,
+            customBodyRenderLite: (dataIndex) => {
+              let value = builddata[dataIndex][6];
+              return <Chip style={{backgroundColor: value == true ? "#039be5" : "gray", margin: "1%", color: "white"}} label={value == true ? "Active" : "Inactive"}  />; 
+            },
+          }
+        },   
+        {
+          name: "Envío a la casa",
+          options: {
+            filter: true,
+            display: false,
+            viewColumns: isAdmin,
+            customBodyRenderLite: (dataIndex) => {
+              let value = builddata[dataIndex][7];
+              return <Chip style={{backgroundColor: value == true ? "#039be5" : "gray", margin: "1%", color: "white"}} label={value == true ? "Active" : "Inactive"}  />; 
+            },
+          }
+        },   
+        {
+          name: "message",
+          label: "Mensaje Campaña ",
+          options: {
+            filter: true,
+            sort: true,
+            display: false,
+            viewColumns: isAdmin,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            },
+            setCellProps: value => {
+              return {
+                style: {
+                  wordBreak: "break-word"
+                }
+              };
+            },
           }
         },
         {

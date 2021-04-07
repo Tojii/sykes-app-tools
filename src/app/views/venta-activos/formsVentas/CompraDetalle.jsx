@@ -112,16 +112,6 @@ const CompraDetalle = (props) => {
         }
     }
 
-    const [disponibles, setDisponibles] = useState([
-        {id:1, name: "Monitor MSI",
-        quantity: 3,
-        unitPrice: 10000},
-        {id:2,name: "Audifonos MSI",
-        quantity: 4,
-        unitPrice: 12000,
-        },
-    ]);
-
     return (
         <div className="m-sm-30">
             {(isLoading) ? <Loading/> : 
@@ -148,21 +138,29 @@ const CompraDetalle = (props) => {
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].phone }</TableCell>
                                     </TableRow>
                                     <TableRow>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Método de entrega:</h6> </TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].sendMethod }</TableCell>
+                                    </TableRow>
+                                    {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Provincia:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].province }</TableCell>
-                                    </TableRow>
-                                    <TableRow>
+                                    </TableRow> : null}
+                                    {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Cantón:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].canton }</TableCell>
-                                    </TableRow>
-                                    <TableRow>
+                                    </TableRow> : null}
+                                    {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Distrito:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].district }</TableCell>
-                                    </TableRow>
-                                    <TableRow>
+                                    </TableRow> : null}
+                                    {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Dirección exacta:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].address }</TableCell>
-                                    </TableRow>
+                                    </TableRow> : null}
+                                    {(order[0] != undefined && order[0].sendMethod == "Recoger en edificio") ? <TableRow>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Edificio:</h6> </TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].building.name }</TableCell>
+                                    </TableRow> : null}
                                 </TableBody>
                             </Table>
                             <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">Datos de la compra:</h2>
@@ -186,7 +184,7 @@ const CompraDetalle = (props) => {
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Total Compra:</h6> </TableCell>
-                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : "₡" + order[0].total }</TableCell>
+                                        <TableCell className="px-sm-24">{ order[0] == undefined ? "" : "₡" + parseFloat(order[0].total).toFixed(2) }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell colSpan={3} className="px-sm-24 border-none">
@@ -234,7 +232,7 @@ const CompraDetalle = (props) => {
                                                     {item.amount}
                                                     </Grid>
                                                     <Grid item lg={4} md={4} sm={4} xs={4}>
-                                                    ₡ {item.subTotal}
+                                                    ₡ {parseFloat(item.subTotal).toFixed(2)}
                                                     </Grid>
                                                     <Grid item lg={3} md={3} sm={3} xs={3}>
                                                     <div className="flex">

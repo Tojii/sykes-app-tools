@@ -144,6 +144,7 @@ const FormAdminInventario = () => {
             stockQuantity: campaignitem[0].stockQuantity != undefined ? campaignitem[0].stockQuantity.toString() : null,
             unitPrice: campaignitem[0].unitPrice != undefined ? campaignitem[0].unitPrice.toString() : null,
             maxLimitPerPerson: campaignitem[0].maxLimitPerPerson != undefined ? campaignitem[0].maxLimitPerPerson.toString() : "0",
+            shippingPrice: campaignitem[0].estimatedPrice != undefined ? campaignitem[0].estimatedPrice.toString() : "0",
             files: null
         });}
 
@@ -349,8 +350,8 @@ const FormAdminInventario = () => {
                             type="text"
                             name="maxLimitPerPerson" 
                             value={inventarioform.maxLimitPerPerson}
-                            validators={["required","isNumber","maxStringLength:7","isPositive"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 7 carácteres", "No se aceptan negativos"]}
+                            validators={["required","isNumber","maxStringLength:3","isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 3 carácteres", "No se aceptan negativos"]}
                         />
                         <FormControl className={classes.textvalidator}>
                             <label className={classes.filelabel} id="image">Imagen Artículo (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>

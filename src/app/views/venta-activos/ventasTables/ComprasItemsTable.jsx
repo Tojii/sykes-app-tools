@@ -260,13 +260,20 @@ const ComprasItems = (props) => {
           name: "address",
           label: "Dirección",
           options: {
-          filter: true,
-          viewColumns: isAdmin,
-          sort: true,
-          display: false,
-          filterOptions: { 
-            fullWidth: window.screen.width <= 1024 ? true : false
-          }
+            filter: true,
+            viewColumns: isAdmin,
+            sort: true,
+            display: false,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            },
+            setCellProps: value => {
+              return {
+                style: {
+                  wordBreak: "break-word"
+                }
+              };
+            },
           }
         },
         {
@@ -377,7 +384,14 @@ const ComprasItems = (props) => {
             display: false,
             filterOptions: { 
               fullWidth: window.screen.width <= 1024 ? true : false
-            }
+            },
+            setCellProps: value => {
+              return {
+                style: {
+                  wordBreak: "break-word"
+                }
+              };
+            },
           }
         },
         {
@@ -400,6 +414,19 @@ const ComprasItems = (props) => {
             filterOptions: { 
               fullWidth: window.screen.width <= 1024 ? true : false
             }
+          }
+        },
+        {
+          name: "sendMethod",
+          label: "Método de entrega",
+          options: {
+          filter: true,
+          viewColumns: true,
+          sort: true,
+          display: true,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
           }
         },
         {
@@ -472,6 +499,7 @@ const ComprasItems = (props) => {
           item.order.notes,
           item.order.totalItems,
           "₡" + item.order.total,
+          item.order.sendMethod,
       ]
     })
 

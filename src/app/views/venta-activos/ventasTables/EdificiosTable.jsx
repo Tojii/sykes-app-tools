@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
-import { GetCampaigns, GetCampaignsActive, DeleteCampaign } from "../../../redux/actions/CampaignActions";
+import { GetBuildings, DeleteBuilding } from "../../../redux/actions/BuildingActions";
 import { CleanPurchase } from "../../../redux/actions/OrderActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
@@ -23,9 +23,9 @@ const EdificiosTable = (props) => {
     const dispatch = useDispatch();
     const isAdmin = props.admin != undefined ? props.admin : true;
     const user = useSelector(state => state.user);
-    const campaigns = useSelector(state => state.campaign.campaigns);
-    const successCampaign = useSelector(state => state.campaign.success);
-    const isLoading  = useSelector(state => state.campaign.loading);
+    const buildings = useSelector(state => state.building.buildings);
+    const successCampaign = useSelector(state => state.building.success);
+    const isLoading  = useSelector(state => state.building.loading);
     const [open, setOpen] = useState(false);
     const edificios = [{id:1, name: "Edificio 1"}, {id:2, name: "Edificio 2"}, {id:2, name: "Edificio 2"}]
     
@@ -34,7 +34,7 @@ const EdificiosTable = (props) => {
   
     useEffect(() => {
         // dispatch(CleanPurchase());
-        // isAdmin && dispatch(GetCampaigns());
+        dispatch(GetBuildings());
         // !isAdmin && dispatch(GetCampaignsActive());
     }, []);
 
@@ -43,7 +43,7 @@ const EdificiosTable = (props) => {
     });
 
     const handleDelete = async (id) => {
-      await dispatch(DeleteCampaign(id));
+      await dispatch(DeleteBuilding(id));
       setOpen(true);
     };
 
@@ -68,7 +68,7 @@ const EdificiosTable = (props) => {
       );
     }
 
-    const builddata = edificios.map(item => {
+    const builddata = buildings.map(item => {
       return [
           item.id,
           item.name,
@@ -167,7 +167,7 @@ const EdificiosTable = (props) => {
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">
-            {isLoading ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el edificio no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
+            {isLoading ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Edificios"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetBuildings());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el edificio no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
-import { GetCampaigns, GetCampaignsActive, DeleteCampaign } from "../../../redux/actions/CampaignActions";
+import { GetBuildings } from "../../../redux/actions/BuildingActions";
 import { CleanPurchase } from "../../../redux/actions/OrderActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
@@ -14,19 +14,17 @@ import {
 } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
-import ShoppingCart from "@material-ui/icons/ShoppingCart";
 import { Link } from 'react-router-dom';
 import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
 import NotFound from "../../sessions/NotFound"
-import moment from "moment"
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 
 const EdificiosTable = (props) => {
     const dispatch = useDispatch();
     const isAdmin = props.admin != undefined ? props.admin : true;
     const user = useSelector(state => state.user);
-    const campaigns = useSelector(state => state.campaign.campaigns);
+    const buildings = useSelector(state => state.building.buildings);
     // const purchases = useSelector(state => state.order.purchases);
     // const addCampaign = useSelector(state => state.campaign.addCampaign);
     const successCampaign = useSelector(state => state.campaign.success);
@@ -34,7 +32,7 @@ const EdificiosTable = (props) => {
     const isLoading  = useSelector(state => state.campaign.loading);
     const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
     const [open, setOpen] = useState(false);
-    const edificios = [{id:1, name: "Edificio 1"}, {id:2, name: "Edificio 2"}, {id:3, name: "Edificio 3"}]
+    const edificios = [{id:1, name: "Edificio 1", active: false}, {id:2, name: "Edificio 2", active: false}, {id:3, name: "Edificio 3", active: false}]
     const [edificioshabilitados, setEdificiosHabilitados] = useState([{id:1, name: "Edificio 1"}])
     // const [purchaseList, setPurchaseList] = useState([]);
     
@@ -43,17 +41,35 @@ const EdificiosTable = (props) => {
   
     useEffect(() => {
         // dispatch(CleanPurchase());
-        // isAdmin && dispatch(GetCampaigns());
+        dispatch(GetBuildings());
         // !isAdmin && dispatch(GetCampaignsActive());
-        
     }, []);
+
+    useEffect(() => {
+      setBuilddata(props.edificiosCampaign.length == 0 ? buildings.map((item, index) => {
+        return { 
+          "idBuilding": item.id,
+          "nameBuilding": item.name,
+          "activeBuilding": item.active,
+          "active": false,
+        }
+      }) : buildings.map((item, index) => {
+        return { 
+          "id": props.edificiosCampaign[index] == undefined ? undefined : props.edificiosCampaign[index].id,
+          "nameBuilding": item.name,
+          "active": props.edificiosCampaign[index] == undefined ? false : props.edificiosCampaign[index].active,
+          "activeBuilding": item.active,
+          "idBuilding": item.id,
+        }
+      }))
+  }, [buildings]);
 
     const getMuiTheme = () =>
     createMuiTheme({
     });
 
     const handleDelete = async (id) => {
-      await dispatch(DeleteCampaign(id));
+      //await dispatch(DeleteCampaign(id));
       setOpen(true);
     };
 
@@ -79,29 +95,47 @@ const EdificiosTable = (props) => {
     }
 
     const changeStatus = (dataIndex) => {
-      var edificiosChange = edificios.map((item, index) => {
-        return [
-            item.id,
-            item.name,
-            index == dataIndex ? (builddata[index] && builddata[index][2].includes("Habilitado") ? ["Deshabilitado"] : ["Habilitado"]) : builddata[index][2] 
-        ]
+      var edificiosChange = props.edificiosCampaign.length == 0 ? buildings.map((item, index) => {
+        return { 
+          "idBuilding": item.id,
+          "nameBuilding": item.name,
+          "activeBuilding": item.active,
+          "active": index == dataIndex ? (builddata[index] && builddata[index].active ? false : true) : builddata[index].active 
+        }
+      }) : buildings.map((item, index) => {
+        return { 
+            "id": props.edificiosCampaign[index] == undefined ? undefined : props.edificiosCampaign[index].id,
+            "nameBuilding": item.name,
+            "active": index == dataIndex ? (props.edificiosCampaign[index] != undefined ? (props.edificiosCampaign[index] && props.edificiosCampaign[index].active ? false : true) : (buildings[index].active ? false : true)) : (props.edificiosCampaign[index] != undefined ? props.edificiosCampaign[index].active : buildings[index].active),
+            "activeBuilding": item.active,
+            "idBuilding": item.id,
+        }
       });
       setBuilddata(edificiosChange) 
       props.setEdificiosCampaign(edificiosChange); 
-      console.log("buildata", builddata)
+      console.log("buildata", edificiosChange)
     }
 
-    const [builddata, setBuilddata] = useState( edificios.map((item, index) => {
-      return [
-          item.id,
-          item.name,
-          props.edificiosCampaign.length == 0 ? ["Deshabilitado"] : props.edificiosCampaign[index][2],
-      ]
+    const [builddata, setBuilddata] = useState( props.edificiosCampaign.length == 0 ? buildings.map((item, index) => {
+      return { 
+         "idBuilding": item.id,
+         "nameBuilding": item.name,
+         "activeBuilding": item.active,
+         "active": false,
+      }
+    }) : buildings.map((item, index) => {
+      return { 
+        "id": props.edificiosCampaign[index] == undefined ? undefined : props.edificiosCampaign[index].id,
+        "nameBuilding": item.name,
+        "active": props.edificiosCampaign[index] == undefined ? false : props.edificiosCampaign[index].active,
+        "activeBuilding": item.active,
+        "idBuilding": item.id,
+      }
     }))
 
     const columns = [
         {
-            name: "id",
+            name: "idBuilding",
             label: "ID Edificio ",
             options: {
              filter: false,
@@ -111,7 +145,7 @@ const EdificiosTable = (props) => {
             }
         },
         {
-          name: "name",
+          name: "nameBuilding",
           label: "Nombre Edificio ",
           options: {
            filter: true,
@@ -127,10 +161,10 @@ const EdificiosTable = (props) => {
             filter: true,
             //display: false,
             customBodyRenderLite: (dataIndex) => {
-              let value = builddata[dataIndex][2];
-              return value.map((val, key) => {
-                return <Chip onClick={() => changeStatus(dataIndex)} style={{backgroundColor: val == "Habilitado" ? "#039be5" : "gray", margin: "1%", color: "white"}} label={val} key={key} />;
-              });
+              let value = builddata[dataIndex].active;
+              
+              return <Chip onClick={() => changeStatus(dataIndex)} style={{backgroundColor: value == true ? "#039be5" : "gray", margin: "1%", color: "white"}} label={value == true ? "Habilitado" : "Deshabilitado"}  />;
+             
             },
           }
         },    
@@ -204,8 +238,7 @@ const EdificiosTable = (props) => {
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">
-            
-            {isLoading ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el edificio no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
+            {console.log(props.edificiosCampaign, buildings)}
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}

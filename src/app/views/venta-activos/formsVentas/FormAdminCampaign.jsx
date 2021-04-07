@@ -27,7 +27,12 @@ const useStyles = makeStyles({
              width: "85%",
              marginTop: "3%",
          },
-         "@media (min-width: 1025px)": {
+         "@media (min-width: 1024px)": {
+            marginLeft: "15%",
+            width: "70%",
+            marginTop: "3%",
+        }, 
+         "@media (min-width: 1281px)": {
              marginLeft: "25%",
              width: "50%",
              marginTop: "3%",
@@ -134,17 +139,31 @@ const FormAdminCampaign = () => {
             endDate: campaign[0].endDate,
             maxLimitPerPerson: campaign[0].maxLimitPerPerson != undefined ? campaign[0].maxLimitPerPerson.toString() : null,
             campaignItems: campaign[0].campaignItems,
+            activeEdificio: campaign[0].pickUpInBuilding,
+            activeEnvioCasa: campaign[0].sentToHome,
+            message: campaign[0].message,
+            edificiosCampaign: campaign[0].buildings.map((item, index) => {
+                return { 
+                    "id": item.id,
+                    "nameBuilding": item.building.name,
+                    "active": item.active,
+                    "activeBuilding": item.building.active,
+                    "idBuilding": item.building.id,
+                }
+            }),
         });}
     }, [campaign]);
 
     const handleFormSubmit = async () => {
         //console.log("save", edificiosSave)
-        if (campaignform.startDate != null && campaignform.endDate != null && (campaignform.activeEdificio == true || campaignform.activeEnvioCasa == true) && (campaignform.activeEdificio == false || campaignform.activeEdificio == true && edificiosSave) ) { 
+       
+        if (campaignform.startDate != null && campaignform.endDate != null && (campaignform.activeEdificio || campaignform.activeEnvioCasa) && (!campaignform.activeEdificio || campaignform.activeEdificio && edificiosSave) ) { 
             if (id) {
-                //await dispatch(UpdateCampaign(id,campaignform));
+                await dispatch(UpdateCampaign(id,campaignform));
                 setOpen(true);
             } else {
-                //await dispatch(AddCampaign(campaignform));
+                
+                await dispatch(AddCampaign(campaignform));
                 setOpen(true);
             }
         }
@@ -165,13 +184,13 @@ const FormAdminCampaign = () => {
                 setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "*Se debe seleccionar la fecha de finalización" }));
             }
         }
-        if (campaignform.activeEdificio == false && campaignform.activeEnvioCasa == false) {
+        if (!campaignform.activeEdificio && !campaignform.activeEnvioCasa) {
             setErrorActive({error: true, errorMessage:`Se debe activar al menos una de las opciones`});
         } else {
             setErrorActive({error: false, errorMessage:``});
         }
         for (var i = 0; i < campaignform.edificiosCampaign.length; i++) {
-            if (campaignform.edificiosCampaign[i][2][0] == "Habilitado") {
+            if (campaignform.edificiosCampaign[i] && campaignform.edificiosCampaign[i].active) {
                 setEdificiosSave(true);
                 setErrorEdificio({error: false, errorMessage:``});
             }
@@ -184,7 +203,7 @@ const FormAdminCampaign = () => {
             edificiosCampaign: edificios,
         });  
         for (var i = 0; i < edificios.length; i++) {
-            if (edificios[i][2][0] == "Habilitado") {
+            if (edificios[i] && edificios[i].active) {
                 setEdificiosSave(true);
                 setErrorEdificio({error: false, errorMessage:``});
             }
@@ -194,10 +213,26 @@ const FormAdminCampaign = () => {
     const handleChange = (event) => {
         const name = event.target.name;
         if (name == "activeEdificio" || name == "activeEnvioCasa") {
-            setCampaignForm({
-                ...campaignform,
-                [name]: event.target.checked,
-            })
+            if (name == "activeEdificio" && !event.target.checked) {
+                setCampaignForm({
+                    ...campaignform,
+                    [name]: event.target.checked,
+                    edificiosCampaign: campaignform.edificiosCampaign.map((item, index) => {
+                        return { 
+                          "id": item.id,
+                          "nameBuilding": item.nameBuilding,
+                          "active": false,
+                          "activeBuilding": item.activeBuilding,
+                          "idBuilding": item.idBuilding,
+                        }
+                      }),
+                })
+            } else {
+                setCampaignForm({
+                    ...campaignform,
+                    [name]: event.target.checked,
+                })
+            }
             if ( event.target.checked) {
                 setErrorActive({error: false, errorMessage:``});
             }
@@ -232,7 +267,7 @@ const FormAdminCampaign = () => {
 
     return (
         <div className="p-24">
-            {/* {console.log("edificios", campaignform.edificiosCampaign)} */}
+            {console.log("edificios", campaignform.edificiosCampaign)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading && id) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Campaña" : "Agregar Campaña"}</h2>}

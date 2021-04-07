@@ -89,17 +89,14 @@ const useStyles = makeStyles({
         marginBottom: '8%',
         boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19)',
     },
-
     card__header: {
         color: "#fff",
         backgroundColor: '#3497D3',
     },
-
     card__title: {
         margin: "10px 10px 0 0",
         padding: "5px 10px"
     },
-
     action__btn: {
         display: 'flex',
         justifyContent: 'center',
@@ -182,29 +179,6 @@ const FormVentas = () => {
             index: 0
         }
     );
-    const edificios = [
-        [
-            1,
-            "Edificio 1",
-            [
-                "Deshabilitado"
-            ]
-        ],
-        [
-            2,
-            "Edificio 2",
-            [
-                "Habilitado"
-            ]
-        ],
-        [
-            3,
-            "Edificio 3",
-            [
-                "Deshabilitado"
-            ]
-        ]
-    ]
     const message = "Costo de servicio de entrega no está incluido y varia dependiendo de la distancia"
     const activeEdificio = true;
     const activeEnvioCasa = true;
@@ -259,7 +233,8 @@ const FormVentas = () => {
         setVentasForm({
             ...ventasform,
             totalComprados: ventasform.totalComprados - carrito[index].buyquantity,
-            totalCompra: ventasform.totalCompra - carrito[index].subtotal,
+            freightVentas: ventasform.freightVentas - carrito[index].estimatedPrice,
+            totalCompra: Math.round((ventasform.totalCompra - carrito[index].subtotal) * 100) / 100, 
         })
         carritolist.splice(index, 1);
         setCarrito([...carritolist]);
@@ -293,9 +268,9 @@ const FormVentas = () => {
         canton: "",
         district: "",
         provinceCode: "",
-        metodoEntrega: "",
-        edificio: "",
-        flete: 0,
+        sendMethod: "",
+        building: "",
+        freightVentas: 0,
         cantonCode: "",
         districtCode: "",
         fecha: moment(new Date()).format("DD/MM/yyyy"),
@@ -327,7 +302,7 @@ const FormVentas = () => {
                     }
                 )
             })
-            await dispatch(AddOrder({ ...ventasform, detail: details }));
+            await dispatch(AddOrder({ ...ventasform, detail: details, freight: ventasform.sendMethod == "Envío a la casa" ? ventasform.freightVentas : 0 }));
             const payloadUser = {
                 email: ventasform.email,
                 phone: ventasform.phone,
@@ -350,18 +325,38 @@ const FormVentas = () => {
         });
     };
 
-    const handleChangeEntrega = (event) => {
+    const handleChangeEdificio = (event) => {
         const name = event.target.name;
         setVentasForm({
             ...ventasform,
-            [name]: event.target.value,
+            [name]: {"id":event.target.value},
         });
+    };
+
+    const handleChangeEntrega = (event) => {
+        const name = event.target.name;
         if(event.target.value == "Envío a la casa") {
             setshowInformation(true)
             setshowEdificio(false)
+            setVentasForm({
+                ...ventasform,
+                [name]: event.target.value,
+                building: "",
+            });
         } else {
             setshowInformation(false)
             setshowEdificio(true)
+            setVentasForm({
+                ...ventasform,
+                [name]: event.target.value,
+                province: "",
+                canton: "",
+                district: "",
+                provinceCode: "",
+                address: "",
+                cantonCode: "",
+                districtCode: "",
+            });
         }
     };
 
@@ -425,17 +420,18 @@ const FormVentas = () => {
             buyquantity: event.target.value,
             unitPrice: carrito[index].unitPrice,
             quantity: carrito[index].quantity,
-            subtotal: event.target.value * carrito[index].unitPrice,
+            subtotal: Math.round((event.target.value * carrito[index].unitPrice) * 100) / 100,
             maxLimitPerPerson: carrito[index].maxLimitPerPerson,
             stockQuantity: carrito[index].stockQuantity,
             limiteActual: carrito[index].limiteActual,
+            estimatedPrice: carrito[index].estimatedPrice,
             image: carrito[index].image
         };
         setCarrito([...carritolist]);
         setVentasForm({
             ...ventasform,
             totalComprados: totalcomprados + event.target.value,
-            totalCompra: totalcompra + event.target.value * carrito[index].unitPrice,
+            totalCompra: Math.round((totalcompra + event.target.value * carrito[index].unitPrice) * 100) / 100,
         })
         if ((purchases[0] != undefined && (totalcomprados + event.target.value) > (ventasform.maximo - purchases[0].totalPurchasedItems))) {
             setDisableMaximo(true);
@@ -451,7 +447,7 @@ const FormVentas = () => {
             {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={"¡Lo sentimos!"} save={() => { }} message={"¡Ya se ha alcanzado el máximo de artículos comprados en esta campaña!"} setOpen={setOpenPurchase} open={openPurchase && !isLoadingCampaign} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <h4 className={classes.titulo}>*El rebajo de artículos comprados se hará de planilla</h4>}
-                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : message && <h4 className={classes.titulo}>{"*" + message}</h4>}
+                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : message && <h4 className={classes.titulo}>{campaign[0] ? campaign[0].message : ""}</h4>}
                 {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <h2 style={{ textAlign: "center", marginTop: "2%" }} className="mb-20">Datos del usuario</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>
                     {(isLoadingCampaign || isLoadingOrder) ? <Loading /> :
@@ -500,32 +496,32 @@ const FormVentas = () => {
                             />
                             <SelectValidator
                                 label="Método de Entrega*"
-                                name="metodoEntrega"
+                                name="sendMethod"
                                 className={classes.textvalidator}
-                                value={ventasform.metodoEntrega}
+                                value={ventasform.sendMethod}
                                 onChange={handleChangeEntrega}
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
                             >
-                                {activeEnvioCasa && <MenuItem key={`entrega-envío`} id={"Envío a la casa"} value={"Envío a la casa"}>
+                                {(campaign[0] && campaign[0].sentToHome) && <MenuItem key={`entrega-envío`} id={"Envío a la casa"} value={"Envío a la casa"}>
                                     {"Envío a la casa"}
                                 </MenuItem>}  
-                                {activeEdificio && <MenuItem key={`entrega-edificio`} id={"Entrega en edificio"} value={"Recoger en edificio"}>
+                                {(campaign[0] && campaign[0].pickUpInBuilding) && <MenuItem key={`entrega-edificio`} id={"Entrega en edificio"} value={"Recoger en edificio"}>
                                     {"Recoger en edificio"}
                                 </MenuItem>}  
                             </SelectValidator>
                             {showEdificio ? <SelectValidator
                                 label="Edificio*"
-                                name="edificio"
+                                name="building"
                                 className={classes.textvalidator}
-                                value={ventasform.edificio}
-                                onChange={handleChange}
+                                value={ventasform.building.id}
+                                onChange={handleChangeEdificio}
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
                             >
-                                {edificios.map(edificio => (
-                                    edificio[2] == "Habilitado" && <MenuItem key={`edificio-${edificio[0]}`} id={edificio[0]} value={edificio[1] ? edificio[1] : ""}>
-                                        {edificio[1] || " "}
+                                {campaign[0].buildings.map(edificio => (
+                                    edificio.active && <MenuItem key={`edificio-${edificio.id}`} id={edificio.id} value={edificio.building.name ? edificio.building.id : ""}>
+                                        {edificio.building.name || " "}
                                     </MenuItem>
                                 ))}
                             </SelectValidator> : null}
@@ -793,7 +789,7 @@ const FormVentas = () => {
                                                                 </Grid>
                                                                 <Grid item zeroMinWidth xs={6}>
                                                                     <Typography gutterBottom variant="subtitle1">
-                                                                        Precio:
+                                                                        Subtotal:
                                                                     </Typography>
                                                                     <Typography variant="body2" color="textSecondary" component="p">
                                                                         ₡{item.subtotal}
@@ -845,15 +841,15 @@ const FormVentas = () => {
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
                             />
-                             {/* <TextValidator
+                             {showInformation ? <TextValidator
                                 className={classes.textvalidator}
                                 label="Flete aproximado"
                                 onChange={handleChange}
                                 type="text"
-                                name="flete"
+                                name="freightVentas"
                                 disabled={true}
-                                value={ventasform.flete}
-                            /> */}
+                                value={ventasform.freightVentas}
+                            /> : null}
                             <div className={classes.sectionbutton}>
                                 <Button style={{ margin: "1%", width: "105.92px" }} variant="contained" color="primary" type="submit">
                                     ENVIAR
@@ -866,9 +862,9 @@ const FormVentas = () => {
                     }
                 </ValidatorForm>
                 <Dialog fullWidth maxWidth="md" onClose={handleClose} open={shouldOpenDetailsDialog.open}>
-                    <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+                {isLoadingCampaign ? <Loading/> : <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                         Detalles del artículo:
-                    </DialogTitle>
+                    </DialogTitle>}
                     <AgregarDialog type={"agregar"} close={handleClose} purchases={purchases} ventas={ventasform} setventas={setVentasForm} indexlist={indexlist} setIndex={setIndexlist} carrito={carrito} setCarrito={setCarrito} order={[{}]} id={shouldOpenDetailsDialog.id} index={shouldOpenDetailsDialog.index} />
                 </Dialog>
             </Card>

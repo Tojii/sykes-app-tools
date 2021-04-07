@@ -2,7 +2,7 @@ import React, { useState, Component, useRef, useEffect } from "react";
 import { Button, Card, FormControlLabel, Switch, FormHelperText } from "@material-ui/core";
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
-import { GetCampaignsById, UpdateCampaign, AddCampaign, GetCampaigns } from "../../../redux/actions/CampaignActions";
+import { GetBuildingsById, UpdateBuilding, AddBuilding, GetBuildings } from "../../../redux/actions/BuildingActions";
 import { useSelector, useDispatch } from 'react-redux';
 import "date-fns";
 import { useParams } from "react-router";
@@ -63,38 +63,35 @@ const FormAdminEdificios = () => {
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const [edificiosform, setEdificiosForm] = useState({
         name: "",
-        id: ""
+        id: "",
+        active: false
     });
     const classes = useStyles();
-    const successCampaign = useSelector(state => state.campaign.success);
-    const campaign = useSelector(state => state.campaign.campaign);
-    const isLoading  = useSelector(state => state.campaign.loading);
+    const successCampaign = useSelector(state => state.building.success);
+    const building = useSelector(state => state.building.building);
+    const isLoading  = useSelector(state => state.building.loading);
     const [open, setOpen] = useState(false);
     const [errorActive, setErrorActive] = useState({error: false, errorMessage: ""});
 
     useEffect(() => {
         if (id) {
-            dispatch(GetCampaignsById(id));
+            dispatch(GetBuildingsById(id));
         }  
     }, []);
 
     useEffect(() => {
-        if(id && campaign != [] && campaign[0] != [""] && campaign[0] != undefined) {setEdificiosForm({
-            name: campaign[0].name,
-            description: campaign[0].description,
-            startDate: campaign[0].startDate,
-            endDate: campaign[0].endDate,
-            maxLimitPerPerson: campaign[0].maxLimitPerPerson != undefined ? campaign[0].maxLimitPerPerson.toString() : null,
-            campaignItems: campaign[0].campaignItems,
+        if(id && building != [] && building[0] != [""] && building[0] != undefined) {setEdificiosForm({
+            name: building[0].name,
+            active: building[0].active,
         });}
-    }, [campaign]);
+    }, [building]);
 
     const handleFormSubmit = async () => {
         if (id) {
-            await dispatch(UpdateCampaign(id,edificiosform));
+            await dispatch(UpdateBuilding(id,edificiosform));
             setOpen(true);
         } else {
-            await dispatch(AddCampaign(edificiosform));
+            await dispatch(AddBuilding(edificiosform));
             setOpen(true);
         }
     };
@@ -113,7 +110,7 @@ const FormAdminEdificios = () => {
 
     return (
         <div className="p-24">
-            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Edificios"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Edificios"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetBuildings());}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading && id) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Edificio" : "Agregar Edificio"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>                 
