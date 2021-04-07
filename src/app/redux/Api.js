@@ -48,9 +48,9 @@ export const HeaderContentTypeJson = () => {
 
 export const globalErrorHandler = async (error) => {
     console.log("something went wrong");
-    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+    if (error.response && (error.response.status === 401 || error.response.status === 403 || error.response.status === 415)) {
       Store.dispatch(logoutUser("Your session has expired."));
     }
-    else
-      Store.dispatch(logoutUser());
+    // else
+    //   Store.dispatch(logoutUser());
 };

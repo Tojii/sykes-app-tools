@@ -13,35 +13,29 @@ import {
 } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
-import ShoppingCart from "@material-ui/icons/ShoppingCart";
 import { Link } from 'react-router-dom';
 import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
 import NotFound from "../../sessions/NotFound"
-import moment from "moment"
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 
-const CampaignTable = (props) => {
+const EdificiosTable = (props) => {
     const dispatch = useDispatch();
     const isAdmin = props.admin != undefined ? props.admin : true;
     const user = useSelector(state => state.user);
     const campaigns = useSelector(state => state.campaign.campaigns);
-    // const purchases = useSelector(state => state.order.purchases);
-    // const addCampaign = useSelector(state => state.campaign.addCampaign);
     const successCampaign = useSelector(state => state.campaign.success);
-    const campaignsActive = useSelector(state => state.campaign.campaignsActive);
     const isLoading  = useSelector(state => state.campaign.loading);
-    const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
     const [open, setOpen] = useState(false);
-    // const [purchaseList, setPurchaseList] = useState([]);
+    const edificios = [{id:1, name: "Edificio 1"}, {id:2, name: "Edificio 2"}, {id:2, name: "Edificio 2"}]
     
 
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
   
     useEffect(() => {
-        dispatch(CleanPurchase());
-        isAdmin && dispatch(GetCampaigns());
-        !isAdmin && dispatch(GetCampaignsActive());
+        // dispatch(CleanPurchase());
+        // isAdmin && dispatch(GetCampaigns());
+        // !isAdmin && dispatch(GetCampaignsActive());
     }, []);
 
     const getMuiTheme = () =>
@@ -54,11 +48,7 @@ const CampaignTable = (props) => {
     };
 
     const handleEdit = (id) => { 
-      history.push(`/Ventas/FormAdminCampaign/${id}`);
-    };
-
-    const handleComprar = (item) => {     
-      history.push(`/Ventas/form/${item.id}`);
+      history.push(`/Ventas/FormAdminEdificios/${id}`);
     };
 
     const addButton = () => {
@@ -66,7 +56,7 @@ const CampaignTable = (props) => {
           <React.Fragment>
             <Tooltip title={"Nuevo"}>
               <Button
-                component={Link} to="/Ventas/FormAdminCampaign"
+                component={Link} to="/Ventas/FormAdminEdificios"
                 variant="contained"
                 color="primary"
                 startIcon={<AddIcon />}
@@ -78,87 +68,27 @@ const CampaignTable = (props) => {
       );
     }
 
-    const compraButton = (item) => {
-      return (
-          <React.Fragment>
-            <Tooltip title={"Comprar"}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleComprar(item)}
-                startIcon={<ShoppingCart />}
-              >
-                Comprar
-              </Button>
-            </Tooltip>
-          </React.Fragment>
-      );
-    }
-
-    const builddata = isAdmin ? campaigns.map(item => {
-      var stock = 0;
-      item.campaignItems.map(item2 =>
-      {
-        stock += item2.stockQuantity;
-      }
-      )
-
+    const builddata = edificios.map(item => {
       return [
           item.id,
-          item.name, 
-          item.description,
-          item.startDate,
-          item.endDate,
-          item.maxLimitPerPerson,
-          stock,
-          compraButton(item)
+          item.name,
       ]
-  }) : campaignsActive.filter(function(item) {
-    var stock = 0;
-    item.campaignItems.map(item2 =>
-    {
-      stock += item2.stockQuantity;
-    }
-    )
-
-    if (stock == 0) {
-      return false; // skip
-    }
-    return true;
-  }).map(item => {
-    var stock = 0;
-    item.campaignItems.map(item2 =>
-    {
-      stock += item2.stockQuantity;
-    }
-    )
-
-    return [
-        item.id,
-        item.name, 
-        item.description,
-        item.startDate,
-        item.endDate,
-        item.maxLimitPerPerson,
-        stock,
-        compraButton(item)
-    ]
-  })
+    })
 
     const columns = [
         {
             name: "id",
-            label: "ID Campaña ",
+            label: "ID Edificio ",
             options: {
              filter: false,
              sort: true,
-             display: false,
-             viewColumns: isAdmin,
+             //display: false,
+             //viewColumns: isAdmin,
             }
         },
         {
           name: "name",
-          label: "Nombre Campaña ",
+          label: "Nombre Edificio ",
           options: {
            filter: true,
            sort: true,
@@ -166,84 +96,7 @@ const CampaignTable = (props) => {
             fullWidth: window.screen.width <= 1024 ? true : false
            }
           }
-        },
-        {
-          name: "description",
-          label: "Descripción Campaña ",
-          options: {
-            filter: true,
-            sort: true,
-            filterOptions: { 
-              fullWidth: window.screen.width <= 1024 ? true : false
-            },
-            setCellProps: value => {
-              return {
-                style: {
-                  wordBreak: "break-word"
-                }
-              };
-            },
-          }
-        },
-        {
-          name: "startDate",
-          label: "Fecha Inicio ",
-          options: {
-            filter: true,
-            sort: true,
-            filterOptions: { 
-              fullWidth: window.screen.width <= 1024 ? true : false
-            },
-            customBodyRender: value =>
-            (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""
-          }
-        },
-        {
-          name: "endDate",
-          label: "Fecha Finalización",
-          options: {
-            filter: true,
-            sort: true,
-            filterOptions: { 
-              fullWidth: window.screen.width <= 1024 ? true : false
-            },
-            customBodyRender: value =>
-            (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""
-          }
-        },
-        {
-          name: "maxLimitPerPerson",
-          label: "Límite Máximo por Persona",
-          options: {
-            filter: true,
-            sort: true,
-            filterOptions: { 
-              fullWidth: window.screen.width <= 1024 ? true : false
-            }
-          }
-        },
-        {
-          name: "stockquantity",
-          label: "Artículos en stock",
-          options: {
-            filter: true,
-            sort: true,
-            filterOptions: { 
-              fullWidth: window.screen.width <= 1024 ? true : false
-            }
-          }
-        },
-        {
-          name: "compra",
-          label: " ",
-          options: {
-          filter: false,
-          sort: true,
-          display: !isAdmin,
-          viewColumns: false,
-          }
-        },
-       
+        },       
     ]
 
     const options = {
@@ -257,7 +110,7 @@ const CampaignTable = (props) => {
       },
       selectableRowsOnClick: isAdmin,
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar la campaña "} index={1} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
+        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar el edificio "} index={1} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
       ),
       print:false,
       download: false,
@@ -314,14 +167,14 @@ const CampaignTable = (props) => {
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">
-            {isLoading ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la campaña no pudo ser eliminada!"} setOpen={setOpen} open={open} />}
+            {isLoading ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el edificio no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}
                         <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                             <MuiThemeProvider theme={getMuiTheme()}>
                               <MUIDataTable  className="w-100"
-                                  title={isAdmin ? <div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Administración de Campaña</h4></div> : <h4 style={{alignSelf: "flex-end"}}>Campañas activas</h4>}
+                                  title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Administración de Edificios</h4></div>}
                                   data={builddata}
                                   columns={columns}
                                   options={options}
@@ -336,4 +189,4 @@ const CampaignTable = (props) => {
   )
 }
 
-export default CampaignTable
+export default EdificiosTable

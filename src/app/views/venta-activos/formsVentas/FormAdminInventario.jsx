@@ -8,7 +8,6 @@ import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
-import {addRaft} from "../../../redux/actions/RaftActions";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -17,7 +16,6 @@ import ValidationModal from '../../growth-opportunities/components/ValidationDia
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
-import moment from "moment"
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -44,6 +42,10 @@ const useStyles = makeStyles({
             width: "100%",
         },
         "@media (min-width: 1024px)": {
+            marginLeft: "15%",
+            width: "70%",
+        },
+        "@media (min-width: 1281px)": {
             marginLeft: "25%",
             width: "50%",
         }
@@ -96,6 +98,7 @@ const FormAdminInventario = () => {
         quantity: "",
         stockQuantity: "",
         unitPrice: "",
+        shippingPrice: "",
         maxLimitPerPerson: "",
         files: null
     });
@@ -316,12 +319,27 @@ const FormAdminInventario = () => {
                                 name="unitPrice"
                                 placeholder="0.00"
                                 value={inventarioform.unitPrice}
-                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$","maxStringLength:11"]} 
-                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales", "Máximo 11 carácteres"]}
+                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$","maxStringLength:8"]} 
+                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales", "Máximo 8 carácteres"]}
+                                InputProps={{
+                                    startAdornment:<InputAdornment position="start">₡</InputAdornment>,
+                                  }}  
+                            />
+                        </FormControl>
+                        <FormControl className={classes.textvalidator}>
+                            <TextValidator
+                                fullWidth
+                                label="Precio estimado de envío*"
+                                onChange={handleChange}
+                                type="text"
+                                name="shippingPrice"
+                                placeholder="0.00"
+                                value={inventarioform.shippingPrice}
+                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$","maxStringLength:8"]} 
+                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales", "Máximo 8 carácteres"]}
                                 InputProps={{
                                     startAdornment:<InputAdornment position="start">₡</InputAdornment>,
                                   }}
-                                
                             />
                         </FormControl>
                         <TextValidator

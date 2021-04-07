@@ -1,8 +1,5 @@
 import React, { useState, Component, useRef, useEffect } from "react";
-import {
-  Button,
-  Card
-} from "@material-ui/core";
+import { Button, Card, FormControlLabel, Switch, FormHelperText } from "@material-ui/core";
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
 import {addRaft} from "../../../redux/actions/RaftActions";
@@ -21,6 +18,7 @@ import NotFound from "../../sessions/NotFound"
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 import Campaigns from "app/views/dashboard/shared/Campaigns";
 import history from "history.js";
+import EdificiosTable from "../ventasTables/CampaignEdificiosTable"
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -40,7 +38,25 @@ const useStyles = makeStyles({
          "& .MuiFormLabel-root.Mui-disabled": {
             color: "rgba(74, 70, 109, 0.43)" 
          },
-     },
+    },
+    edificiostable: {
+        "@media (min-width: 0px)": {
+             marginLeft: "7.5%",
+             width: "85%",
+             marginTop: "3%",
+         },
+         "@media (min-width: 1025px)": {
+             marginLeft: "15%",
+             width: "75%",
+             marginTop: "3%",
+         }, 
+         "& .MuiInputBase-root.Mui-disabled": {
+            color: "darkgray"
+         },
+         "& .MuiFormLabel-root.Mui-disabled": {
+            color: "rgba(74, 70, 109, 0.43)" 
+         },
+    },
     formcard: {
         "@media (min-width: 0px)": {
             marginLeft: "0%",
@@ -88,7 +104,11 @@ const FormAdminCampaign = () => {
         startDate: null,
         endDate: null,
         maxLimitPerPerson: "",
+        message: "",
         campaignItems: [],
+        activeEdificio: false,
+        activeEnvioCasa: false,
+        edificiosCampaign: []
     });
     const classes = useStyles();
     const addCampaign = useSelector(state => state.campaign.addCampaign);
@@ -96,6 +116,9 @@ const FormAdminCampaign = () => {
     const campaign = useSelector(state => state.campaign.campaign);
     const isLoading  = useSelector(state => state.campaign.loading);
     const [open, setOpen] = useState(false);
+    const [errorActive, setErrorActive] = useState({error: false, errorMessage: ""});
+    const [errorEdificio, setErrorEdificio] = useState({error: false, errorMessage: ""});
+    const [edificiosSave, setEdificiosSave] = useState(false);
 
     useEffect(() => {
         if (id) {
@@ -115,12 +138,13 @@ const FormAdminCampaign = () => {
     }, [campaign]);
 
     const handleFormSubmit = async () => {
-        if (campaignform.startDate != null && campaignform.endDate != null) { 
+        //console.log("save", edificiosSave)
+        if (campaignform.startDate != null && campaignform.endDate != null && (campaignform.activeEdificio == true || campaignform.activeEnvioCasa == true) && (campaignform.activeEdificio == false || campaignform.activeEdificio == true && edificiosSave) ) { 
             if (id) {
-                await dispatch(UpdateCampaign(id,campaignform));
+                //await dispatch(UpdateCampaign(id,campaignform));
                 setOpen(true);
             } else {
-                await dispatch(AddCampaign(campaignform));
+                //await dispatch(AddCampaign(campaignform));
                 setOpen(true);
             }
         }
@@ -131,6 +155,8 @@ const FormAdminCampaign = () => {
     }
 
     const presave = () => {
+        setEdificiosSave(false);
+        campaignform.activeEdificio && setErrorEdificio({error: true, errorMessage:`Se debe habilitar al menos un edificio`});
         if (campaignform.startDate == null || campaignform.endDate == null) { 
             if (campaignform.startDate == null) {
                 setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*Se debe seleccionar la fecha de inicio" }));
@@ -139,14 +165,48 @@ const FormAdminCampaign = () => {
                 setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "*Se debe seleccionar la fecha de finalización" }));
             }
         }
+        if (campaignform.activeEdificio == false && campaignform.activeEnvioCasa == false) {
+            setErrorActive({error: true, errorMessage:`Se debe activar al menos una de las opciones`});
+        } else {
+            setErrorActive({error: false, errorMessage:``});
+        }
+        for (var i = 0; i < campaignform.edificiosCampaign.length; i++) {
+            if (campaignform.edificiosCampaign[i][2][0] == "Habilitado") {
+                setEdificiosSave(true);
+                setErrorEdificio({error: false, errorMessage:``});
+            }
+        }      
     }
+
+    const handleChangeEdificios = (edificios) => {
+        setCampaignForm({
+            ...campaignform,
+            edificiosCampaign: edificios,
+        });  
+        for (var i = 0; i < edificios.length; i++) {
+            if (edificios[i][2][0] == "Habilitado") {
+                setEdificiosSave(true);
+                setErrorEdificio({error: false, errorMessage:``});
+            }
+        }  
+    };
     
     const handleChange = (event) => {
         const name = event.target.name;
-        setCampaignForm({
-          ...campaignform,
-          [name]: event.target.value,
-        });
+        if (name == "activeEdificio" || name == "activeEnvioCasa") {
+            setCampaignForm({
+                ...campaignform,
+                [name]: event.target.checked,
+            })
+            if ( event.target.checked) {
+                setErrorActive({error: false, errorMessage:``});
+            }
+        } else {
+            setCampaignForm({
+                ...campaignform,
+                [name]: event.target.value,
+              });
+        }
     };
 
     const handleDateChangeStartDate = date => {
@@ -172,6 +232,7 @@ const FormAdminCampaign = () => {
 
     return (
         <div className="p-24">
+            {/* {console.log("edificios", campaignform.edificiosCampaign)} */}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading && id) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Campaña" : "Agregar Campaña"}</h2>}
@@ -234,10 +295,46 @@ const FormAdminCampaign = () => {
                             type="text"
                             name="maxLimitPerPerson"
                             value={campaignform.maxLimitPerPerson}
-                            validators={["required","isNumber","isPositive","maxStringLength:7"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos", "Máximo 7 carácteres"]}
+                            validators={["required","isNumber","isPositive","maxStringLength:6"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "No se aceptan negativos", "Máximo 6 carácteres"]}
                         />
-                    
+                        <TextValidator
+                            className={classes.textvalidator}
+                            label="Mensaje"
+                            onChange={handleChange}
+                            type="text"
+                            name="message"
+                            value={campaignform.message}
+                        />
+                         <FormControlLabel
+                            className={classes.textvalidator}
+                            label="Activar envío a la casa"
+                            control={
+                                <Switch
+                                checked={campaignform.activeEnvioCasa}
+                                name="activeEnvioCasa"
+                                color="primary"
+                                onChange={handleChange}
+                                />
+                            }
+                        />
+                         <FormControlLabel
+                            className={classes.textvalidator}
+                            label="Activar recoger en edificio"
+                            control={
+                                <Switch
+                                checked={campaignform.activeEdificio}
+                                name="activeEdificio"
+                                color="primary"
+                                onChange={handleChange}
+                                />
+                            }
+                        />
+                        <FormHelperText style={{display: errorActive.error ? null : "none", marginTop: "0%"}} className={classes.textvalidator} error={errorActive.error} id="my-helper-text">{errorActive.errorMessage}</FormHelperText>
+                        <div className={classes.edificiostable}>
+                            {campaignform.activeEdificio ? <EdificiosTable campaignform={campaignform} edificiosCampaign={campaignform.edificiosCampaign} setEdificiosCampaign={handleChangeEdificios} /> : null} 
+                        </div>
+                        <FormHelperText style={{display: errorEdificio.error ? null : "none", marginTop: "0%"}} style={{marginLeft: "19%"}} className={classes.textvalidator} error={errorEdificio.error} id="my-helper-text2">{errorEdificio.errorMessage}</FormHelperText>
                         <div className={classes.sectionbutton}>
                         <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
                                 ENVIAR  

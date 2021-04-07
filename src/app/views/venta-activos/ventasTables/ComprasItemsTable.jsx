@@ -90,26 +90,40 @@ const ComprasItems = (props) => {
           name: "itemName",
           label: "Artículo",
           options: {
-          filter: true,
-          viewColumns: isAdmin,
-          sort: true,
-          display: true,
-          filterOptions: { 
-            fullWidth: window.screen.width <= 1024 ? true : false
-          }
+            filter: true,
+            viewColumns: isAdmin,
+            sort: true,
+            display: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            },
+            setCellProps: value => {
+              return {
+                style: {
+                  wordBreak: "break-word"
+                }
+              };
+            },
           }
         },
         {
           name: "itemDescription",
           label: "Descripción artículo",
           options: {
-          filter: true,
-          viewColumns: isAdmin,
-          sort: true,
-          display: true,
-          filterOptions: { 
-            fullWidth: window.screen.width <= 1024 ? true : false
-          }
+            filter: true,
+            viewColumns: isAdmin,
+            sort: true,
+            display: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            },
+            setCellProps: value => {
+              return {
+                style: {
+                  wordBreak: "break-word"
+                }
+              };
+            },
           }
         },
         {

@@ -72,6 +72,7 @@ const AgregarArticulo = (props) => {
     //const cantCompradaArticulo = props.type == "agregar" && props.purchases[0] != undefined ? props.purchases[0].items[props.index].totalPurchasedItems : 0
     const cantCompradaAnterior = props.type == "agregar" && props.purchases[0] != undefined ? props.purchases[0].allowedPendingPurchaseItems - props.ventas.totalComprados : 0
     const [cantidadArticulo, setCantidadArticulo] = useState(1);
+    const [disableAgregar, setDisableAgregar] = useState(false);
     const classes = useStyles();
     const dispatch = useDispatch();
 
@@ -92,37 +93,44 @@ const AgregarArticulo = (props) => {
     }
 
     const handleFormSubmit = async () => {
+        setDisableAgregar(true);
         if(props.ventas.maximo < props.ventas.totalComprados + cantidadArticulo) {
             //console.log("se sobrepasa el limite")
         } else { 
-            props.setCarrito(
-                [ 
-                    ...props.carrito,
-                    {id: campaignItems[0].id,
-                    name: campaignItems[0].name,
-                    buyquantity: cantidadArticulo,
-                    unitPrice: campaignItems[0].unitPrice,
-                    quantity: campaignItems[0].quantity,
-                    subtotal: cantidadArticulo * campaignItems[0].unitPrice,
-                    maxLimitPerPerson: campaignItems[0].maxLimitPerPerson - cantComprada,
-                    stockQuantity: campaignItems[0].stockQuantity,
-                    limiteActual: props.ventas.maximo - props.ventas.totalComprados + cantidadArticulo,
-                    image: campaignItems[0].image
-                },    
-            ]);
+            if (!props.indexlist.includes(props.id)) {
+                props.setCarrito(
+                    [ 
+                        ...props.carrito,
+                        {id: campaignItems[0].id,
+                        name: campaignItems[0].name,
+                        buyquantity: cantidadArticulo,
+                        unitPrice: campaignItems[0].unitPrice,
+                        quantity: campaignItems[0].quantity,
+                        subtotal: cantidadArticulo * campaignItems[0].unitPrice,
+                        maxLimitPerPerson: campaignItems[0].maxLimitPerPerson - cantComprada,
+                        stockQuantity: campaignItems[0].stockQuantity,
+                        limiteActual: props.ventas.maximo - props.ventas.totalComprados + cantidadArticulo,
+                        image: campaignItems[0].image
+                    },    
+                ]);
 
-            props.setventas({
-                ...props.ventas,
-                totalComprados: props.ventas.totalComprados + cantidadArticulo,
-                totalCompra: props.ventas.totalCompra + cantidadArticulo * campaignItems[0].unitPrice,
-            });
+                props.setventas({
+                    ...props.ventas,
+                    totalComprados: props.ventas.totalComprados + cantidadArticulo,
+                    totalCompra: props.ventas.totalCompra + cantidadArticulo * campaignItems[0].unitPrice,
+                });
 
-            props.close();
+                props.close();
 
-            props.setIndex([...props.indexlist, props.id])
+                props.setIndex([...props.indexlist, props.id])
+            }
         }
     };
     
+    const presave = () => {
+        //setDisableAgregar(true);
+    }
+
     const handleChange = (event) => {
         setCantidadArticulo( 
             event.target.value,
@@ -196,7 +204,7 @@ const AgregarArticulo = (props) => {
                             </Table>}
                       
                             <div className={classes.sectionbutton}>
-                                <Button variant="contained" color="primary" style={{margin: "1%", width: "105.92px", display: (campaignItems[0] == undefined || props.type == "detalles") ? "none" : null}} type="submit">
+                                <Button variant="contained" color="primary" onClick={presave} disabled={disableAgregar} style={{margin: "1%", width: "105.92px", display: (campaignItems[0] == undefined || props.type == "detalles") ? "none" : null}} type="submit">
                                     AGREGAR
                                 </Button>
                                 <Button variant="contained" style={{margin: "1%", display: (campaignItems[0] == undefined || props.order == undefined)? "none" : null}} onClick={props.close} color="default">

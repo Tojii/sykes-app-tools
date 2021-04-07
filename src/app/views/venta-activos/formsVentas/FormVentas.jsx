@@ -173,6 +173,8 @@ const FormVentas = () => {
     const [disableMaximo, setDisableMaximo] = useState(false);
     const [disableCanton, setDisableCanton] = useState(true);
     const [disableDistrict, setDisableDistrict] = useState(true);
+    const [showInformation, setshowInformation] = useState(false);
+    const [showEdificio, setshowEdificio] = useState(false);
     const classes = useStyles();
     const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(
         {
@@ -180,6 +182,32 @@ const FormVentas = () => {
             index: 0
         }
     );
+    const edificios = [
+        [
+            1,
+            "Edificio 1",
+            [
+                "Deshabilitado"
+            ]
+        ],
+        [
+            2,
+            "Edificio 2",
+            [
+                "Habilitado"
+            ]
+        ],
+        [
+            3,
+            "Edificio 3",
+            [
+                "Deshabilitado"
+            ]
+        ]
+    ]
+    const message = "Costo de servicio de entrega no está incluido y varia dependiendo de la distancia"
+    const activeEdificio = true;
+    const activeEnvioCasa = true;
 
     useEffect(() => {
         setOpenPurchase(false);
@@ -247,27 +275,12 @@ const FormVentas = () => {
 
     const handleCantidad = () => {
         let i;
-        //console.log("cantidad", purchases[0] != undefined ? (purchases[0].allowedPendingPurchaseItems - ventasform.totalCompra) : "")
-        //console.log("cantidad", campaign[0] != undefined ? campaign[0].maxLimitPerPerson : "")
         if (campaign[0] != undefined) {
             for (i = 1; i <= campaign[0].maxLimitPerPerson && (purchases[0] != undefined && i <= (purchases[0].allowedPendingPurchaseItems - ventasform.totalCompra)); i++) {
                 cantidad.push(i);
             }
         }
     }
-
-    const [disponibles, setDisponibles] = useState([
-        {
-            id: 1, name: "Monitor MSI",
-            quantity: 3,
-            unitPrice: 10000
-        },
-        {
-            id: 2, name: "Audifonos MSI",
-            quantity: 4,
-            unitPrice: 12000,
-        },
-    ]);
 
     const [carrito, setCarrito] = useState([]);
 
@@ -280,6 +293,9 @@ const FormVentas = () => {
         canton: "",
         district: "",
         provinceCode: "",
+        metodoEntrega: "",
+        edificio: "",
+        flete: 0,
         cantonCode: "",
         districtCode: "",
         fecha: moment(new Date()).format("DD/MM/yyyy"),
@@ -332,6 +348,21 @@ const FormVentas = () => {
             ...ventasform,
             [name]: event.target.value,
         });
+    };
+
+    const handleChangeEntrega = (event) => {
+        const name = event.target.name;
+        setVentasForm({
+            ...ventasform,
+            [name]: event.target.value,
+        });
+        if(event.target.value == "Envío a la casa") {
+            setshowInformation(true)
+            setshowEdificio(false)
+        } else {
+            setshowInformation(false)
+            setshowEdificio(true)
+        }
     };
 
     const handleChangeProvince = (event) => {
@@ -415,12 +446,12 @@ const FormVentas = () => {
 
     return (
         <div className="m-sm-30">
-            {/* { console.log("purchases", maximolist)} */}
-            {/* { console.log("carrito", carrito)} */}
+            {console.log("carrito", carrito)}
             {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={(successOrder) ? "Success!" : "Error!"} save={() => { }} message={(successOrder) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={"¡Lo sentimos!"} save={() => { }} message={"¡Ya se ha alcanzado el máximo de artículos comprados en esta campaña!"} setOpen={setOpenPurchase} open={openPurchase && !isLoadingCampaign} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <h4 className={classes.titulo}>*El rebajo de artículos comprados se hará de planilla</h4>}
+                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : message && <h4 className={classes.titulo}>{"*" + message}</h4>}
                 {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <h2 style={{ textAlign: "center", marginTop: "2%" }} className="mb-20">Datos del usuario</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>
                     {(isLoadingCampaign || isLoadingOrder) ? <Loading /> :
@@ -468,6 +499,37 @@ const FormVentas = () => {
                                 errorMessages={["Este campo es requerido", "Solo se permiten números", "No se aceptan negativos", "Máximo 8 carácteres", "Mínimo 8 carácteres"]}
                             />
                             <SelectValidator
+                                label="Método de Entrega*"
+                                name="metodoEntrega"
+                                className={classes.textvalidator}
+                                value={ventasform.metodoEntrega}
+                                onChange={handleChangeEntrega}
+                                validators={["required"]}
+                                errorMessages={["Este campo es requerido"]}
+                            >
+                                {activeEnvioCasa && <MenuItem key={`entrega-envío`} id={"Envío a la casa"} value={"Envío a la casa"}>
+                                    {"Envío a la casa"}
+                                </MenuItem>}  
+                                {activeEdificio && <MenuItem key={`entrega-edificio`} id={"Entrega en edificio"} value={"Recoger en edificio"}>
+                                    {"Recoger en edificio"}
+                                </MenuItem>}  
+                            </SelectValidator>
+                            {showEdificio ? <SelectValidator
+                                label="Edificio*"
+                                name="edificio"
+                                className={classes.textvalidator}
+                                value={ventasform.edificio}
+                                onChange={handleChange}
+                                validators={["required"]}
+                                errorMessages={["Este campo es requerido"]}
+                            >
+                                {edificios.map(edificio => (
+                                    edificio[2] == "Habilitado" && <MenuItem key={`edificio-${edificio[0]}`} id={edificio[0]} value={edificio[1] ? edificio[1] : ""}>
+                                        {edificio[1] || " "}
+                                    </MenuItem>
+                                ))}
+                            </SelectValidator> : null}
+                            {showInformation ? <SelectValidator
                                 label="Provincia*"
                                 name="provinceCode"
                                 className={classes.textvalidator}
@@ -481,8 +543,8 @@ const FormVentas = () => {
                                         {province.name || " "}
                                     </MenuItem>
                                 ))}
-                            </SelectValidator>
-                            <SelectValidator
+                            </SelectValidator> : null}
+                            {showInformation ? <SelectValidator
                                 label="Cantón*"
                                 name="cantonCode"
                                 className={classes.textvalidator}
@@ -497,8 +559,8 @@ const FormVentas = () => {
                                         {canton.name || " "}
                                     </MenuItem>
                                 ))}
-                            </SelectValidator>
-                            <SelectValidator
+                            </SelectValidator> : null}
+                            {showInformation ? <SelectValidator
                                 label="Distrito*"
                                 name="districtCode"
                                 className={classes.textvalidator}
@@ -513,8 +575,8 @@ const FormVentas = () => {
                                         {district.name || " "}
                                     </MenuItem>
                                 ))}
-                            </SelectValidator>
-                            <TextValidator
+                            </SelectValidator> : null}
+                            {showInformation ? <TextValidator
                                 className={classes.textvalidator}
                                 label="Dirección Exacta*"
                                 onChange={handleChange}
@@ -524,7 +586,7 @@ const FormVentas = () => {
                                 value={ventasform.address}
                                 validators={["required", "minStringLength:30"]}
                                 errorMessages={["Este campo es requerido", "La dirección debe ser de al menos 30 caracteres"]}
-                            />
+                            /> : null}
                             <h2 style={{ textAlign: "center", marginTop: "2%" }} className="mb-20">Datos de la compra:</h2>
                             <TextValidator
                                 className={classes.textvalidator}
@@ -629,7 +691,7 @@ const FormVentas = () => {
                                                         </Grid>
                                                         <Grid container spacing={1}>
                                                             <Grid item xs={12}>
-                                                                <Grid xs container 
+                                                                <Grid container 
                                                                     direction="row"
                                                                     justify="center"
                                                                     alignItems="center"
@@ -701,13 +763,13 @@ const FormVentas = () => {
                                                     </Grid>
                                                     <Grid container spacing={3}>
                                                         <Grid item xs={12}>
-                                                            <Grid co ntainer direction="row"
+                                                            <Grid container direction="row"
                                                                 justify="center"
                                                                 alignItems="center"
                                                                 spacing={2}>
                                                                 <Grid
                                                                     item zeroMinWidth xs={6}
-                                                                    alignContent="center"
+                                                                    
                                                                 >
                                                                     <Typography gutterBottom variant="subtitle1">
                                                                         Cantidad:
@@ -720,7 +782,7 @@ const FormVentas = () => {
                                                                         errorMessages={["Este campo es requerido"]}
                                                                     >
                                                                         { //console.log("cant carrito", item.limiteActual),
-                                                                            cantidad.map(cantidaditem => (
+                                                                            cantidad.map((cantidaditem, index) => (
                                                                                 (cantidaditem <= item.maxLimitPerPerson && cantidaditem <= item.stockQuantity && cantidaditem <= item.limiteActual) ?
                                                                                     <MenuItem key={`cantidad-${cantidaditem}`} value={cantidaditem ? cantidaditem : ""}>
                                                                                         {cantidaditem || " "}
@@ -783,6 +845,15 @@ const FormVentas = () => {
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
                             />
+                             {/* <TextValidator
+                                className={classes.textvalidator}
+                                label="Flete aproximado"
+                                onChange={handleChange}
+                                type="text"
+                                name="flete"
+                                disabled={true}
+                                value={ventasform.flete}
+                            /> */}
                             <div className={classes.sectionbutton}>
                                 <Button style={{ margin: "1%", width: "105.92px" }} variant="contained" color="primary" type="submit">
                                     ENVIAR
@@ -798,7 +869,7 @@ const FormVentas = () => {
                     <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                         Detalles del artículo:
                     </DialogTitle>
-                    <AgregarDialog type={"agregar"} close={handleClose} purchases={purchases} ventas={ventasform} setventas={setVentasForm} indexlist={indexlist} setIndex={setIndexlist} carrito={carrito} setCarrito={setCarrito} order={[{}]} setDisponibles={setDisponibles} id={shouldOpenDetailsDialog.id} index={shouldOpenDetailsDialog.index} />
+                    <AgregarDialog type={"agregar"} close={handleClose} purchases={purchases} ventas={ventasform} setventas={setVentasForm} indexlist={indexlist} setIndex={setIndexlist} carrito={carrito} setCarrito={setCarrito} order={[{}]} id={shouldOpenDetailsDialog.id} index={shouldOpenDetailsDialog.index} />
                 </Dialog>
             </Card>
         </div>

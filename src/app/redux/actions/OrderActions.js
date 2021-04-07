@@ -42,20 +42,7 @@ export const OR_LOADING_ITEMS = "OR_LOADING_ITEMS";
 
         //console.log("imagenes",res.data)
       })
-      .catch((error) => {
-        // Error
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        if (error.response) {
-            console.log(error.response.data);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
-        }
-        console.log(error.config);
-      }); 
+      .catch(globalErrorHandler);
     };
   };
 
@@ -78,19 +65,7 @@ export const OR_LOADING_ITEMS = "OR_LOADING_ITEMS";
 
         //console.log("imagenes",res.data)
       })
-      .catch((error) => {
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        if (error.response) {
-            console.log(error.response.data);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
-        }
-        console.log(error.config);
-      }); 
+      .catch(globalErrorHandler);
     };
   }; 
 
@@ -113,19 +88,7 @@ export const OR_LOADING_ITEMS = "OR_LOADING_ITEMS";
 
         //console.log("imagenes",res.data)
       })
-      .catch((error) => {
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        if (error.response) {
-            console.log(error.response.data);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
-        }
-        console.log(error.config);
-      }); 
+      .catch(globalErrorHandler);
     };
   }; 
 
@@ -148,19 +111,7 @@ export const OR_LOADING_ITEMS = "OR_LOADING_ITEMS";
 
         //console.log("imagenes",res.data)
       })
-      .catch((error) => {
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        if (error.response) {
-            console.log(error.response.data);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
-        }
-        console.log(error.config);
-      }); 
+      .catch(globalErrorHandler);
     };
   };
 
@@ -183,19 +134,7 @@ export const OR_LOADING_ITEMS = "OR_LOADING_ITEMS";
 
         //console.log("imagenes",res.data)
       })
-      .catch((error) => {
-        if (error.response.status === 401 || error.response.status === 403) {
-          dispatch(setError("Your session expired!"));
-        }
-        if (error.response) {
-            console.log(error.response.data);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
-        }
-        console.log(error.config);
-      }); 
+      .catch(globalErrorHandler);
     };
   };
 
@@ -220,21 +159,11 @@ export const OR_LOADING_ITEMS = "OR_LOADING_ITEMS";
             console.log(res.data)
         })
         .catch((error) => {
-            dispatch({
-              type: OR_ERROR
-            });
-            if (error.response.status === 401 || error.response.status === 403) {
-              dispatch(setError("Your session expired!"));
-            }
-            if (error.response) {
-                console.log(error.response.data);
-            } else if (error.request) {
-                console.log(error.request);
-            } else {
-                console.log('Error', error.message);
-            }
-            console.log(error.config);
-        }); 
+          globalErrorHandler(error);
+          dispatch({
+            type: OR_ERROR
+          })
+        });
     };
 };
 
