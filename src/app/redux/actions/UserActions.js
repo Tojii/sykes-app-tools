@@ -47,7 +47,7 @@ export const updateUserData = (payload) => dispatch => {
     }
   }
   //console.log("formdata", formData)
-  api.post(`/GrowthOpportunity/UpdatePersonalInformation`, formData, config).then(res => {
+  api.post(`/GrowthOpportunityUser/UpdatePersonalInformation`, formData, config).then(res => {
     setUserData(res.data);
   }); 
 }

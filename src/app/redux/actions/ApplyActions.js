@@ -45,12 +45,13 @@ export const saveJobApplication = (payload) => dispatch => {
     formData.append('EnglishApproved', payload.englishApproved);
     formData.append('EnglishScoreMinimum', payload.englishScoreMinimum);
     formData.append('EnglishScoreCurrent', payload.englishScoreCurrent);
-    formData.append('EnglishScoreCurrentDate', payload.englishScoreCurrentDate);
+
+    formData.append('EnglishScoreCurrentDate', payload.englishScoreCurrentDate ? payload.englishScoreCurrentDate : '');
     formData.append('EnglishListening', payload.englishListening);
     formData.append('EnglishGrammar', payload.englishGrammar);
     formData.append('EnglishOral', payload.englishOral);
     formData.append('EnglishReading_and_Writing', payload.englishReading_and_Writing);
-    formData.append('WarningCurrentDate', payload.warningCurrentDate);
+    formData.append('WarningCurrentDate', payload.warningCurrentDate ? payload.warningCurrentDate : "");
     formData.append('WarningCurrentType', payload.warningCurrentType);
     formData.append('DA_Category', payload.dA_Category);
     formData.append('WarningApproved', payload.warningApproved);
@@ -60,7 +61,7 @@ export const saveJobApplication = (payload) => dispatch => {
     formData.append('TenureRequired', payload.tenureRequired);
     formData.append('EnglishRequired', payload.englishRequired);
     formData.append('ApprovedFinal', payload.approvedFinal);
-    //formData.append('ApprovedFinal', false);
+    formData.append('ApprovedFinal', false);
 
     const config = {
         headers: {
@@ -70,7 +71,7 @@ export const saveJobApplication = (payload) => dispatch => {
     dispatch({
         type: RE_LOADING
     });
-    api.post(`/GrowthOpportunity/SaveJobApplication`, formData, config).then(res => {
+    api.post(`/GrowthOpportunityApplication`, formData, config).then(res => {
         dispatch({
             type: SAVE_JOB_APPLICATION,
             payload: res.data
@@ -85,7 +86,7 @@ export const saveJobApplication = (payload) => dispatch => {
 };
 
 export const setValidations = (badge, jobId) => dispatch => {
-    api.get(`/GrowthOpportunity/CallValidations?badgeId=${badge}&jobId=${jobId}`).then(res => 
+    api.get(`/GrowthOpportunityMetric/Validate?jobId=${jobId}`).then(res => 
         dispatch({
             type: SET_VALIDATIONS,
             payload: res.data

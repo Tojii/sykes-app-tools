@@ -1,25 +1,25 @@
 import { format } from 'date-fns';
 import  api, { globalErrorHandler } from "../Api"
 
-export const GET_REFOUND_LIST_BY_USER = "GET_REFOUND_LIST_BY_USER";
-export const SAVE_REFOUND = "SAVE_REFOUND";
+export const GET_REIMBURSEMENT_LIST_BY_USER = "GET_REIMBURSEMENT_LIST_BY_USER";
+export const SAVE_REIMBURSEMENT = "SAVE_REIMBURSEMENT";
 export const RE_LOADING = "RE_LOADING";
 export const GET_INFORMATION_LISTS = "GET_INFORMATION_LISTS";
 export const GET_STUDIES_CATEGORY = "GET_STUDIES_CATEGORY";
-export const CLEAN_SAVEREFOUND =  "CLEAN_SAVEREFOUND";
+export const CLEAN_SAVEREIMBURSEMENT =  "CLEAN_SAVEREIMBURSEMENT";
 
-export const GetRefoundListByUser = (badgeId) => {
+export const GetReimbursementListByUser = (badgeId) => {
   return async dispatch =>{
-      await api.get(`/api/Refund/GetListByUser?badgeId=${badgeId}`).then((res => {
+      await api.get(`/EducationalReimbursement`).then((res => {
         dispatch({
-            type: GET_REFOUND_LIST_BY_USER,
+            type: GET_REIMBURSEMENT_LIST_BY_USER,
             data: res.data
             });
       })).catch(globalErrorHandler);
   } 
 };
 
-export const SaveRefund = (Data, Files, badge, fullname) => {
+export const SaveReimbursement = (Data, Files, badge, fullname) =>{
   
   var formData = new FormData();
   formData.append('badge', badge);
@@ -68,15 +68,15 @@ export const SaveRefund = (Data, Files, badge, fullname) => {
 
   return async dispatch => {
         dispatch({
-          type: CLEAN_SAVEREFOUND
+          type: CLEAN_SAVEREIMBURSEMENT
         });    
         dispatch({
             type: RE_LOADING
           });
-        await api.post(`/api/Refund/SaveRefund`,formData, config 
+        await api.post(`/EducationalReimbursement`,formData, config 
           ).then((res => {
           dispatch({
-                type: SAVE_REFOUND,
+                type: SAVE_REIMBURSEMENT,
                 data: res.data,
           });
           //console.log(res.data)
@@ -86,12 +86,12 @@ export const SaveRefund = (Data, Files, badge, fullname) => {
     }
 }
 
-export const GetIformationLists = () => {
+export const GetInformationLists = () => {
   return async dispatch => {
     dispatch({
         type: RE_LOADING
       });
-    await api.get(`/api/Refund/GetInformationLists`).then((res => {
+    await api.get(`/EducationalReimbursement/GetInformationLists`).then((res => {
       dispatch({
             type: GET_INFORMATION_LISTS,
             data: res.data
@@ -103,7 +103,7 @@ export const GetIformationLists = () => {
 
 export const getStudiesCatergory = () => {
   return async dispatch => {
-    await api.get(`/api/Refund/GetStudiesCategory`).then((res => {
+    await api.get(`/EducationalReimbursement/GetStudiesCategory`).then((res => {
       dispatch({
         type: GET_STUDIES_CATEGORY,
         data: res.data

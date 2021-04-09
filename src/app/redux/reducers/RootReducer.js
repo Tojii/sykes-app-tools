@@ -11,7 +11,7 @@ import MetricsReducer from "./MetricsReducer";
 import ApplyReducer from "./ApplyReducer";
 //import ReembolsosEducativosReducer from "./ReembolsoEducativoReducer";
 import RaftReducer from "./RaftReducer";
-import RefoundsReducer from "./RefoundReducer";
+import EducationalReimbursementReducer from "./EducationalReimbursementReducer";
 import CommonReducer from "./CommonReducer";
 import { persistStore } from 'redux-persist'
 import CampaignReducer from "./CampaignReducer";
@@ -28,7 +28,7 @@ const RootReducer = combineReducers({
   ecommerce: EcommerceReducer,
   lss: LSSReducer,
   raft: RaftReducer,
-  refound: RefoundsReducer,
+  reimbursement: EducationalReimbursementReducer,
   common: CommonReducer,
   campaign: CampaignReducer,
   benefit: BenefitReducer,

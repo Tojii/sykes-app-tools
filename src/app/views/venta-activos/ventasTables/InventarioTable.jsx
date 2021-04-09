@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
-import { GetRefoundListByUser } from "../../../redux/actions/RefoundActions";
+import { GetReimbursementListByUser } from "../../../redux/actions/EducationalReimbursementActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import CustomToolbarSelect from "./CustomSelect"

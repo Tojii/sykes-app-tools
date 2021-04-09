@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import lssRoutes from './views/lss/LssRoutes';
 import raftRoutes from './views/raft/RaftRoutes';
 import ventasRoutes from './views/venta-activos/VentasRoutes';
-import refoundRoutes from './views/refound/refoundRoutes';
+import educationalReimbursementRoutes from './views/educational-reimbursement/educationalReimbursementRoutes';
 import sykesHomeRoutes from './views/sykesHome/sykesHomeRoutes';
 import sessionRoutes from "./views/sessions/SessionRoutes";
 import growthOpportunitiesRoutes from "./views/growth-opportunities/GrowthOpportunitiesRoutes";
@@ -33,7 +33,7 @@ const errorRoute = [
 
 const routes = [
   ...sessionRoutes,
-  ...refoundRoutes,
+  ...educationalReimbursementRoutes,
   ...sykesHomeRoutes,
   ...growthOpportunitiesRoutes,
   ...userRoutes,
