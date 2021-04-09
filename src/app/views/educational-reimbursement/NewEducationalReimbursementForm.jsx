@@ -545,7 +545,7 @@ const EducationalReimbursementForm = () => {
 
   return (
     <div>
-      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={(saveReimbursement != null && !saveReimbursement.success) == false ? "Success!" : "Error!"} save={() => {}} message={(saveReimbursement != null && !saveReimbursement.success) == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
+      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={saveReimbursement ? "Success!" : "Error!"} save={() => {}} message={saveReimbursement ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
       {(isLoading || !user) ? <Loading /> :
         <div className="m-sm-30">
           <SimpleCard title="Nuevo Reembolso Educativo">
@@ -562,8 +562,8 @@ const EducationalReimbursementForm = () => {
                   {saveReimbursement != null ? 
                   <div>
                     <div className="d-flex justify-content-center mb-16">
-                    <Alert variant="outlined" severity={!saveReimbursement.success == false ? "success" : "error"}>
-                      {!saveReimbursement.success == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
+                    <Alert variant="outlined" severity={saveReimbursement ? "success" : "error"}>
+                      {saveReimbursement ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
                     </Alert>
                   </div>
                   {/* <Button variant="contained" color="secondary" onClick={handleReset}>
