@@ -76,7 +76,7 @@ export const setError = error => {
 
 export const refreshtoken = (refreshtoken) => {
   return async dispatch => {
-    const response = await api.post(`/authenticate/refresh`, `"${refreshtoken}"`).catch(globalErrorHandler);;
+    const response = await api.post(`/authenticate/refresh`, `"${refreshtoken}"`).catch(globalErrorHandler);
     dispatch({
       type: LOGIN_SUCCESS,
       data: response.data

@@ -1,8 +1,5 @@
-import axios from "axios";
+import  api, { globalErrorHandler } from "../Api"
 import { format } from 'date-fns';
-import apiAuthService from "../../services/apiAuthService";
-import history from "history.js";
-
 export const GET_REIMBURSEMENT_LIST_BY_USER = "GET_REIMBURSEMENT_LIST_BY_USER";
 export const SAVE_REIMBURSEMENT = "SAVE_REIMBURSEMENT";
 export const RE_LOADING = "RE_LOADING";
@@ -10,37 +7,16 @@ export const GET_INFORMATION_LISTS = "GET_INFORMATION_LISTS";
 export const GET_STUDIES_CATEGORY = "GET_STUDIES_CATEGORY";
 export const CLEAN_SAVEREIMBURSEMENT =  "CLEAN_SAVEREIMBURSEMENT";
 
-const axiosInstance = axios.create();
-
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    //if (error.response.status === 401) {
-        apiAuthService.logout(); 
-        //apiAuthService.removeUser();
-        history.state = history.location.pathname;
-        history.push({
-          pathname: "/session/signin"
-        });
-    //}
-
-    return Promise.reject(error);
-  }
-)
 
 export const GetReimbursementListByUser = (badgeId) => {
   return async dispatch =>{
-    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-      await axiosInstance.get(`${process.env.REACT_APP_API_URL}/EducationalReimbursement`).then((res => {
-        console.log("test", res)
+      await api.get(`/EducationalReimbursement`).then((res => {
         dispatch({
             type: GET_REIMBURSEMENT_LIST_BY_USER,
             data: res.data
             });
             //console.log(res.data)
-      })).catch(function(error){
-        console.log("Error", error);
-      });
+      })).catch(globalErrorHandler);
   } 
 };
 
@@ -98,33 +74,14 @@ export const SaveReimbursement = (Data, Files, badge, fullname) =>{
         dispatch({
             type: RE_LOADING
           });
-        axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-        await axiosInstance.post(`${process.env.REACT_APP_API_URL}/EducationalReimbursement`,formData, config 
+        await api.post(`/EducationalReimbursement`,formData, config 
           ).then((res => {
           dispatch({
                 type: SAVE_REIMBURSEMENT,
                 data: res.data,
           });
           //console.log(res.data)
-        }))
-        .catch((error) => {
-          // Error
-          if (error.response) {
-              // The request was made and the server responded with a status code
-              // that falls out of the range of 2xx
-              console.log(error.response.data);
-          } else if (error.request) {
-              // The request was made but no response was received
-              // `error.request` is an instance of XMLHttpRequest in the 
-              // browser and an instance of
-              // http.ClientRequest in node.js
-              console.log(error.request);
-          } else {
-              // Something happened in setting up the request that triggered an Error
-              console.log('Error', error.message);
-          }
-          console.log(error.config);
-        }); 
+        })).catch(globalErrorHandler);
         
     }
 }
@@ -134,60 +91,22 @@ export const GetInformationLists = () => {
     dispatch({
         type: RE_LOADING
       });
-    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
-    await axiosInstance.get(`${process.env.REACT_APP_API_URL}/EducationalReimbursement/GetInformationLists`).then((res => {
+    await api.get(`/EducationalReimbursement/GetInformationLists`).then((res => {
       dispatch({
             type: GET_INFORMATION_LISTS,
             data: res.data
         });
-    }))
-    .catch((error) => {
-      // Error
-      if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-      } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the 
-          // browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-      } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-      }
-      console.log(error.config);
-    }); 
+    })).catch(globalErrorHandler);
 }
 }
 
 export const getStudiesCatergory = () => {
   return async dispatch => {
-    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-    await axiosInstance.get(`${process.env.REACT_APP_API_URL}/EducationalReimbursement/GetStudiesCategory`).then((res => {
+    await api.get(`/EducationalReimbursement/GetStudiesCategory`).then((res => {
       dispatch({
         type: GET_STUDIES_CATEGORY,
         data: res.data
       });
-    }))
-    .catch((error) => {
-      // Error
-      if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-      } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the 
-          // browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-      } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-      }
-      console.log(error.config);
-    }); 
+    })).catch(globalErrorHandler);
   }
 }
