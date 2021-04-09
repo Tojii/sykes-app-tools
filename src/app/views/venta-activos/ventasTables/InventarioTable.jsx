@@ -113,6 +113,7 @@ const InventarioTable = () => {
           item.quantity,
           item.stockQuantity,
           "₡" + item.unitPrice,
+          "₡" + item.estimatedPrice,
           item.maxLimitPerPerson,
       ]}
     })
@@ -222,6 +223,17 @@ const InventarioTable = () => {
         {
           name: "unitPrice",
           label: "Valor Artículo",
+          options: {
+            filter: true,
+            sort: true,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            }
+          }
+        },
+        {
+          name: "estimatedPrice",
+          label: "Precio de envío",
           options: {
             filter: true,
             sort: true,
