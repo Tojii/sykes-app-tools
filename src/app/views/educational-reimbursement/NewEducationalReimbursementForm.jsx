@@ -17,9 +17,9 @@ import {
 } from "@material-ui/core";
 import {
   getStudiesCatergory,
-  GetIformationLists,
-  SaveRefund
-} from "../../redux/actions/RefoundActions";
+  GetInformationLists,
+  SaveReimbursement
+} from "../../redux/actions/EducationalReimbursementActions";
 import UploadForm from "./UploadForm";
 import {
   MuiPickersUtilsProvider,
@@ -82,19 +82,19 @@ export const LANGUAGES = "IDIOMAS";
 export const TECHNICAL_STUDIES = "ESTUDIOS TÉCNICOS";
 export const OTHERS = "OTROS";
 
-const NewRefoundForm = () => {
+const EducationalReimbursementForm = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
-  const studiesCatergory = useSelector(state => state.refound.studiesCatergory);
-  const universityInstitutes = useSelector(state => state.refound.universityInstitutes);
-  const ciscoAcademies = useSelector(state => state.refound.ciscoAcademies);
-  const techStudiesCenter = useSelector(state => state.refound.techStudiesCenter);
-  const languageAcademies = useSelector(state => state.refound.languageAcademies);
-  const certifications = useSelector(state => state.refound.certifications);
-  const saveRefound = useSelector(state => state.refound.saveRefound);
+  const studiesCatergory = useSelector(state => state.reimbursement.studiesCatergory);
+  const universityInstitutes = useSelector(state => state.reimbursement.universityInstitutes);
+  const ciscoAcademies = useSelector(state => state.reimbursement.ciscoAcademies);
+  const techStudiesCenter = useSelector(state => state.reimbursement.techStudiesCenter);
+  const languageAcademies = useSelector(state => state.reimbursement.languageAcademies);
+  const certifications = useSelector(state => state.reimbursement.certifications);
+  const saveReimbursement = useSelector(state => state.reimbursement.saveReimbursement);
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
-  const isLoading = useSelector(state => state.refound.loading);
+  const isLoading = useSelector(state => state.reimbursement.loading);
   const [isError, setError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [isErrorUpload, setIsErrorUpload] = useState(false);
@@ -124,7 +124,7 @@ const NewRefoundForm = () => {
   });
 
   useEffect(() => {
-    dispatch(GetIformationLists(user != null ? user.badge : ""));
+    dispatch(GetInformationLists(user.badge));
     dispatch(getStudiesCatergory());
     // setForm({
     //   ...form,
@@ -338,7 +338,7 @@ const NewRefoundForm = () => {
     }
     //console.log(sizes)
     setActiveStep(steps.length);
-    await dispatch(SaveRefund(form, files, user != null ? user.badge : "", user != null ? user.fullname : ""));
+    await dispatch(SaveReimbursement(form, files, user.badge, user.fullname));
     setOpen(true);
   }
 
@@ -545,7 +545,7 @@ const NewRefoundForm = () => {
 
   return (
     <div>
-      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={(saveRefound != null && !saveRefound.success) == false ? "Success!" : "Error!"} save={() => {}} message={(saveRefound != null && !saveRefound.success) == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
+      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={saveReimbursement ? "Success!" : "Error!"} save={() => {}} message={saveReimbursement ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
       {(isLoading || !user) ? <Loading /> :
         <div className="m-sm-30">
           <SimpleCard title="Nuevo Reembolso Educativo">
@@ -559,11 +559,11 @@ const NewRefoundForm = () => {
             <div>
               {activeStep === steps.length ? (
                 <div>
-                  {saveRefound != null ? 
+                  {saveReimbursement != null ? 
                   <div>
                     <div className="d-flex justify-content-center mb-16">
-                    <Alert variant="outlined" severity={!saveRefound.success == false ? "success" : "error"}>
-                      {!saveRefound.success == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
+                    <Alert variant="outlined" severity={saveReimbursement ? "success" : "error"}>
+                      {saveReimbursement ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
                     </Alert>
                   </div>
                   {/* <Button variant="contained" color="secondary" onClick={handleReset}>
@@ -606,4 +606,4 @@ const NewRefoundForm = () => {
   )
 }
 
-export default NewRefoundForm
+export default EducationalReimbursementForm

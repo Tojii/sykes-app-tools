@@ -1,15 +1,15 @@
 import {
-    GET_REFOUND_LIST_BY_USER,
-    SAVE_REFOUND,
+    GET_REIMBURSEMENT_LIST_BY_USER,
+    SAVE_REIMBURSEMENT,
     RE_LOADING,
     GET_INFORMATION_LISTS,
     GET_STUDIES_CATEGORY
-} from "../actions/RefoundActions";
+} from "../actions/EducationalReimbursementActions";
 
 
 const initialState = {
     summary: [],
-    employeeRefunds: [],
+    employeeReimbursements: [],
     iformationLists: [],
     studiesCatergory: [],
     universityInstitutes: [],
@@ -18,11 +18,11 @@ const initialState = {
     languageAcademies: [],
     certifications: [],
     techStudiesCenter: [],
-    saveRefound: null,
+    saveReimbursement: null,
     loading: true
   };
 
-const RefoundsReducer = function(state = initialState, action) {
+const EducationalReimbursementReducer = function(state = initialState, action) {
     switch (action.type) {
         case RE_LOADING: {
           return {
@@ -30,18 +30,18 @@ const RefoundsReducer = function(state = initialState, action) {
             loading: true
           }
         }
-        case SAVE_REFOUND: {
+        case SAVE_REIMBURSEMENT: {
           return {
               ...state,
-              saveRefound : action.data,
+              saveReimbursement : action.data,
               loading: false
           }
       }
-        case GET_REFOUND_LIST_BY_USER: {
+        case GET_REIMBURSEMENT_LIST_BY_USER: {
             return {
                 ...state,
                 summary : [...action.data.summary],
-                employeeRefunds: [...action.data.employeeRefunds],
+                employeeReimbursements: [...action.data.employeeReimbursements],
                 loading: false
             }
         }
@@ -69,5 +69,5 @@ const RefoundsReducer = function(state = initialState, action) {
         }
 }
 
-export default RefoundsReducer;
+export default EducationalReimbursementReducer;
   

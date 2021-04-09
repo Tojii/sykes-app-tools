@@ -1,6 +1,6 @@
 import React from "react";
 import { Breadcrumb } from "matx";
-import NewRefoundForm from "./NewRefoundForm";
+import EducationalReimbursementForm from "./NewEducationalReimbursementForm";
 
 function Form() {
     return (
@@ -13,7 +13,7 @@ function Form() {
                 ]}
             />
             </div>
-            <NewRefoundForm />
+            <EducationalReimbursementForm />
         </div>
     )
 }
