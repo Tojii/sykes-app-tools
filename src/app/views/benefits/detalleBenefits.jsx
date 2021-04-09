@@ -129,7 +129,7 @@ const DetalleBenefits = (props) => {
     const location = { address: 'San José, Costa Rica', lat: 9.903329970416294, lng: -84.08271419551181 } // our location object from earlier
 
     useEffect(() => {
-        dispatch(GetBenefitsById("6"));
+        dispatch(GetBenefitsById("2"));
     }, [])
 
     const onChangeLocation = (lat, lng) => {

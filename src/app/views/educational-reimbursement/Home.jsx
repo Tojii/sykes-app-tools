@@ -64,7 +64,8 @@ const DialogTitle = withStyles(styles)((props) => {
 });
 
 const Home = () => {
-    const dispatch = useDispatch();  
+    const dispatch = useDispatch(); 
+    const classes = useStyles(); 
     const summary = useSelector(state => state.reimbursement.summary);
     const isLoading  = useSelector(state => state.reimbursement.loading);
     const user = useSelector(state => state.user);

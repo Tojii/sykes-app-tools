@@ -5,6 +5,10 @@ const Home = MatxLoadable({
   loader: () => import("./HomeBenefits")
 });
 
+const CategoryBenefits = MatxLoadable({
+  loader: () => import("./categoryBenefits")
+});
+
 const DetallesBenefits = MatxLoadable({
   loader: () => import("./detalleLinks")
 });
@@ -38,7 +42,7 @@ const settings = {
 const benefitsRoutes = [
   {
     path: "/Benefits/Home",
-    component: Home,
+    component: CategoryBenefits,
     settings
   },
   {
