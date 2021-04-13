@@ -71,7 +71,7 @@ export const navigations = [
     children:[
     {
       name: "Benefits Home",
-      path: "/Benefits/Detalle",
+      path: "/Benefits/Home",
       iconText: "BH",
       display: null
     },

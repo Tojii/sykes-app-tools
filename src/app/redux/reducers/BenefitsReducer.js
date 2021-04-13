@@ -5,6 +5,8 @@ import {
     GET_BENEFITS_ACTIVE,
     GET_BENEFITSBYID,
     GET_BENEFITS_LOCATIONSBYID,
+    GET_BENEFITS_LOCATIONSBYPROVINCE,
+    GET_BENEFITS_LOCATIONSBYPROVINCECANTON,
     ADD_BENEFIT,
     ADD_BENEFIT_LOCATION,
     UPDATE_BENEFIT,
@@ -14,12 +16,15 @@ import {
     BE_LOADING,
     BE_LOADING_LOCATION,
     BE_ERROR,
+    GET_BENEFITS_CATEGORYBYID,
 } from "../actions/BenefitsActions"
 
 const initialState = {
     benefits: [],
     benefitscategories: [],
+    benefitscategory: [],
     benefitslocations: [],
+    benefitslocationsCanton: [],
     benefitsActive: [],
     loading: false,
     loadingLocation: false,
@@ -72,7 +77,8 @@ const BenefitReducer = function(state = initialState, action){
             return {
                 ...state,
                 benefitslocations: [...action.data],
-                loading: false,
+                benefitslocationsCanton: [...action.data],
+                loadingLocation: false,
                 success: true,
             }
         }
@@ -92,10 +98,35 @@ const BenefitReducer = function(state = initialState, action){
                 success: true,
             }
         }
+        case GET_BENEFITS_CATEGORYBYID: {
+            return {
+                ...state,
+                benefitscategory: [action.data],
+                loading: false,
+                success: true,
+            }
+        }
         case GET_BENEFITS_LOCATIONSBYID: {
             return {
                 ...state,
                 benefitlocation: [action.data],
+                loadingLocation: false,
+                success: true,
+            }
+        }
+        case GET_BENEFITS_LOCATIONSBYPROVINCE: {
+            return {
+                ...state,
+                benefitslocations: [...action.data],
+                benefitslocationsCanton: [...action.data],
+                loadingLocation: false,
+                success: true,
+            }
+        }
+        case GET_BENEFITS_LOCATIONSBYPROVINCECANTON: {
+            return {
+                ...state,
+                benefitslocationsCanton: [...action.data],
                 loadingLocation: false,
                 success: true,
             }

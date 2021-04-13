@@ -140,7 +140,7 @@ const FormAdminBenefits = () => {
     }, []);
 
     useEffect(() => {
-        if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined) {setBenefitsForm({
+        if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined && benefit[0].benefit != null) {setBenefitsForm({
             idBenefit: benefit[0].benefit.idBenefit,
             idCategory: benefit[0].benefit.category.idCategory,
             name: benefit[0].benefit.name,

@@ -10,7 +10,10 @@ export const GET_BENEFITS_CATEGORY = "GET_BENEFITS_CATEGORY";
 export const GET_BENEFITS_LOCATIONS = "GET_BENEFITS_LOCATIONS";
 export const GET_BENEFITS_ACTIVE = "GET_BENEFITS_ACTIVE";
 export const GET_BENEFITSBYID = "GET_BENEFITSBYID";
-export const GET_BENEFITS_LOCATIONSBYID= "GET_BENEFITS_LOCATIONSBYID";
+export const GET_BENEFITS_CATEGORYBYID = "GET_BENEFITS_CATEGORYBYID";
+export const GET_BENEFITS_LOCATIONSBYID = "GET_BENEFITS_LOCATIONSBYID";
+export const GET_BENEFITS_LOCATIONSBYPROVINCE = "GET_BENEFITS_LOCATIONSBYPROVINCE";
+export const GET_BENEFITS_LOCATIONSBYPROVINCECANTON = "GET_BENEFITS_LOCATIONSBYPROVINCECANTON";
 export const ADD_BENEFIT = "ADD_BENEFIT";
 export const ADD_BENEFIT_LOCATION = "ADD_BENEFIT_LOCATION";
 export const UPDATE_BENEFIT = "UPDATE_BENEFIT";
@@ -94,7 +97,7 @@ export const GetBenefitsActive = () => {
       }  
     return async dispatch => {
       dispatch({
-        type: BE_LOADING
+        type: BE_LOADING_LOCATION
       });
       await api.get(`/BenefitsLocation`,config).then(res => {
         dispatch({
@@ -103,6 +106,29 @@ export const GetBenefitsActive = () => {
           });
 
         //console.log("imagenes",res.data)
+      })
+      .catch(globalErrorHandler);
+    };
+  };
+
+  export const GetBenefitsCategoryById = (id) => {
+    console.log("categoriesaction",id)
+    const config = {
+        headers: {
+            'content-type': 'application/json',
+        }
+      }  
+    return async dispatch => {
+      dispatch({
+        type: BE_LOADING
+      });
+      await api.get(`/BenefitsCategory/${id}`,config).then(res => {
+        dispatch({
+          type: GET_BENEFITS_CATEGORYBYID,
+          data: res.data
+        });
+
+        console.log("categoriesaction", res.data)
       })
       .catch(globalErrorHandler);
     };
@@ -125,6 +151,50 @@ export const GetBenefitsActive = () => {
           });
 
         console.log("imagenes",res.data)
+      })
+      .catch(globalErrorHandler);
+    };
+  };
+
+  export const GetBenefitsLocationsByProvincia = (province) => {
+    const config = {
+        headers: {
+            'content-type': 'application/json',
+        }
+      }  
+    return async dispatch => {
+      dispatch({
+        type: BE_LOADING_LOCATION
+      });
+      await api.get(`/BenefitsLocation/FindByProvincia?provincia=${province}`,config).then(res => {
+        dispatch({
+          type: GET_BENEFITS_LOCATIONSBYPROVINCE,
+          data: res.data
+          });
+
+        //console.log("provincias",res.data)
+      })
+      .catch(globalErrorHandler);
+    };
+  };
+
+  export const GetBenefitsLocationsByProvinciaCanton = (province, canton) => {
+    const config = {
+        headers: {
+            'content-type': 'application/json',
+        }
+      }  
+    return async dispatch => {
+      dispatch({
+        type: BE_LOADING_LOCATION
+      });
+      await api.get(`/BenefitsLocation/FindByProvinciaCanton?canton=${canton}&provincia=${province}`,config).then(res => {
+        dispatch({
+          type: GET_BENEFITS_LOCATIONSBYPROVINCECANTON,
+          data: res.data
+          });
+
+        //console.log("cantons",res.data)
       })
       .catch(globalErrorHandler);
     };

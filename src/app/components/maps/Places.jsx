@@ -33,6 +33,7 @@ const Map = ({ lat, lng, zoomLevel, draggable, onChangeLocation, locations, show
     }
 
     if (locations) {
+      console.log("locations", locations)
       locations.forEach(element => {
         
         let marker = new maps.Marker({

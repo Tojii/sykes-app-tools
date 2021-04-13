@@ -42,11 +42,16 @@ const settings = {
 const benefitsRoutes = [
   {
     path: "/Benefits/Home",
+    component: Home,
+    settings
+  },
+  {
+    path: "/Benefits/Category/:id",
     component: CategoryBenefits,
     settings
   },
   {
-    path: "/Benefits/Detalle",
+    path: "/Benefits/Detalle/:id",
     component: DetallesBenefits,
     settings
   },
