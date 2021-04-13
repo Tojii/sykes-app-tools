@@ -32,7 +32,6 @@ export const GetReimbursementListByUser = (badgeId) => {
   return async dispatch =>{
     axiosInstance.defaults.headers.common["Authorization"] = "Bearer " +  localStorage.getItem("jwt_token");
       await axiosInstance.get(`${process.env.REACT_APP_API_URL}/EducationalReimbursement`).then((res => {
-        console.log("test", res)
         dispatch({
             type: GET_REIMBURSEMENT_LIST_BY_USER,
             data: res.data

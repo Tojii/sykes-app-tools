@@ -41,19 +41,23 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
     }
 
     useEffect(() => {
-        if(apply.backResume && apply.resume != undefined) {
+        console.log("resume", apply['resume']);
+        if (!apply['resume']) {
+            setDisableNext(true);
+        }
+
+        if(apply.backResume && apply.resume != undefined && apply.resume) {
             if(!apply.fileMessage) {setDisableNext(false)};
-            setFile(apply.resume)
+            setFile(apply.resume);
             apply['backResume'] = false;
         }
     }, [])
 
     const handleFileSelect = (event) => {
+        console.log("handle select");
+
         let files = event.target.files;
         for (const iterator of files) {
-            console.log("tipo", iterator.type)
-            console.log("tipo", iterator.size)
-
             if (iterator.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
                 iterator.type == "application/pdf" || iterator.name.includes('.docx')) {
                 let invalid = iterator.size > 2000000 || iterator.size < 1

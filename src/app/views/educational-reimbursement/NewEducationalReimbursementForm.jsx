@@ -514,7 +514,6 @@ const EducationalReimbursementForm = () => {
                     value={form.endDate}
                     name="endDate"
                     onChange={handleDateChangeEndDate}
-                    minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000) : null}
                     disabled={!form.startDate}
                   />
                 </MuiPickersUtilsProvider>
