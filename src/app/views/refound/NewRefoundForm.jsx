@@ -257,6 +257,10 @@ const NewRefoundForm = () => {
           isErrorValidation = true;
           setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "*Se debe seleccionar la fecha de finalización" }));
         }
+        if (form.endDate != null && form.startDate.getTime() > form.endDate.getTime()) {
+          isErrorValidation = true;
+          setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*La fecha de inicio no puede ser mayor a la fecha de finaización" }));
+        }
       }
     }
     if (!isErrorValidation && !isError && !emailError) {
@@ -346,16 +350,20 @@ const NewRefoundForm = () => {
     if (date != null) {
       setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
     }
+    if (form.endDate != null && date.getTime() > form.endDate.getTime()) {
+      //isErrorValidation = true;
+      setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*La fecha de inicio no puede ser mayor a la fecha de finaización" }));
+    }
     setForm({
       ...form,
       startDate: date,
-      endDate: null,
+      //endDate: null,
     });
   };
 
   const handleDateChangeEndDate = date => {
     if (date != null) {
-      setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "", endDate: "" }));
+      setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
     }
     setForm({
       ...form,
