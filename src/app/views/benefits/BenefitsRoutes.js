@@ -5,12 +5,20 @@ const Home = MatxLoadable({
   loader: () => import("./HomeBenefits")
 });
 
+const Configuration = MatxLoadable({
+  loader: () => import("./configuracioBenefits")
+});
+
 const CategoryBenefits = MatxLoadable({
   loader: () => import("./categoryBenefits")
 });
 
+const CategoriesBenefits = MatxLoadable({
+  loader: () => import("./categoriesBenefits")
+});
+
 const DetallesBenefits = MatxLoadable({
-  loader: () => import("./detalleLinks")
+  loader: () => import("./detalleBenefits")
 });
 
 const AdminBenefits = MatxLoadable({
@@ -46,8 +54,18 @@ const benefitsRoutes = [
     settings
   },
   {
+    path: "/Benefits/Configuration",
+    component: Configuration,
+    settings
+  },
+  {
     path: "/Benefits/Category/:id",
     component: CategoryBenefits,
+    settings
+  },
+  {
+    path: "/Benefits/Category",
+    component: CategoriesBenefits,
     settings
   },
   {

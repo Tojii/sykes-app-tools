@@ -2,19 +2,23 @@ import {
     GET_BENEFITS,
     GET_BENEFITS_CATEGORY,
     GET_BENEFITS_LOCATIONS,
+    GET_PAGE_SETTINGS,
     GET_BENEFITS_ACTIVE,
     GET_BENEFITSBYID,
     GET_BENEFITS_LOCATIONSBYID,
     GET_BENEFITS_LOCATIONSBYPROVINCE,
     GET_BENEFITS_LOCATIONSBYPROVINCECANTON,
     ADD_BENEFIT,
+    ADD_PAGE_SETTINGS,
     ADD_BENEFIT_LOCATION,
     UPDATE_BENEFIT,
+    UPDATE_PAGE_SETTINGS,
     UPDATE_BENEFIT_LOCATION,
     DELETE_BENEFIT,
     DELETE_BENEFIT_LOCATION,
     BE_LOADING,
     BE_LOADING_LOCATION,
+    BE_LOADING_SETTINGS,
     BE_ERROR,
     GET_BENEFITS_CATEGORYBYID,
 } from "../actions/BenefitsActions"
@@ -24,13 +28,16 @@ const initialState = {
     benefitscategories: [],
     benefitscategory: [],
     benefitslocations: [],
+    pageSettings: [],
     benefitslocationsCanton: [],
     benefitsActive: [],
     loading: false,
     loadingLocation: false,
+    loadingSettings: false,
     benefit: [],
     benefitlocation: [],
     addBenefit: null,
+    addSettings: null,
     addBenefitLocation: null,
     success: true,
 };
@@ -49,12 +56,19 @@ const BenefitReducer = function(state = initialState, action){
               loadingLocation: true
             }
         }
+        case BE_LOADING_SETTINGS: {
+            return {
+              ...state,
+              loadingSettings: true
+            }
+        }
         case BE_ERROR: {
             return {
               ...state,
               success: false,
               loading: false,
               loadingLocation: false,
+              loadingSettings: false,
             }
         }
         case GET_BENEFITS: {
@@ -79,6 +93,14 @@ const BenefitReducer = function(state = initialState, action){
                 benefitslocations: [...action.data],
                 benefitslocationsCanton: [...action.data],
                 loadingLocation: false,
+                success: true,
+            }
+        }
+        case GET_PAGE_SETTINGS: {
+            return {
+                ...state,
+                pageSettings: [...action.data],
+                loadingSettings: false,
                 success: true,
             }
         }
@@ -139,6 +161,14 @@ const BenefitReducer = function(state = initialState, action){
                 loading: false
             }
         }
+        case ADD_PAGE_SETTINGS: {
+            return {
+                ...state,
+                addSettings : action.data,
+                success: true,
+                loadingSettings: false
+            }
+        }
         case ADD_BENEFIT_LOCATION: {
             return {
                 ...state,
@@ -153,6 +183,14 @@ const BenefitReducer = function(state = initialState, action){
                 addBenefit : action.data,
                 success: true,
                 loading: false
+            }
+        }
+        case UPDATE_PAGE_SETTINGS: {
+            return {
+                ...state,
+                addSettings : action.data,
+                success: true,
+                loadingSettings: false
             }
         }
         case UPDATE_BENEFIT_LOCATION: {

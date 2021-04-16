@@ -217,15 +217,15 @@ const FormAdminBenefits = () => {
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {console.log(benefitsform)}
-             {(isLoading || isLoadingLocation) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {/* {console.log(benefitsform)} */}
+            {(isLoading || isLoadingLocation) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Beneficio" : "Agregar Beneficio"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
                     {(isLoading) ? <Loading/> :
                     <>  
                         <SelectValidator 
-                            label="Category*" 
+                            label="Categoría*" 
                             name="idCategory"
                             className={classes.textvalidator} 
                             value={benefitsform.idCategory} 
@@ -241,7 +241,7 @@ const FormAdminBenefits = () => {
                         </SelectValidator>           
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Name*"
+                            label="Nombre*"
                             onChange={handleChange}
                             type="text"
                             name="name"
@@ -251,7 +251,7 @@ const FormAdminBenefits = () => {
                         />
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Detail*"
+                            label="Detalle*"
                             onChange={handleChange}
                             type="text"
                             name="detail"
@@ -261,7 +261,7 @@ const FormAdminBenefits = () => {
                         />
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Description*"
+                            label="Descripción*"
                             onChange={handleChange}
                             type="text"
                             name="description"
@@ -271,7 +271,7 @@ const FormAdminBenefits = () => {
                         />
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Benefit Information*"
+                            label="Información de Beneficio*"
                             onChange={handleChange}
                             type="text"
                             name="benefitInfo"
@@ -323,7 +323,7 @@ const FormAdminBenefits = () => {
                         />
                         <FormControlLabel
                             className={classes.textvalidator}
-                            label="Active Benefit"
+                            label="Activar Beneficio"
                             control={
                                 <Switch
                                 checked={benefitsform.active}
@@ -334,7 +334,7 @@ const FormAdminBenefits = () => {
                             }
                         />
                         <FormControl className={classes.textvalidator}>
-                            <label className={classes.filelabel} id="logo">Logo (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>
+                            <label className={classes.filelabel} id="logo">Logo (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
                             <Input type="file" name="files" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect} 
                                  />  
                             <FormHelperText error={errorFile.error} id="my-helper-text">{errorFile.errorMessage}</FormHelperText>                               

@@ -9,7 +9,8 @@ function Form() {
                 <Breadcrumb
                 routeSegments={[
                 { name: "Benefits Home", path: "/Benefits/Home" },
-                { name: "Admin Benefits", path: "/Benefits/AdminFormBenefits" },               
+                { name: "Configuraciones", path: `/Benefits/Configuration` }, 
+                { name: "Admin Beneficios", path: "/Benefits/AdminFormBenefits" },               
                 ]}
             />
             </div>

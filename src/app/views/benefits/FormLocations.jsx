@@ -3,7 +3,7 @@ import { Button, Card, FormControlLabel, Switch } from "@material-ui/core";
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { AddBenefitLocation, GetBenefitsLocationsById, UpdateBenefitLocation, GetBenefitsById} from "../../redux/actions/BenefitsActions";
+import { AddBenefitLocation, GetBenefitsLocationsById, UpdateBenefitLocation, GetBenefitsById, GetBenefitsLocations} from "../../redux/actions/BenefitsActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
@@ -71,10 +71,13 @@ const FormAdminBenefits = (props) => {
     const classes = useStyles();
     
     const location = useSelector(state => state.benefit.benefitlocation);
+    const benefitslocations = useSelector(state => state.benefit.benefit);
     const successCampaignItems = useSelector(state => state.benefit.success);
     const isLoadingLocation  = useSelector(state => state.benefit.loadingLocation);
+    const isLoadingProvince  = useSelector(state => state.locations.loading); 
     const isLoading  = useSelector(state => state.benefit.loading);
     const [open, setOpen] = useState(false);
+    const [openMessage, setOpenMessage] = useState(false);
     const [files, setFiles] = useState(null);
     const [logo, setLogo] = useState(null);
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
@@ -97,7 +100,8 @@ const FormAdminBenefits = (props) => {
         whatsapp: "",
         latitude: "",
         longitude: "",
-        active: false
+        active: false,
+        mainLocation: false,
     });
     const locationMap = {
         address: 'San José, Costa Rica',
@@ -105,6 +109,22 @@ const FormAdminBenefits = (props) => {
       } // our location object from earlier
 
     const handleFormSubmitLocation = async () => {
+        if (locationsform.mainLocation) {
+            var mainlocation = benefitslocations[0].locations.filter(function(item) {
+                if (item.idLocation != props.id && !item.active) {
+                  return false; // skip
+                }
+                return true;
+            }).map((item, index) => {
+                return (
+                    item
+                )
+            })
+            //console.log("main", mainlocation)
+            mainlocation.length != 0 && await dispatch(UpdateBenefitLocation(mainlocation[0].idLocation, {...mainlocation[0], provinceCode: mainlocation[0].codProvincia, whatsapp: mainlocation[0].whatsApp,
+            cantonCode: 7, districtCode: mainlocation[0].codDistrito, district: mainlocation[0].distrito, province: mainlocation[0].provincia,
+            idBenefit: mainlocation[0].benefit.idBenefit, active: false}, {latitude: mainlocation[0].latitude, longitude: mainlocation[0].longitude }));
+        }
         if (props.id) {
             await dispatch(UpdateBenefitLocation(props.id, locationsform, locationsMapform));
             setOpen(true);
@@ -116,6 +136,7 @@ const FormAdminBenefits = (props) => {
 
     useEffect(() => {
         //dispatch(GetCampaigns());
+        GetBenefitsById(props.idBenefit)
         dispatch(GetProvince());
         if (props.id) {
             dispatch(GetBenefitsLocationsById(props.id));
@@ -137,6 +158,7 @@ const FormAdminBenefits = (props) => {
             phone: location[0].phone,
             whatsapp: location[0].whatsApp,
             active: location[0].active,
+            mainLocation: false
             });
             setLocationsMapForm({
                 latitude: location[0].latitude,
@@ -152,7 +174,10 @@ const FormAdminBenefits = (props) => {
 
     const handleChange = (event) => {
         const name = event.target.name;
-        if (name == "active") {
+        if (name == "active" || name == "mainLocation") {
+            if (name == "mainLocation") {
+                event.target.checked && setOpenMessage(true)
+            }
             setLocationsForm({
                 ...locationsform,
                 [name]: event.target.checked,
@@ -225,16 +250,17 @@ const FormAdminBenefits = (props) => {
 
     return (
         <div className={"p-24"}>
-            {console.log("Benefit", locationsform, locationsMapform)}
-            {(isLoading || isLoadingLocation) ? <Loading/> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsById(props.idBenefit))}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {/* {console.log("Benefit", benefitslocations)} */}
+            {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsById(props.idBenefit))}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> : <ValidationModal idioma={"Español"} path={""} state={"Recordatorio"} save={() => {}} message={"Se va a establecer esta localización como la principal del beneficio"} setOpen={setOpenMessage} open={openMessage} />}
             <Card className={classes.formcard} elevation={6}>
-                {(isLoading || isLoadingLocation) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{props.id ? "Editar Localización" : "Agregar Localización"}</h2>}
+                {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{props.id ? "Editar Localización" : "Agregar Localización"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmitLocation}>  
-                    {(isLoading || isLoadingLocation) ? <Loading/> :
+                    {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> :
                     <>               
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Address*"
+                            label="Dirección*"
                             onChange={handleChange}
                             type="text"
                             name="address"
@@ -243,7 +269,7 @@ const FormAdminBenefits = (props) => {
                             errorMessages={["Este campo es requerido","Máximo 250 carácteres"]}
                         />
                         <SelectValidator 
-                            label="Province*" 
+                            label="Provincia*" 
                             name="provinceCode"
                             className={classes.textvalidator} 
                             value={locationsform.provinceCode} 
@@ -258,7 +284,7 @@ const FormAdminBenefits = (props) => {
                             ))}
                         </SelectValidator> 
                         <SelectValidator 
-                            label="Canton*" 
+                            label="Cantón*" 
                             name="cantonCode"
                             className={classes.textvalidator} 
                             value={locationsform.cantonCode} 
@@ -291,7 +317,7 @@ const FormAdminBenefits = (props) => {
                         </SelectValidator> 
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Phone*"
+                            label="Teléfono*"
                             onChange={handleChange}
                             type="text"
                             name="phone"
@@ -311,11 +337,23 @@ const FormAdminBenefits = (props) => {
                         />
                         <FormControlLabel
                             className={classes.textvalidator}
-                            label="Active Location"
+                            label="Activar Localización"
                             control={
                                 <Switch
                                 checked={locationsform.active}
                                 name="active"
+                                color="primary"
+                                onChange={handleChange}
+                                />
+                            }
+                        />
+                        <FormControlLabel
+                            className={classes.textvalidator}
+                            label="Localización Principal"
+                            control={
+                                <Switch
+                                checked={locationsform.mainLocation}
+                                name="mainLocation"
                                 color="primary"
                                 onChange={handleChange}
                                 />
@@ -326,7 +364,7 @@ const FormAdminBenefits = (props) => {
                         </div>
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Latitude*"
+                            label="Latitud*"
                             //onChange={handleChange}
                             type="text"
                             name="latitude"
@@ -337,7 +375,7 @@ const FormAdminBenefits = (props) => {
                         />
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Longitude*"
+                            label="Longitud*"
                             //onChange={handleChange}
                             type="text"
                             name="longitude"

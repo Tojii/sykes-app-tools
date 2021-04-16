@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 export const GET_BENEFITS = "GET_BENEFITS";
 export const GET_BENEFITS_CATEGORY = "GET_BENEFITS_CATEGORY";
 export const GET_BENEFITS_LOCATIONS = "GET_BENEFITS_LOCATIONS";
+export const GET_PAGE_SETTINGS = "GET_PAGE_SETTINGS";
 export const GET_BENEFITS_ACTIVE = "GET_BENEFITS_ACTIVE";
 export const GET_BENEFITSBYID = "GET_BENEFITSBYID";
 export const GET_BENEFITS_CATEGORYBYID = "GET_BENEFITS_CATEGORYBYID";
@@ -15,12 +16,15 @@ export const GET_BENEFITS_LOCATIONSBYID = "GET_BENEFITS_LOCATIONSBYID";
 export const GET_BENEFITS_LOCATIONSBYPROVINCE = "GET_BENEFITS_LOCATIONSBYPROVINCE";
 export const GET_BENEFITS_LOCATIONSBYPROVINCECANTON = "GET_BENEFITS_LOCATIONSBYPROVINCECANTON";
 export const ADD_BENEFIT = "ADD_BENEFIT";
+export const ADD_PAGE_SETTINGS = "ADD_PAGE_SETTINGS";
 export const ADD_BENEFIT_LOCATION = "ADD_BENEFIT_LOCATION";
 export const UPDATE_BENEFIT = "UPDATE_BENEFIT";
+export const UPDATE_PAGE_SETTINGS = "UPDATE_PAGE_SETTINGS";
 export const UPDATE_BENEFIT_LOCATION = "UPDATE_BENEFIT_LOCATION";
 export const DELETE_BENEFIT = "DELETE_BENEFIT";
 export const DELETE_BENEFIT_LOCATION = "DELETE_BENEFIT_LOCATION";
 export const BE_LOADING = "BE_LOADING";
+export const BE_LOADING_SETTINGS = "BE_LOADING_SETTINGS";
 export const BE_LOADING_LOCATION = "BE_LOADING_LOCATION";
 export const BE_ERROR = "BE_ERROR";
 
@@ -41,7 +45,12 @@ export const GetBenefitsActive = () => {
           });
         //console.log("imagenes",res.data)
       })
-      .catch(globalErrorHandler);
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR 
+        })
+      });
     };
   };
 
@@ -63,7 +72,12 @@ export const GetBenefitsActive = () => {
 
         //console.log("imagenes",res.data)
       })
-      .catch(globalErrorHandler);
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR 
+        })
+      });
     };
   };
 
@@ -85,7 +99,12 @@ export const GetBenefitsActive = () => {
 
         //console.log("imagenes",res.data)
       })
-      .catch(globalErrorHandler);
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR 
+        })
+      });
     };
   };
 
@@ -107,12 +126,44 @@ export const GetBenefitsActive = () => {
 
         //console.log("imagenes",res.data)
       })
-      .catch(globalErrorHandler);
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR 
+        })
+      });
+    };
+  };
+
+  export const GetPageSettings = () => {
+    const config = {
+        headers: {
+            'content-type': 'application/json',
+        }
+      }  
+    return async dispatch => {
+      dispatch({
+        type: BE_LOADING_SETTINGS
+      });
+      await api.get(`/PageSettings`,config).then(res => {
+        dispatch({
+          type: GET_PAGE_SETTINGS,
+          data: res.data
+          });
+
+        //console.log("imagenes",res.data)
+      })
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR 
+        })
+      });
     };
   };
 
   export const GetBenefitsCategoryById = (id) => {
-    console.log("categoriesaction",id)
+    //console.log("categoriesaction",id)
     const config = {
         headers: {
             'content-type': 'application/json',
@@ -128,9 +179,14 @@ export const GetBenefitsActive = () => {
           data: res.data
         });
 
-        console.log("categoriesaction", res.data)
+        //console.log("categoriesaction", res.data)
       })
-      .catch(globalErrorHandler);
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR 
+        })
+      });
     };
   };
 
@@ -150,9 +206,14 @@ export const GetBenefitsActive = () => {
           data: res.data
           });
 
-        console.log("imagenes",res.data)
+        //console.log("imagenes",res.data)
       })
-      .catch(globalErrorHandler);
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR 
+        })
+      });
     };
   };
 
@@ -174,7 +235,12 @@ export const GetBenefitsActive = () => {
 
         //console.log("provincias",res.data)
       })
-      .catch(globalErrorHandler);
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR 
+        })
+      });
     };
   };
 
@@ -196,7 +262,12 @@ export const GetBenefitsActive = () => {
 
         //console.log("cantons",res.data)
       })
-      .catch(globalErrorHandler);
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR 
+        })
+      });
     };
   };
 
@@ -212,7 +283,12 @@ export const GetBenefitsActive = () => {
           data: res.data
           });
       })
-      .catch(globalErrorHandler);
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR 
+        })
+      });
     };
   };
 
@@ -246,8 +322,44 @@ export const AddBenefit = (payload, Logo) => {
               type: ADD_BENEFIT,
               payload: res.data
           });
-          console.log(res.data)
+          //console.log(res.data)
           history.push(`/Benefits/FormAdminBenefits/${res.data}`);
+      })
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: BE_ERROR 
+        })
+      });
+  };
+};
+
+export const AddPageSettings = (payload, Logo, Footer, Badge) => {
+  //console.log("addver", payload, files)
+  var formData = new FormData();
+    formData.append('Title', "settings");
+    formData.append('Header', payload.header);
+    formData.append('Reminder', payload.reminder);
+    formData.append('LogoFiles', Logo);
+    formData.append('footerFiles', Footer);
+    formData.append('badgeFiles', Badge);
+    const config = {
+        headers: {
+            'content-type': 'multipart/form-data',
+        }
+    }
+  return async dispatch => {
+      dispatch({
+          type: BE_LOADING_SETTINGS
+      });
+
+      api.post(`/PageSettings`, 
+      formData, config).then(res => {
+          dispatch({
+              type: ADD_PAGE_SETTINGS,
+              payload: res.data
+          });
+          //console.log(res.data)
       })
       .catch((error) => {
         globalErrorHandler(error);
@@ -290,7 +402,7 @@ export const AddBenefitLocation = (payload, payloadMap) => {
               type: ADD_BENEFIT_LOCATION,
               payload: res.data
           });
-          console.log(res.data)
+          //console.log(res.data)
           //history.push(`/Benefits/FormAdminBenefits/${id}`);
       })
       .catch((error) => {
@@ -340,8 +452,44 @@ export const UpdateBenefit = (id, payload, files) => dispatch => {
   });
 };
 
+export const UpdatePageSettings = (id, payload, Logo, Footer, Badge) => dispatch => {
+  var formData = new FormData();
+  formData.append('Title', "settings");
+  formData.append('id', id);
+  formData.append('Header', payload.header);
+  formData.append('Reminder', payload.reminder);
+  formData.append('Logo', payload.logo);
+  formData.append('footer', payload.footer);
+  formData.append('badge', payload.badge);
+  formData.append('LogoFiles', Logo);
+  formData.append('footerFiles', Footer);
+  formData.append('badgeFiles', Badge);
+  const config = {
+      headers: {
+          'content-type': 'multipart/form-data',
+      }
+  }
+  dispatch({
+      type: BE_LOADING_SETTINGS
+  });
+
+  api.put(`/PageSettings/${id}`, 
+  formData, config).then(res => {
+      dispatch({
+          type: UPDATE_PAGE_SETTINGS,
+          payload: res.data
+      });
+  })
+  .catch((error) => {
+    globalErrorHandler(error);
+    dispatch({
+      type: BE_ERROR
+    })
+  });
+};
+
 export const UpdateBenefitLocation = (id, payload, payloadMap) => dispatch => {
-  console.log("update",payload, payloadMap)
+  //console.log("update",payload, payloadMap)
   var formData = new FormData();
     formData.append('idBenefits', payload.idBenefit);
     formData.append('Provincia', payload.province);

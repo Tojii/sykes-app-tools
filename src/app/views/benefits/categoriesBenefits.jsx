@@ -6,7 +6,7 @@ import { Tabs, Panel } from '@bumaga/tabs'
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { GetBenefitsById, GetBenefitsCategoryById, GetPageSettings, GetBenefitsLocationsByProvincia } from "../../redux/actions/BenefitsActions";
+import { GetBenefitsById, GetBenefitsCategoryById, GetPageSettings, GetBenefitsLocationsByProvincia, GetBenefitsCategory, GetBenefitsLocationsByProvinciaCanton } from "../../redux/actions/BenefitsActions";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import Places from '../../components/maps/Places';
 import { isMdScreen } from "utils";
@@ -69,7 +69,7 @@ import ValidationModal from '../growth-opportunities/components/ValidationDialog
     },
     media: {
         maxWidth: "200px",
-        maxHeight: "100px"
+        maxHeight: "90px"
     },
     medialogo: {
         width: "194px",
@@ -156,8 +156,9 @@ const DetalleBenefits = (props) => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const benefit = useSelector(state => state.benefit.benefit);
-    const benefitscategory = useSelector(state => state.benefit.benefitscategory);
+    const benefitscategories = useSelector(state => state.benefit.benefitscategories);
     const benefitslocations = useSelector(state => state.benefit.benefitslocations);
+    const benefitslocationsCanton = useSelector(state => state.benefit.benefitslocationsCanton);
     const isLoading  = useSelector(state => state.benefit.loading); 
     const isLoadingSettings  = useSelector(state => state.benefit.loadingSettings); 
     const isLoadingProvince  = useSelector(state => state.locations.loading); 
@@ -181,23 +182,16 @@ const DetalleBenefits = (props) => {
 
     useEffect(() => {
         //dispatch(GetBenefitsById("6"));
-        dispatch(GetBenefitsCategoryById(id));
+        dispatch(GetBenefitsCategory());
         dispatch(GetProvince());
         dispatch(GetPageSettings());
     }, [])
 
     useEffect(() => {
-        //dispatch(GetBenefitsById("6"));
-        setCantons([benefitslocations.filter(function(item) {
-            if (id == "" || id != item.benefit.category.idCategory) {
-                return false; // skip
-            }
-            return true;
-            }).map((item, index) => {
-            return ( 
-                item.canton
-            )})
-        ]);
+        setCantons (Array.from(new Set(benefitslocations.map((item, index) => {
+            return item.canton
+        }))))
+        //console.log("cantons",cantons)
     }, [benefitslocations])
 
     const showImage = () => {
@@ -224,13 +218,13 @@ const DetalleBenefits = (props) => {
     const handleChangeCanton = (event) => {
         //setDisableCanton(false);
         //setDisableDistrict(true);
-        //dispatch(GetBenefitsLocationsByProvinciaCanton(province, event.target.value));
+        dispatch(GetBenefitsLocationsByProvinciaCanton(province, event.target.value));
         setCanton(event.target.value)
     };
 
     return (
         <>
-            {/* {console.log("category", cantons)} */}
+            {/* {console.log("category", benefitscategories)} */}
             <div className="m-sm-30">
                 {(isLoading || isLoadingSettings || isLoadingProvince || loadingLocation) ? <Loading/> :
                 <div className="mb-sm-30">
@@ -244,10 +238,10 @@ const DetalleBenefits = (props) => {
                 {(isLoading || isLoadingSettings || isLoadingProvince || loadingLocation) ? <Loading/> :
                 <Card className={classes.cardContainer} elevation={6}> 
                     <div className={classes.margindiv}>
-                        <h1 style={{ color: "#4cb050", marginLeft: "2%", marginTop: "2%", fontWeight: "bold"}} className="mb-20">{showImage()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {benefitscategory[0] && benefitscategory[0].name ? benefitscategory[0].name.toUpperCase() : ""}</h1>
+                        <h1 style={{ color: "#4cb050", marginLeft: "2%", marginTop: "2%", fontWeight: "bold"}} className="mb-20">{showImage()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {"ALL"}</h1>
                         <h5 style={{ color: "#939598", marginLeft: "2%"}}>{pageSettings[0] != null ? pageSettings[0].reminder : ""}</h5>
                             
-                            {(benefitscategory[0] != null && benefitscategory[0].benefits.length != 0) ? <Tabs style={{marginLeft: "2%", marginTop: "2%",}}>
+                            {(benefitscategories[0] != null && benefitscategories.length != 0) ? <Tabs style={{marginLeft: "2%", marginTop: "2%",}}>
                                 <div className={classes.tabs}>
                                     <Panel>
                                         <div style={{marginBottom: "1%" }}>
@@ -275,7 +269,7 @@ const DetalleBenefits = (props) => {
                                                 value={canton} 
                                                 onChange={handleChangeCanton} 
                                                 >
-                                                {(cantons != null && cantons[0] != undefined) && cantons[0].map(canton => (
+                                                {(cantons != null && cantons[0] != undefined) && cantons.map(canton => (
                                                     <MenuItem key={`canton-${canton}`} id={canton} value={canton ? canton : ""}>
                                                     {canton || " "}
                                                     </MenuItem>
@@ -285,7 +279,7 @@ const DetalleBenefits = (props) => {
                                         </div>
                                         <div style={{backgroundColor: "lightgray"}}>
                                             <Grid container spacing={2}> 
-                                                {(benefitscategory[0] != undefined && benefitscategory[0].benefits != undefined) ? benefitscategory[0].benefits.filter(function(item) {
+                                                {(benefitscategories[0] != undefined && benefitscategories != null && benefitscategories.length != 0) ? benefitscategories.map((item, index) => { return (item.benefits.filter(function(item) {
                                                     var locationstemp = item.benefitLocations.filter(function(item) {
                                                         if (province != "" && province != item.provincia ) {
                                                           return false; // skip
@@ -307,7 +301,7 @@ const DetalleBenefits = (props) => {
                                                 }).map((item, index) => {
                                                     return (
                                                     <Grid key={item.idBenefit} item lg={4} md={4} sm={4} xs={11} className={classes.box}>
-                                                        <Card className={classes.root}>
+                                                            <Card className={classes.root}>
                                                                 <CardActionArea>
                                                                     <div style={{textAlign: "center"}}>
                                                                         <a onClick={() => history.push({pathname: `/Benefits/Detalle/${item.idBenefit}`, prev: history.location.pathname})} >
@@ -348,8 +342,9 @@ const DetalleBenefits = (props) => {
                                                                     </Tooltip>
                                                                 </div>
                                                             </Card>
+                                                     
                                                     </Grid>
-                                                )}) : null}
+                                                )}))}) : null}
                                             </Grid>
                                         </div>
                                     </Panel>

@@ -73,7 +73,7 @@ const AdminBenefitsTable = () => {
                 color="primary"
                 startIcon={<AddIcon />}
               >
-                New
+                Nuevo
               </Button>
             </Tooltip>
           </React.Fragment>
@@ -97,7 +97,7 @@ const AdminBenefitsTable = () => {
                 onClick={() => handleDetalle(item)}
                 startIcon={<Details />}
               >
-                Details
+                Detalles
               </Button>
             </Tooltip>
           </React.Fragment>
@@ -141,7 +141,7 @@ const AdminBenefitsTable = () => {
     const columns = [
         {
           name: "id",
-          label: "ID Benefit",
+          label: "ID Beneficio",
           options: {
             filter: false,
             sort: true,
@@ -150,7 +150,7 @@ const AdminBenefitsTable = () => {
         },
         {
             name: "idCategory",
-            label: "ID Category",
+            label: "ID Categoría",
             options: {
              filter: false,
              sort: true,
@@ -159,7 +159,7 @@ const AdminBenefitsTable = () => {
         },
         {
           name: "category",
-          label: "Category",
+          label: "Categoría",
           options: {
            filter: true,
            sort: true,
@@ -168,7 +168,7 @@ const AdminBenefitsTable = () => {
         },
         {
           name: "name",
-          label: "Name",
+          label: "Nombre",
           options: {
            filter: true,
            sort: true,
@@ -180,7 +180,7 @@ const AdminBenefitsTable = () => {
       },
         {
           name: "detail",
-          label: "Detail",
+          label: "Detalle",
           options: {
            filter: true,
            sort: true,
@@ -191,7 +191,7 @@ const AdminBenefitsTable = () => {
         },
         {
           name: "description",
-          label: "Description",
+          label: "Descripción",
           options: {
             filter: true,
             sort: true,
@@ -202,7 +202,7 @@ const AdminBenefitsTable = () => {
         },
         {
           name: "benefitInfo",
-          label: "Benefit Information",
+          label: "Información de Beneficio",
           options: {
             filter: true,
             sort: true,
@@ -259,7 +259,7 @@ const AdminBenefitsTable = () => {
             }
         },
         {
-          name: "Active",
+          name: "Activo",
           options: {
             filter: true,
             customBodyRenderLite: (dataIndex) => {
@@ -271,7 +271,7 @@ const AdminBenefitsTable = () => {
           }
         },  
         {
-          name: "Provinces",
+          name: "Provincias",
           options: {
             filter: true,
             customBodyRenderLite: (dataIndex) => {
@@ -283,7 +283,7 @@ const AdminBenefitsTable = () => {
           }
         },
         {
-          name: "Cantons",
+          name: "Cantones",
           options: {
             filter: true,
             customBodyRenderLite: (dataIndex) => {
@@ -295,7 +295,7 @@ const AdminBenefitsTable = () => {
           }
         },
         {
-          name: "Districts",
+          name: "Distritos",
           options: {
             filter: true,
             display: false,
@@ -358,20 +358,52 @@ const AdminBenefitsTable = () => {
         );
       },
       customSort: (data, colIndex, order) => { return data.sort((a, b) => { if (colIndex === 5 || colIndex === 6) { return (new Date(a.data[colIndex]) < new Date(b.data[colIndex]) ? -1: 1 ) * (order === 'desc' ? 1 : -1); } else { return (a.data[colIndex] < b.data[colIndex] ? -1: 1 ) * (order === 'desc' ? 1 : -1); } }); },
-  }
+      textLabels: {
+        body: {
+          noMatch: "Lo sentimos, no se encontraron registros",
+          toolTip: "Sort",
+          columnHeaderTooltip: column => `Ordenar por ${column.label}`
+        },
+        pagination: {
+          next: "Siguiente",
+          previous: "Regresar",
+          rowsPerPage: "Filas por página:",
+          displayRows: "de",
+        },
+        toolbar: {
+          search: "Buscar",
+          downloadCsv: "Descargar CSV",
+          viewColumns: "Ver Columnas",
+          filterTable: "Filtrar tabla",
+        },
+        filter: {
+          all: "Todas",
+          title: "Filtradas",
+          reset: "Eliminar filtros",
+        },
+        viewColumns: {
+          title: "Mostrar Columnas",
+          titleAria: "Show/Hide Table Columns",
+        },
+        selectedRows: {
+          text: "fila seleccionada",
+          delete: "Delete",
+          deleteAria: "Delete Selected Rows",
+        },
+      }
+    }
 
   return (
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={classes.tableMargin + " m-sm-20"}>
-          {console.log("BN", benefits)}
           {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el beneficio no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                   <MuiThemeProvider theme={getMuiTheme()}>
                     <MUIDataTable  className="w-100"
-                        title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Benefits Administration</h4></div>}
+                        title={<div style={{display: "inline-flex"}}>{addButton()} &nbsp; &nbsp; &nbsp;  <h4 style={{alignSelf: "flex-end"}}>Administración de Beneficios</h4></div>}
                         data={builddata}
                         columns={columns}
                         options={options}
