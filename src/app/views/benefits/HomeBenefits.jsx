@@ -1,32 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Card, CardActionArea, Typography, CardContent, CardMedia, FormControl, InputLabel, Tooltip, Button } from "@material-ui/core";
+import { Grid, Card, FormControl, InputLabel, Tooltip, Button } from "@material-ui/core";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
-import NotFound from "../sessions/NotFound"
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Breadcrumb } from "matx";
 import Places from '../../components/maps/Places';
-import { GetBenefitsById, GetBenefitsLocationsByProvincia, GetBenefitsLocationsByProvinciaCanton, GetPageSettings, GetBenefitsCategory, GetBenefitsLocations } from "../../redux/actions/BenefitsActions";
+import { GetBenefitsLocationsByProvincia, GetBenefitsLocationsByProvinciaCanton, GetPageSettings, GetBenefitsCategory, GetBenefitsLocations } from "../../redux/actions/BenefitsActions";
 import { isMdScreen } from "utils";
-import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Link } from 'react-router-dom';
 import SettingsIcon from "@material-ui/icons/Settings";
-import { GetProvince, GetCantons, GetDistricts } from "../../redux/actions/LocationActions";
+import { GetProvince } from "../../redux/actions/LocationActions";
 import history from "history.js";
 
 const useStyles = makeStyles({
-    tableMargin: {     
-        "@media (min-width: 0px)": {
-            marginBottom: "25%",
-        },
-        "@media (min-width: 1024px)": {
-            marginBottom: "5%",
-        },
-    },
     cardContainer:{
-        marginBottom:"2%" 
+        marginBottom:"5%" 
     },
     box: {
         marginTop: "10px",
@@ -40,8 +30,8 @@ const useStyles = makeStyles({
         //boxShadow: "5px 10px 11px -4px rgb(0 0 0 / 40%)" 
     },
     media: {
-        width: "163.8px",
-        height: "159.6px"
+        width: "90%",
+        height: "90%"
     },
     mediafooter: {
         width: "872px",
@@ -66,7 +56,6 @@ const HomeBenefits = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
-    const benefit = useSelector(state => state.benefit.benefit);
     const benefitscategories = useSelector(state => state.benefit.benefitscategories);
     const benefitslocations = useSelector(state => state.benefit.benefitslocations);
     const benefitslocationsCanton = useSelector(state => state.benefit.benefitslocationsCanton);
@@ -120,17 +109,12 @@ const HomeBenefits = () => {
 
     const handleChangeProvince = (event) => {
         setDisableCanton(false);
-        //setDisableDistrict(true);
         dispatch(GetBenefitsLocationsByProvincia(event.target.value));
-        
-        const name = event.target.name;
         setProvince(event.target.value)
         setCanton("")
     };
 
     const handleChangeCanton = (event) => {
-        //setDisableCanton(false);
-        //setDisableDistrict(true);
         dispatch(GetBenefitsLocationsByProvinciaCanton(province, event.target.value));
         setCanton(event.target.value)
     };
@@ -145,7 +129,6 @@ const HomeBenefits = () => {
     
     useEffect(() => {
         dispatch(GetBenefitsLocations());
-        //dispatch(GetBenefitsById("2"));
         dispatch(GetBenefitsCategory());
         dispatch(GetProvince());
         dispatch(GetPageSettings());
@@ -153,7 +136,7 @@ const HomeBenefits = () => {
 
     useEffect(() => {
         setCantons (Array.from(new Set(benefitslocations.filter(function(item) {
-            if (category != "" && category != item.benefit.category.idCategory ) {
+            if (!item.benefit.active || !item.active || (category != "" && category != item.benefit.category.idCategory)) {
               return false; // skip
             }
             return true;
@@ -165,7 +148,7 @@ const HomeBenefits = () => {
 
     return (
         <div className="m-sm-30">
-              {/* {console.log(benefitscategories)} */}
+              {console.log("benetisCanton", benefitslocationsCanton)}
               {(user.badge == undefined || isLoading || loadingLocation || isLoadingSettings || isLoadingProvince) ? <Loading /> : <div className="mb-sm-30">
                 <Breadcrumb
                 routeSegments={[
@@ -183,40 +166,22 @@ const HomeBenefits = () => {
                                 <Grid container spacing={2}> 
                                     <Grid key={0} item lg={3} md={3} sm={3} xs={7} className={classes.box}>
                                         <a onClick={() => history.push({pathname: `/Benefits/Category`})}>
-                                            {/* <Card className={classes.root}>
-                                                <CardActionArea> */}
-                                                    <img
-                                                        className={classes.media}
-                                                        alt="..."
-                                                        src={require('./images/ALL.png')}
-                                                    />
-                                                    {/* <CardContent style={{textAlign: "center"}}>
-                                                    <Typography style={{textAlign: "center", color: "orchid", fontWeight: "bold"}} gutterBottom variant="subtitle1" component="p">
-                                                        {item.name.toUpperCase()}
-                                                    </Typography>
-                                                    </CardContent> */}
-                                                {/* </CardActionArea>
-                                            </Card> */}
+                                            <img
+                                                className={classes.media}
+                                                alt="..."
+                                                src={require('./images/ALL.png')}
+                                            />
                                         </a>
                                     </Grid>
                                     {benefitscategories.map((item, index) => {
                                     return (
                                         <Grid key={item.idCategory} item lg={3} md={3} sm={3} xs={7} className={classes.box}>
                                             <a onClick={() => history.push({pathname: `/Benefits/Category/${item.idCategory}`})} >
-                                                {/* <Card className={classes.root}>
-                                                    <CardActionArea> */}
-                                                        <img
-                                                            className={classes.media}
-                                                            alt="..."
-                                                            src={`${item.image}`}
-                                                        />
-                                                        {/* <CardContent style={{textAlign: "center"}}>
-                                                        <Typography style={{textAlign: "center", color: "orchid", fontWeight: "bold"}} gutterBottom variant="subtitle1" component="p">
-                                                            {item.name.toUpperCase()}
-                                                        </Typography>
-                                                        </CardContent> */}
-                                                    {/* </CardActionArea>
-                                                </Card> */}
+                                                {item.image && <img
+                                                    className={classes.media}
+                                                    alt="..."
+                                                    src={`${item.image}`}
+                                                />}
                                             </a>
                                         </Grid>
                                     )})}
@@ -252,8 +217,6 @@ const HomeBenefits = () => {
                                             <Select 
                                             label="Province*" 
                                             name="province"
-                                            
-                                            //className={classes.textvalidator} 
                                             value={province} 
                                             onChange={handleChangeProvince} 
                                             >
@@ -283,11 +246,27 @@ const HomeBenefits = () => {
                                     <div style={{ height: "655px", padding: isMdScreen() ? "10px" : "25px", width: "100%", marginLeft: isMdScreen() ? "3%" : "1%" }}>
                                         <Places 
                                             locations={ benefitslocationsCanton ? benefitslocationsCanton.filter(function(item) {
-                                                if (category != "" && category != item.benefit.category.idCategory ) {
+                                                if (!item.benefit.active || !item.active || (category != "" && category != item.benefit.category.idCategory)) {
                                                   return false; // skip
                                                 }
                                                 return true;
                                             }).map((item, index) => {return item}) : [] } 
+                                            content={benefitslocationsCanton ? benefitslocationsCanton.filter(function(item) {
+                                                if (!item.benefit.active || !item.active || (category != "" && category != item.benefit.category.idCategory)) {
+                                                  return false; // skip
+                                                }
+                                                return true;
+                                            }).map((item, index) => {return '<div id="content">' +
+                                            '<div id="siteNotice">' +
+                                            "</div>" +
+                                            `<h1 id="firstHeading" class="firstHeading">${item.benefit.name}</h1>` +
+                                            '<div id="bodyContent">' +
+                                            `<p><b>Address: </b> ${item.address} </p>` +
+                                            `<p><b>Phone: </b> ${item.phone} </p>` +
+                                            `<p><b>WhatsApp: </b> ${item.whatsApp} </p>` +
+                                            `<a style="color:#039be5; text-decoration: underline;" href="${process.env.PUBLIC_URL}/Benefits/Detalle/${item.benefit.idBenefit}">Ver detalle</a>` +
+                                            "</div>" +
+                                            "</div>"}) : [] }
                                             lat={location.lat} lng={location.lng} zoomLevel={8} draggable={false} onChangeLocation={onChangeLocation} show /> {/* include it here */}
                                     </div>
                                 </Grid>

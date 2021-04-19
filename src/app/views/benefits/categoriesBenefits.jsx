@@ -4,30 +4,17 @@ import { Card, CardActionArea, CardContent, CardMedia, Divider, Tooltip, FormCon
 import { makeStyles } from '@material-ui/core/styles';
 import { Tabs, Panel } from '@bumaga/tabs'
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { GetBenefitsById, GetBenefitsCategoryById, GetPageSettings, GetBenefitsLocationsByProvincia, GetBenefitsCategory, GetBenefitsLocationsByProvinciaCanton } from "../../redux/actions/BenefitsActions";
+import { GetPageSettings, GetBenefitsLocationsByProvincia, GetBenefitsCategory, GetBenefitsLocationsByProvinciaCanton } from "../../redux/actions/BenefitsActions";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
-import Places from '../../components/maps/Places';
 import { isMdScreen } from "utils";
 import { Breadcrumb } from "matx";
 import history from "history.js";
 import { useParams } from "react-router";
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import { GetProvince, GetCantons, GetDistricts } from "../../redux/actions/LocationActions";
+import { GetProvince } from "../../redux/actions/LocationActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
-
-  const cn = (...args) => args.filter(Boolean).join(' ')
-
-  const Tab = ({ children, scroll }) => {
-    const classes = useStyles();
-    return (
-      <button className={cn(classes.tab)} onClick={() => {scroll()}}>
-        {children}
-      </button>
-    )
-  }
 
   const useStyles = makeStyles({
     tabs: {
@@ -48,9 +35,6 @@ import ValidationModal from '../growth-opportunities/components/ValidationDialog
         borderTopWidth: "thin",
         color: "#ff9805"
     },
-    tabList: {
-        display: "flex",
-    },
     box: {
         marginTop: "10px",
         marginBottom: "10px",
@@ -62,8 +46,8 @@ import ValidationModal from '../growth-opportunities/components/ValidationDialog
         marginRight: "auto",
     },
     root: {
-        width: isMdScreen() ? "100%" : 345,
-        height: isMdScreen() ? "100%" : 315,
+        width: isMdScreen() ? "100%" : "70%",
+        height: isMdScreen() ? "100%" : "100%",
         //height: 415,
         boxShadow: "5px 4px 16px 0px rgb(0 0 0 / 0.4)",
     },
@@ -97,12 +81,6 @@ import ValidationModal from '../growth-opportunities/components/ValidationDialog
     cardContainer:{
         marginBottom:"2%" 
     },
-    tabActive: {
-        backgroundColor: "#039be5",
-        borderColor: "transparent",
-        color: "white",
-        cursor: "default",
-    },
     paper: {
         margin: '3%',
         "@media (min-width: 0px)": {
@@ -112,30 +90,6 @@ import ValidationModal from '../growth-opportunities/components/ValidationDialog
             width: "90%",
         },
         boxShadow: "5px 4px 16px 0px rgb(0 0 0 / 0.4)",
-    },
-    papercardinfo: {
-        "@media (min-width: 0px)": {
-            marginTop: "0%",
-            margin:"3%",
-        },
-        "@media (min-width: 1024px)": {
-            width: "80%",
-            marginTop: "8%",
-            margin:"8%",
-        },
-        boxShadow: "5px 4px 16px 0px rgb(0 0 0 / 0.4)",
-    },
-    lineGrid: {
-        borderBottom: "1px solid rgba(224, 224, 224, 1)",
-        width: "100%",
-        marginLeft: "0%",
-    },
-    lineTypo: {
-        borderBottom: "1px solid rgba(224, 224, 224, 1)",
-        marginLeft: "0%",
-    },
-    graytext: {
-        color: "gray",
     },
     miniatureimage: {
         //margin: "5%",
@@ -155,10 +109,8 @@ import ValidationModal from '../growth-opportunities/components/ValidationDialog
 const DetalleBenefits = (props) => {
     const dispatch = useDispatch();
     const classes = useStyles();
-    const benefit = useSelector(state => state.benefit.benefit);
     const benefitscategories = useSelector(state => state.benefit.benefitscategories);
     const benefitslocations = useSelector(state => state.benefit.benefitslocations);
-    const benefitslocationsCanton = useSelector(state => state.benefit.benefitslocationsCanton);
     const isLoading  = useSelector(state => state.benefit.loading); 
     const isLoadingSettings  = useSelector(state => state.benefit.loadingSettings); 
     const isLoadingProvince  = useSelector(state => state.locations.loading); 
@@ -176,12 +128,8 @@ const DetalleBenefits = (props) => {
     // const user = useSelector(state => state.user);
     //const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     //console.log("user",user)
-    const promociones = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    //const promociones = "";
-    const location = { address: 'San José, Costa Rica', lat: 9.903329970416294, lng: -84.08271419551181 } // our location object from earlier
 
     useEffect(() => {
-        //dispatch(GetBenefitsById("6"));
         dispatch(GetBenefitsCategory());
         dispatch(GetProvince());
         dispatch(GetPageSettings());
@@ -207,17 +155,12 @@ const DetalleBenefits = (props) => {
 
     const handleChangeProvince = (event) => {
         setDisableCanton(false);
-        //setDisableDistrict(true);
         dispatch(GetBenefitsLocationsByProvincia(event.target.value));
-        
-        const name = event.target.name;
         setProvince(event.target.value)
         setCanton("")
     };
 
     const handleChangeCanton = (event) => {
-        //setDisableCanton(false);
-        //setDisableDistrict(true);
         dispatch(GetBenefitsLocationsByProvinciaCanton(province, event.target.value));
         setCanton(event.target.value)
     };
@@ -293,7 +236,7 @@ const DetalleBenefits = (props) => {
                                                             canton: item.canton,
                                                             provincia: item.provincia
                                                         }})
-                                                    if (locationstemp.length == 0) {
+                                                    if (locationstemp.length == 0 || !item.active) {
                                                       return false; // skip
                                                     }
                                                     //console.log("temp", locationstemp)
@@ -319,12 +262,12 @@ const DetalleBenefits = (props) => {
                                                                             </Typography>
                                                                         </a>
                                                                         <a onClick={() => (item.description.length < 215) && history.push({pathname: `/Benefits/Detalle/${item.idBenefit}`, prev: history.location.pathname})} >
-                                                                            <Typography style={{height: 100, textAlign: "justify", color: "#939598"}} gutterBottom variant="body2" component="p">
+                                                                            <Typography style={{minHeight: "100px", textAlign: "justify", color: "#939598"}} gutterBottom variant="body2" component="p">
                                                                                 <a onClick={() => history.push({pathname: `/Benefits/Detalle/${item.idBenefit}`, prev: history.location.pathname})} >
                                                                                     {`${item.description.substr(0, 215)}${(item.description.length >= 215) ? "... " : ""}`}
                                                                                 </a>
                                                                                 <a onClick={() => {setDescriptionMessageName(item.name); setDescriptionMessage(item.description); setOpenMessage(true)}} >
-                                                                                    <Typography style={{display: "inline", textAlign: "justify", color: "#039be5"}}>{`${(item.description.length >= 215) ? "Ver más" : ""}`}</Typography>
+                                                                                    <Typography style={{display: "inline", textAlign: "justify", textDecoration: "underline", color: "#039be5"}}>{`${(item.description.length >= 215) ? "Ver más" : ""}`}</Typography>
                                                                                 </a>
                                                                             </Typography>
                                                                         </a>

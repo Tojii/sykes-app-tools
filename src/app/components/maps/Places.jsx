@@ -2,7 +2,7 @@ import React, { useState, Component, useRef, useEffect } from "react";
 import GoogleMap from './GoogleMap';
 import SearchBox from './SearchBox';
 
-const Map = ({ lat, lng, zoomLevel, draggable, onChangeLocation, locations, showSearcBox }) => {
+const Map = ({ lat, lng, zoomLevel, content, draggable, onChangeLocation, locations, showSearcBox }) => {
   let markers = [];
   const mylocation = [];
   
@@ -33,9 +33,9 @@ const Map = ({ lat, lng, zoomLevel, draggable, onChangeLocation, locations, show
     }
 
     if (locations) {
-      console.log("locations", locations)
-      locations.forEach(element => {
-        
+      //console.log("content", content)
+      locations.forEach((element, index) => {
+        //console.log(index)
         let marker = new maps.Marker({
           position: { lat: parseFloat(element.latitude.replace(",", ".")), lng: parseFloat(element.longitude.replace(",", ".")) },
           map,
@@ -45,16 +45,7 @@ const Map = ({ lat, lng, zoomLevel, draggable, onChangeLocation, locations, show
         
         if (element.address) {
           const infowindow = new window.google.maps.InfoWindow({
-            content: '<div id="content">' +
-            '<div id="siteNotice">' +
-            "</div>" +
-            `<h1 id="firstHeading" class="firstHeading">${element.benefit.name}</h1>` +
-            '<div id="bodyContent">' +
-            `<p><b>Address: </b> ${element.address} </p>` +
-            `<p><b>Phone: </b> ${element.phone} </p>` +
-            `<p><b>WhatsApp: </b> ${element.whatsApp} </p>` +
-            "</div>" +
-            "</div>",
+            content: content.length != 0 ? content[index] : "",
           });
 
           marker.addListener("click", () => {
@@ -68,7 +59,7 @@ const Map = ({ lat, lng, zoomLevel, draggable, onChangeLocation, locations, show
   
   return (
       <>
-        {console.log("maps", mylocation)}
+        {/* {console.log("maps", mylocation)} */}
         {mapLoaded && showSearcBox && <SearchBox map={mapInstance} mapApi={mapApi} addplace={addPlace} />}
         <GoogleMap
           defaultZoom={zoomLevel}

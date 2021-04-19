@@ -386,6 +386,7 @@ export const AddBenefitLocation = (payload, payloadMap) => {
     formData.append('Phone', payload.phone);
     formData.append('WhatsApp', payload.whatsapp);
     formData.append('Active', payload.active);
+    formData.append('PrincipalLocation', payload.principalLocation);
     const config = {
         headers: {
             'content-type': 'multipart/form-data',
@@ -489,7 +490,7 @@ export const UpdatePageSettings = (id, payload, Logo, Footer, Badge) => dispatch
 };
 
 export const UpdateBenefitLocation = (id, payload, payloadMap) => dispatch => {
-  //console.log("update",payload, payloadMap)
+  console.log("update",payload, payloadMap)
   var formData = new FormData();
     formData.append('idBenefits', payload.idBenefit);
     formData.append('Provincia', payload.province);
@@ -504,6 +505,7 @@ export const UpdateBenefitLocation = (id, payload, payloadMap) => dispatch => {
     formData.append('Phone', payload.phone);
     formData.append('WhatsApp', payload.whatsapp);
     formData.append('Active', payload.active);
+    formData.append('PrincipalLocation', payload.principalLocation);
     const config = {
         headers: {
             'content-type': 'multipart/form-data',

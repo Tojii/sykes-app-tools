@@ -1,13 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Button,
-  Card,
-  Grid, 
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@material-ui/core";
+import { Button, Card, Grid, Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
@@ -19,11 +11,6 @@ import Chip from '@material-ui/core/Chip';
 
 
 const useStyles = makeStyles({
-    cardcarrito: {     
-        marginLeft: "3%",
-        width: "96%",
-        marginTop: "3%",
-    },
     formcard: {
         "@media (min-width: 1023px)": {
             marginLeft: "0%",
@@ -123,10 +110,7 @@ const AdminBenefitDetalle = (props) => {
                                         }</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell width={"100%"} className={classes.cellspace + " pl-sm-24"}>
-                                            <h6>Localizaciones:</h6>
-                                        </TableCell>
-                                        <TableCell> 
+                                        <TableCell colSpan={3} className="px-sm-24 border-none"> 
                                             <LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} type={"detail"} /> 
                                         </TableCell>
                                     </TableRow>

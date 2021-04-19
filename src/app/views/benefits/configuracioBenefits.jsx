@@ -1,20 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
-import { Card, Button, FormControl, Input, FormHelperText, FormControlLabel, Switch, Tooltip } from "@material-ui/core";
+import { Card, Button, FormControl, Input, FormHelperText, Tooltip } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import { Tabs, useTabState, Panel } from '@bumaga/tabs'
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import { GetBenefitsById, GetPageSettings, AddPageSettings, UpdatePageSettings } from "../../redux/actions/BenefitsActions";
+import { GetPageSettings, AddPageSettings, UpdatePageSettings } from "../../redux/actions/BenefitsActions";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
-import Places from '../../components/maps/Places';
-import { isMdScreen } from "utils";
 import { useParams } from "react-router";
 import { Breadcrumb } from "matx";
-import AdminBenefits from "./adminBenefitsTable"
-import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
-import AddIcon from "@material-ui/icons/Add";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { Link } from 'react-router-dom';
 import history from "history.js";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
@@ -157,8 +149,14 @@ const DetalleBenefits = (props) => {
     }
 
     const presave = () => {
-        if (pageSettings.length == 0) {
+        if (settingsform.logo == null) {
             setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
+        }
+        if (settingsform.footer == null) {
+            setErrorFileFooter({error: true, errorMessage:`Debe adjuntar una imagen`});
+        }
+        if (settingsform.badge == null) {
+            setErrorFileBadge({error: true, errorMessage:`Debe adjuntar una imagen`});
         }
     }
 
@@ -183,11 +181,9 @@ const DetalleBenefits = (props) => {
 
     const handleFormSubmit = async () => {
         if (((pageSettings.length != 0 ))) {
-            //console.log("update")
             await dispatch(UpdatePageSettings("1", settingsform, files, filesFooter, filesBadge));
             setOpen(true);
         } else if ((files != null && filesFooter != null && filesBadge != null)) {
-            //console.log("add")
             await dispatch(AddPageSettings(settingsform, files, filesFooter, filesBadge));
             setOpen(true);
         }
@@ -213,7 +209,6 @@ const DetalleBenefits = (props) => {
         const name = event.target.name;
         if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
                 if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
-                    //setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
                     name == "logo" && setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
                     name == "footer" && setErrorFileFooter({error: true, errorMessage:`El formato del archivo no es válido`});
                     name == "badge" && setErrorFileBadge({error: true, errorMessage:`El formato del archivo no es válido`});
@@ -224,7 +219,6 @@ const DetalleBenefits = (props) => {
                     setLogo(null);
                 }
                 else if (filesList.size/1024/1024 > 2) {
-                    //setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
                     name == "logo" && setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
                     name == "footer" && setErrorFileFooter({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
                     name == "badge" && setErrorFileBadge({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
@@ -244,7 +238,6 @@ const DetalleBenefits = (props) => {
                     getBase64(event.target.files[0], name);
                 }
         } else {
-            //setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
             name == "logo" && setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
             name == "footer" && setErrorFileFooter({error: true, errorMessage:`El formato del archivo no es válido`});
             name == "badge" && setErrorFileBadge({error: true, errorMessage:`El formato del archivo no es válido`});
@@ -259,6 +252,7 @@ const DetalleBenefits = (props) => {
     return (
         <>
             <div className="m-sm-30">
+                {console.log("form", settingsform )}
                 { isLoading ? <Loading/> : <div className="mb-sm-30">
                     <Breadcrumb
                     routeSegments={[
@@ -268,7 +262,6 @@ const DetalleBenefits = (props) => {
                 />
                 </div>}
                 {/* {console.log("pageSettings", pageSettings)} */}
-                {/* { isLoading ? <Loading/> : */}
                 {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Configuration"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetPageSettings());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
                 <Card className={classes.cardContainer} elevation={6}>
                     <div className={classes.margindiv}>

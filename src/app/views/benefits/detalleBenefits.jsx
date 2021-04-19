@@ -62,12 +62,6 @@ import history from "history.js";
     cardContainer:{
         marginBottom:"2%" 
     },
-    tabActive: {
-        backgroundColor: "#039be5",
-        borderColor: "transparent",
-        color: "white",
-        cursor: "default",
-    },
     paper: {
         margin: '3%',
         "@media (min-width: 0px)": {
@@ -181,15 +175,15 @@ const DetalleBenefits = (props) => {
                 { (isLoading || isLoadingSettings) ? <Loading/> : <div className="mb-sm-30">
                     <Breadcrumb
                     routeSegments={[
-                    { name: "Benefits Home", path: "/Benefits/Home" },
-                    //{ name: "Categoría", path: `/Benefits/Category/${benefit[0] && benefit[0].benefit ? benefit[0].benefit.category.idCategory : ""}` }, 
+                    { name: "Benefits Home", path: "/Benefits/Home" }, 
                     { name: "Categoría", path: `${history.location.prev ? history.location.prev : (`/Benefits/Category/${benefit[0] && benefit[0].benefit ? benefit[0].benefit.category.idCategory : ""}`)}` },  
                     { name: "Detalle", path: "/Benefits/Detalle" },                
                     ]}
                 />
                 </div>}
-                {/* {console.log("benefit", benefit)} */}
+                {console.log("benefit", benefit)}
                 { (isLoading || isLoadingSettings) ? <Loading/> :
+                (benefit[0] != undefined && benefit[0].benefit.active) ?
                 <Card className={classes.cardContainer} elevation={6}>
                     <div className={classes.margindiv}>
                         <h1 style={{ color: "#4cb050", marginLeft: "2%", marginTop: "2%", fontWeight: "bold"}} className="mb-20">{showImage()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {benefit[0] && benefit[0].benefit ? benefit[0].benefit.category.name.toUpperCase() : ""}</h1>
@@ -254,7 +248,28 @@ const DetalleBenefits = (props) => {
                                                                             UBICACIÓN
                                                                         </Typography>
                                                                         <div style={{ height: "400px", padding: isMdScreen() ? "10px" : "25px", width: "100%", marginLeft: isMdScreen() ? "3%" : "1%" }}>
-                                                                            <Places locations={ benefit[0] && benefit[0].locations ? benefit[0].locations : [] } lat={location.lat} lng={location.lng} zoomLevel={7} draggable={false} onChangeLocation={onChangeLocation} show /> {/* include it here */}
+                                                                            <Places locations={ benefit[0] && benefit[0].locations ? benefit[0].locations.filter(function(item) {
+                                                                                if (!item.benefit.active || !item.active) {
+                                                                                  return false; // skip
+                                                                                }
+                                                                                return true;
+                                                                            }).map((item, index) => {return item}) : [] } lat={location.lat} lng={location.lng} zoomLevel={7} draggable={false} 
+                                                                            content={benefit[0] && benefit[0].locations ? benefit[0].locations.filter(function(item) {
+                                                                                if (!item.benefit.active || !item.active) {
+                                                                                  return false; // skip
+                                                                                }
+                                                                                return true;
+                                                                            }).map((item, index) => {return '<div id="content">' +
+                                                                            '<div id="siteNotice">' +
+                                                                            "</div>" +
+                                                                            `<h1 id="firstHeading" class="firstHeading">${item.benefit.name}</h1>` +
+                                                                            '<div id="bodyContent">' +
+                                                                            `<p><b>Address: </b> ${item.address} </p>` +
+                                                                            `<p><b>Phone: </b> ${item.phone} </p>` +
+                                                                            `<p><b>WhatsApp: </b> ${item.whatsApp} </p>` +
+                                                                            "</div>" +
+                                                                            "</div>"}) : []}
+                                                                            onChangeLocation={onChangeLocation} show /> {/* include it here */}
                                                                         </div>
                                                                     
                                                                     </Grid>
@@ -332,15 +347,6 @@ const DetalleBenefits = (props) => {
                                                             </Grid>
                                                         </Grid>
                                                         <Grid container spacing={2} justify="center" alignItems="center" direction="row">
-                                                            {/* <Grid item lg={3} md={3} sm={3} xs={3}>
-                                                                <div style={{textAlignLast: "center"}}>
-                                                                    <img
-                                                                        className={classes.miniatureimage}
-                                                                        alt="..."
-                                                                        src={`data:image/png;base64,${images[0] ? images[0].content : null}`}
-                                                                    />
-                                                                </div>
-                                                            </Grid> */}
                                                             {benefit[0] && benefit[0].benefit && benefit[0].benefit.instagram ?
                                                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                                                 <div style={{textAlignLast: "center"}}>
@@ -404,7 +410,7 @@ const DetalleBenefits = (props) => {
                                 </div>
                             </Tabs>
                     </div>
-                </Card>}
+                </Card> : <h4 style={{textAlign:"center"}}>El beneficio no se encuentra disponible en este momento.</h4>}
             </div>
         </>
     )
