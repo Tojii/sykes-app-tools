@@ -130,9 +130,9 @@ const AdminBenefitsTable = () => {
           item.benefit.instagram,
           item.benefit.email,
           item.benefit.active ? ["Active"] : ["Inactive"],
-          item.locations.map(item2 => {return item2.provincia }),
-          item.locations.map(item2 => {return item2.canton }),
-          item.locations.map(item2 => {return item2.distrito }),
+          (Array.from(new Set(item.locations.map(item2 => {return item2.provincia })))),
+          (Array.from(new Set(item.locations.map(item2 => {return item2.canton })))),
+          (Array.from(new Set(item.locations.map(item2 => {return item2.distrito })))),
           showImage(item),
           detallesButton(item)
       ]}

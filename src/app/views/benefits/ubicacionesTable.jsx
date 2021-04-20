@@ -131,7 +131,7 @@ const LocationsTable = (props) => {
     const columns = [
         {
           name: "id",
-          label: "ID Location",
+          label: "ID Localización",
           options: {
             filter: false,
             sort: true,
@@ -140,7 +140,7 @@ const LocationsTable = (props) => {
         },
         {
             name: "idBenefit",
-            label: "ID Benefit",
+            label: "ID Beneficio",
             options: {
              filter: false,
              sort: true,
@@ -149,7 +149,7 @@ const LocationsTable = (props) => {
         },
         {
           name: "address",
-          label: "Address",
+          label: "Dirección",
           options: {
            filter: true,
            sort: true,
@@ -161,7 +161,7 @@ const LocationsTable = (props) => {
         },
         {
           name: "province",
-          label: "Province",
+          label: "Provincia",
           options: {
            filter: true,
            sort: true,
@@ -185,7 +185,7 @@ const LocationsTable = (props) => {
         },
         {
           name: "phone",
-          label: "Phone",
+          label: "Teléfono",
           options: {
            filter: true,
            sort: true,

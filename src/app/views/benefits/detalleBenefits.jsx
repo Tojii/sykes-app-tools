@@ -362,7 +362,7 @@ const DetalleBenefits = (props) => {
                                                             {benefit[0] && benefit[0].benefit && benefit[0].benefit.facebook ?
                                                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                                                 <div style={{textAlignLast: "center"}}>
-                                                                    <a href={`https://${benefit[0] && benefit[0].benefit ? benefit[0].benefit.facebook : ""}`}> 
+                                                                    <a href={`${benefit[0] && benefit[0].benefit ? benefit[0].benefit.facebook : ""}`}> 
                                                                         <img
                                                                             className={classes.miniatureimage}
                                                                             alt="..."

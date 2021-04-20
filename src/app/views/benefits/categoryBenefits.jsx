@@ -136,7 +136,7 @@ const DetalleBenefits = (props) => {
 
     useEffect(() => {
         setCantons([benefitslocations.filter(function(item) {
-            if (id == "" || id != item.benefit.category.idCategory) {
+            if (!item.benefit.active || !item.active || id == "" || id != item.benefit.category.idCategory) {
                 return false; // skip
             }
             return true;

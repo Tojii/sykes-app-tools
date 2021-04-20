@@ -136,7 +136,12 @@ const DetalleBenefits = (props) => {
     }, [])
 
     useEffect(() => {
-        setCantons (Array.from(new Set(benefitslocations.map((item, index) => {
+        setCantons (Array.from(new Set(benefitslocations.filter(function(item) {
+            if (!item.benefit.active || !item.active) {
+                return false; // skip
+            }
+            return true;
+            }).map((item, index) => {
             return item.canton
         }))))
         //console.log("cantons",cantons)
