@@ -9,21 +9,20 @@ import {
     Grid,
     Dialog
 } from "@material-ui/core";
-import { GetRefoundListByUser } from "../../redux/actions/RefoundActions";
+import { GetReimbursementListByUser } from "../../redux/actions/EducationalReimbursementActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import MUIDataTable from "mui-datatables";
 import AddIcon from "@material-ui/icons/Add";
 import DetailsIcon from "@material-ui/icons/ReorderSharp";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
-import DetalleTable from "./RefoundDetails";
+import DetalleTable from "./EducationalReimbursementDetails";
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import history from "history.js";
 import moment from "moment"
 import CustomFooter from '../muidatatable/CustomFooter';
-import { makeStyles } from '@material-ui/core/styles';
 
 const styles = (theme) => ({
   root: {
@@ -37,17 +36,6 @@ const styles = (theme) => ({
     color: theme.palette.grey[500],
   },
 });
-
-const useStyles = makeStyles({
-  tableMargin: {     
-      "@media (min-width: 0px)": {
-          marginBottom: "25%",
-      },
-      "@media (min-width: 1024px)": {
-          marginBottom: "5%",
-      },
-  },
-})
 
 const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
@@ -65,9 +53,8 @@ const DialogTitle = withStyles(styles)((props) => {
 
 const Home = () => {
     const dispatch = useDispatch();  
-    const classes = useStyles();
-    const summary = useSelector(state => state.refound.summary);
-    const isLoading  = useSelector(state => state.refound.loading);
+    const summary = useSelector(state => state.reimbursement.summary);
+    const isLoading  = useSelector(state => state.reimbursement.loading);
     const user = useSelector(state => state.user);
     const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(false);
     const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
@@ -266,13 +253,13 @@ const Home = () => {
     }
 
     useEffect(() => {
-        dispatch(GetRefoundListByUser(user != null ? user.badge : ""));
+        dispatch(GetReimbursementListByUser(user.badge));
     }, [user]);
 
     return (
         <div>
             { (!summary || isLoading) ? <Loading /> : 
-                <div className={classes.tableMargin + " m-sm-30"}>
+                <div className="m-sm-30">
                     <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                         <MuiThemeProvider theme={getMuiTheme()}>
                           <MUIDataTable  className="w-100"
