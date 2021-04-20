@@ -158,6 +158,18 @@ const DetalleBenefits = (props) => {
         );
     }
 
+    function handleLocation (locations) {
+        var tooltipAddress = locations.filter(function(item) {
+            if (!item.principalLocation) {
+            return false; // skip
+            }
+            return true;
+        }).map((item, index) => {
+            return item.address
+        })
+        return tooltipAddress;
+    }
+
     const handleChangeProvince = (event) => {
         setDisableCanton(false);
         dispatch(GetBenefitsLocationsByProvincia(event.target.value));
@@ -281,7 +293,7 @@ const DetalleBenefits = (props) => {
                                                                     </CardContent>
                                                                 </CardActionArea>
                                                                 <div style={{textAlign: "right", marginRight: "5%"}}>
-                                                                    <Tooltip title={item.benefitLocations[0].address} arrow>
+                                                                    <Tooltip title={handleLocation(item.benefitLocations)} arrow>
                                                                         <img
                                                                         className={classes.miniatureimage}
                                                                         alt="..."

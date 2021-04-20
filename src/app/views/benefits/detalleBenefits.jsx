@@ -298,9 +298,32 @@ const DetalleBenefits = (props) => {
                                                                     />
                                                                 </div>
                                                             </Grid>
-                                                            <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
-                                                                {`${benefit[0] && benefit[0].locations[0] ? benefit[0].locations[0].address : null}`}
-                                                            </Grid>
+                                                            {benefit[0] && benefit[0].locations[0] && benefit[0].locations.filter(function(item) {
+                                                                if (!item.principalLocation) {
+                                                                return false; // skip
+                                                                }
+                                                                return true;
+                                                            }).map((item, index) => {
+                                                                return (
+                                                                    <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
+                                                                        {item.address}
+                                                                    </Grid>
+                                                                )
+                                                            })}
+                                                             {benefit[0] && benefit[0].locations[0] && benefit[0].locations.filter(function(item) {
+                                                                if (!item.principalLocation) {
+                                                                return false; // skip
+                                                                }
+                                                                return true;
+                                                            }).map((item, index) => {
+                                                                return (
+                                                                    <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
+                                                                        {`+ (506) ${item.address}`}
+                                                                    </Grid>
+                                                                )
+                                                            }).length == 0 ? <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
+                                                            {`${benefit[0] && benefit[0].locations[0] ? benefit[0].locations[0].address : ""}`}
+                                                            </Grid> : null}    
                                                         </Grid>
                                                         <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
                                                             <Grid item lg={3} md={3} sm={3} xs={3}>
@@ -312,9 +335,32 @@ const DetalleBenefits = (props) => {
                                                                     />
                                                                 </div>
                                                             </Grid>
-                                                            <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
-                                                                {`${benefit[0] && benefit[0].locations[0] ? benefit[0].locations[0].phone : null}`}
-                                                            </Grid>
+                                                            {benefit[0] && benefit[0].locations[0] && benefit[0].locations.filter(function(item) {
+                                                                if (!item.principalLocation) {
+                                                                return false; // skip
+                                                                }
+                                                                return true;
+                                                            }).map((item, index) => {
+                                                                return (
+                                                                    <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
+                                                                        {item.phone}
+                                                                    </Grid>
+                                                                )
+                                                            })}
+                                                             {benefit[0] && benefit[0].locations[0] && benefit[0].locations.filter(function(item) {
+                                                                if (!item.principalLocation) {
+                                                                return false; // skip
+                                                                }
+                                                                return true;
+                                                            }).map((item, index) => {
+                                                                return (
+                                                                    <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
+                                                                        {`+ (506) ${item.phone}`}
+                                                                    </Grid>
+                                                                )
+                                                            }).length == 0 ? <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
+                                                            {`${benefit[0] && benefit[0].locations[0] ? benefit[0].locations[0].phone : ""}`}
+                                                            </Grid> : null}
                                                         </Grid>
                                                         <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
                                                             <Grid item lg={3} md={3} sm={3} xs={3}>
@@ -326,9 +372,32 @@ const DetalleBenefits = (props) => {
                                                                     />
                                                                 </div>
                                                             </Grid>
-                                                            <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
-                                                                {`+ (506) ${benefit[0] && benefit[0].locations[0] ? benefit[0].locations[0].whatsApp : null}`}
-                                                            </Grid>
+                                                            {benefit[0] && benefit[0].locations[0] && benefit[0].locations.filter(function(item) {
+                                                                if (!item.principalLocation) {
+                                                                return false; // skip
+                                                                }
+                                                                return true;
+                                                            }).map((item, index) => {
+                                                                return (
+                                                                    <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
+                                                                        {`+ (506) ${item.whatsApp}`}
+                                                                    </Grid>
+                                                                )
+                                                            })}
+                                                            {benefit[0] && benefit[0].locations[0] && benefit[0].locations.filter(function(item) {
+                                                                if (!item.principalLocation) {
+                                                                return false; // skip
+                                                                }
+                                                                return true;
+                                                            }).map((item, index) => {
+                                                                return (
+                                                                    <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
+                                                                        {`+ (506) ${item.whatsApp}`}
+                                                                    </Grid>
+                                                                )
+                                                            }).length == 0 ? <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
+                                                            {`+ (506) ${benefit[0] && benefit[0].locations[0] ? benefit[0].locations[0].whatsApp : ""}`}
+                                                            </Grid> : null}
                                                         </Grid>
                                                         <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
                                                             <Grid item lg={3} md={3} sm={3} xs={3}>
