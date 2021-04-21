@@ -43,7 +43,7 @@ const useStyles = makeStyles({
 });
 
 const InventarioTable = () => {
-    const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
+    //const employeeRefunds = useSelector(state => state.refound.employeeRefunds.filter(item => item.anio != -1));
     const dispatch = useDispatch();
     const classes = useStyles();
     const user = useSelector(state => state.user);
