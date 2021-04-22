@@ -62,9 +62,9 @@ export const SaveReimbursement = (Data, Files, badge, fullname) =>{
   }
  
   const config = {
-    headers: {
-        'content-type': 'multipart/form-data',
-    }
+    // headers: {
+    //     'content-type': 'multipart/form-data',
+    // }
   }  
 
   return async dispatch => {
