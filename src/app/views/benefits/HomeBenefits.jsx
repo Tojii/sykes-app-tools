@@ -109,20 +109,30 @@ const HomeBenefits = () => {
 
     const handleChangeProvince = (event) => {
         setDisableCanton(false);
-        dispatch(GetBenefitsLocationsByProvincia(event.target.value));
+        if (event.target.value == "all") {
+            dispatch(GetBenefitsLocations());
+            setCantons([])
+            setDisableCanton(true);
+        } else {
+            dispatch(GetBenefitsLocationsByProvincia(event.target.value));
+        }
         setProvince(event.target.value)
         setCanton("")
     };
 
     const handleChangeCanton = (event) => {
-        dispatch(GetBenefitsLocationsByProvinciaCanton(province, event.target.value));
+        if (event.target.value == "all") {
+            dispatch(GetBenefitsLocationsByProvincia(province));
+        } else {
+            dispatch(GetBenefitsLocationsByProvinciaCanton(province, event.target.value));
+        }
         setCanton(event.target.value)
     };
 
     const handleChangeCategory = (event) => {
-        (province != "" && canton == "") && dispatch(GetBenefitsLocationsByProvincia(province));
-        (province != "" && canton != "") && dispatch(GetBenefitsLocationsByProvincia(province));
-        (province == "" && canton == "") && dispatch(GetBenefitsLocations());
+        (province != "" && province != "all" && canton == "") && dispatch(GetBenefitsLocationsByProvincia(province));
+        (province != "" && province != "all" && canton != "") && dispatch(GetBenefitsLocationsByProvincia(province));
+        ((province == "" && canton == "") || (province == "" && canton == "" && event.target.value == "all") || province == "all") && dispatch(GetBenefitsLocations());
         setCategory(event.target.value)
         setCanton("")
     };
@@ -136,7 +146,7 @@ const HomeBenefits = () => {
 
     useEffect(() => {
         setCantons (Array.from(new Set(benefitslocations.filter(function(item) {
-            if (!item.benefit.active || !item.active || (category != "" && category != item.benefit.category.idCategory)) {
+            if (!item.benefit.active || !item.active || (category != "" && category != "all" && category != item.benefit.category.idCategory)) {
               return false; // skip
             }
             return true;
@@ -148,7 +158,7 @@ const HomeBenefits = () => {
 
     return (
         <div className="m-sm-30">
-              {console.log("benetisCanton", benefitslocationsCanton)}
+              {console.log("benetisCanton", benefitslocations)}
               {(user.badge == undefined || isLoading || loadingLocation || isLoadingSettings || isLoadingProvince) ? <Loading /> : <div className="mb-sm-30">
                 <Breadcrumb
                 routeSegments={[
@@ -210,6 +220,9 @@ const HomeBenefits = () => {
                                                     {category.name || " "}
                                                     </MenuItem> 
                                                 ))}
+                                                <MenuItem key={`category-all`} id={"all"} value={"all"}>
+                                                    {"Todas"}
+                                                </MenuItem>
                                             </Select> 
                                     </FormControl>
                                     <FormControl style={{ width: isMdScreen() ? "25%" : "20%", marginLeft: isMdScreen() ? "3%" : "4%" }}>
@@ -220,11 +233,14 @@ const HomeBenefits = () => {
                                             value={province} 
                                             onChange={handleChangeProvince} 
                                             >
-                                            {provinces.map(province => (
-                                                <MenuItem key={`province-${province.code}`} id={province.code} value={province.name ? province.name : ""}>
-                                                {province.name || " "}
+                                                {provinces.map(province => (
+                                                    <MenuItem key={`province-${province.code}`} id={province.code} value={province.name ? province.name : ""}>
+                                                    {province.name || " "}
+                                                    </MenuItem>
+                                                ))}
+                                                <MenuItem key={`province-all`} id={"all"} value={"all"}>
+                                                    {"Todos"}
                                                 </MenuItem>
-                                            ))}
                                             </Select> 
                                     </FormControl>
                                     <FormControl style={{ width: isMdScreen() ? "25%" : "20%", marginLeft: isMdScreen() ? "3%" : "4%" }}>
@@ -241,18 +257,21 @@ const HomeBenefits = () => {
                                                 {canton || " "}
                                                 </MenuItem>
                                             ))}
+                                                <MenuItem key={`canton-all`} id={"all"} value={"all"}>
+                                                    {"Todos"}
+                                                </MenuItem>
                                             </Select> 
                                     </FormControl>
                                     <div style={{ height: "655px", padding: isMdScreen() ? "10px" : "25px", width: "100%", marginLeft: isMdScreen() ? "3%" : "1%" }}>
                                         <Places 
                                             locations={ benefitslocationsCanton ? benefitslocationsCanton.filter(function(item) {
-                                                if (!item.benefit.active || !item.active || (category != "" && category != item.benefit.category.idCategory)) {
+                                                if (!item.benefit.active || !item.active || (category != "" && category != "all" && category != item.benefit.category.idCategory)) {
                                                   return false; // skip
                                                 }
                                                 return true;
                                             }).map((item, index) => {return item}) : [] } 
                                             content={benefitslocationsCanton ? benefitslocationsCanton.filter(function(item) {
-                                                if (!item.benefit.active || !item.active || (category != "" && category != item.benefit.category.idCategory)) {
+                                                if (!item.benefit.active || !item.active || (category != "" && category != "all" && category != item.benefit.category.idCategory)) {
                                                   return false; // skip
                                                 }
                                                 return true;

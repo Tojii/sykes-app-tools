@@ -172,7 +172,12 @@ const DetalleBenefits = (props) => {
 
     const handleChangeProvince = (event) => {
         setDisableCanton(false);
-        dispatch(GetBenefitsLocationsByProvincia(event.target.value));
+        if (event.target.value == "all") {
+            dispatch(GetBenefitsCategoryById(id));
+            setCantons([])
+        } else {
+            dispatch(GetBenefitsLocationsByProvincia(event.target.value));
+        }
         setProvince(event.target.value)
         setCanton("")
     };
@@ -212,11 +217,14 @@ const DetalleBenefits = (props) => {
                                                 value={province} 
                                                 onChange={handleChangeProvince} 
                                                 >
-                                                {provinces != null && provinces.map(province => (
-                                                    <MenuItem key={`province-${province.code}`} id={province.code} value={province.name ? province.name : ""}>
-                                                    {province.name || " "}
+                                                    {provinces != null && provinces.map(province => (
+                                                        <MenuItem key={`province-${province.code}`} id={province.code} value={province.name ? province.name : ""}>
+                                                        {province.name || " "}
+                                                        </MenuItem>
+                                                    ))}
+                                                    <MenuItem key={`province-all`} id={"all"} value={"all"}>
+                                                        {"Todos"}
                                                     </MenuItem>
-                                                ))}
                                                 </Select> 
                                         </FormControl>
                                         <FormControl style={{ width: isMdScreen() ? "40%" : "15%", marginLeft: isMdScreen() ? "3%" : "1%" }}>
@@ -228,11 +236,14 @@ const DetalleBenefits = (props) => {
                                                 value={canton} 
                                                 onChange={handleChangeCanton} 
                                                 >
-                                                {(cantons != null && cantons[0] != undefined) && cantons[0].map(canton => (
-                                                    <MenuItem key={`canton-${canton}`} id={canton} value={canton ? canton : ""}>
-                                                    {canton || " "}
+                                                    {(cantons != null && cantons[0] != undefined) && cantons[0].map(canton => (
+                                                        <MenuItem key={`canton-${canton}`} id={canton} value={canton ? canton : ""}>
+                                                        {canton || " "}
+                                                        </MenuItem>
+                                                    ))}
+                                                    <MenuItem key={`canton-all`} id={"all"} value={"all"}>
+                                                        {"Todos"}
                                                     </MenuItem>
-                                                ))}
                                                 </Select> 
                                         </FormControl>
                                         </div>
@@ -240,10 +251,10 @@ const DetalleBenefits = (props) => {
                                             <Grid container spacing={2}> 
                                                 {(benefitscategory[0] != undefined && benefitscategory[0].benefits != undefined) ? benefitscategory[0].benefits.filter(function(item) {
                                                     var locationstemp = item.benefitLocations.filter(function(item) {
-                                                        if (province != "" && province != item.provincia ) {
+                                                        if (province != "" && province != "all" && province != item.provincia ) {
                                                           return false; // skip
                                                         }
-                                                        if (canton != "" && canton != item.canton ) {
+                                                        if (canton != "" && canton != "all" && canton != item.canton ) {
                                                             return false; // skip
                                                         }
                                                         return true;

@@ -172,27 +172,36 @@ const DetalleBenefits = (props) => {
 
     const handleChangeProvince = (event) => {
         setDisableCanton(false);
-        dispatch(GetBenefitsLocationsByProvincia(event.target.value));
+        if (event.target.value == "all") {
+            dispatch(GetBenefitsCategory());
+            setCantons([])
+        } else {
+            dispatch(GetBenefitsLocationsByProvincia(event.target.value));
+        }
         setProvince(event.target.value)
         setCanton("")
     };
 
     const handleChangeCanton = (event) => {
-        dispatch(GetBenefitsLocationsByProvinciaCanton(province, event.target.value));
+        if (event.target.value == "all") {
+            dispatch(GetBenefitsLocationsByProvincia(province));
+        } else {
+            dispatch(GetBenefitsLocationsByProvinciaCanton(province, event.target.value));
+        }
         setCanton(event.target.value)
     };
 
     return (
         <>
-            {/* {console.log("category", benefitscategories)} */}
+            {console.log("category", benefitscategories)}
             <div className="m-sm-30">
                 {(isLoading || isLoadingSettings || isLoadingProvince || loadingLocation) ? <Loading/> :
                 <div className="mb-sm-30">
-                        <Breadcrumb
-                        routeSegments={[
-                        { name: "Benefits Home", path: "/Benefits/Home" },
-                        { name: "Categoría", path: "/Benefits/Home" },               
-                        ]}
+                    <Breadcrumb
+                    routeSegments={[
+                    { name: "Benefits Home", path: "/Benefits/Home" },
+                    { name: "Categoría", path: "/Benefits/Home" },               
+                    ]}
                     />
                 </div>}
                 {(isLoading || isLoadingSettings || isLoadingProvince || loadingLocation) ? <Loading/> :
@@ -213,11 +222,14 @@ const DetalleBenefits = (props) => {
                                                 value={province} 
                                                 onChange={handleChangeProvince} 
                                                 >
-                                                {provinces != null && provinces.map(province => (
-                                                    <MenuItem key={`province-${province.code}`} id={province.code} value={province.name ? province.name : ""}>
-                                                    {province.name || " "}
+                                                    {provinces != null && provinces.map(province => (
+                                                        <MenuItem key={`province-${province.code}`} id={province.code} value={province.name ? province.name : ""}>
+                                                        {province.name || " "}
+                                                        </MenuItem>
+                                                    ))}
+                                                    <MenuItem key={`province-all`} id={"all"} value={"all"}>
+                                                        {"Todos"}
                                                     </MenuItem>
-                                                ))}
                                                 </Select> 
                                         </FormControl>
                                         <FormControl style={{ width: isMdScreen() ? "40%" : "15%", marginLeft: isMdScreen() ? "3%" : "1%" }}>
@@ -229,11 +241,14 @@ const DetalleBenefits = (props) => {
                                                 value={canton} 
                                                 onChange={handleChangeCanton} 
                                                 >
-                                                {(cantons != null && cantons[0] != undefined) && cantons.map(canton => (
-                                                    <MenuItem key={`canton-${canton}`} id={canton} value={canton ? canton : ""}>
-                                                    {canton || " "}
+                                                    {(cantons != null && cantons[0] != undefined) && cantons.map(canton => (
+                                                        <MenuItem key={`canton-${canton}`} id={canton} value={canton ? canton : ""}>
+                                                        {canton || " "}
+                                                        </MenuItem>
+                                                    ))}
+                                                    <MenuItem key={`canton-all`} id={"all"} value={"all"}>
+                                                        {"Todos"}
                                                     </MenuItem>
-                                                ))}
                                                 </Select> 
                                         </FormControl>
                                         </div>
@@ -241,10 +256,10 @@ const DetalleBenefits = (props) => {
                                             <Grid container spacing={2}> 
                                                 {(benefitscategories[0] != undefined && benefitscategories != null && benefitscategories.length != 0) ? benefitscategories.map((item, index) => { return (item.benefits.filter(function(item) {
                                                     var locationstemp = item.benefitLocations.filter(function(item) {
-                                                        if (province != "" && province != item.provincia ) {
+                                                        if (province != "" && province != "all" && province != item.provincia ) {
                                                           return false; // skip
                                                         }
-                                                        if (canton != "" && canton != item.canton ) {
+                                                        if (canton != "" && canton != "all" && canton != item.canton ) {
                                                             return false; // skip
                                                         }
                                                         return true;
@@ -261,48 +276,47 @@ const DetalleBenefits = (props) => {
                                                 }).map((item, index) => {
                                                     return (
                                                     <Grid key={item.idBenefit} item lg={4} md={4} sm={4} xs={11} className={classes.box}>
-                                                            <Card className={classes.root}>
-                                                                <CardActionArea>
-                                                                    <div style={{textAlign: "center"}}>
-                                                                        <a onClick={() => history.push({pathname: `/Benefits/Detalle/${item.idBenefit}`, prev: history.location.pathname})} >
-                                                                            <img
-                                                                                className={classes.media}
-                                                                                alt="..."
-                                                                                src={`${item.logo}`}
-                                                                            />
-                                                                        </a>
-                                                                    </div>
-                                                                    <CardContent>
-                                                                        <a onClick={() => history.push({pathname: `/Benefits/Detalle/${item.idBenefit}`, prev: history.location.pathname})} >
-                                                                            <Typography className={classes.typostyle} gutterBottom variant="h6" component="h6">
-                                                                                {item.name}
-                                                                            </Typography>
-                                                                        </a>
-                                                                        <a onClick={() => (item.description.length < 215) && history.push({pathname: `/Benefits/Detalle/${item.idBenefit}`, prev: history.location.pathname})} >
-                                                                            <Typography style={{minHeight: "100px", textAlign: "justify", color: "#939598"}} gutterBottom variant="body2" component="p">
-                                                                                <a onClick={() => history.push({pathname: `/Benefits/Detalle/${item.idBenefit}`, prev: history.location.pathname})} >
-                                                                                    {`${item.description.substr(0, 215)}${(item.description.length >= 215) ? "... " : ""}`}
-                                                                                </a>
-                                                                                <a onClick={() => {setDescriptionMessageName(item.name); setDescriptionMessage(item.description); setOpenMessage(true)}} >
-                                                                                    <Typography style={{display: "inline", textAlign: "justify", textDecoration: "underline", color: "#039be5"}}>{`${(item.description.length >= 215) ? "Ver más" : ""}`}</Typography>
-                                                                                </a>
-                                                                            </Typography>
-                                                                        </a>
-                                                                        {<ValidationModal idioma={"Español"} path={""} state={`Descripción de ${descriptionMessageName}`} save={() => {}} message={descriptionMessage} setOpen={setOpenMessage} open={openMessage} />}
-                                                                        <Divider style={{backgroundColor: "#ff9805", marginTop:"3%"}} />
-                                                                    </CardContent>
-                                                                </CardActionArea>
-                                                                <div style={{textAlign: "right", marginRight: "5%"}}>
-                                                                    <Tooltip title={handleLocation(item.benefitLocations)} arrow>
+                                                        <Card className={classes.root}>
+                                                            <CardActionArea>
+                                                                <div style={{textAlign: "center"}}>
+                                                                    <a onClick={() => history.push({pathname: `/Benefits/Detalle/${item.idBenefit}`, prev: history.location.pathname})} >
                                                                         <img
-                                                                        className={classes.miniatureimage}
-                                                                        alt="..."
-                                                                        src={require('./images/ubicacion.png')}
+                                                                            className={classes.media}
+                                                                            alt="..."
+                                                                            src={`${item.logo}`}
                                                                         />
-                                                                    </Tooltip>
+                                                                    </a>
                                                                 </div>
-                                                            </Card>
-                                                     
+                                                                <CardContent>
+                                                                    <a onClick={() => history.push({pathname: `/Benefits/Detalle/${item.idBenefit}`, prev: history.location.pathname})} >
+                                                                        <Typography className={classes.typostyle} gutterBottom variant="h6" component="h6">
+                                                                            {item.name}
+                                                                        </Typography>
+                                                                    </a>
+                                                                    <a onClick={() => (item.description.length < 215) && history.push({pathname: `/Benefits/Detalle/${item.idBenefit}`, prev: history.location.pathname})} >
+                                                                        <Typography style={{minHeight: "100px", textAlign: "justify", color: "#939598"}} gutterBottom variant="body2" component="p">
+                                                                            <a onClick={() => history.push({pathname: `/Benefits/Detalle/${item.idBenefit}`, prev: history.location.pathname})} >
+                                                                                {`${item.description.substr(0, 215)}${(item.description.length >= 215) ? "... " : ""}`}
+                                                                            </a>
+                                                                            <a onClick={() => {setDescriptionMessageName(item.name); setDescriptionMessage(item.description); setOpenMessage(true)}} >
+                                                                                <Typography style={{display: "inline", textAlign: "justify", textDecoration: "underline", color: "#039be5"}}>{`${(item.description.length >= 215) ? "Ver más" : ""}`}</Typography>
+                                                                            </a>
+                                                                        </Typography>
+                                                                    </a>
+                                                                    {<ValidationModal idioma={"Español"} path={""} state={`Descripción de ${descriptionMessageName}`} save={() => {}} message={descriptionMessage} setOpen={setOpenMessage} open={openMessage} />}
+                                                                    <Divider style={{backgroundColor: "#ff9805", marginTop:"3%"}} />
+                                                                </CardContent>
+                                                            </CardActionArea>
+                                                            <div style={{textAlign: "right", marginRight: "5%"}}>
+                                                                <Tooltip title={handleLocation(item.benefitLocations)} arrow>
+                                                                    <img
+                                                                    className={classes.miniatureimage}
+                                                                    alt="..."
+                                                                    src={require('./images/ubicacion.png')}
+                                                                    />
+                                                                </Tooltip>
+                                                            </div>
+                                                        </Card>
                                                     </Grid>
                                                 )}))}) : null}
                                             </Grid>

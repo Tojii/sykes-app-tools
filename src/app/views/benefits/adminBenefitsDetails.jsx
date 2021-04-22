@@ -96,7 +96,7 @@ const AdminBenefitDetalle = (props) => {
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Activo:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ 
-                                            benefit[0] == undefined ? "" : <Chip style={{backgroundColor: benefit[0].benefit.active ? "green" : "red", margin: "1%", color: "white"}} label={benefit[0].benefit.active ? "Active" : "Inactive"} key={benefit[0].benefit.active ? "Active" : "Inactive"} />}
+                                            benefit[0] == undefined ? "" : <Chip style={{backgroundColor: benefit[0].benefit.active ? "#4cb050" : "#939598", margin: "1%", color: "white"}} label={benefit[0].benefit.active ? "Active" : "Inactive"} key={benefit[0].benefit.active ? "Active" : "Inactive"} />}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow>

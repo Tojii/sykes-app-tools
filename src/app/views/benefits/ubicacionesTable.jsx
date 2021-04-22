@@ -15,6 +15,7 @@ import ValidationModal from '../growth-opportunities/components/ValidationDialog
 import AgregarDialog from "./FormLocations"
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import CloseIcon from '@material-ui/icons/Close';
+import Chip from '@material-ui/core/Chip';
 
 const useStyles = makeStyles({
   sectionbutton: {
@@ -125,6 +126,8 @@ const LocationsTable = (props) => {
           item.canton,
           item.phone,
           item.whatsApp,
+          item.active ? ["Active"] : ["Inactive"],
+          item.principalLocation ? ["Active"] : ["Inactive"],
       ]}
     })
 
@@ -205,6 +208,30 @@ const LocationsTable = (props) => {
             }
           }
         },
+        {
+          name: "Activo",
+          options: {
+            filter: true,
+            customBodyRenderLite: (dataIndex) => {
+              let value = builddata[dataIndex][7];
+              return value.map((val, key) => {
+                return <Chip style={{backgroundColor: val == "Active" ? "#4cb050" : "#939598", margin: "1%", color: "white"}} label={val} key={key} />;
+              });
+            },
+          }
+        },  
+        {
+          name: "Localización Principal",
+          options: {
+            filter: true,
+            customBodyRenderLite: (dataIndex) => {
+              let value = builddata[dataIndex][8];
+              return value.map((val, key) => {
+                return <Chip style={{backgroundColor: val == "Active" ? "#4cb050" : "#939598", margin: "1%", color: "white"}} label={val} key={key} />;
+              });
+            },
+          }
+        },  
     ]
 
     const options = {

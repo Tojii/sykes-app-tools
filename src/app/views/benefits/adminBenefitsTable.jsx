@@ -265,7 +265,7 @@ const AdminBenefitsTable = () => {
             customBodyRenderLite: (dataIndex) => {
               let value = builddata[dataIndex][11];
               return value.map((val, key) => {
-                return <Chip style={{backgroundColor: val == "Active" ? "green" : "red", margin: "1%", color: "white"}} label={val} key={key} />;
+                return <Chip style={{backgroundColor: val == "Active" ? "#4cb050" : "#939598", margin: "1%", color: "white"}} label={val} key={key} />;
               });
             },
           }
