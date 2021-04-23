@@ -320,8 +320,8 @@ const FormAdminInventario = () => {
                                 name="unitPrice"
                                 placeholder="0.00"
                                 value={inventarioform.unitPrice}
-                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$","maxStringLength:8"]} 
-                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales", "Máximo 8 carácteres"]}
+                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$","maxStringLength:9"]} 
+                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales", "Máximo 9 carácteres"]}
                                 InputProps={{
                                     startAdornment:<InputAdornment position="start">₡</InputAdornment>,
                                   }}  
@@ -336,8 +336,8 @@ const FormAdminInventario = () => {
                                 name="shippingPrice"
                                 placeholder="0.00"
                                 value={inventarioform.shippingPrice}
-                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$","maxStringLength:8"]} 
-                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales", "Máximo 8 carácteres"]}
+                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$","maxStringLength:9"]} 
+                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales", "Máximo 9 carácteres"]}
                                 InputProps={{
                                     startAdornment:<InputAdornment position="start">₡</InputAdornment>,
                                   }}

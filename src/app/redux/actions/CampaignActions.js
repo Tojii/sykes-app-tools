@@ -170,9 +170,9 @@ export const AddCampaignItems = (id, payload, files) => {
     formData.append('stockQuantity', parseInt(payload.stockQuantity, 10));
     formData.append('unitPrice', payload.unitPrice.replace(".", ","));
     formData.append('maxLimitPerPerson', parseInt(payload.maxLimitPerPerson, 10));
-    formData.append('EstimatedPrice', payload.shippingPrice);
+    formData.append('EstimatedPrice', payload.shippingPrice.replace(".", ","));
     formData.append('files', files);
-    console.log("add", payload.unitPrice.replace(".", ","))
+    //console.log("add", payload.unitPrice.replace(".", ","))
     const config = {
         headers: {
             'content-type': 'multipart/form-data',
@@ -246,7 +246,7 @@ export const UpdateCampaignItems = (id, payload, files) => dispatch => {
     formData.append('stockQuantity', parseInt(payload.stockQuantity, 10));
     formData.append('unitPrice', payload.unitPrice.replace(".", ","));
     formData.append('maxLimitPerPerson', payload.maxLimitPerPerson);
-    formData.append('EstimatedPrice', payload.shippingPrice);
+    formData.append('EstimatedPrice', payload.shippingPrice.replace(".", ","));
     if (files != null) {formData.append('files', files);}
   dispatch({
       type: CA_LOADING
