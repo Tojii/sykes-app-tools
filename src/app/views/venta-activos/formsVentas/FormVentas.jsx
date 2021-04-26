@@ -346,6 +346,8 @@ const FormVentas = () => {
         } else {
             setshowInformation(false)
             setshowEdificio(true)
+            setDisableCanton(true)
+            setDisableDistrict(true)
             setVentasForm({
                 ...ventasform,
                 [name]: event.target.value,

@@ -204,7 +204,7 @@ const FormAdminInventario = () => {
         let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
         let list = [];
         let sizes = 0;
-        //console.log("image prop", filesList)
+        console.log("image prop", event.target.files[0])
 
         if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
                 if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
@@ -224,7 +224,7 @@ const FormAdminInventario = () => {
                     setInventarioForm({...inventarioform, files: event.target.files[0]});
                     getBase64(event.target.files[0]);
                 }
-        } else {
+        } else if (filesList != null) {
             setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
             setFiles(null);
             setInventarioForm({...inventarioform, files: null, image: null});
