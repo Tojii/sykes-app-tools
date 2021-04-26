@@ -137,11 +137,43 @@ const DetalleBenefits = (props) => {
             <React.Fragment>
               <Tooltip title={"Admin Promociones"}>
                 <Button
-                  component={Link} to="/Benefits/AdminFormBenefits"
+                  component={Link} to="/Benefits/Discounts"
                   variant="contained"
                   color="primary"
                 >
                   Admin Promociones
+                </Button>
+              </Tooltip>
+            </React.Fragment>
+        );
+    }
+
+    const adminCategoryButton = () => {
+        return (
+            <React.Fragment>
+              <Tooltip title={"Admin Categorías"}>
+                <Button
+                  component={Link} to="/Benefits/Categories"
+                  variant="contained"
+                  color="primary"
+                >
+                  Admin Categorías
+                </Button>
+              </Tooltip>
+            </React.Fragment>
+        );
+    }
+
+    const adminLinksButton = () => {
+        return (
+            <React.Fragment>
+              <Tooltip title={"Admin Links"}>
+                <Button
+                  component={Link} to="/Benefits/Links"
+                  variant="contained"
+                  color="primary"
+                >
+                  Admin Links
                 </Button>
               </Tooltip>
             </React.Fragment>
@@ -265,7 +297,8 @@ const DetalleBenefits = (props) => {
                 {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Configuration"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetPageSettings());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
                 <Card className={classes.cardContainer} elevation={6}>
                     <div className={classes.margindiv}>
-                        {(isLoading) ? <Loading/> : <h1 style={{ color: "#4cb050", marginLeft: "3%", marginTop: "2%", fontWeight: "bold"}} className="mb-20">Configuraciones Generales &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminBenefitButton()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminPromButton()}</h1>}
+                        {(isLoading) ? <Loading/> : <h1 style={{ color: "#4cb050", marginLeft: "3%", marginTop: "2%", fontWeight: "bold"}} className="mb-20">Configuraciones Generales &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminBenefitButton()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminPromButton()} 
+                        &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminCategoryButton()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminLinksButton()}</h1>}
                         <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
                         {(isLoading) ? <Loading/> :
                         <>             

@@ -80,6 +80,18 @@ export const navigations = [
       path: "/Benefits/AdminFormBenefits",
       iconText: "AB",
       display: null
+    },
+    {
+      name: "Promociones",
+      path: "/Benefits/Discounts",
+      iconText: "PR",
+      display: null
+    },
+    {
+      name: "Categorías",
+      path: "/Benefits/Categories",
+      iconText: "CA",
+      display: null
     }
     ]
   },

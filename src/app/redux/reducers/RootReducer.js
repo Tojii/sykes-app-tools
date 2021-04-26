@@ -16,6 +16,9 @@ import CommonReducer from "./CommonReducer";
 import { persistStore } from 'redux-persist'
 import CampaignReducer from "./CampaignReducer";
 import BenefitReducer from "./BenefitsReducer";
+import BenefitsDiscountReducer from "./BenefitsDiscountReducer";
+import BenefitsCategoryReducer from "./BenefitsCategoryReducer";
+import BenefitsLinksReducer from "./BenefitsLinksReducer";
 import OrderReducer from "./OrderReducer";
 import LocationReducer from "./LocationReducer";
 
@@ -32,6 +35,9 @@ const RootReducer = combineReducers({
   common: CommonReducer,
   campaign: CampaignReducer,
   benefit: BenefitReducer,
+  discount: BenefitsDiscountReducer,
+  category: BenefitsCategoryReducer,
+  links: BenefitsLinksReducer,
   order: OrderReducer,
   locations: LocationReducer,
   growth: GrowthReducer,

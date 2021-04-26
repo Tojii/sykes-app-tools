@@ -17,6 +17,18 @@ const CategoriesBenefits = MatxLoadable({
   loader: () => import("./categoriesBenefits")
 });
 
+const DiscountBenefits = MatxLoadable({
+  loader: () => import("./discountsTable")
+});
+
+const CategoryTableBenefits = MatxLoadable({
+  loader: () => import("./categoryTable")
+});
+
+const LinkTableBenefits = MatxLoadable({
+  loader: () => import("./linksTable")
+}); 
+
 const DetallesBenefits = MatxLoadable({
   loader: () => import("./detalleBenefits")
 });
@@ -31,6 +43,18 @@ const AdminBenefitsDetails = MatxLoadable({
 
 const FormAdminBenefits = MatxLoadable({
   loader: () => import("./FormAdminBenefit")
+});
+
+const FormDiscountBenefits = MatxLoadable({
+  loader: () => import("./FormDiscountBenefit")
+});
+
+const FormCategoryBenefits = MatxLoadable({
+  loader: () => import("./FormCategoryBenefit")
+});
+
+const FormLinksBenefit = MatxLoadable({
+  loader: () => import("./FormLinksBenefit")
 });
 
 const settings = {
@@ -56,6 +80,51 @@ const benefitsRoutes = [
   {
     path: "/Benefits/Configuration",
     component: Configuration,
+    settings
+  },
+  {
+    path: "/Benefits/Discounts",
+    component: DiscountBenefits,
+    settings
+  },
+  {
+    path: "/Benefits/FormDiscountBenefits/:id",
+    component: FormDiscountBenefits,
+    settings
+  },
+  {
+    path: "/Benefits/FormDiscountBenefits",
+    component: FormDiscountBenefits,
+    settings
+  },
+  {
+    path: "/Benefits/Categories",
+    component: CategoryTableBenefits,
+    settings
+  },
+  {
+    path: "/Benefits/FormCategoryBenefits/:id",
+    component: FormCategoryBenefits,
+    settings
+  },
+  {
+    path: "/Benefits/FormCategoryBenefits",
+    component: FormCategoryBenefits,
+    settings
+  },
+  {
+    path: "/Benefits/Links",
+    component: LinkTableBenefits,
+    settings
+  },
+  {
+    path: "/Benefits/FormLinksBenefit/:id",
+    component: FormLinksBenefit,
+    settings
+  },
+  {
+    path: "/Benefits/FormLinksBenefit",
+    component: FormLinksBenefit,
     settings
   },
   {

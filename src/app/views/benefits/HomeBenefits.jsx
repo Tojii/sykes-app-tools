@@ -195,6 +195,15 @@ const HomeBenefits = () => {
                                             </a>
                                         </Grid>
                                     )})}
+                                    <Grid key={"discount"} item lg={3} md={3} sm={3} xs={7} className={classes.box}>
+                                        <a onClick={() => history.push({pathname: `/Benefits/Category`})}>
+                                            <img
+                                                className={classes.media}
+                                                alt="..."
+                                                src={require('./images/DISCOUNT.png')}
+                                            />
+                                        </a>
+                                    </Grid>
                                 </Grid>
                                 {pageSettings[0] != null && <img
                                     className={classes.mediafooter}
