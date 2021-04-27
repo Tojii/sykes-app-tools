@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
 import { useSelector, useDispatch } from 'react-redux';
-import Loading from "../../../matx/components/MatxLoadable/Loading";
-import CustomToolbarSelect from "../venta-activos/ventasTables/CustomSelect"
+import Loading from "../../../../matx/components/MatxLoadable/Loading";
+import CustomToolbarSelect from "../../venta-activos/ventasTables/CustomSelect"
 import { Button, Card, Grid, Tooltip, Dialog, Typography, IconButton } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import history from "history.js";
-import CustomFooter from '../muidatatable/CustomFooter';
-import NotFound from "../sessions/NotFound"
+import CustomFooter from '../../muidatatable/CustomFooter';
+import NotFound from "../../sessions/NotFound"
 import { makeStyles } from '@material-ui/core/styles';
-import { DeleteBenefitLocation, GetBenefitsById } from "../../redux/actions/BenefitsActions";
-import ValidationModal from '../growth-opportunities/components/ValidationDialog';
-import AgregarDialog from "./FormLocations"
+import { DeleteBenefitLocation, GetBenefitsById } from "../../../redux/actions/BenefitsActions";
+import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
+import AgregarDialog from "../forms/FormLocations"
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import CloseIcon from '@material-ui/icons/Close';
 import Chip from '@material-ui/core/Chip';

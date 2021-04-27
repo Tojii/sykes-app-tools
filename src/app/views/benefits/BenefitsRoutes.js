@@ -6,7 +6,7 @@ const Home = MatxLoadable({
 });
 
 const Configuration = MatxLoadable({
-  loader: () => import("./configuracioBenefits")
+  loader: () => import("./forms/configuracioBenefits")
 });
 
 const CategoryBenefits = MatxLoadable({
@@ -18,15 +18,15 @@ const CategoriesBenefits = MatxLoadable({
 });
 
 const DiscountBenefits = MatxLoadable({
-  loader: () => import("./discountsTable")
+  loader: () => import("./tables/discountsTable")
 });
 
 const CategoryTableBenefits = MatxLoadable({
-  loader: () => import("./categoryTable")
+  loader: () => import("./tables/categoryTable")
 });
 
 const LinkTableBenefits = MatxLoadable({
-  loader: () => import("./linksTable")
+  loader: () => import("./tables/linksTable")
 }); 
 
 const DetallesBenefits = MatxLoadable({
@@ -42,19 +42,19 @@ const AdminBenefitsDetails = MatxLoadable({
 });
 
 const FormAdminBenefits = MatxLoadable({
-  loader: () => import("./FormAdminBenefit")
+  loader: () => import("./forms/FormAdminBenefit")
 });
 
 const FormDiscountBenefits = MatxLoadable({
-  loader: () => import("./FormDiscountBenefit")
+  loader: () => import("./forms/FormDiscountBenefit")
 });
 
 const FormCategoryBenefits = MatxLoadable({
-  loader: () => import("./FormCategoryBenefit")
+  loader: () => import("./forms/FormCategoryBenefit")
 });
 
 const FormLinksBenefit = MatxLoadable({
-  loader: () => import("./FormLinksBenefit")
+  loader: () => import("./forms/FormLinksBenefit")
 });
 
 const settings = {

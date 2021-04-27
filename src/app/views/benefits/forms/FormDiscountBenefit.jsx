@@ -6,12 +6,12 @@ import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
-import { GetBenefitsById, UpdateBenefit, AddBenefit, GetBenefits, GetBenefitsActive, GetBenefitsCategory, GetBenefitsLocations } from "../../redux/actions/BenefitsActions";
-import { GetBenefitsLinksById, UpdateBenefitLink, AddBenefitLinks, GetSocialLinks } from "../../redux/actions/BenefitsLinksActions";
-import ValidationModal from '../growth-opportunities/components/ValidationDialog';
-import Loading from "../../../matx/components/MatxLoadable/Loading";
+import { GetBenefitsById, UpdateBenefit, AddBenefit, GetBenefits, GetBenefitsActive, GetBenefitsCategory, GetBenefitsLocations } from "../../../redux/actions/BenefitsActions";
+import { GetBenefitsDiscountById, UpdateDiscount, AddDiscount, GetDiscounts } from "../../../redux/actions/BenefitsDiscountActions";
+import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
+import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import history from "history.js";
-import LocationsTable from "./ubicacionesTable";
+import LocationsTable from "../tables/ubicacionesTable";
 import MenuItem from '@material-ui/core/MenuItem';
 import {
     MuiPickersUtilsProvider,
@@ -81,36 +81,45 @@ const useStyles = makeStyles({
     }   
 });
 
-const FormLinksBenefits = () => {
+const FormDiscountBenefits = () => {
     
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     let { id } = useParams();
     const classes = useStyles();
     const benefit = useSelector(state => state.benefit.benefit);
-    const benefitslinks = useSelector(state => state.links.benefitslinks);
-    const successBenefit = useSelector(state => state.links.success);
-    const isLoading  = useSelector(state => state.links.loading);
+    const benefitscategories = useSelector(state => state.benefit.benefitscategories);
+    const successBenefit = useSelector(state => state.discount.success);
+    const isLoading  = useSelector(state => state.discount.loading);
     const [open, setOpen] = useState(false);
     const [files, setFiles] = useState(null);
     const [logo, setLogo] = useState(null);
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
     const [errorMessage, setErrorMessage] = useState([]);
     
-    const [linksform, setLinkForm] = useState({
-        id: "",
+    const [discountform, setDiscountForm] = useState({
         idBenefit: "",
+        idCategory: "",
+        benefitInfo: "",
         name: "",
+        description: "",
+        logo: null,
+        detail: "",
+        link: "",
+        facebook: "",
+        instagram: "",
+        email: "",
         active: false,
-        icon: null,
+        startDate: null,
+        endDate: null
     });
 
     const handleFormSubmit = async () => {
-        if (((id && linksform.icon != null))) {
-            await dispatch(UpdateBenefitLink(id, linksform, files));
+        if (((id && discountform.logo != null))) {
+            await dispatch(UpdateDiscount(id, discountform, files));
             setOpen(true);
-        } else if ((linksform.icon != null)) {
-            await dispatch(AddBenefitLinks(linksform, files));
+        } else if ((discountform.logo != null)) {
+            await dispatch(AddDiscount(discountform, files));
             setOpen(true);
         }
     };
@@ -122,19 +131,40 @@ const FormLinksBenefits = () => {
     }
 
     const handleBack = () => {
-        history.push("/Benefits/Links");
+        history.push("/Benefits/Discounts");
     }
+
+    const handleDateChangeStartDate = date => {
+        if (date != null) {
+          setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
+        }
+        setDiscountForm({
+          ...discountform,
+          startDate: date,
+          endDate: null,
+        });
+    };
+
+    const handleDateChangeEndDate = date => {
+        if (date != null) {
+          setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "", endDate: "" }));
+        }
+        setDiscountForm({
+          ...discountform,
+          endDate: date,
+        });
+      };
 
     useEffect(() => {
         dispatch(GetBenefits());
         //dispatch(GetBenefitsLocations());
         if (id) {
-            dispatch(GetBenefitsLinksById(id));
+            dispatch(GetBenefitsDiscountById(id));
         } 
     }, []);
 
     useEffect(() => {
-        if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined && benefit[0].benefit != null) {setLinkForm({
+        if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined && benefit[0].benefit != null) {setDiscountForm({
             idBenefit: benefit[0].benefit.idBenefit,
             idCategory: benefit[0].benefit.category.idCategory,
             name: benefit[0].benefit.name,
@@ -154,13 +184,13 @@ const FormLinksBenefits = () => {
     const handleChange = (event) => {
         const name = event.target.name;
         if (name == "active") {
-            setLinkForm({
-                ...linksform,
+            setDiscountForm({
+                ...discountform,
                 [name]: event.target.checked,
             })
         } else {
-            setLinkForm({
-                ...linksform,
+            setDiscountForm({
+                ...discountform,
                 [name]: event.target.value,
             })
         }
@@ -173,7 +203,7 @@ const FormLinksBenefits = () => {
         reader.onload = function () {
             imageupload = reader.result
             setLogo(imageupload)
-            setLinkForm({...linksform, icon: imageupload});
+            setDiscountForm({...discountform, logo: imageupload});
         };
         reader.onerror = function (error) {
             console.log('Error: ', error);
@@ -187,24 +217,24 @@ const FormLinksBenefits = () => {
                 if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
                     setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
                     setFiles(null);
-                    setLinkForm({...linksform, files: null, logo: null});
+                    setDiscountForm({...discountform, files: null, logo: null});
                     setLogo(null);
                 }
                 else if (filesList.size/1024/1024 > 2) {
                     setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
                     setFiles(null);
-                    setLinkForm({...linksform, files: null, logo: null});
+                    setDiscountForm({...discountform, files: null, logo: null});
                     setLogo(null);
                 } else {
                     setErrorFile({error: false, errorMessage:``});
                     setFiles(event.target.files[0]);
-                    setLinkForm({...linksform, files: event.target.files[0]});
+                    setDiscountForm({...discountform, files: event.target.files[0]});
                     getBase64(event.target.files[0]);
                 }
         } else {
             setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
             setFiles(null);
-            setLinkForm({...linksform, files: null, logo: null});
+            setDiscountForm({...discountform, files: null, logo: null});
             setLogo(null);
         }
     };
@@ -212,17 +242,17 @@ const FormLinksBenefits = () => {
     return (
         <div className={classes.margindiv + " p-24"}>
             {/* {console.log(benefitsform)} */}
-            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Links"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetSocialLinks());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Discounts"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetDiscounts());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
-                {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Vínculo" : "Agregar Vínculo"}</h2>}
+                {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Promoción" : "Agregar Promoción"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
                     {(isLoading) ? <Loading/> :
-                    <>            
+                    <>  
                         <SelectValidator 
                             label="Beneficio*" 
                             name="idBenefit"
                             className={classes.textvalidator} 
-                            value={linksform.idBenefit} 
+                            value={discountform.idBenefit} 
                             onChange={handleChange} 
                             validators={["required"]}
                             errorMessages={["Este campo es requerido"]}
@@ -232,45 +262,63 @@ const FormLinksBenefits = () => {
                                 {category.name || " "}
                                 </MenuItem> 
                             ))} */}
-                        </SelectValidator> 
+                        </SelectValidator>           
                         <TextValidator
                             className={classes.textvalidator}
-                            label="Nombre*"
+                            label="Promoción*"
                             onChange={handleChange}
                             type="text"
                             name="name"
-                            value={linksform.name}
+                            value={discountform.name}
                             validators={["required","maxStringLength:100"]}
                             errorMessages={["Este campo es requerido", "Máximo 100 carácteres"]}
                         />
-                        <FormControlLabel
-                            className={classes.textvalidator}
-                            label="Activar Link"
-                            control={
-                                <Switch
-                                checked={linksform.active}
-                                name="active"
-                                color="primary"
-                                onChange={handleChange}
-                                />
-                            }
-                        />
+                        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
+                            <DatePicker
+                                className={classes.textvalidator}
+                                cancelLabel="CANCELAR"
+                                error={!!errorMessage.startDate}
+                                helperText={errorMessage.startDate}
+                                format="dd/MM/yyyy"
+                                label="Fecha de Inicio*"
+                                value={discountform.startDate}
+                                name="startDate"
+                                onChange={handleDateChangeStartDate}    
+                            />
+                        </MuiPickersUtilsProvider>
+                        <br/>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}> 
+                            <DatePicker
+                                className={classes.textvalidator}
+                                cancelLabel="CANCELAR"
+                                error={!!errorMessage.endDate}
+                                helperText={errorMessage.endDate}
+                                format="dd/MM/yyyy"
+                                label="Fecha de Finalización*"
+                                value={discountform.endDate}
+                                name="endDate"
+                                onChange={handleDateChangeEndDate}
+                                minDate={discountform.startDate != null ? new Date(discountform.startDate).setTime(new Date(discountform.startDate).getTime() + 1 * 86400000) : null}
+                                disabled={!discountform.startDate}
+                            />
+                        </MuiPickersUtilsProvider>
                         <FormControl className={classes.textvalidator}>
-                            <label className={classes.filelabel} id="logo">Icono (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
+                            <label className={classes.filelabel} id="logo">Imagen (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
                             <Input type="file" name="files" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect} 
                                  />  
                             <FormHelperText error={errorFile.error} id="my-helper-text">{errorFile.errorMessage}</FormHelperText>                               
                         </FormControl>
                         <div className={classes.sectionbutton}>
-                            {linksform.icon ? 
+                            {discountform.logo ? 
                                 <img
                                 className={classes.imageadd}                                          
                                 alt="..."
-                                src={`${linksform.icon}`}
+                                src={`${discountform.logo}`}
                                 />
                                 : null
                             }
                         </div>
+                        {id ? <LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} idBenefit={id} /> : null}
                         <div className={classes.sectionbutton}>
                             <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
                                 ENVIAR  
@@ -288,4 +336,4 @@ const FormLinksBenefits = () => {
     );
 }
 
-export default FormLinksBenefits
+export default FormDiscountBenefits

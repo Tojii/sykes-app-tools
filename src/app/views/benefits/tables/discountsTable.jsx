@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
 import { useSelector, useDispatch } from 'react-redux';
-import Loading from "../../../matx/components/MatxLoadable/Loading";
-import CustomToolbarSelect from "../venta-activos/ventasTables/CustomSelect"
+import Loading from "../../../../matx/components/MatxLoadable/Loading";
+import CustomToolbarSelect from "../../venta-activos/ventasTables/CustomSelect"
 import { Button, Card, Grid, Tooltip, FormLabel, FormGroup } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import history from "history.js";
-import CustomFooter from '../muidatatable/CustomFooter';
-import NotFound from "../sessions/NotFound"
+import CustomFooter from '../../muidatatable/CustomFooter';
+import NotFound from "../../sessions/NotFound"
 import { makeStyles } from '@material-ui/core/styles';
-import { DeleteBenefitDiscount, GetDiscounts } from "../../redux/actions/BenefitsDiscountActions";
-import ValidationModal from '../growth-opportunities/components/ValidationDialog';
+import { DeleteBenefitDiscount, GetDiscounts } from "../../../redux/actions/BenefitsDiscountActions";
+import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 import { Link } from 'react-router-dom';
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";

@@ -6,7 +6,7 @@ import Loading from "../../../matx/components/MatxLoadable/Loading";
 import { GetBenefitsById, GetBenefitsLocations} from "../../redux/actions/BenefitsActions";
 import history from "history.js";
 import { useParams } from "react-router";
-import LocationsTable from "./ubicacionesTable"
+import LocationsTable from "./tables/ubicacionesTable"
 import Chip from '@material-ui/core/Chip';
 
 

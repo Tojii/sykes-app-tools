@@ -3,13 +3,13 @@ import { Button, Card, FormControlLabel, Switch, FormHelperText, FormControl } f
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { AddBenefitLocation, GetBenefitsLocationsById, UpdateBenefitLocation, GetBenefitsById, GetBenefitsLocations} from "../../redux/actions/BenefitsActions";
-import ValidationModal from '../growth-opportunities/components/ValidationDialog';
-import Loading from "../../../matx/components/MatxLoadable/Loading";
+import { AddBenefitLocation, GetBenefitsLocationsById, UpdateBenefitLocation, GetBenefitsById, GetBenefitsLocations} from "../../../redux/actions/BenefitsActions";
+import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
+import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
-import { GetProvince, GetCantons, GetDistricts } from "../../redux/actions/LocationActions";
-import Places from '../../components/maps/SetPlace';
+import { GetProvince, GetCantons, GetDistricts } from "../../../redux/actions/LocationActions";
+import Places from '../../../components/maps/SetPlace';
 
 const useStyles = makeStyles({
     textvalidator: {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Breadcrumb } from "matx";
-import AdminTable from "./adminBenefitsTable";
+import AdminTable from "./tables/adminBenefitsTable";
 
 function Form() {
     return (

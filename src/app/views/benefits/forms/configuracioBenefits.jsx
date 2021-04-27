@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { Card, Button, FormControl, Input, FormHelperText, Tooltip } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import { GetPageSettings, AddPageSettings, UpdatePageSettings } from "../../redux/actions/BenefitsActions";
-import Loading from "../../../matx/components/MatxLoadable/Loading";
+import { GetPageSettings, AddPageSettings, UpdatePageSettings } from "../../../redux/actions/BenefitsActions";
+import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import { useParams } from "react-router";
 import { Breadcrumb } from "matx";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { Link } from 'react-router-dom';
 import history from "history.js";
-import ValidationModal from '../growth-opportunities/components/ValidationDialog';
+import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 
 const useStyles = makeStyles({
     textvalidator: {

@@ -6,12 +6,12 @@ import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
-import { GetBenefitsById, UpdateBenefit, AddBenefit, GetBenefits, GetBenefitsActive, GetBenefitsCategory, GetBenefitsLocations } from "../../redux/actions/BenefitsActions";
-import { GetBenefitsCategoryById, UpdateCategory, AddCategory, GetCategories } from "../../redux/actions/BenefitsCategoryActions";
-import ValidationModal from '../growth-opportunities/components/ValidationDialog';
-import Loading from "../../../matx/components/MatxLoadable/Loading";
+import { GetBenefitsById, UpdateBenefit, AddBenefit, GetBenefits, GetBenefitsActive, GetBenefitsCategory, GetBenefitsLocations } from "../../../redux/actions/BenefitsActions";
+import { GetBenefitsLinksById, UpdateBenefitLink, AddBenefitLinks, GetSocialLinks } from "../../../redux/actions/BenefitsLinksActions";
+import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
+import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import history from "history.js";
-import LocationsTable from "./ubicacionesTable";
+import LocationsTable from "../tables/ubicacionesTable";
 import MenuItem from '@material-ui/core/MenuItem';
 import {
     MuiPickersUtilsProvider,
@@ -81,34 +81,36 @@ const useStyles = makeStyles({
     }   
 });
 
-const FormCategoryBenefits = () => {
+const FormLinksBenefits = () => {
     
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     let { id } = useParams();
     const classes = useStyles();
     const benefit = useSelector(state => state.benefit.benefit);
-    const benefitscategories = useSelector(state => state.category.benefitscategories);
-    const successBenefit = useSelector(state => state.category.success);
-    const isLoading  = useSelector(state => state.category.loading);
+    const benefitslinks = useSelector(state => state.links.benefitslinks);
+    const successBenefit = useSelector(state => state.links.success);
+    const isLoading  = useSelector(state => state.links.loading);
     const [open, setOpen] = useState(false);
     const [files, setFiles] = useState(null);
     const [logo, setLogo] = useState(null);
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
     const [errorMessage, setErrorMessage] = useState([]);
     
-    const [categoryform, setCategoryForm] = useState({
+    const [linksform, setLinkForm] = useState({
         id: "",
+        idBenefit: "",
         name: "",
-        image: null,
+        active: false,
+        icon: null,
     });
 
     const handleFormSubmit = async () => {
-        if (((id && categoryform.image != null))) {
-            await dispatch(UpdateCategory(id, categoryform, files));
+        if (((id && linksform.icon != null))) {
+            await dispatch(UpdateBenefitLink(id, linksform, files));
             setOpen(true);
-        } else if ((categoryform.image != null)) {
-            await dispatch(AddCategory(categoryform, files));
+        } else if ((linksform.icon != null)) {
+            await dispatch(AddBenefitLinks(linksform, files));
             setOpen(true);
         }
     };
@@ -120,19 +122,19 @@ const FormCategoryBenefits = () => {
     }
 
     const handleBack = () => {
-        history.push("/Benefits/Categories");
+        history.push("/Benefits/Links");
     }
 
     useEffect(() => {
-        //dispatch(GetBenefits());
+        dispatch(GetBenefits());
         //dispatch(GetBenefitsLocations());
         if (id) {
-            dispatch(GetBenefitsCategoryById(id));
+            dispatch(GetBenefitsLinksById(id));
         } 
     }, []);
 
     useEffect(() => {
-        if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined && benefit[0].benefit != null) {setCategoryForm({
+        if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined && benefit[0].benefit != null) {setLinkForm({
             idBenefit: benefit[0].benefit.idBenefit,
             idCategory: benefit[0].benefit.category.idCategory,
             name: benefit[0].benefit.name,
@@ -151,10 +153,17 @@ const FormCategoryBenefits = () => {
 
     const handleChange = (event) => {
         const name = event.target.name;
-        setCategoryForm({
-            ...categoryform,
-            [name]: event.target.value,
-        })
+        if (name == "active") {
+            setLinkForm({
+                ...linksform,
+                [name]: event.target.checked,
+            })
+        } else {
+            setLinkForm({
+                ...linksform,
+                [name]: event.target.value,
+            })
+        }
     };
 
     const getBase64 = (file) => {
@@ -164,7 +173,7 @@ const FormCategoryBenefits = () => {
         reader.onload = function () {
             imageupload = reader.result
             setLogo(imageupload)
-            setCategoryForm({...categoryform, logo: imageupload});
+            setLinkForm({...linksform, icon: imageupload});
         };
         reader.onerror = function (error) {
             console.log('Error: ', error);
@@ -178,24 +187,24 @@ const FormCategoryBenefits = () => {
                 if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
                     setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
                     setFiles(null);
-                    setCategoryForm({...categoryform, files: null, logo: null});
+                    setLinkForm({...linksform, files: null, logo: null});
                     setLogo(null);
                 }
                 else if (filesList.size/1024/1024 > 2) {
                     setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
                     setFiles(null);
-                    setCategoryForm({...categoryform, files: null, logo: null});
+                    setLinkForm({...linksform, files: null, logo: null});
                     setLogo(null);
                 } else {
                     setErrorFile({error: false, errorMessage:``});
                     setFiles(event.target.files[0]);
-                    setCategoryForm({...categoryform, files: event.target.files[0]});
+                    setLinkForm({...linksform, files: event.target.files[0]});
                     getBase64(event.target.files[0]);
                 }
         } else {
             setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
             setFiles(null);
-            setCategoryForm({...categoryform, files: null, logo: null});
+            setLinkForm({...linksform, files: null, logo: null});
             setLogo(null);
         }
     };
@@ -203,34 +212,61 @@ const FormCategoryBenefits = () => {
     return (
         <div className={classes.margindiv + " p-24"}>
             {/* {console.log(benefitsform)} */}
-            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Categories"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetCategories());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Links"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetSocialLinks());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
-                {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Categoría" : "Agregar Categoría"}</h2>}
+                {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Vínculo" : "Agregar Vínculo"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
                     {(isLoading) ? <Loading/> :
                     <>            
+                        <SelectValidator 
+                            label="Beneficio*" 
+                            name="idBenefit"
+                            className={classes.textvalidator} 
+                            value={linksform.idBenefit} 
+                            onChange={handleChange} 
+                            validators={["required"]}
+                            errorMessages={["Este campo es requerido"]}
+                        >
+                            {/* {benefitscategories.map(category => (
+                                <MenuItem key={`category-${category.idCategory}`} id={category.idCategory} value={category.idCategory ? category.idCategory : ""}>
+                                {category.name || " "}
+                                </MenuItem> 
+                            ))} */}
+                        </SelectValidator> 
                         <TextValidator
                             className={classes.textvalidator}
                             label="Nombre*"
                             onChange={handleChange}
                             type="text"
                             name="name"
-                            value={categoryform.name}
+                            value={linksform.name}
                             validators={["required","maxStringLength:100"]}
                             errorMessages={["Este campo es requerido", "Máximo 100 carácteres"]}
                         />
+                        <FormControlLabel
+                            className={classes.textvalidator}
+                            label="Activar Link"
+                            control={
+                                <Switch
+                                checked={linksform.active}
+                                name="active"
+                                color="primary"
+                                onChange={handleChange}
+                                />
+                            }
+                        />
                         <FormControl className={classes.textvalidator}>
-                            <label className={classes.filelabel} id="logo">Imagen (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
+                            <label className={classes.filelabel} id="logo">Icono (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
                             <Input type="file" name="files" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect} 
                                  />  
                             <FormHelperText error={errorFile.error} id="my-helper-text">{errorFile.errorMessage}</FormHelperText>                               
                         </FormControl>
                         <div className={classes.sectionbutton}>
-                            {categoryform.image ? 
+                            {linksform.icon ? 
                                 <img
                                 className={classes.imageadd}                                          
                                 alt="..."
-                                src={`${categoryform.image}`}
+                                src={`${linksform.icon}`}
                                 />
                                 : null
                             }
@@ -252,4 +288,4 @@ const FormCategoryBenefits = () => {
     );
 }
 
-export default FormCategoryBenefits
+export default FormLinksBenefits
