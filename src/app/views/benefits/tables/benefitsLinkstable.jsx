@@ -30,7 +30,7 @@ const BenefitsLinksTable = (props) => {
     // const addCampaign = useSelector(state => state.campaign.addCampaign);
     const successCampaign = useSelector(state => state.campaign.success);
     const campaignsActive = useSelector(state => state.campaign.campaignsActive);
-    const isLoading  = useSelector(state => state.campaign.loading);
+    const isLoading  = useSelector(state => state.links.loading);
     const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
     //const [open, setOpen] = useState(false);
     const edificios = [{id:1, name: "Edificio 1", active: false}, {id:2, name: "Edificio 2", active: false}, {id:3, name: "Edificio 3", active: false}]

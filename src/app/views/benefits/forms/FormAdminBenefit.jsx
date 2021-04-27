@@ -244,7 +244,7 @@ const FormAdminBenefits = () => {
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {/* {console.log(benefitsform)} */}
+            {console.log(benefitsform)}
             {(isLoading || isLoadingLocation) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Beneficio" : "Agregar Beneficio"}</h2>}
@@ -361,7 +361,7 @@ const FormAdminBenefits = () => {
                             }
                         />
                         <div className={classes.linkstable}>
-                            <Links benefitsform={benefitsform} benefitsLinks={benefitslinks} setBenefitsLinks={handleChangeLinks} ></Links>
+                            <Links benefitsform={benefitsform} benefitsLinks={benefitslinks} setBenefitsLinks={handleChangeLinks} />
                         </div>
                         <FormControl className={classes.textvalidator}>
                             <label className={classes.filelabel} id="logo">Logo (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
