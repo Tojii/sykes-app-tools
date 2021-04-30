@@ -30,6 +30,7 @@ import history from "history.js";
 import './FormVentas.css';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -48,6 +49,18 @@ const useStyles = makeStyles({
         },
         "& .MuiFormLabel-root.Mui-disabled": {
             color: "rgba(74, 70, 109, 0.43)"
+        },
+    },
+    textmessage: {
+        "@media (min-width: 0px)": {
+            marginLeft: "7.5%",
+            width: "85%",
+            marginTop: "3%",
+        },
+        "@media (min-width: 1025px)": {
+            marginLeft: "15%",
+            width: "75%",
+            marginTop: "3%",
         },
     },
     gridtext: {
@@ -448,8 +461,9 @@ const FormVentas = () => {
             {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={(successOrder) ? "Success!" : "Error!"} save={() => { }} message={(successOrder) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={"¡Lo sentimos!"} save={() => { }} message={"¡Ya se ha alcanzado el máximo de artículos comprados en esta campaña!"} setOpen={setOpenPurchase} open={openPurchase && !isLoadingCampaign} />}
             <Card className={classes.formcard} elevation={6}>
-                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <h4 className={classes.titulo}>*El rebajo de artículos comprados se hará de planilla</h4>}
-                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : message && <h4 className={classes.titulo}>{campaign[0] ? campaign[0].message : ""}</h4>}
+                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <Alert severity="info" className={classes.textmessage}>*El rebajo de artículos comprados se hará de planilla</Alert>}
+                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : message && <Alert severity="info" className={classes.textmessage}>{campaign[0] ? campaign[0].message : ""}</Alert>}
+                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : showInformation ? <Alert severity="info" className={classes.textmessage}>Mensaje de precio estimado de envío</Alert> : null}
                 {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <h2 style={{ textAlign: "center", marginTop: "2%" }} className="mb-20">Datos del usuario</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>
                     {(isLoadingCampaign || isLoadingOrder) ? <Loading /> :
