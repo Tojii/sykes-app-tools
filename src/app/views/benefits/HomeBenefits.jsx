@@ -26,16 +26,14 @@ const useStyles = makeStyles({
     },
     root: {
         maxWidth: 164,
-        //boxShadow: "5px 4px 16px 0px rgb(0 0 0 / 0.4)",
-        //boxShadow: "5px 10px 11px -4px rgb(0 0 0 / 40%)" 
     },
     media: {
         width: "90%",
         height: "90%"
     },
     mediafooter: {
-        width: "872px",
-        height: "209px",
+        //width: "872px",
+        //height: "209px",
         marginTop: "3%"
     },
     medialogo: {
@@ -100,9 +98,9 @@ const HomeBenefits = () => {
         return (
         pageSettings[0] != null ?
           <img
-          className={classes.medialogo}                                         
-          alt="..."
-          src={`${pageSettings[0].logo}`}
+            className={classes.medialogo}                                         
+            alt="..."
+            src={`${pageSettings[0].logo}`}
           /> : ""
         );
     }
@@ -158,8 +156,8 @@ const HomeBenefits = () => {
 
     return (
         <div className="m-sm-30">
-              {console.log("benetisCanton", benefitslocations)}
-              {(user.badge == undefined || isLoading || loadingLocation || isLoadingSettings || isLoadingProvince) ? <Loading /> : <div className="mb-sm-30">
+            {console.log("benetisCanton", benefitslocations)}
+            {(user.badge == undefined || isLoading || loadingLocation || isLoadingSettings || isLoadingProvince) ? <Loading /> : <div className="mb-sm-30">
                 <Breadcrumb
                 routeSegments={[
                 { name: "Benefits Home", path: "/Benefits/Home" },              
@@ -196,7 +194,7 @@ const HomeBenefits = () => {
                                         </Grid>
                                     )})}
                                     <Grid key={"discount"} item lg={3} md={3} sm={3} xs={7} className={classes.box}>
-                                        <a onClick={() => history.push({pathname: `/Benefits/Category`})}>
+                                        <a onClick={() => history.push({pathname: `/Benefits/MontlyDiscounts`})}>
                                             <img
                                                 className={classes.media}
                                                 alt="..."

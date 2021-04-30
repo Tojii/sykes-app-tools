@@ -1,5 +1,6 @@
 import api, { globalErrorHandler } from "../Api";
 import history from "history.js";
+import moment from "moment"
 
 export const GET_BENEFITS_DISCOUNTS = "GET_BENEFITS_DISCOUNTS";
 export const GET_BENEFITS_DISCOUNT_BYID = "GET_BENEFITS_DISCOUNT_BYID";
@@ -67,12 +68,12 @@ export const BE_DISCOUNT_ERROR = "BE_DISCOUNT_ERROR";
 export const AddDiscount = (payload, Icon) => {
   //console.log("addver", payload, files)
   var formData = new FormData();
-    formData.append('idBenefit', payload.idBenefit);
+    formData.append('idBenefits', payload.idBenefits);
     formData.append('idLocation', payload.idLocation);
-    formData.append('DiscountName', payload.DiscountName);
-    formData.append('Link', payload.Link);
-    formData.append('StartDate', payload.StartDate);
-    formData.append('EndDate', payload.EndDate);
+    formData.append('DiscountName', payload.name);
+    formData.append('Link', "link");
+    formData.append('StartDate', moment(payload.startDate).format('YYYY-MM-DD HH:mm:ss'));
+    formData.append('EndDate', moment(payload.endDate).format('YYYY-MM-DD HH:mm:ss'));
     formData.append('files', Icon);
     const config = {
         headers: {
@@ -103,12 +104,12 @@ export const AddDiscount = (payload, Icon) => {
 
 export const UpdateDiscount = (id, payload, Icon) => dispatch => {
   var formData = new FormData();
-    formData.append('idBenefit', payload.idBenefit);
+    formData.append('idBenefits', payload.idBenefits);
     formData.append('idLocation', payload.idLocation);
-    formData.append('DiscountName', payload.DiscountName);
-    formData.append('Link', payload.Link);
-    formData.append('StartDate', payload.StartDate);
-    formData.append('EndDate', payload.EndDate);
+    formData.append('DiscountName', payload.name);
+    formData.append('Link', "link");
+    formData.append('StartDate', moment(payload.startDate).format('YYYY-MM-DD HH:mm:ss'));
+    formData.append('EndDate', moment(payload.endDate).format('YYYY-MM-DD HH:mm:ss'));
     formData.append('files', Icon);
   const config = {
       headers: {

@@ -88,7 +88,7 @@ const FormCategoryBenefits = () => {
     let { id } = useParams();
     const classes = useStyles();
     const benefit = useSelector(state => state.benefit.benefit);
-    const benefitscategories = useSelector(state => state.category.benefitscategories);
+    const category = useSelector(state => state.category.category);
     const successBenefit = useSelector(state => state.category.success);
     const isLoading  = useSelector(state => state.category.loading);
     const [open, setOpen] = useState(false);
@@ -98,7 +98,7 @@ const FormCategoryBenefits = () => {
     const [errorMessage, setErrorMessage] = useState([]);
     
     const [categoryform, setCategoryForm] = useState({
-        id: "",
+        idCategory: "",
         name: "",
         image: null,
     });
@@ -114,7 +114,7 @@ const FormCategoryBenefits = () => {
     };
 
     const presave = () => {
-        if (logo == null) {
+        if (categoryform.image == null) {
             setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
         }
     }
@@ -132,21 +132,12 @@ const FormCategoryBenefits = () => {
     }, []);
 
     useEffect(() => {
-        if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined && benefit[0].benefit != null) {setCategoryForm({
-            idBenefit: benefit[0].benefit.idBenefit,
-            idCategory: benefit[0].benefit.category.idCategory,
-            name: benefit[0].benefit.name,
-            description: benefit[0].benefit.description ? benefit[0].benefit.description : "",
-            logo: benefit[0].benefit.logo,
-            detail: benefit[0].benefit.detail,
-            benefitInfo: benefit[0].benefit.benefitInfo,
-            link: benefit[0].benefit.link,
-            facebook: benefit[0].benefit.facebook ? benefit[0].benefit.facebook : "",
-            instagram: benefit[0].benefit.instagram ? benefit[0].benefit.instagram : "",
-            email: benefit[0].benefit.email ? benefit[0].benefit.email : "",
-            active: benefit[0].benefit.active,
+        if(id && category != [] && category[0] != [""] && category[0] != undefined) {setCategoryForm({
+            idCategory: category[0].idCategory,
+            name: category[0].name,
+            image: category[0].image,
         });}
-    }, [benefit]);
+    }, [category]);
 
 
     const handleChange = (event) => {
@@ -164,7 +155,7 @@ const FormCategoryBenefits = () => {
         reader.onload = function () {
             imageupload = reader.result
             setLogo(imageupload)
-            setCategoryForm({...categoryform, logo: imageupload});
+            setCategoryForm({...categoryform, image: imageupload});
         };
         reader.onerror = function (error) {
             console.log('Error: ', error);
@@ -178,13 +169,13 @@ const FormCategoryBenefits = () => {
                 if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
                     setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
                     setFiles(null);
-                    setCategoryForm({...categoryform, files: null, logo: null});
+                    setCategoryForm({...categoryform, files: null, image: null});
                     setLogo(null);
                 }
                 else if (filesList.size/1024/1024 > 2) {
                     setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
                     setFiles(null);
-                    setCategoryForm({...categoryform, files: null, logo: null});
+                    setCategoryForm({...categoryform, files: null, image: null});
                     setLogo(null);
                 } else {
                     setErrorFile({error: false, errorMessage:``});
@@ -195,14 +186,14 @@ const FormCategoryBenefits = () => {
         } else {
             setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
             setFiles(null);
-            setCategoryForm({...categoryform, files: null, logo: null});
+            setCategoryForm({...categoryform, files: null, image: null});
             setLogo(null);
         }
     };
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {/* {console.log(benefitsform)} */}
+            {console.log(category)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Categories"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetCategories());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Categoría" : "Agregar Categoría"}</h2>}

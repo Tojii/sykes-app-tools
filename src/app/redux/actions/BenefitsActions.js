@@ -305,6 +305,7 @@ export const AddBenefit = (payload, Logo) => {
     formData.append('Instagram', payload.instagram);
     formData.append('Email', payload.email);
     formData.append('Active', payload.active);
+    formData.append('BenefitLinks', payload.benefitLinks);
     formData.append('files', Logo);
     const config = {
         headers: {

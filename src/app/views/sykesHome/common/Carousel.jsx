@@ -57,6 +57,9 @@ const useStyles = makeStyles({
     "@media (min-width: 3500px)": {
       left: "43%", 
     },
+  },
+  divCenter: {
+    alignSelf: "center"
   }
 });
 
@@ -153,7 +156,7 @@ export const Carousel = (props) => {
             <div className="swiper-container mx-28">
               <div className="swiper-wrapper">
                 {Children.map(children, (child, index) => (
-                  <div className="swiper-slide p-4 pb-24">{child}</div>
+                  <div className={classes.divCenter + " swiper-slide p-4 pb-24"}>{child}</div>
                 ))}
               </div>
 

@@ -12,7 +12,8 @@ import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import history from "history.js";
 import LocationsTable from "../tables/ubicacionesTable";
 import MenuItem from '@material-ui/core/MenuItem';
-import Links from "../tables/adminBenefitsTable"
+import Links from "../tables/benefitsLinkstable"
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -103,12 +104,14 @@ const FormAdminBenefits = () => {
     const benefitscategories = useSelector(state => state.benefit.benefitscategories);
     const successBenefit = useSelector(state => state.benefit.success);
     const isLoadingLocation  = useSelector(state => state.benefit.loadingLocation);
+    const isLoadingLinks  = useSelector(state => state.links.loading);
     const isLoading  = useSelector(state => state.benefit.loading);
     const [open, setOpen] = useState(false);
     const [files, setFiles] = useState(null);
     const [logo, setLogo] = useState(null);
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
     const [benefitslinks, setBenefitsLinks] = useState({});
+    const [errorLinks, setErrorLinks] = useState({error: false, errorMessage: ""});
     
     const [benefitsform, setBenefitsForm] = useState({
         idBenefit: "",
@@ -126,12 +129,14 @@ const FormAdminBenefits = () => {
     });
 
     const handleFormSubmit = async () => {
-        if (((id && benefitsform.logo != null))) {
-            await dispatch(UpdateBenefit(id, benefitsform, files));
-            setOpen(true);
-        } else if ((benefitsform.logo != null)) {
-            await dispatch(AddBenefit(benefitsform, files));
-            setOpen(true);
+        if (!errorLinks.error) {
+            if (((id && benefitsform.logo != null))) {
+                await dispatch(UpdateBenefit(id, benefitsform, files));
+                setOpen(true);
+            } else if ((benefitsform.logo != null)) {
+                await dispatch(AddBenefit(benefitsform, files));
+                setOpen(true);
+            }
         }
     };
 
@@ -189,14 +194,20 @@ const FormAdminBenefits = () => {
     const handleChangeLinks = (links) => {
         setBenefitsForm({
             ...benefitsform,
-            links: links,
-        });  
-        // for (var i = 0; i < links.length; i++) {
-        //     if (links[i] && links[i].active) {
-        //         setEdificiosSave(true);
-        //         setErrorEdificio({error: false, errorMessage:``});
-        //     }
-        // }  
+            benefitLinks: links,
+        });
+        setBenefitsLinks(links)
+        const regex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+        var error = false;
+        for (var i = 0; i < links.length; i++) {
+            if (links[i] && !regex.test(links[i].link) && links[i].link != "") {
+                //setEdificiosSave(true);
+                //console.log("error!")
+                error = true;
+                //setErrorLinks({error: true, errorMessage:``});
+            }
+        } 
+        setErrorLinks({error: error, errorMessage:``}); 
     };
 
     const getBase64 = (file) => {
@@ -244,8 +255,8 @@ const FormAdminBenefits = () => {
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {console.log(benefitsform)}
-            {(isLoading || isLoadingLocation) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {console.log("vinculos",benefitsform)}
+            {(isLoading || isLoadingLocation || isLoadingLinks) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Beneficio" : "Agregar Beneficio"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
@@ -318,7 +329,7 @@ const FormAdminBenefits = () => {
                             validators={["required", "matchRegexp:^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$"]}
                             errorMessages={["Este campo es requerido", "Formato de url no válido"]}
                         />
-                        <TextValidator
+                        {/* <TextValidator
                             className={classes.textvalidator}
                             label="Facebook"
                             onChange={handleChange}
@@ -347,7 +358,7 @@ const FormAdminBenefits = () => {
                             value={benefitsform.email}
                             validators={["matchRegexp:^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"]}
                             errorMessages={["Correo no válido"]}
-                        />
+                        /> */}
                         <FormControlLabel
                             className={classes.textvalidator}
                             label="Activar Beneficio"
@@ -360,9 +371,6 @@ const FormAdminBenefits = () => {
                                 />
                             }
                         />
-                        <div className={classes.linkstable}>
-                            <Links benefitsform={benefitsform} benefitsLinks={benefitslinks} setBenefitsLinks={handleChangeLinks} />
-                        </div>
                         <FormControl className={classes.textvalidator}>
                             <label className={classes.filelabel} id="logo">Logo (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
                             <Input type="file" name="files" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect} 
@@ -378,6 +386,10 @@ const FormAdminBenefits = () => {
                                 />
                                 : null
                             }
+                        </div>
+                        <div>
+                            <Links benefitsform={benefitsform} benefitsLinks={benefitslinks} setBenefitsLinks={handleChangeLinks} />
+                            {errorLinks.error && <Alert style={{width: "70%", marginLeft: "15%"}} severity="error">Formato de vínculo no válido: Uno de los links ingresados no es válido</Alert>}
                         </div>
                         {id ? <LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} idBenefit={id} /> : null}
                         <div className={classes.sectionbutton}>

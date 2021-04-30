@@ -111,7 +111,7 @@ const CategoriesTable = (props) => {
     const builddata = categories.map(item => {
       if (item != undefined) {
       return [
-          item.id,
+          item.idCategory,
           item.name,
           showImage(item),
       ]}
@@ -164,7 +164,7 @@ const CategoriesTable = (props) => {
         return categories[dataIndex][1] != "Attorney";
       },
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar la promoción "} index={2} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
+        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar la categoría "} index={1} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
       ),
       print:false,
       download: false,
@@ -221,7 +221,7 @@ const CategoriesTable = (props) => {
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={props.type != "detail" ? classes.tableMargin + " m-sm-30" : "m-sm-30"}>
-          {console.log(successCampaignItems)}
+          {console.log(categories)}
           <div className="mb-sm-30">
                 <Breadcrumb
                 routeSegments={[
@@ -231,7 +231,7 @@ const CategoriesTable = (props) => {
                 ]}
             />
           </div>
-          {(isLoading) ? <Loading /> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCategories())}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la promoción no pudo ser eliminada!"} setOpen={setOpen} open={open} />}
+          {(isLoading) ? <Loading /> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCategories())}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la categoría no pudo ser eliminada!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               {/* { isLoading ? <Loading /> :   */}

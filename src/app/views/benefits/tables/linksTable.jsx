@@ -43,6 +43,9 @@ const useStyles = makeStyles({
         marginBottom: "5%",
     },
   },
+  miniature: {
+    maxWidth: "50px"
+  }
 });
 
 const LinksTable = (props) => {
@@ -85,7 +88,7 @@ const LinksTable = (props) => {
       return (
         item.icon ?
         <img
-          className={classes.sectionbutton}                                         
+          className={classes.miniature}                                         
           alt="..."
           src={`${item.icon}`}
         /> : ""
@@ -112,10 +115,10 @@ const LinksTable = (props) => {
     const builddata = links.map(item => {
       if (item != undefined) {
       return [
-          item.id,
-          item.idBenefit,
+          item.idBenefitLink,
+          item.benefit.idBenefit,
           item.name,
-          item.benefit.active ? ["Active"] : ["Inactive"],
+          item.active ? ["Active"] : ["Inactive"],
           showImage(item),
       ]}
     })
@@ -245,7 +248,7 @@ const LinksTable = (props) => {
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={props.type != "detail" ? classes.tableMargin + " m-sm-30" : "m-sm-30"}>
-          {console.log(successLinkItems)}
+          {console.log(links)}
           <div className="mb-sm-30">
                 <Breadcrumb
                 routeSegments={[

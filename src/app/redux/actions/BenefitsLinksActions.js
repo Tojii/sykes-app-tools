@@ -67,10 +67,11 @@ export const BE_LINKS_ERROR = "BE_LINKS_ERROR";
 export const AddBenefitLinks = (payload, Icon) => {
   //console.log("addver", payload, files)
   var formData = new FormData();
-    formData.append('idBenefit', payload.idBenefit);
+    formData.append('idBenefit', "1");
     formData.append('Name', payload.name);
-    formData.append('Link', payload.link);
+    formData.append('Link', "");
     formData.append('Active', payload.active);
+    formData.append('icon', payload.icon);
     formData.append('files', Icon);
     const config = {
         headers: {
@@ -103,8 +104,9 @@ export const UpdateBenefitLink = (id, payload, Icon) => dispatch => {
   var formData = new FormData();
   formData.append('idBenefit', payload.idBenefit);
   formData.append('Name', payload.name);
-  formData.append('Link', payload.link);
+  formData.append('Link', "");
   formData.append('Active', payload.active);
+  formData.append('icon', payload.icon);
   formData.append('files', Icon);
   const config = {
       headers: {

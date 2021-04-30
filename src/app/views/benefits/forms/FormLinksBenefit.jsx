@@ -87,7 +87,7 @@ const FormLinksBenefits = () => {
     const dispatch = useDispatch();
     let { id } = useParams();
     const classes = useStyles();
-    const benefit = useSelector(state => state.benefit.benefit);
+    const link = useSelector(state => state.links.link);
     const benefitslinks = useSelector(state => state.links.benefitslinks);
     const successBenefit = useSelector(state => state.links.success);
     const isLoading  = useSelector(state => state.links.loading);
@@ -116,7 +116,7 @@ const FormLinksBenefits = () => {
     };
 
     const presave = () => {
-        if (logo == null) {
+        if (linksform.icon == null) {
             setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
         }
     }
@@ -134,21 +134,13 @@ const FormLinksBenefits = () => {
     }, []);
 
     useEffect(() => {
-        if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined && benefit[0].benefit != null) {setLinkForm({
-            idBenefit: benefit[0].benefit.idBenefit,
-            idCategory: benefit[0].benefit.category.idCategory,
-            name: benefit[0].benefit.name,
-            description: benefit[0].benefit.description ? benefit[0].benefit.description : "",
-            logo: benefit[0].benefit.logo,
-            detail: benefit[0].benefit.detail,
-            benefitInfo: benefit[0].benefit.benefitInfo,
-            link: benefit[0].benefit.link,
-            facebook: benefit[0].benefit.facebook ? benefit[0].benefit.facebook : "",
-            instagram: benefit[0].benefit.instagram ? benefit[0].benefit.instagram : "",
-            email: benefit[0].benefit.email ? benefit[0].benefit.email : "",
-            active: benefit[0].benefit.active,
+        if(id && link != [] && link[0] != [""] && link[0] != undefined && link[0].benefit != null) {setLinkForm({
+            idBenefit: link[0].benefit.idBenefit,
+            name: link[0].name,
+            icon: link[0].icon,
+            active: link[0].active,
         });}
-    }, [benefit]);
+    }, [link]);
 
 
     const handleChange = (event) => {
@@ -218,7 +210,7 @@ const FormLinksBenefits = () => {
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
                     {(isLoading) ? <Loading/> :
                     <>            
-                        <SelectValidator 
+                        {/* <SelectValidator 
                             label="Beneficio*" 
                             name="idBenefit"
                             className={classes.textvalidator} 
@@ -227,12 +219,12 @@ const FormLinksBenefits = () => {
                             validators={["required"]}
                             errorMessages={["Este campo es requerido"]}
                         >
-                            {/* {benefitscategories.map(category => (
+                            {benefitscategories.map(category => (
                                 <MenuItem key={`category-${category.idCategory}`} id={category.idCategory} value={category.idCategory ? category.idCategory : ""}>
                                 {category.name || " "}
                                 </MenuItem> 
-                            ))} */}
-                        </SelectValidator> 
+                            ))}
+                        </SelectValidator>  */}
                         <TextValidator
                             className={classes.textvalidator}
                             label="Nombre*"

@@ -49,17 +49,15 @@ const DiscountsTable = (props) => {
     const classes = useStyles();
     const user = useSelector(state => state.user);
     const discounts = useSelector(state => state.discount.benefitsdiscounts);
-    const image = null;
     const successCampaignItems = useSelector(state => state.discount.success);
     const isLoading  = useSelector(state => state.discount.loading);
     const [open, setOpen] = useState(false);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
-    const [shouldOpenNewDialog, setShouldOpenNewDialog] = useState({ open: false, type: "new" });
     const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
 
     useEffect(() => {
       dispatch(GetDiscounts());
-      console.log("effect")
+      //console.log("effect")
     }, []);
 
     const getMuiTheme = () =>
@@ -75,10 +73,6 @@ const DiscountsTable = (props) => {
       //console.log(id)
       history.push(`/Benefits/FormDiscountBenefits/${id}`);
     };
-
-    const handleClose = () => {
-      setShouldOpenNewDialog({open: false, index: 0});
-    }
 
     const showImage = (item) => {
       return (
@@ -111,13 +105,16 @@ const DiscountsTable = (props) => {
     const builddata = discounts.map(item => {
       if (item != undefined) {
       return [
-          item.id,
-          item.idBenefit,
-          item.idLocation,
+          item.idDiscount,
+          item.benefit.idBenefit,
+          item.location.idLocation,
           item.discountName,
-          item.link,
+          item.benefit.category.name,
           item.startDate,
           item.endDate,
+          item.location.address,
+          item.location.provincia,
+          item.location.canton,
           showImage(item),
       ]}
     })
@@ -125,7 +122,7 @@ const DiscountsTable = (props) => {
     const columns = [
         {
           name: "id",
-          label: "ID Discount",
+          label: "ID Promoción",
           options: {
             filter: false,
             sort: true,
@@ -163,8 +160,8 @@ const DiscountsTable = (props) => {
           }
         },
         {
-          name: "link",
-          label: "Link",
+          name: "category",
+          label: "Categoría",
           options: {
            filter: true,
            sort: true,
@@ -185,11 +182,11 @@ const DiscountsTable = (props) => {
                 if (v[0] && v[1] && false) {
                   return [`Fecha Inicio: ${new Date(v[0]).toLocaleDateString()}`, `Fecha Final: ${new Date(v[1]).toLocaleDateString()}`];
                 } else if (v[0] && v[1] && true) {
-                  return `Fecha Inicio: ${new Date(v[0]).toLocaleDateString()}, Fecha Final: ${new Date(v[1]).toLocaleDateString()}`;
+                  return `Fecha Inicio desde: ${new Date(v[0]).toLocaleDateString()}, hasta: ${new Date(v[1]).toLocaleDateString()}`;
                 } else if (v[0]) {
-                  return `Fecha Inicio: ${new Date(v[0]).toLocaleDateString()}`;
+                  return `Fecha Inicio desde: ${new Date(v[0]).toLocaleDateString()}`;
                 } else if (v[1]) {
-                  return `Fecha Final: ${new Date(v[1]).toLocaleDateString()}`;
+                  return `Fecha Inicio hasta: ${new Date(v[1]).toLocaleDateString()}`;
                 }
                 return [];
               },
@@ -211,9 +208,9 @@ const DiscountsTable = (props) => {
               logic(age, filters) {
                 var date = new Date(age.replace( /(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3"))
                 if (filters[0] && filters[1]) {
-                  return date.getTime() < new Date(filters[0]).getTime() || date.getTime() > new Date(filters[1]).getTime();
+                  return date.getTime() <= new Date(filters[0]).getTime() || date.getTime() > new Date(filters[1]).getTime();
                 } else if (filters[0]) {
-                  return date.getTime() < new Date(filters[0]).getTime();
+                  return date.getTime() <= new Date(filters[0]).getTime();
                 } else if (filters[1]) {
                   return date.getTime() > new Date(filters[1]).getTime();
                 }
@@ -273,11 +270,11 @@ const DiscountsTable = (props) => {
                 if (v[0] && v[1] && false) {
                   return [`Fecha Inicio: ${new Date(v[0]).toLocaleDateString()}`, `Fecha Final: ${new Date(v[1]).toLocaleDateString()}`];
                 } else if (v[0] && v[1] && true) {
-                  return `Fecha Inicio: ${new Date(v[0]).toLocaleDateString()}, Fecha Final: ${new Date(v[1]).toLocaleDateString()}`;
+                  return `Fecha Final desde: ${new Date(v[0]).toLocaleDateString()}, hasta: ${new Date(v[1]).toLocaleDateString()}`;
                 } else if (v[0]) {
-                  return `Fecha Inicio: ${new Date(v[0]).toLocaleDateString()}`;
+                  return `Fecha Final desde: ${new Date(v[0]).toLocaleDateString()}`;
                 } else if (v[1]) {
-                  return `Fecha Final: ${new Date(v[1]).toLocaleDateString()}`;
+                  return `Fecha Final hasta: ${new Date(v[1]).toLocaleDateString()}`;
                 }
                 return [];
               },
@@ -299,11 +296,11 @@ const DiscountsTable = (props) => {
               logic(age, filters) {
                 var date = new Date(age.replace( /(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3"))
                 if (filters[0] && filters[1]) {
-                  return date.getTime() < new Date(filters[0]).getTime() || date.getTime() > new Date(filters[1]).getTime();
+                  return date.getTime() <= new Date(filters[0]).getTime() || date.getTime() > new Date(filters[0]).getTime(1);
                 } else if (filters[0]) {
-                  return date.getTime() < new Date(filters[0]).getTime();
+                  return date.getTime() <= new Date(filters[0]).getTime();
                 } else if (filters[1]) {
-                  return date.getTime() > new Date(filters[1]).getTime();
+                  return date.getTime() >= new Date(filters[1]).getTime();
                 }
                 return false;
               },
@@ -351,6 +348,42 @@ const DiscountsTable = (props) => {
           },
         },
         {
+          name: "address",
+          label: "Dirección",
+          options: {
+           filter: true,
+           sort: true,
+           display: true,
+           filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+           }
+          }
+        },
+        {
+          name: "provincia",
+          label: "Provincia",
+          options: {
+           filter: true,
+           sort: true,
+           display: true,
+           filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+           }
+          }
+        },
+        {
+          name: "canton",
+          label: "Cantón",
+          options: {
+           filter: true,
+           sort: true,
+           display: true,
+           filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+           }
+          }
+        },
+        {
           name: "image",
           label: "Imagen",
           options: {
@@ -375,7 +408,7 @@ const DiscountsTable = (props) => {
         return discounts[dataIndex][1] != "Attorney";
       },
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar la promoción "} index={2} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
+        <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} question={"¿Desea eliminar la promoción "} index={3} setSelectedRows={setSelectedRows} eliminar={handleDelete} editar={handleEdit} />
       ),
       print:false,
       download: false,
@@ -442,10 +475,11 @@ const DiscountsTable = (props) => {
                 ]}
             />
           </div>
+          {console.log(discounts)}
           {(isLoading) ? <Loading /> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetDiscounts())}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la promoción no pudo ser eliminada!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
-              {/* { isLoading ? <Loading /> :   */}
+              { isLoading ? <Loading /> :  
                 <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                     <MuiThemeProvider theme={getMuiTheme()}>
                       <MUIDataTable  className="w-100"
@@ -456,7 +490,7 @@ const DiscountsTable = (props) => {
                       />
                     </MuiThemeProvider>
                 </Card>
-              {/* } */}
+              }
             </Grid>
           </Grid>
         </div> 

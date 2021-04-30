@@ -87,46 +87,53 @@ const FormDiscountBenefits = () => {
     const dispatch = useDispatch();
     let { id } = useParams();
     const classes = useStyles();
-    const benefit = useSelector(state => state.benefit.benefit);
-    const benefitscategories = useSelector(state => state.benefit.benefitscategories);
+    const discount = useSelector(state => state.discount.discount);
+    const benefits = useSelector(state => state.benefit.benefits);
     const successBenefit = useSelector(state => state.discount.success);
-    const isLoading  = useSelector(state => state.discount.loading);
+    const isLoading  = useSelector(state => state.benefit.loading);
     const [open, setOpen] = useState(false);
+    const [disabledLocation, setDisabledLocation] = useState(true);
     const [files, setFiles] = useState(null);
-    const [logo, setLogo] = useState(null);
+    const [image, setImage] = useState(null);
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
     const [errorMessage, setErrorMessage] = useState([]);
+    const [locationsSelect, setLocationsSelect] = useState([]);
     
     const [discountform, setDiscountForm] = useState({
-        idBenefit: "",
-        idCategory: "",
-        benefitInfo: "",
+        idBenefits: "",
+        idLocation: "",
         name: "",
-        description: "",
-        logo: null,
-        detail: "",
-        link: "",
-        facebook: "",
-        instagram: "",
-        email: "",
-        active: false,
+        image: null,
         startDate: null,
         endDate: null
     });
 
     const handleFormSubmit = async () => {
-        if (((id && discountform.logo != null))) {
-            await dispatch(UpdateDiscount(id, discountform, files));
-            setOpen(true);
-        } else if ((discountform.logo != null)) {
-            await dispatch(AddDiscount(discountform, files));
-            setOpen(true);
+        if (discountform.startDate != null && discountform.endDate != null && discountform.startDate.getTime() < discountform.endDate.getTime()) {
+            if (((id && discountform.image != null))) {
+                await dispatch(UpdateDiscount(id, discountform, files));
+                setOpen(true);
+            } else if ((discountform.image != null)) {
+                await dispatch(AddDiscount(discountform, files));
+                setOpen(true);
+            }
         }
     };
 
     const presave = () => {
-        if (logo == null) {
+        if (discountform.image == null) {
             setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
+        }
+        if (discountform.startDate == null || discountform.endDate == null) { 
+            if (discountform.startDate == null) {
+                setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*Se debe seleccionar la fecha de inicio" }));
+            }
+            if (discountform.endDate == null) {
+                setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "*Se debe seleccionar la fecha de finalización" }));
+            }
+        }
+        if (discountform.startDate.getTime() >= discountform.endDate.getTime()) {
+            setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*La fecha de inicio no puede ser mayor que la fecha de finalización" }));
         }
     }
 
@@ -138,10 +145,12 @@ const FormDiscountBenefits = () => {
         if (date != null) {
           setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
         }
+        if (discountform.endDate != null && date.getTime() >= discountform.endDate.getTime()) {
+            setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*La fecha de inicio no puede ser mayor que la fecha de finalización" }));
+        }
         setDiscountForm({
           ...discountform,
           startDate: date,
-          endDate: null,
         });
     };
 
@@ -164,25 +173,27 @@ const FormDiscountBenefits = () => {
     }, []);
 
     useEffect(() => {
-        if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined && benefit[0].benefit != null) {setDiscountForm({
-            idBenefit: benefit[0].benefit.idBenefit,
-            idCategory: benefit[0].benefit.category.idCategory,
-            name: benefit[0].benefit.name,
-            description: benefit[0].benefit.description ? benefit[0].benefit.description : "",
-            logo: benefit[0].benefit.logo,
-            detail: benefit[0].benefit.detail,
-            benefitInfo: benefit[0].benefit.benefitInfo,
-            link: benefit[0].benefit.link,
-            facebook: benefit[0].benefit.facebook ? benefit[0].benefit.facebook : "",
-            instagram: benefit[0].benefit.instagram ? benefit[0].benefit.instagram : "",
-            email: benefit[0].benefit.email ? benefit[0].benefit.email : "",
-            active: benefit[0].benefit.active,
-        });}
-    }, [benefit]);
+        if(id && discount != [] && discount[0] != [""] && discount[0] != undefined && discount[0].benefit != null) {setDiscountForm({
+            idBenefits: discount[0].benefit.idBenefit,
+            idLocation: discount[0].location.idLocation,
+            name: discount[0].discountName,
+            image: discount[0].image,
+            startDate: discount[0].startDate,
+            endDate: discount[0].endDate,
+            });
+            for(var i = 0; benefits.length > i; i++) {
+                if (benefits[i].benefit.idBenefit == discount[0].benefit.idBenefit) {
+                    setLocationsSelect(benefits[i].locations)
+                }
+            }
+            setDisabledLocation(false)
+        }
+    }, [discount, benefits]);
 
 
     const handleChange = (event) => {
         const name = event.target.name;
+        console.log("prueba", event)
         if (name == "active") {
             setDiscountForm({
                 ...discountform,
@@ -196,14 +207,31 @@ const FormDiscountBenefits = () => {
         }
     };
 
+    const handleChangeBenefit = (event, index) => {
+        const name = event.target.name;
+        console.log("prueba", event)
+        setDiscountForm({
+            ...discountform,
+            [name]: event.target.value,
+            idLocation: "",
+        })
+        for(var i = 0; benefits.length > i; i++) {
+            if (benefits[i].benefit.idBenefit == event.target.value) {
+                console.log("locations", benefits[i].locations)
+                setLocationsSelect(benefits[i].locations)
+            }
+        }
+        setDisabledLocation(false)
+    };
+
     const getBase64 = (file) => {
         let reader = new FileReader();
         let imageupload = ""
         reader.readAsDataURL(file);
         reader.onload = function () {
             imageupload = reader.result
-            setLogo(imageupload)
-            setDiscountForm({...discountform, logo: imageupload});
+            setImage(imageupload)
+            setDiscountForm({...discountform, image: imageupload});
         };
         reader.onerror = function (error) {
             console.log('Error: ', error);
@@ -217,31 +245,31 @@ const FormDiscountBenefits = () => {
                 if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
                     setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
                     setFiles(null);
-                    setDiscountForm({...discountform, files: null, logo: null});
-                    setLogo(null);
+                    setDiscountForm({...discountform, files: null, image: null});
+                    setImage(null);
                 }
                 else if (filesList.size/1024/1024 > 2) {
                     setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
                     setFiles(null);
-                    setDiscountForm({...discountform, files: null, logo: null});
-                    setLogo(null);
+                    setDiscountForm({...discountform, files: null, image: null});
+                    setImage(null);
                 } else {
                     setErrorFile({error: false, errorMessage:``});
                     setFiles(event.target.files[0]);
                     setDiscountForm({...discountform, files: event.target.files[0]});
                     getBase64(event.target.files[0]);
                 }
-        } else {
+        } else if (filesList != null) {
             setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
             setFiles(null);
-            setDiscountForm({...discountform, files: null, logo: null});
-            setLogo(null);
+            setDiscountForm({...discountform, files: null, image: null});
+            setImage(null);
         }
     };
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {/* {console.log(benefitsform)} */}
+            {console.log(discountform)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Discounts"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetDiscounts());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Promoción" : "Agregar Promoción"}</h2>}
@@ -250,19 +278,35 @@ const FormDiscountBenefits = () => {
                     <>  
                         <SelectValidator 
                             label="Beneficio*" 
-                            name="idBenefit"
+                            name="idBenefits"
                             className={classes.textvalidator} 
-                            value={discountform.idBenefit} 
-                            onChange={handleChange} 
+                            value={discountform.idBenefits} 
+                            onChange={handleChangeBenefit} 
                             validators={["required"]}
                             errorMessages={["Este campo es requerido"]}
                         >
-                            {/* {benefitscategories.map(category => (
-                                <MenuItem key={`category-${category.idCategory}`} id={category.idCategory} value={category.idCategory ? category.idCategory : ""}>
-                                {category.name || " "}
+                            {benefits.map((benefit, index) => (
+                                <MenuItem key={`category-${benefit.benefit.idBenefit}`} id={benefit.benefit.idBenefit} value={benefit.benefit.idBenefit ? benefit.benefit.idBenefit : ""}>
+                                {benefit.benefit.name || " "}
                                 </MenuItem> 
-                            ))} */}
-                        </SelectValidator>           
+                            ))}
+                        </SelectValidator>
+                        <SelectValidator 
+                            label="Localización*" 
+                            name="idLocation"
+                            className={classes.textvalidator} 
+                            value={discountform.idLocation} 
+                            onChange={handleChange} 
+                            validators={["required"]}
+                            disabled={disabledLocation}
+                            errorMessages={["Este campo es requerido"]}
+                        >
+                            {locationsSelect.map((location, index) => (
+                                <MenuItem key={`category-${location.idLocation}`} id={location.idLocation} value={location.idLocation ? location.idLocation : ""}>
+                                {location.address || " "}
+                                </MenuItem> 
+                            ))}
+                        </SelectValidator>            
                         <TextValidator
                             className={classes.textvalidator}
                             label="Promoción*"
@@ -303,22 +347,22 @@ const FormDiscountBenefits = () => {
                             />
                         </MuiPickersUtilsProvider>
                         <FormControl className={classes.textvalidator}>
-                            <label className={classes.filelabel} id="logo">Imagen (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
+                            <label className={classes.filelabel} id="image">Imagen (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
                             <Input type="file" name="files" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect} 
                                  />  
                             <FormHelperText error={errorFile.error} id="my-helper-text">{errorFile.errorMessage}</FormHelperText>                               
                         </FormControl>
                         <div className={classes.sectionbutton}>
-                            {discountform.logo ? 
+                            {discountform.image ? 
                                 <img
                                 className={classes.imageadd}                                          
                                 alt="..."
-                                src={`${discountform.logo}`}
+                                src={`${discountform.image}`}
                                 />
                                 : null
                             }
                         </div>
-                        {id ? <LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} idBenefit={id} /> : null}
+                        {/* {id ? <LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} idBenefit={id} /> : null} */}
                         <div className={classes.sectionbutton}>
                             <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
                                 ENVIAR  

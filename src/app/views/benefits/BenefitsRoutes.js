@@ -57,6 +57,10 @@ const FormLinksBenefit = MatxLoadable({
   loader: () => import("./forms/FormLinksBenefit")
 });
 
+const MontlyDiscount = MatxLoadable({
+  loader: () => import("./montlyDiscounts")
+});
+
 const settings = {
   activeLayout: "layout1",
   layout1Settings: {
@@ -85,6 +89,11 @@ const benefitsRoutes = [
   {
     path: "/Benefits/Discounts",
     component: DiscountBenefits,
+    settings
+  },
+  {
+    path: "/Benefits/MontlyDiscounts",
+    component: MontlyDiscount,
     settings
   },
   {
