@@ -109,7 +109,7 @@ const FormDiscountBenefits = () => {
     });
 
     const handleFormSubmit = async () => {
-        if (discountform.startDate != null && discountform.endDate != null && discountform.startDate.getTime() < discountform.endDate.getTime()) {
+        if (discountform.startDate != null && discountform.endDate != null && new Date(discountform.startDate).getTime() < new Date(discountform.endDate).getTime()) {
             if (((id && discountform.image != null))) {
                 await dispatch(UpdateDiscount(id, discountform, files));
                 setOpen(true);
@@ -132,7 +132,7 @@ const FormDiscountBenefits = () => {
                 setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "*Se debe seleccionar la fecha de finalización" }));
             }
         }
-        if (discountform.startDate.getTime() >= discountform.endDate.getTime()) {
+        if (new Date(discountform.startDate).getTime() >= new Date(discountform.endDate).getTime()) {
             setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*La fecha de inicio no puede ser mayor que la fecha de finalización" }));
         }
     }
@@ -145,7 +145,7 @@ const FormDiscountBenefits = () => {
         if (date != null) {
           setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
         }
-        if (discountform.endDate != null && date.getTime() >= discountform.endDate.getTime()) {
+        if (discountform.endDate != null && date.getTime() >= new Date(discountform.endDate).getTime()) {
             setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*La fecha de inicio no puede ser mayor que la fecha de finalización" }));
         }
         setDiscountForm({

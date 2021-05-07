@@ -41,8 +41,8 @@ const useStyles = makeStyles({
     },
     imageCarousel: {
         "@media (min-width: 0px)": {
-            maxHeight: "370px",
-            maxWidth: "370px"
+            maxHeight: "515px",
+            width: "390px"
         },
         "@media (min-width: 1025px)": {
             
@@ -73,6 +73,7 @@ const Home = () => {
 
     return (
         <div className="m-sm-30">
+            {console.log(images)}
             { isLoading ? <Loading/> : <div className="mb-sm-30">
             <Breadcrumb
             routeSegments={[
@@ -85,7 +86,19 @@ const Home = () => {
                 { isLoading ? <Loading /> :
                     <div>
                         <Carousel>
-                            {images.map((image, index) => (
+                            {images.filter(function(image) {
+                                var d = new Date();
+                                var start = new Date(image.startDate);
+                                var end = new Date(image.endDate);
+                                d.setHours(0,0,0,0);
+                                start.setHours(0,0,0,0);
+                                end.setHours(0,0,0,0);
+                                if (start.getTime() > d.getTime() || end.getTime() < d.getTime()) {
+                                    console.log(start.getTime(), d.getTime(), end.getTime())
+                                return false; // skip
+                                }
+                                return true;
+                            }).map((image, index) => (
                                 <div key={index} className={classes.divImage + " pb-16"}>
                                     <img
                                         //maxHeight={"515px"}
