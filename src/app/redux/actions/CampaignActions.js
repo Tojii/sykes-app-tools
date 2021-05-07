@@ -134,7 +134,7 @@ export const GetCampaignsActive = () => {
 
         api.post(`/Campaign`, 
         { "name": payload.name, "description": payload.description, "startDate": moment(payload.startDate).format('YYYY-MM-DD HH:mm:ss'), "endDate": moment(payload.endDate).format('YYYY-MM-DD HH:mm:ss'), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10),
-          "pickUpInBuilding": payload.activeEdificio, "sentToHome": payload.activeEnvioCasa, "message": payload.message, 
+          "pickUpInBuilding": payload.activeEdificio, "sentToHome": payload.activeEnvioCasa, "message": payload.message, "shippingMessage": payload.shippingMessage,
           "buildings": payload.edificiosCampaign.map(item => {
             return {
               "building": {
@@ -206,7 +206,7 @@ export const AddCampaignItems = (id, payload, files) => {
     });
     
     api.put(`/Campaign/${id}`, { "name": payload.name, "description": payload.description, "startDate": moment(payload.startDate).format('YYYY-MM-DD HH:mm:ss'), "endDate": moment(payload.endDate).format('YYYY-MM-DD HH:mm:ss'), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10),
-    "pickUpInBuilding": payload.activeEdificio, "sentToHome": payload.activeEnvioCasa, "message": payload.message, 
+    "pickUpInBuilding": payload.activeEdificio, "sentToHome": payload.activeEnvioCasa, "message": payload.message, "shippingMessage": payload.shippingMessage,
     "buildings": payload.edificiosCampaign.map(item => {
       return {
           "building": {

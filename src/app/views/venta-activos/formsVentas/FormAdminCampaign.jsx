@@ -110,6 +110,7 @@ const FormAdminCampaign = () => {
         endDate: null,
         maxLimitPerPerson: "",
         message: "",
+        shippingMessage: "",
         campaignItems: [],
         activeEdificio: false,
         activeEnvioCasa: false,
@@ -142,6 +143,7 @@ const FormAdminCampaign = () => {
             activeEdificio: campaign[0].pickUpInBuilding,
             activeEnvioCasa: campaign[0].sentToHome,
             message: campaign[0].message,
+            shippingMessage: campaign[0].shippingMessage,
             edificiosCampaign: campaign[0].buildings.map((item, index) => {
                 return { 
                     "id": item.id,
@@ -340,6 +342,14 @@ const FormAdminCampaign = () => {
                             type="text"
                             name="message"
                             value={campaignform.message}
+                        />
+                        <TextValidator
+                            className={classes.textvalidator}
+                            label="Mensaje de envío"
+                            onChange={handleChange}
+                            type="text"
+                            name="shippingMessage"
+                            value={campaignform.shippingMessage}
                         />
                          <FormControlLabel
                             className={classes.textvalidator}

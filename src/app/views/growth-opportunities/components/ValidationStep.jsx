@@ -65,6 +65,7 @@ const ResumeStep = ({
 
     return (
         <>
+            {console.log("validations", validations)}
             <ValidationModal idioma={"Ingles"} path={"/growth-opportunities"} save={saveJob} state={"Error!"} message={(validations != null) ? validations.message : "Lo sentimos, pero el usuario actual no puede aplicar a este job"} setOpen={setOpen} open={open} />
             { validations != null ? (
                 //console.log("approved",validations.approvedFinal),
