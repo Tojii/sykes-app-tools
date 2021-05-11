@@ -310,18 +310,18 @@ const ComprasTable = (props) => {
             }
           }
         },
-        {
-          name: "freight",
-          label: "Flete aproximado ",
-          options: {
-            filter: true,
-            sort: true,
-            display: false,
-            filterOptions: { 
-              fullWidth: window.screen.width <= 1024 ? true : false
-            }
-          }
-        },
+        // {
+        //   name: "freight",
+        //   label: "Flete aproximado ",
+        //   options: {
+        //     filter: true,
+        //     sort: true,
+        //     display: false,
+        //     filterOptions: { 
+        //       fullWidth: window.screen.width <= 1024 ? true : false
+        //     }
+        //   }
+        // },
         {
           name: "total",
           label: "Total Compra",
@@ -397,7 +397,7 @@ const ComprasTable = (props) => {
           item.createdDate, 
           item.notes,
           item.totalItems,
-          "₡" + (item.freight ? item.freight : 0),
+          // "₡" + (item.freight ? item.freight : 0),
           "₡" + parseFloat(item.total).toFixed(2),
           item.sendMethod,
           detallesButton(item)

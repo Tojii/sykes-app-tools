@@ -176,10 +176,10 @@ const AgregarArticulo = (props) => {
                                         <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Valor del artículo:</h6></TableCell>
                                         <TableCell className="px-sm-24 border-none">{ campaignItems[0] == undefined ? "" : "₡" + campaignItems[0].unitPrice }</TableCell>
                                     </TableRow>
-                                    {(props.ventas != undefined && props.ventas.sendMethod != "Recoger en edificio") ? <TableRow>
+                                    {/* {(props.ventas != undefined && props.ventas.sendMethod != "Recoger en edificio") ? <TableRow>
                                         <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Precio estimado de envío:</h6></TableCell>
                                         <TableCell className="px-sm-24 border-none">{ campaignItems[0] == undefined ? "" : "₡" + campaignItems[0].estimatedPrice }</TableCell>
-                                    </TableRow> : null}
+                                    </TableRow> : null} */}
                                     <TableRow>
                                         <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Cantidad:</h6></TableCell>
                                         { props.type == "agregar" ? <TableCell className="px-sm-24 border-none">

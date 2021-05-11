@@ -98,7 +98,7 @@ const FormAdminInventario = () => {
         quantity: "",
         stockQuantity: "",
         unitPrice: "",
-        shippingPrice: "",
+        shippingPrice: "0",
         maxLimitPerPerson: "",
         files: null
     });
@@ -327,7 +327,7 @@ const FormAdminInventario = () => {
                                   }}  
                             />
                         </FormControl>
-                        <FormControl className={classes.textvalidator}>
+                        {/* <FormControl className={classes.textvalidator}>
                             <TextValidator
                                 fullWidth
                                 label="Precio estimado de envío*"
@@ -342,7 +342,7 @@ const FormAdminInventario = () => {
                                     startAdornment:<InputAdornment position="start">₡</InputAdornment>,
                                   }}
                             />
-                        </FormControl>
+                        </FormControl> */}
                         <TextValidator
                             className={classes.textvalidator}
                             label="Límite Máximo de Venta por Empleado*"

@@ -113,7 +113,7 @@ const InventarioTable = () => {
           item.quantity,
           item.stockQuantity,
           "₡" + item.unitPrice,
-          "₡" + item.estimatedPrice,
+          //"₡" + item.estimatedPrice,
           item.maxLimitPerPerson,
       ]}
     })
@@ -231,17 +231,17 @@ const InventarioTable = () => {
             }
           }
         },
-        {
-          name: "estimatedPrice",
-          label: "Precio de envío",
-          options: {
-            filter: true,
-            sort: true,
-            filterOptions: { 
-              fullWidth: window.screen.width <= 1024 ? true : false
-            }
-          }
-        },
+        // {
+        //   name: "estimatedPrice",
+        //   label: "Precio de envío",
+        //   options: {
+        //     filter: true,
+        //     sort: true,
+        //     filterOptions: { 
+        //       fullWidth: window.screen.width <= 1024 ? true : false
+        //     }
+        //   }
+        // },
         {
           name: "maxLimitPerPerson",
           label: "Límite Máximo Artículo",

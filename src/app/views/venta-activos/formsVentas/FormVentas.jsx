@@ -857,7 +857,7 @@ const FormVentas = () => {
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
                             />
-                             {showInformation ? <TextValidator
+                             {/* {showInformation ? <TextValidator
                                 className={classes.textvalidator}
                                 label="Flete aproximado"
                                 onChange={handleChange}
@@ -865,7 +865,7 @@ const FormVentas = () => {
                                 name="freightVentas"
                                 disabled={true}
                                 value={ventasform.freightVentas}
-                            /> : null}
+                            /> : null} */}
                             <div className={classes.sectionbutton}>
                                 <Button style={{ margin: "1%", width: "105.92px" }} variant="contained" color="primary" type="submit">
                                     ENVIAR
