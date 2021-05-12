@@ -8,7 +8,6 @@ import EcommerceReducer from "./EcommerceReducer";
 import MantenimientoReducer from "./MantenimientoReducer";
 import LSSReducer from "./LSSReducer";
 import growthReducer from "./GrowthOpportunityReducer";
-import metricsReducer from "./MetricsReducer";
 import applyReducer from "./ApplyReducer";
 //import ReembolsosEducativosReducer from "./ReembolsoEducativoReducer";
 import RaftReducer from "./RaftReducer";
@@ -30,7 +29,6 @@ const appReducer = combineReducers({
   reimbursement: EducationalReimbursementReducer,
   common: CommonReducer,
   growthReducer,
-  metricsReducer,
   applyReducer,
 });
 

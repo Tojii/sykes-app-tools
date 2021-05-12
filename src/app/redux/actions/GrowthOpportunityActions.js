@@ -7,6 +7,7 @@ export const GET_GROWTH_OPPORTUNITIES = "GET_GROWTH_OPPORTUNITIES";
 export const SET_GROWTH_OPPORTUNITY = "SET_GROWTH_OPPORTUNITY";
 export const GET_JOBS_APPLIED = "GET_JOBS_APPLIED";
 export const GET_GROWTH_OPPORTUNITY = "GET_GROWTH_OPPORTUNITY";
+export const GET_GROWTH_OPPORTUNITY_METRICS = "GET_GROWTH_OPPORTUNITY_METRICS";
 
 const axiosInstance = axios.create();
 
@@ -96,4 +97,34 @@ export const getGrowthOpportunity = () => dispatch => {
         type: GET_GROWTH_OPPORTUNITY,
         payload: payload,
     })
+};
+
+
+export const getGrowthOpportunityMetrics = (badge) => dispatch => {
+    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
+    axiosInstance.get(`${process.env.REACT_APP_API_URL}/GrowthOpportunityApplication/Metrics`).then(res => {
+      dispatch({
+        type: GET_GROWTH_OPPORTUNITY_METRICS,
+        payload: res.data
+      });
+      //console.log(res.data) 
+    })
+    .catch((error) => {
+      // Error
+      if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+      } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the 
+          // browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+      } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+      }
+      console.log(error.config);
+    });
 };

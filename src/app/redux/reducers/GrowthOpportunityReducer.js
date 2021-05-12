@@ -3,13 +3,14 @@ import {
     SET_GROWTH_OPPORTUNITY,
     GET_JOBS_APPLIED,
     GET_GROWTH_OPPORTUNITY,
+    GET_GROWTH_OPPORTUNITY_METRICS
 } from "../actions/GrowthOpportunityActions";
-import localStorageService from "../../services/localStorageService"
 
 const INIT_STATE = {
     growth_opportunities: null,
     growth_opportunity: null,
     jobs_applied: null,
+    metrics: null
 };
 
 export default (state = INIT_STATE, action) => {
@@ -22,6 +23,8 @@ export default (state = INIT_STATE, action) => {
             return { ...state, growth_opportunity: action.payload };
         case GET_GROWTH_OPPORTUNITY:
             return { ...state, growth_opportunity: action.payload };
+        case GET_GROWTH_OPPORTUNITY_METRICS:
+            return { ...state, metrics: action.payload };
         default:
             return { ...state };
      }
