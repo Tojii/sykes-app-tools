@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { Card } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { GetBenefitsById, GetPageSettings } from "../../redux/actions/BenefitsActions";
+import { DeleteBenefitDiscount, GetDiscounts } from "../../redux/actions/BenefitsDiscountActions";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import Places from '../../components/maps/Places';
 import { isMdScreen } from "utils";
@@ -134,20 +135,35 @@ const DetalleBenefits = (props) => {
     const ubicationRef = useRef(null);
     const benefit = useSelector(state => state.benefit.benefit);
     const isLoading  = useSelector(state => state.benefit.loading);
+    const discounts = useSelector(state => state.discount.benefitsdiscounts);
     const isLoadingSettings  = useSelector(state => state.benefit.loadingSettings); 
     let { id } = useParams(); 
     const pageSettings = useSelector(state => state.benefit.pageSettings);
     // const user = useSelector(state => state.user);
     //const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     //console.log("user",user)
-    const promociones = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    //const promociones = "";
+    //const promociones = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    //let promociones = [];
+    const [promociones, setPromociones] = useState([]);
     const location = { address: 'San José, Costa Rica', lat: 9.903329970416294, lng: -84.08271419551181 } // our location object from earlier
 
     useEffect(() => {
         dispatch(GetBenefitsById(id));
-        dispatch(GetPageSettings());       
+        dispatch(GetPageSettings()); 
+        dispatch(GetDiscounts());      
     }, [])
+
+    useEffect(() => {
+            setPromociones(discounts.filter(function(item) {
+                console.log("prueba", item.benefit.idBenefit,id)
+                if (item.benefit.idBenefit != id) {
+                return false; // skip
+                }
+                return true;
+            }).map((item, index) => {
+                return item.discountName
+            }))
+    }, [discounts])
 
     const showImage = () => {
         return (
@@ -181,7 +197,7 @@ const DetalleBenefits = (props) => {
                     ]}
                 />
                 </div>}
-                {console.log("benefit", benefit)}
+                {console.log("benefit", promociones)}
                 { (isLoading || isLoadingSettings) ? <Loading/> :
                 (benefit[0] != undefined && benefit[0].benefit.active) ?
                 <Card className={classes.cardContainer} elevation={6}>
@@ -454,7 +470,7 @@ const DetalleBenefits = (props) => {
                                                             </Grid> : null}
                                                         </Grid>
                                                     </Paper> 
-                                                    {promociones != "" ?
+                                                    {promociones.length > 0 ?
                                                     <Paper className={classes.papercardprom}>
                                                         <Grid container spacing={2}>
                                                             <Grid item xs={12} sm container>
@@ -464,7 +480,7 @@ const DetalleBenefits = (props) => {
                                                                             PROMOCIONES
                                                                         </Typography>
                                                                         <Typography style={{color: "#939598", marginLeft: "3%", textAlign: "justify", display:"inline-block"}} variant="body2" gutterBottom>
-                                                                        {promociones}
+                                                                        {promociones[0]}
                                                                         </Typography>                                                      
                                                                     </Grid>
                                                                 </Grid>

@@ -156,13 +156,13 @@ const FormDiscountBenefits = () => {
 
     const handleDateChangeEndDate = date => {
         if (date != null) {
-          setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "", endDate: "" }));
+          setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
         }
         setDiscountForm({
           ...discountform,
           endDate: date,
         });
-      };
+    };
 
     useEffect(() => {
         dispatch(GetBenefits());

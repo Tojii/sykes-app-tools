@@ -305,7 +305,16 @@ export const AddBenefit = (payload, Logo) => {
     formData.append('Instagram', payload.instagram);
     formData.append('Email', payload.email);
     formData.append('Active', payload.active);
-    formData.append('BenefitLinks', payload.benefitLinks);
+    formData.append('BenefitLinks', payload.benefitLinks.map(item => {
+      return {
+        "IDBenefitLink": item.idBenefitLink,
+        "Name": item.name,
+        "Link": item.link,
+        "icon": item.icon,
+        "Active": item.active,
+        "order": item.order,
+      }
+    }));
     formData.append('files', Logo);
     const config = {
         headers: {
@@ -318,7 +327,17 @@ export const AddBenefit = (payload, Logo) => {
       });
 
       api.post(`/Benefits`, 
-      formData, config).then(res => {
+      {"idCategory": payload.idCategory, "Name": payload.name, "Detail": payload.detail, "Description": payload.description, "BenefitInfo": payload.benefitInfo, "Link": payload.link,
+      "Active": payload.active, "BenefitLinks": payload.benefitLinks.map(item => {
+        return {
+          "IDBenefitLink": item.idBenefitLink,
+          "Name": item.name,
+          "Link": item.link,
+          "icon": item.icon,
+          "Active": item.active,
+          "order": item.order,
+        }
+      })}, config).then(res => {
           dispatch({
               type: ADD_BENEFIT,
               payload: res.data
