@@ -116,7 +116,7 @@ const LinksTable = (props) => {
       if (item != undefined) {
       return [
           item.idBenefitLink,
-          item.benefit.idBenefit,
+          //item.benefit.idBenefit,
           item.name,
           item.active ? ["Active"] : ["Inactive"],
           showImage(item),
@@ -133,15 +133,15 @@ const LinksTable = (props) => {
             display: false,
           }
         },
-        {
-          name: "idBenefit",
-          label: "ID Beneficio",
-          options: {
-            filter: false,
-            sort: true,
-            display: false,
-          }
-        },
+        // {
+        //   name: "idBenefit",
+        //   label: "ID Beneficio",
+        //   options: {
+        //     filter: false,
+        //     sort: true,
+        //     display: false,
+        //   }
+        // },
         {
           name: "name",
           label: "Nombre",
@@ -159,7 +159,7 @@ const LinksTable = (props) => {
           options: {
             filter: true,
             customBodyRenderLite: (dataIndex) => {
-              let value = builddata[dataIndex][3];
+              let value = builddata[dataIndex][2];
               return value.map((val, key) => {
                 return <Chip style={{backgroundColor: val == "Active" ? "#4cb050" : "#939598", margin: "1%", color: "white"}} label={val} key={key} />;
               });

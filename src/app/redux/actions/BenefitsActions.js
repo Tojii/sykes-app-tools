@@ -428,6 +428,7 @@ export const UpdateBenefit = (id, payload, files) => dispatch => {
   formData.append('Instagram', payload.instagram);
   formData.append('Email', payload.email);
   formData.append('Active', payload.active);
+  formData.append('BenefitLinks', payload.benefitLinks);
   formData.append('Logo', payload.logo);
   formData.append('files', files);
   const config = {

@@ -172,6 +172,7 @@ const FormAdminBenefits = () => {
             instagram: benefit[0].benefit.instagram ? benefit[0].benefit.instagram : "",
             email: benefit[0].benefit.email ? benefit[0].benefit.email : "",
             active: benefit[0].benefit.active,
+            benefitLinks: benefit[0].benefit.benefitLinks,
         });}
     }, [benefit]);
 
@@ -255,7 +256,7 @@ const FormAdminBenefits = () => {
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {console.log("vinculos",benefitsform)}
+            {console.log("vinculos",benefit)}
             {(isLoading || isLoadingLocation || isLoadingLinks) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Beneficio" : "Agregar Beneficio"}</h2>}

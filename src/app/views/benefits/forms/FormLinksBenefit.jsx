@@ -134,8 +134,8 @@ const FormLinksBenefits = () => {
     }, []);
 
     useEffect(() => {
-        if(id && link != [] && link[0] != [""] && link[0] != undefined && link[0].benefit != null) {setLinkForm({
-            idBenefit: link[0].benefit.idBenefit,
+        if(id && link != [] && link[0] != [""] && link[0] != undefined) {setLinkForm({
+            //idBenefit: link[0].benefit.idBenefit,
             name: link[0].name,
             icon: link[0].icon,
             active: link[0].active,
@@ -203,7 +203,7 @@ const FormLinksBenefits = () => {
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {/* {console.log(benefitsform)} */}
+            {console.log(link)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Links"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetSocialLinks());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Vínculo" : "Agregar Vínculo"}</h2>}
