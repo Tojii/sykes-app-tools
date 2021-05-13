@@ -204,7 +204,7 @@ const FormVentas = () => {
     }, []);
 
     useEffect(() => {
-        if (cantidad[0] == undefined) { handleCantidad(); }
+        if (cantidad[0] == undefined && purchases[0] != undefined && campaign[0] != undefined && purchases[0].campaignId == campaign[0].id) { handleCantidad(); }
         if ((ventasform.badge == undefined && ventasform.name == undefined) || ventasform.email == user.email && ventasform.phone == user.phone) {
             setVentasForm({
                 ...ventasform,
@@ -267,7 +267,9 @@ const FormVentas = () => {
             for (i = 1; i <= campaign[0].maxLimitPerPerson && (purchases[0] != undefined && i <= (purchases[0].allowedPendingPurchaseItems - ventasform.totalCompra)); i++) {
                 cantidad.push(i);
             }
+            //console.log("cantidad", purchases[0], ventasform.totalCompra, cantidad)
         }
+        
     }
 
     const [carrito, setCarrito] = useState([]);
@@ -283,6 +285,7 @@ const FormVentas = () => {
         provinceCode: "",
         sendMethod: "",
         building: "",
+        buildingID: "",
         freightVentas: 0,
         cantonCode: "",
         districtCode: "",
@@ -342,7 +345,8 @@ const FormVentas = () => {
         const name = event.target.name;
         setVentasForm({
             ...ventasform,
-            [name]: {"id":event.target.value},
+            [name]: event.target.value,
+            building: {"id":event.target.value},
         });
     };
 
@@ -457,13 +461,13 @@ const FormVentas = () => {
 
     return (
         <div className="m-sm-30">
-            {console.log("carrito", carrito)}
+            {/* {console.log("carrito", carrito)} */}
             {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={(successOrder) ? "Success!" : "Error!"} save={() => { }} message={(successOrder) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={"¡Lo sentimos!"} save={() => { }} message={"¡Ya se ha alcanzado el máximo de artículos comprados en esta campaña!"} setOpen={setOpenPurchase} open={openPurchase && !isLoadingCampaign} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <Alert severity="info" className={classes.textmessage}>*El rebajo de artículos comprados se hará de planilla</Alert>}
-                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : message && <Alert severity="info" className={classes.textmessage}>{campaign[0] ? campaign[0].message : ""}</Alert>}
-                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : showInformation ? <Alert severity="info" className={classes.textmessage}>{campaign[0] != undefined ? campaign[0].shippingMessage : ""}</Alert> : null}
+                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : (campaign[0] && campaign[0] != undefined && campaign[0].message != "") && <Alert severity="info" className={classes.textmessage}>{campaign[0] ? campaign[0].message : ""}</Alert>}
+                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : (campaign[0] && campaign[0] != undefined && campaign[0].shippingMessage && showInformation) ? <Alert severity="info" className={classes.textmessage}>{campaign[0] ? campaign[0].shippingMessage : ""}</Alert> : null}
                 {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <h2 style={{ textAlign: "center", marginTop: "2%" }} className="mb-20">Datos del usuario</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>
                     {(isLoadingCampaign || isLoadingOrder) ? <Loading /> :
@@ -528,9 +532,9 @@ const FormVentas = () => {
                             </SelectValidator>
                             {showEdificio ? <SelectValidator
                                 label="Edificio*"
-                                name="building"
+                                name="buildingID"
                                 className={classes.textvalidator}
-                                value={ventasform.building.id}
+                                value={ventasform.buildingID}
                                 onChange={handleChangeEdificio}
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
@@ -793,7 +797,7 @@ const FormVentas = () => {
                                                                         validators={["required"]}
                                                                         errorMessages={["Este campo es requerido"]}
                                                                     >
-                                                                        { //console.log("cant carrito", item.limiteActual),
+                                                                        { //console.log("cant carrito", item.limiteActual, item.stockQuantity, item.maxLimitPerPerson),
                                                                             cantidad.map((cantidaditem, index) => (
                                                                                 (cantidaditem <= item.maxLimitPerPerson && cantidaditem <= item.stockQuantity && cantidaditem <= item.limiteActual) ?
                                                                                     <MenuItem key={`cantidad-${cantidaditem}`} value={cantidaditem ? cantidaditem : ""}>
