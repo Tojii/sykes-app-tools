@@ -355,7 +355,7 @@ const BenefitsLinksTable = (props) => {
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className={classes.tableMargin + " m-sm-30"}>
-            {console.log(props.benefitsLinks, builddata)}
+            {console.log("links", links)}
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}
