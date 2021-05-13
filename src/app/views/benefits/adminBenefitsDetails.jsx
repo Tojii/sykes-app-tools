@@ -81,7 +81,7 @@ const AdminBenefitDetalle = (props) => {
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Link:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].benefit.link }</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    {/* <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Facebook:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].benefit.facebook }</TableCell>
                                     </TableRow>
@@ -92,7 +92,7 @@ const AdminBenefitDetalle = (props) => {
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Email:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].benefit.email }</TableCell>
-                                    </TableRow>
+                                    </TableRow> */}
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Activo:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ 
