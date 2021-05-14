@@ -27,7 +27,7 @@ class MatxVerticalNav extends Component {
   renderLevels = (data, user) => {
     // data[0].display = "none";
     // data[1].user = user;
-    //console.log("nav",user)
+    console.log("nav",user)
     if ( user!=undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) { 
         data.map((item, index) => {
           if (item.children) {
