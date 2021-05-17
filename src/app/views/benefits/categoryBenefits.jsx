@@ -167,6 +167,9 @@ const DetalleBenefits = (props) => {
         }).map((item, index) => {
             return item.address
         })
+        if (tooltipAddress.length == 0) {
+            tooltipAddress = locations[0] ? locations[0].address : "";
+        }
         return tooltipAddress;
     }
 
@@ -188,7 +191,7 @@ const DetalleBenefits = (props) => {
 
     return (
         <>
-            {/* {console.log("category", cantons)} */}
+            {console.log("category", benefitscategory)}
             <div className="m-sm-30">
                 {(isLoading || isLoadingSettings || isLoadingProvince || loadingLocation) ? <Loading/> :
                 <div className="mb-sm-30">

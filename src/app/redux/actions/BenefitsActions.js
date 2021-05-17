@@ -305,7 +305,7 @@ export const AddBenefit = (payload, Logo) => {
     formData.append('Instagram', payload.instagram);
     formData.append('Email', payload.email);
     formData.append('Active', payload.active);
-    formData.append('BenefitLinks', payload.benefitLinks.map(item => {
+    formData.append('BenefitLinks', JSON.stringify(payload.benefitLinks.map(item => {
       return {
         "IDBenefitLink": item.idBenefitLink,
         "Name": item.name,
@@ -314,7 +314,7 @@ export const AddBenefit = (payload, Logo) => {
         "Active": item.active,
         "order": item.order,
       }
-    }));
+    })));
     formData.append('files', Logo);
     const config = {
         headers: {
@@ -327,17 +327,7 @@ export const AddBenefit = (payload, Logo) => {
       });
 
       api.post(`/Benefits`, 
-      {"idCategory": payload.idCategory, "Name": payload.name, "Detail": payload.detail, "Description": payload.description, "BenefitInfo": payload.benefitInfo, "Link": payload.link,
-      "Active": payload.active, "BenefitLinks": payload.benefitLinks.map(item => {
-        return {
-          "IDBenefitLink": item.idBenefitLink,
-          "Name": item.name,
-          "Link": item.link,
-          "icon": item.icon,
-          "Active": item.active,
-          "order": item.order,
-        }
-      })}, config).then(res => {
+      formData, config).then(res => {
           dispatch({
               type: ADD_BENEFIT,
               payload: res.data
@@ -443,11 +433,20 @@ export const UpdateBenefit = (id, payload, files) => dispatch => {
   formData.append('Description', payload.description);
   formData.append('BenefitInfo', payload.benefitInfo);
   formData.append('Link', payload.link);
-  formData.append('Facebook', payload.facebook);
-  formData.append('Instagram', payload.instagram);
-  formData.append('Email', payload.email);
+  //formData.append('Facebook', payload.facebook);
+  //formData.append('Instagram', payload.instagram);
+  //formData.append('Email', payload.email);
   formData.append('Active', payload.active);
-  formData.append('BenefitLinks', payload.benefitLinks);
+  formData.append('BenefitLinks', JSON.stringify(payload.benefitLinks.map(item => {
+    return {
+      "idBenefitLink": item.idBenefitLink,
+      "name": item.name,
+      "link": item.link,
+      "icon": item.icon,
+      "active": item.active,
+      "order": item.order,
+    }
+  })));
   formData.append('Logo', payload.logo);
   formData.append('files', files);
   const config = {

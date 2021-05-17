@@ -120,10 +120,11 @@ const BenefitsLinksTable = (props) => {
         return { 
           "idBenefitLink": item.idBenefitLink,
           "name": item.name,
-          "icon": showImage(item),
+          "showIcon": showImage(item),
           "active": item.active,
           "order": builddata[index].order,
-          "link": index == dataIndex ? link : builddata[index].link 
+          "link": index == dataIndex ? link : builddata[index].link,
+          "icon": item.icon
         }
       });
       //console.log("cambio",linksChange)
@@ -143,10 +144,11 @@ const BenefitsLinksTable = (props) => {
         return { 
           "idBenefitLink": item.idBenefitLink,
           "name": item.name,
-          "icon": showImage(item),
+          "showIcon": showImage(item),
           "active": item.active,
           "order": index == dataIndex ? order : order == builddata[index].order ? actualorder : builddata[index].order,
-          "link": builddata[index].link 
+          "link": builddata[index].link,
+          "icon": item.icon
         }
       });
       //console.log("cambio",linksChange)
@@ -177,7 +179,7 @@ const BenefitsLinksTable = (props) => {
       console.log("buildata", edificiosChange)
     }
 
-    const [builddata, setBuilddata] = useState( props.benefitsLinks.length == 0 ? links.filter(function(item) {
+    const [builddata, setBuilddata] = useState( /**props.benefitsLinks.length == 0 ?**/ links.filter(function(item) {
       if (!item.active) {
         return false; // skip
       }
@@ -187,10 +189,11 @@ const BenefitsLinksTable = (props) => {
          "idBenefitLink": item.idBenefitLink,
          "name": item.name,
          "link": item.link != null ? item.link : "",
-         "icon": showImage(item),
+         "showIcon": showImage(item),
          "order" : index + 1,
+         "icon": item.icon,
       }
-    }) : links.filter(function(item) {
+    }) /*: links.filter(function(item) {
       if (!item.active) {
         return false; // skip
       }
@@ -200,10 +203,10 @@ const BenefitsLinksTable = (props) => {
         "idBenefitLink": item.idBenefitLink,
         "name": item.name,
         "link": item.link != null ? item.link : "",
-        "icon": showImage(item),
+        "showIcon": showImage(item),
         "order" : index + 1,
       }
-    }))
+    })*/)
 
     const columns = [
         {
@@ -216,7 +219,7 @@ const BenefitsLinksTable = (props) => {
           }
         },
         {
-          name: "icon",
+          name: "showIcon",
           label: " ",
           options: {
             download: false,

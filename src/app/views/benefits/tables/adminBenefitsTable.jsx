@@ -63,7 +63,7 @@ const AdminBenefitsTable = () => {
       history.push(`/Benefits/FormAdminBenefits/${id}`);
     };
 
-    const addButton = () => {
+    const addButton = () => { //button in table to add New Benefit
       return (
           <React.Fragment>
             <Tooltip title={"Nuevo"}>
@@ -87,7 +87,7 @@ const AdminBenefitsTable = () => {
       });
     };
   
-    const detallesButton = (item) => {
+    const detallesButton = (item) => { //button in table to show benefit details 
       return (
           <React.Fragment>
             <Tooltip title={"Detalles"}>
@@ -104,7 +104,7 @@ const AdminBenefitsTable = () => {
       );
     }
 
-    const showImage = (item) => {
+    const showImage = (item) => { // function to show images in rows
       return (
         item.benefit.logo ?
         <img

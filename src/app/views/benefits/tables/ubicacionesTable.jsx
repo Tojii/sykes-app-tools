@@ -120,7 +120,7 @@ const LocationsTable = (props) => {
       if (item != undefined) {
       return [
           item.idLocation,
-          item.benefit.idBenefit,
+          item.idBenefit,
           item.address,
           item.provincia,
           item.canton,

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, Grid, } from "@material-ui/core";
 import { useSelector, useDispatch } from 'react-redux'
 import Carousel from "../sykesHome/common/Carousel";
 import { makeStyles } from '@material-ui/core/styles';
@@ -93,7 +92,7 @@ const Home = () => {
                                 d.setHours(0,0,0,0);
                                 start.setHours(0,0,0,0);
                                 end.setHours(0,0,0,0);
-                                if (start.getTime() > d.getTime() || end.getTime() < d.getTime()) {
+                                if (start.getTime() > d.getTime() || end.getTime() < d.getTime()) { //use only active discounts
                                     console.log(start.getTime(), d.getTime(), end.getTime())
                                 return false; // skip
                                 }
@@ -104,20 +103,13 @@ const Home = () => {
                                         //maxHeight={"515px"}
                                         //width={"390px"}
                                         className={classes.imageCarousel}
-                                        //className="p-0 m-0 pb-24 pt-16" 
                                         alt="..."
                                         src={`${image.image}`}
                                         onClick={image.benefit != undefined && image.benefit.idBenefit ? function () {
                                             window.location.href = `${process.env.PUBLIC_URL}/Benefits/Detalle/${image.benefit.idBenefit}`;
                                         } : null}
-                                    //alt={`key-${images.imageName}`}
                                     />
                                 </div>
-                                // <Card className="h-100 px-24 card" key={index}>
-                                //     <CardContent className="testimonial1__card-content">
-
-                                //     </CardContent>
-                                // </Card>
                             ))}
                         </Carousel>
                     </div>

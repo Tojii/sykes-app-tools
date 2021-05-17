@@ -138,7 +138,7 @@ const FormAdminBenefits = (props) => {
         console.log(locationsform)
         //Si se eligió la ubicación pricipal entonces se pasa la anterior a false
         if (locationsform.principalLocation) {
-            var mainlocation = benefitslocations[0].locations.filter(function(item) {
+            var mainlocation = benefitslocations[0].benefitLocations.filter(function(item) {
                 if (item.idLocation == props.id || !item.principalLocation) {
                   return false; // skip
                 }

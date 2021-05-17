@@ -167,6 +167,9 @@ const DetalleBenefits = (props) => {
         }).map((item, index) => {
             return item.address
         })
+        if (tooltipAddress.length == 0) {
+            tooltipAddress = locations[0] ? locations[0].address : "";
+        }
         return tooltipAddress;
     }
 

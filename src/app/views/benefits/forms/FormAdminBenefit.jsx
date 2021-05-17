@@ -159,20 +159,20 @@ const FormAdminBenefits = () => {
     }, []);
 
     useEffect(() => {
-        if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined && benefit[0].benefit != null) {setBenefitsForm({
-            idBenefit: benefit[0].benefit.idBenefit,
-            idCategory: benefit[0].benefit.category.idCategory,
-            name: benefit[0].benefit.name,
-            description: benefit[0].benefit.description ? benefit[0].benefit.description : "",
-            logo: benefit[0].benefit.logo,
-            detail: benefit[0].benefit.detail,
-            benefitInfo: benefit[0].benefit.benefitInfo,
-            link: benefit[0].benefit.link,
-            facebook: benefit[0].benefit.facebook ? benefit[0].benefit.facebook : "",
-            instagram: benefit[0].benefit.instagram ? benefit[0].benefit.instagram : "",
-            email: benefit[0].benefit.email ? benefit[0].benefit.email : "",
-            active: benefit[0].benefit.active,
-            benefitLinks: benefit[0].benefit.benefitLinks,
+        if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined) {setBenefitsForm({
+            idBenefit: benefit[0].idBenefit,
+            idCategory: benefit[0].category.idCategory,
+            name: benefit[0].name,
+            description: benefit[0].description ? benefit[0].description : "",
+            logo: benefit[0].logo,
+            detail: benefit[0].detail,
+            benefitInfo: benefit[0].benefitInfo,
+            link: benefit[0].link,
+            facebook: benefit[0].facebook ? benefit[0].facebook : "",
+            instagram: benefit[0].instagram ? benefit[0].instagram : "",
+            email: benefit[0].email ? benefit[0].email : "",
+            active: benefit[0].active,
+            benefitLinks: benefit[0].benefitLinks,
         });}
     }, [benefit]);
 
@@ -392,7 +392,7 @@ const FormAdminBenefits = () => {
                             <Links benefitsform={benefitsform} benefitsLinks={benefitslinks} setBenefitsLinks={handleChangeLinks} />
                             {errorLinks.error && <Alert style={{width: "70%", marginLeft: "15%"}} severity="error">Formato de vínculo no válido: Uno de los links ingresados no es válido</Alert>}
                         </div>
-                        {id ? <LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} idBenefit={id} /> : null}
+                        {id ? <LocationsTable benefitslocations={benefit[0] ? benefit[0].benefitLocations : []} idBenefit={id} /> : null}
                         <div className={classes.sectionbutton}>
                             <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
                                 ENVIAR  

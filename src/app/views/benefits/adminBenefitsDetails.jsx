@@ -63,23 +63,23 @@ const AdminBenefitDetalle = (props) => {
                                 <TableBody>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Nombre:</h6></TableCell>
-                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].benefit.name }</TableCell>
+                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].name }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Detalle:</h6></TableCell>
-                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].benefit.detail }</TableCell>
+                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].detail }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Descripción:</h6></TableCell>
-                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].benefit.description }</TableCell>
+                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].description }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Información del Beneficio:</h6></TableCell>
-                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].benefit.benefitInfo }</TableCell>
+                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].benefitInfo }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Link:</h6> </TableCell>
-                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].benefit.link }</TableCell>
+                                        <TableCell className="px-sm-24">{ benefit[0] == undefined ? "" : benefit[0].link }</TableCell>
                                     </TableRow>
                                     {/* <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Facebook:</h6> </TableCell>
@@ -96,7 +96,7 @@ const AdminBenefitDetalle = (props) => {
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Activo:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ 
-                                            benefit[0] == undefined ? "" : <Chip style={{backgroundColor: benefit[0].benefit.active ? "#4cb050" : "#939598", margin: "1%", color: "white"}} label={benefit[0].benefit.active ? "Active" : "Inactive"} key={benefit[0].benefit.active ? "Active" : "Inactive"} />}
+                                            benefit[0] == undefined ? "" : <Chip style={{backgroundColor: benefit[0].active ? "#4cb050" : "#939598", margin: "1%", color: "white"}} label={benefit[0].active ? "Active" : "Inactive"} key={benefit[0].active ? "Active" : "Inactive"} />}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow>
@@ -105,13 +105,13 @@ const AdminBenefitDetalle = (props) => {
                                              benefit[0] == undefined ? null : <img
                                              className={classes.sectionbutton}                                         
                                              alt="..."
-                                             src={`${benefit[0].benefit.logo}`}
+                                             src={`${benefit[0].logo}`}
                                              />
                                         }</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell colSpan={2} className="px-sm-24 border-none"> 
-                                            <LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} type={"detail"} /> 
+                                            <LocationsTable benefitslocations={benefit[0] ? benefit[0].benefitLocations : []} type={"detail"} /> 
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>

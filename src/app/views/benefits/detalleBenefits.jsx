@@ -192,19 +192,19 @@ const DetalleBenefits = (props) => {
                     <Breadcrumb
                     routeSegments={[
                     { name: "Benefits Home", path: "/Benefits/Home" }, 
-                    { name: "Categoría", path: `${history.location.prev ? history.location.prev : (`/Benefits/Category/${benefit[0] && benefit[0].benefit ? benefit[0].benefit.category.idCategory : ""}`)}` },  
+                    { name: "Categoría", path: `${history.location.prev ? history.location.prev : (`/Benefits/Category/${benefit[0] ? benefit[0].category.idCategory : ""}`)}` },  
                     { name: "Detalle", path: "/Benefits/Detalle" },                
                     ]}
                 />
                 </div>}
-                {console.log("benefit", promociones)}
+                {console.log("benefit", benefit)}
                 { (isLoading || isLoadingSettings) ? <Loading/> :
-                (benefit[0] != undefined && benefit[0].benefit.active) ?
+                (benefit[0] != undefined && benefit[0].active) ?
                 <Card className={classes.cardContainer} elevation={6}>
                     <div className={classes.margindiv}>
-                        <h1 style={{ color: "#4cb050", marginLeft: "2%", marginTop: "2%", fontWeight: "bold"}} className="mb-20">{showImage()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {benefit[0] && benefit[0].benefit ? benefit[0].benefit.category.name.toUpperCase() : ""}</h1>
+                        <h1 style={{ color: "#4cb050", marginLeft: "2%", marginTop: "2%", fontWeight: "bold"}} className="mb-20">{showImage()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {benefit[0] ? benefit[0].category.name.toUpperCase() : ""}</h1>
                         <h5 style={{ color: "#939598", marginLeft: "2%"}}> {pageSettings[0] != null ? pageSettings[0].reminder : ""} </h5>
-                            <h2 style={{ color: "#ff9805", marginLeft: "2%", marginTop: "2%",}} className="mb-20"> {benefit[0] && benefit[0].benefit ? benefit[0].benefit.name : ""}</h2>      
+                            <h2 style={{ color: "#ff9805", marginLeft: "2%", marginTop: "2%",}} className="mb-20"> {benefit[0] ? benefit[0].name : ""}</h2>      
                             <Tabs style={{marginLeft: "2%", marginTop: "2%",}}>
                                 <div className={classes.tabs}>
                                     <div className={classes.tabList} >
@@ -227,7 +227,7 @@ const DetalleBenefits = (props) => {
                                                                             DESCRIPCIÓN
                                                                         </Typography>
                                                                         <Typography style={{color: "#939598", marginLeft: "3%", textAlign: "justify",}} variant="body2" gutterBottom>
-                                                                            {benefit[0] && benefit[0].benefit ? benefit[0].benefit.description : ""}
+                                                                            {benefit[0] ? benefit[0].description : ""}
                                                                         </Typography>
                                                                     </Grid>
                                                                 </Grid>
@@ -243,7 +243,7 @@ const DetalleBenefits = (props) => {
                                                                             BENEFICIO
                                                                         </Typography>
                                                                         <Typography style={{color: "#939598", width: window.screen.width <= 1024 ? "100%" : "75%", marginLeft: "3%", textAlign: "justify", display:"inline-block", verticalAlign: "top"}} variant="body2" gutterBottom>
-                                                                            {benefit[0] && benefit[0].benefit ? benefit[0].benefit.benefitInfo : ""}
+                                                                            {benefit[0] ? benefit[0].benefitInfo : ""}
                                                                         </Typography>
                                                                         {pageSettings[0] != null && <img
                                                                             style={{marginLeft: "3%", maxWidth: "145px"}}
@@ -264,21 +264,21 @@ const DetalleBenefits = (props) => {
                                                                             UBICACIÓN
                                                                         </Typography>
                                                                         <div style={{ height: "400px", padding: isMdScreen() ? "10px" : "25px", width: "100%", marginLeft: isMdScreen() ? "3%" : "1%" }}>
-                                                                            <Places locations={ benefit[0] && benefit[0].locations ? benefit[0].locations.filter(function(item) {
-                                                                                if (!item.benefit.active || !item.active) {
+                                                                            <Places locations={ benefit[0] && benefit[0].benefitLocations ? benefit[0].benefitLocations.filter(function(item) {
+                                                                                if (!item.active || !item.active) {
                                                                                   return false; // skip
                                                                                 }
                                                                                 return true;
                                                                             }).map((item, index) => {return item}) : [] } lat={location.lat} lng={location.lng} zoomLevel={7} draggable={false} 
-                                                                            content={benefit[0] && benefit[0].locations ? benefit[0].locations.filter(function(item) {
-                                                                                if (!item.benefit.active || !item.active) {
+                                                                            content={benefit[0] && benefit[0].benefitLocations ? benefit[0].benefitLocations.filter(function(item) {
+                                                                                if (!item.active || !item.active) {
                                                                                   return false; // skip
                                                                                 }
                                                                                 return true;
                                                                             }).map((item, index) => {return '<div id="content">' +
                                                                             '<div id="siteNotice">' +
                                                                             "</div>" +
-                                                                            `<h1 id="firstHeading" class="firstHeading">${item.benefit.name}</h1>` +
+                                                                            `<h1 id="firstHeading" class="firstHeading">${benefit[0].name}</h1>` +
                                                                             '<div id="bodyContent">' +
                                                                             `<p><b>Address: </b> ${item.address} </p>` +
                                                                             `<p><b>Phone: </b> ${item.phone} </p>` +
@@ -297,10 +297,10 @@ const DetalleBenefits = (props) => {
                                                 <Grid className={classes.gridtext} item lg={4} md={4} sm={4} xs={12}>
                                                     <Paper className={classes.papercardinfo}>
                                                         <div className={classes.lineGrid} style={{textAlignLast: "center"}}>
-                                                            {benefit[0] && benefit[0].benefit && benefit[0].benefit.logo ? <img
+                                                            {benefit[0] && benefit[0].logo ? <img
                                                                     style={{maxWidth: "100px", margin: "5%"}}
                                                                     alt="..."
-                                                                    src={`${benefit[0] && benefit[0].benefit ? benefit[0].benefit.logo : null}`}
+                                                                    src={`${benefit[0] ? benefit[0].logo : null}`}
                                                                 />
                                                             : null} 
                                                         </div>
@@ -314,7 +314,7 @@ const DetalleBenefits = (props) => {
                                                                     />
                                                                 </div>
                                                             </Grid>
-                                                            {benefit[0] && benefit[0].locations[0] && benefit[0].locations.filter(function(item) {
+                                                            {benefit[0] && benefit[0].benefitLocations[0] && benefit[0].benefitLocations.filter(function(item) {
                                                                 if (!item.principalLocation) {
                                                                 return false; // skip
                                                                 }
@@ -326,7 +326,7 @@ const DetalleBenefits = (props) => {
                                                                     </Grid>
                                                                 )
                                                             })}
-                                                             {benefit[0] && benefit[0].locations[0] && benefit[0].locations.filter(function(item) {
+                                                             {benefit[0] && benefit[0].benefitLocations[0] && benefit[0].benefitLocations.filter(function(item) {
                                                                 if (!item.principalLocation) {
                                                                 return false; // skip
                                                                 }
@@ -338,7 +338,7 @@ const DetalleBenefits = (props) => {
                                                                     </Grid>
                                                                 )
                                                             }).length == 0 ? <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
-                                                            {`${benefit[0] && benefit[0].locations[0] ? benefit[0].locations[0].address : ""}`}
+                                                            {`${benefit[0] && benefit[0].benefitLocations[0] ? benefit[0].benefitLocations[0].address : ""}`}
                                                             </Grid> : null}    
                                                         </Grid>
                                                         <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
@@ -351,7 +351,7 @@ const DetalleBenefits = (props) => {
                                                                     />
                                                                 </div>
                                                             </Grid>
-                                                            {benefit[0] && benefit[0].locations[0] && benefit[0].locations.filter(function(item) {
+                                                            {benefit[0] && benefit[0].benefitLocations[0] && benefit[0].benefitLocations.filter(function(item) {
                                                                 if (!item.principalLocation) {
                                                                 return false; // skip
                                                                 }
@@ -363,7 +363,7 @@ const DetalleBenefits = (props) => {
                                                                     </Grid>
                                                                 )
                                                             })}
-                                                             {benefit[0] && benefit[0].locations[0] && benefit[0].locations.filter(function(item) {
+                                                             {benefit[0] && benefit[0].benefitLocations[0] && benefit[0].benefitLocations.filter(function(item) {
                                                                 if (!item.principalLocation) {
                                                                 return false; // skip
                                                                 }
@@ -375,7 +375,7 @@ const DetalleBenefits = (props) => {
                                                                     </Grid>
                                                                 )
                                                             }).length == 0 ? <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
-                                                            {`${benefit[0] && benefit[0].locations[0] ? benefit[0].locations[0].phone : ""}`}
+                                                            {`${benefit[0] && benefit[0].benefitLocations[0] ? benefit[0].benefitLocations[0].phone : ""}`}
                                                             </Grid> : null}
                                                         </Grid>
                                                         <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
@@ -388,7 +388,7 @@ const DetalleBenefits = (props) => {
                                                                     />
                                                                 </div>
                                                             </Grid>
-                                                            {benefit[0] && benefit[0].locations[0] && benefit[0].locations.filter(function(item) {
+                                                            {benefit[0] && benefit[0].benefitLocations[0] && benefit[0].benefitLocations.filter(function(item) {
                                                                 if (!item.principalLocation) {
                                                                 return false; // skip
                                                                 }
@@ -400,7 +400,7 @@ const DetalleBenefits = (props) => {
                                                                     </Grid>
                                                                 )
                                                             })}
-                                                            {benefit[0] && benefit[0].locations[0] && benefit[0].locations.filter(function(item) {
+                                                            {benefit[0] && benefit[0].benefitLocations[0] && benefit[0].benefitLocations.filter(function(item) {
                                                                 if (!item.principalLocation) {
                                                                 return false; // skip
                                                                 }
@@ -412,7 +412,7 @@ const DetalleBenefits = (props) => {
                                                                     </Grid>
                                                                 )
                                                             }).length == 0 ? <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
-                                                            {`+ (506) ${benefit[0] && benefit[0].locations[0] ? benefit[0].locations[0].whatsApp : ""}`}
+                                                            {`+ (506) ${benefit[0] && benefit[0].benefitLocations[0] ? benefit[0].benefitLocations[0].whatsApp : ""}`}
                                                             </Grid> : null}
                                                         </Grid>
                                                         <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
@@ -426,16 +426,16 @@ const DetalleBenefits = (props) => {
                                                                 </div>
                                                             </Grid>
                                                             <Grid item lg={9} md={9} sm={9} xs={9}>
-                                                            <a href={`https://${benefit[0] && benefit[0].benefit ? benefit[0].benefit.link : ""}`} style={{color: "#039be5"}}>
-                                                                {benefit[0] && benefit[0].benefit ? benefit[0].benefit.link : ""}
+                                                            <a href={`https://${benefit[0] ? benefit[0].link : ""}`} style={{color: "#039be5"}}>
+                                                                {benefit[0] ? benefit[0].link : ""}
                                                             </a>
                                                             </Grid>
                                                         </Grid>
                                                         <Grid container spacing={2} justify="center" alignItems="center" direction="row">
-                                                            {benefit[0] && benefit[0].benefit && benefit[0].benefit.instagram ?
+                                                            {benefit[0] && benefit[0].instagram ?
                                                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                                                 <div style={{textAlignLast: "center"}}>
-                                                                    <a href={`https://${benefit[0] && benefit[0].benefit ? benefit[0].benefit.instagram : ""}`}>
+                                                                    <a href={`https://${benefit[0] ? benefit[0].instagram : ""}`}>
                                                                         <img
                                                                             className={classes.miniatureimage}
                                                                             alt="..."
