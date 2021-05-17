@@ -178,8 +178,8 @@ const BenefitsLinksTable = (props) => {
       props.setBenefitsLinks(edificiosChange); 
       console.log("buildata", edificiosChange)
     }
-
-    const [builddata, setBuilddata] = useState( /**props.benefitsLinks.length == 0 ?**/ links.filter(function(item) {
+    //console.log("props", props.benefitsLinks)
+    const [builddata, setBuilddata] = useState( props.benefitsLinks.length == 0 ? links.filter(function(item) {
       if (!item.active) {
         return false; // skip
       }
@@ -193,7 +193,7 @@ const BenefitsLinksTable = (props) => {
          "order" : index + 1,
          "icon": item.icon,
       }
-    }) /*: links.filter(function(item) {
+    }) : links.filter(function(item) {
       if (!item.active) {
         return false; // skip
       }
@@ -202,11 +202,11 @@ const BenefitsLinksTable = (props) => {
       return { 
         "idBenefitLink": item.idBenefitLink,
         "name": item.name,
-        "link": item.link != null ? item.link : "",
+        //"link": props.benefitsLinks[index].link != null ? props.benefitsLinks[index].link : "",
         "showIcon": showImage(item),
         "order" : index + 1,
       }
-    })*/)
+    }))
 
     const columns = [
         {
@@ -358,7 +358,7 @@ const BenefitsLinksTable = (props) => {
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className={classes.tableMargin + " m-sm-30"}>
-            {console.log("links", links)}
+            {console.log("links", props)}
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}
