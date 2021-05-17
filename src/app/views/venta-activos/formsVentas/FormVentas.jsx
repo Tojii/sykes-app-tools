@@ -62,6 +62,7 @@ const useStyles = makeStyles({
             width: "75%",
             marginTop: "3%",
         },
+        wordBreak: "break-word"
     },
     gridtext: {
         "@media (min-width: 0px)": {
@@ -108,7 +109,8 @@ const useStyles = makeStyles({
     },
     card__title: {
         margin: "10px 10px 0 0",
-        padding: "5px 10px"
+        padding: "5px 10px",
+        wordBreak: "break-word"
     },
     action__btn: {
         display: 'flex',
@@ -131,6 +133,9 @@ const useStyles = makeStyles({
         height: 'auto',
         margin: '5px'
     },
+    break: {
+        wordBreak: "break-word"
+    }
 });
 
 const styles = (theme) => ({

@@ -51,6 +51,9 @@ const useStyles = makeStyles({
     },
     cellspace:{
         whiteSpace: "unset",
+    },
+    break:{
+        wordBreak: "break-word"
     }
 });
 
@@ -225,13 +228,13 @@ const CompraDetalle = (props) => {
                                                     alignItems="center"
                                                     direction="row"
                                                 >
-                                                    <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                    <Grid className={classes.break} item lg={3} md={3} sm={3} xs={3}>
                                                     {item.itemName}
                                                     </Grid>
-                                                    <Grid item lg={2} md={2} sm={2} xs={2}>
+                                                    <Grid className={classes.break} item lg={2} md={2} sm={2} xs={2}>
                                                     {item.amount}
                                                     </Grid>
-                                                    <Grid item lg={4} md={4} sm={4} xs={4}>
+                                                    <Grid className={classes.break} item lg={4} md={4} sm={4} xs={4}>
                                                     ₡ {parseFloat(item.subTotal).toFixed(2)}
                                                     </Grid>
                                                     <Grid item lg={3} md={3} sm={3} xs={3}>

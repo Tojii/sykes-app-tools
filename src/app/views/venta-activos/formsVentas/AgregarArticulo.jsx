@@ -59,6 +59,9 @@ const useStyles = makeStyles({
     },
     cellspace:{
         whiteSpace: "unset",
+    },
+    break: {
+        wordBreak: "break-word"
     }
 });
 
@@ -99,7 +102,7 @@ const AgregarArticulo = (props) => {
         } else { 
             if (!props.indexlist.includes(props.id)) {
                 let totalCompraVentas = props.ventas.totalCompra + cantidadArticulo * campaignItems[0].unitPrice;
-                console.log("prueba",totalCompraVentas)
+                //console.log("prueba",totalCompraVentas)
                 props.setCarrito(
                     [ 
                         ...props.carrito,
@@ -150,12 +153,12 @@ const AgregarArticulo = (props) => {
                             { campaignItems[0] == undefined || isLoading ? <Loading /> : <Table>
                                 <TableBody>
                                     <TableRow>
-                                        <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Artículo:</h6></TableCell>
-                                        <TableCell className="px-sm-24 border-none">{ campaignItems[0] == undefined ? "" : campaignItems[0].name }</TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Artículo:</h6></TableCell>
+                                        <TableCell width={"70%"} className={classes.break + " px-sm-24 border-none"}>{ campaignItems[0] == undefined ? "" : campaignItems[0].name }</TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell width={"50%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Descripción del Artículo:</h6></TableCell>
-                                        <TableCell className="px-sm-24 border-none">{ campaignItems[0] == undefined ? "" : campaignItems[0].description }</TableCell>
+                                        <TableCell width={"30%%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Descripción del Artículo:</h6></TableCell>
+                                        <TableCell className={classes.break + " px-sm-24 border-none"}>{ campaignItems[0] == undefined ? "" : campaignItems[0].description }</TableCell>
                                     </TableRow>
                                     {campaignItems[0].image != null ?
                                     <TableRow>
@@ -173,7 +176,7 @@ const AgregarArticulo = (props) => {
                                     </TableRow> : null
                                     }
                                     <TableRow>
-                                        <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Valor del artículo:</h6></TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Valor del artículo:</h6></TableCell>
                                         <TableCell className="px-sm-24 border-none">{ campaignItems[0] == undefined ? "" : "₡" + campaignItems[0].unitPrice }</TableCell>
                                     </TableRow>
                                     {/* {(props.ventas != undefined && props.ventas.sendMethod != "Recoger en edificio") ? <TableRow>
@@ -181,7 +184,7 @@ const AgregarArticulo = (props) => {
                                         <TableCell className="px-sm-24 border-none">{ campaignItems[0] == undefined ? "" : "₡" + campaignItems[0].estimatedPrice }</TableCell>
                                     </TableRow> : null} */}
                                     <TableRow>
-                                        <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Cantidad:</h6></TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Cantidad:</h6></TableCell>
                                         { props.type == "agregar" ? <TableCell className="px-sm-24 border-none">
                                             <SelectValidator  
                                                 name="cantidad"
@@ -202,7 +205,7 @@ const AgregarArticulo = (props) => {
                                         : <TableCell className="px-sm-24 border-none">{ detail.amount }</TableCell>}
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}> <h6>Subtotal:</h6> </TableCell>
+                                        <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24 border-none"}> <h6>Subtotal:</h6> </TableCell>
                                         { props.type == "agregar" ?
                                             <TableCell className="px-sm-24 border-none">{campaignItems[0] == undefined ? "" : "₡" + Math.round((cantidadArticulo * campaignItems[0].unitPrice) * 100) / 100}</TableCell>
                                             : <TableCell className="px-sm-24 border-none">{detail == undefined ? "" : "₡" + Math.round((detail.subTotal) * 100) / 100}</TableCell>
