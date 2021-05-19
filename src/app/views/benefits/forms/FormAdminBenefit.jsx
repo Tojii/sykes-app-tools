@@ -110,7 +110,7 @@ const FormAdminBenefits = () => {
     const [files, setFiles] = useState(null);
     const [logo, setLogo] = useState(null);
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
-    const [benefitslinks, setBenefitsLinks] = useState({});
+    const [benefitslinks, setBenefitsLinks] = useState([]);
     const [errorLinks, setErrorLinks] = useState({error: false, errorMessage: ""});
     
     const [benefitsform, setBenefitsForm] = useState({

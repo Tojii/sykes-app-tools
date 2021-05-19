@@ -8,6 +8,7 @@ import history from "history.js";
 import { useParams } from "react-router";
 import LocationsTable from "./tables/ubicacionesTable"
 import Chip from '@material-ui/core/Chip';
+import Links from "./tables/benefitsLinkstable"
 
 
 const useStyles = makeStyles({
@@ -54,6 +55,7 @@ const AdminBenefitDetalle = (props) => {
 
     return (
         <div className="m-sm-30">
+            {console.log(benefit)}
             {(isLoading || isLoadingLocation) ? <Loading/> : 
             <Grid container spacing={2}>
                 <Grid item md={12} xs={12}> 
@@ -109,9 +111,14 @@ const AdminBenefitDetalle = (props) => {
                                              />
                                         }</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    <TableRow> 
                                         <TableCell colSpan={2} className="px-sm-24 border-none"> 
                                             <LocationsTable benefitslocations={benefit[0] ? benefit[0].benefitLocations : []} type={"detail"} /> 
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow> 
+                                        <TableCell colSpan={2} className="px-sm-24 border-none"> 
+                                            <Links admin={false} benefitsform={[]} setBenefitsLinks={() => {}} benefitsLinks={benefit[0] ? benefit[0].benefitLinks : []} />
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>

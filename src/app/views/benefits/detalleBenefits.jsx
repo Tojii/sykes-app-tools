@@ -124,7 +124,10 @@ import history from "history.js";
         "@media (min-width: 1024px)": {
             marginBottom: "5%",
         },
-    }   
+    },
+    break: {
+        wordBreak: "break-word"
+    }
 })
 
 const DetalleBenefits = (props) => {
@@ -304,7 +307,7 @@ const DetalleBenefits = (props) => {
                                                                 />
                                                             : null} 
                                                         </div>
-                                                        <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
+                                                        <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.break + " " + classes.lineGrid}>
                                                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                                                 <div style={{textAlignLast: "center"}}>
                                                                     <img
@@ -432,42 +435,32 @@ const DetalleBenefits = (props) => {
                                                             </Grid>
                                                         </Grid>
                                                         <Grid container spacing={2} justify="center" alignItems="center" direction="row">
-                                                            {benefit[0] && benefit[0].instagram ?
-                                                            <Grid item lg={3} md={3} sm={3} xs={3}>
-                                                                <div style={{textAlignLast: "center"}}>
-                                                                    <a href={`https://${benefit[0] ? benefit[0].instagram : ""}`}>
-                                                                        <img
-                                                                            className={classes.miniatureimage}
-                                                                            alt="..."
-                                                                            src={require('./images/instagram.png')}
-                                                                        />
-                                                                    </a>
-                                                                </div>
-                                                            </Grid> : null}
-                                                            {benefit[0] && benefit[0].benefit && benefit[0].benefit.facebook ?
-                                                            <Grid item lg={3} md={3} sm={3} xs={3}>
-                                                                <div style={{textAlignLast: "center"}}>
-                                                                    <a href={`${benefit[0] && benefit[0].benefit ? benefit[0].benefit.facebook : ""}`}> 
-                                                                        <img
-                                                                            className={classes.miniatureimage}
-                                                                            alt="..."
-                                                                            src={require('./images/facebook.png')}
-                                                                        />
-                                                                    </a>
-                                                                </div>
-                                                            </Grid> : null}
-                                                            {benefit[0] && benefit[0].benefit && benefit[0].benefit.email ?
-                                                            <Grid item lg={3} md={3} sm={3} xs={3}>
-                                                                <div style={{textAlignLast: "center"}}>
-                                                                    <a href={`https://${benefit[0] && benefit[0].benefit ? benefit[0].benefit.email : ""}`}>
-                                                                        <img
-                                                                            className={classes.miniatureimage}
-                                                                            alt="..."
-                                                                            src={require('./images/correo.png')}
-                                                                        />
-                                                                    </a>
-                                                                </div>
-                                                            </Grid> : null}
+                                                            {benefit[0] && benefit[0].benefitLinks ?
+
+                                                            benefit[0].benefitLinks.filter(function(item) {
+                                                                if ((item.order == "1" || item.order == "2" || item.order == "3" || item.order == "4") && item.link) {
+                                                                return true; // skip
+                                                                }
+                                                                return false;
+                                                            }).map((item, index) => {
+                                                                return (
+                                                                    <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                                        <div style={{textAlignLast: "center"}}>
+                                                                            <a href={`https://${item.link}`}>
+                                                                                <img
+                                                                                    className={classes.miniatureimage}
+                                                                                    alt="..."
+                                                                                    src={item.icon}
+                                                                                />
+                                                                            </a>
+                                                                        </div>
+                                                                    </Grid>
+                                                                )
+                                                            })
+
+                                                           : null}
+                                                            
+                                                          
                                                         </Grid>
                                                     </Paper> 
                                                     {promociones.length > 0 ?

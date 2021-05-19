@@ -74,24 +74,38 @@ const BenefitsLinksTable = (props) => {
         // !isAdmin && dispatch(GetCampaignsActive());
     }, []);
 
-  //   useEffect(() => {
-  //     setBuilddata(props.benefitsLinks.length == 0 ? buildings.map((item, index) => {
-  //       return { 
-  //         "idBuilding": item.id,
-  //         "nameBuilding": item.name,
-  //         "activeBuilding": item.active,
-  //         "active": false,
-  //       }
-  //     }) : buildings.map((item, index) => {
-  //       return { 
-  //         "id": props.benefitsLinks[index] == undefined ? undefined : props.benefitsLinks[index].id,
-  //         "nameBuilding": item.name,
-  //         "active": props.benefitsLinks[index] == undefined ? false : props.benefitsLinks[index].active,
-  //         "activeBuilding": item.active,
-  //         "idBuilding": item.id,
-  //       }
-  //     }))
-  // }, [buildings]);
+    useEffect(() => {
+      console.log("effect", props.benefitsLinks)
+      setBuilddata( props.benefitsLinks.length == 0 ? links.filter(function(item) {
+        if (!item.active) {
+          return false; // skip
+        }
+        return true;
+        }).map((item, index) => {
+        return { 
+           "idBenefitLink": item.idBenefitLink,
+           "name": item.name,
+           "link": item.link != null ? item.link : "",
+           "showIcon": showImage(item),
+           "order" : index + 1,
+           "icon": item.icon,
+        }
+      }) : links.filter(function(item) {
+        if (!item.active) {
+          return false; // skip
+        }
+        return true;
+        }).map((item, index) => {
+        return { 
+          "idBenefitLink": item.idBenefitLink,
+          "name": item.name,
+          "link": props.benefitsLinks[index] != undefined ? props.benefitsLinks[index].link : "",
+          "showIcon": showImage(item),
+          "order" : (props.benefitsLinks[index] != undefined && props.benefitsLinks[index].order) ? props.benefitsLinks[index].order : index + 1,
+          "icon": item.icon,
+        }
+      }))
+  }, [links, props.benefitsLinks]);
 
     const getMuiTheme = () =>
     createMuiTheme({
@@ -157,28 +171,29 @@ const BenefitsLinksTable = (props) => {
     }
 
 
-    const changeStatus = (dataIndex) => {
-      var edificiosChange = props.benefitsLinks.length == 0 ? buildings.map((item, index) => {
-        return { 
-          "idBuilding": item.id,
-          "nameBuilding": item.name,
-          "activeBuilding": item.active,
-          "active": index == dataIndex ? (builddata[index] && builddata[index].active ? false : true) : builddata[index].active 
-        }
-      }) : buildings.map((item, index) => {
-        return { 
-            "id": props.benefitsLinks[index] == undefined ? undefined : props.benefitsLinks[index].id,
-            "nameBuilding": item.name,
-            "active": index == dataIndex ? (props.benefitsLinks[index] != undefined ? (props.benefitsLinks[index] && props.benefitsLinks[index].active ? false : true) : (buildings[index].active ? false : true)) : (props.benefitsLinks[index] != undefined ? props.benefitsLinks[index].active : buildings[index].active),
-            "activeBuilding": item.active,
-            "idBuilding": item.id,
-        }
-      });
-      setBuilddata(edificiosChange) 
-      props.setBenefitsLinks(edificiosChange); 
-      console.log("buildata", edificiosChange)
-    }
+    // const changeStatus = (dataIndex) => {
+    //   var edificiosChange = props.benefitsLinks.length == 0 ? buildings.map((item, index) => {
+    //     return { 
+    //       "idBuilding": item.id,
+    //       "nameBuilding": item.name,
+    //       "activeBuilding": item.active,
+    //       "active": index == dataIndex ? (builddata[index] && builddata[index].active ? false : true) : builddata[index].active 
+    //     }
+    //   }) : buildings.map((item, index) => {
+    //     return { 
+    //         "id": props.benefitsLinks[index] == undefined ? undefined : props.benefitsLinks[index].id,
+    //         "nameBuilding": item.name,
+    //         "active": index == dataIndex ? (props.benefitsLinks[index] != undefined ? (props.benefitsLinks[index] && props.benefitsLinks[index].active ? false : true) : (buildings[index].active ? false : true)) : (props.benefitsLinks[index] != undefined ? props.benefitsLinks[index].active : buildings[index].active),
+    //         "activeBuilding": item.active,
+    //         "idBuilding": item.id,
+    //     }
+    //   });
+    //   setBuilddata(edificiosChange) 
+    //   props.setBenefitsLinks(edificiosChange); 
+    //   console.log("buildata", edificiosChange)
+    // }
     //console.log("props", props.benefitsLinks)
+    
     const [builddata, setBuilddata] = useState( props.benefitsLinks.length == 0 ? links.filter(function(item) {
       if (!item.active) {
         return false; // skip
@@ -202,9 +217,10 @@ const BenefitsLinksTable = (props) => {
       return { 
         "idBenefitLink": item.idBenefitLink,
         "name": item.name,
-        //"link": props.benefitsLinks[index].link != null ? props.benefitsLinks[index].link : "",
+        "link": props.benefitsLinks[index] != undefined ? props.benefitsLinks[index].link : "",
         "showIcon": showImage(item),
-        "order" : index + 1,
+        "order" : (props.benefitsLinks[index] != undefined && props.benefitsLinks[index].order) ? props.benefitsLinks[index].order : index + 1,
+        "icon": item.icon,
       }
     }))
 
@@ -251,7 +267,7 @@ const BenefitsLinksTable = (props) => {
               let value = builddata[dataIndex].link
               //console.log("hola",builddata)
               //return <TextField onClick={() => changeStatus(dataIndex)} style={{backgroundColor: value == true ? "#039be5" : "gray", margin: "1%", color: "white"}} label={value == true ? "Habilitado" : "Deshabilitado"}  />;
-              return <TextValidator
+              if (isAdmin) {return <TextValidator
               //className={classes.textvalidator}
               //label="Prueba*"
               onBlur={(e) => {changeLink(e.target.value, dataIndex)}}
@@ -261,7 +277,7 @@ const BenefitsLinksTable = (props) => {
               validators={["matchRegexp:^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$"]}
               errorMessages={["Formato de url no válido"]}
               //value={value}
-              />
+              />} else {return value}
             },
           }
         },  
@@ -274,7 +290,7 @@ const BenefitsLinksTable = (props) => {
               let value = builddata[dataIndex].order
               //console.log("hola",builddata)
               //return <TextField onClick={() => changeStatus(dataIndex)} style={{backgroundColor: value == true ? "#039be5" : "gray", margin: "1%", color: "white"}} label={value == true ? "Habilitado" : "Deshabilitado"}  />;
-              return <SelectValidator
+              if (isAdmin) {return <SelectValidator
               //className={classes.textvalidator}
               //label="Prueba*"
               onChange={(e) => {changeOrder(e.target.value, dataIndex)}}
@@ -290,7 +306,7 @@ const BenefitsLinksTable = (props) => {
                     {data.order || " "}
                     </MenuItem> 
                 ))}
-              </SelectValidator>
+              </SelectValidator>} else {return value}
             },
           }
         },    
@@ -358,7 +374,7 @@ const BenefitsLinksTable = (props) => {
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className={classes.tableMargin + " m-sm-30"}>
-            {console.log("links", props)}
+            {console.log("links", builddata)}
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}
