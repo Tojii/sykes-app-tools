@@ -62,7 +62,7 @@ const EdificiosTable = (props) => {
           "idBuilding": item.id,
         }
       }))
-  }, [buildings]);
+  }, [buildings, props.edificiosCampaign]);
 
     const getMuiTheme = () =>
     createMuiTheme({
@@ -158,7 +158,8 @@ const EdificiosTable = (props) => {
         {
           name: " ",
           options: {
-            filter: true,
+            filter: false,
+            viewColumns: false,
             //display: false,
             customBodyRenderLite: (dataIndex) => {
               let value = builddata[dataIndex].active;

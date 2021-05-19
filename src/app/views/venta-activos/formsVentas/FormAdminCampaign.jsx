@@ -152,6 +152,10 @@ const FormAdminCampaign = () => {
                     "activeBuilding": item.building.active,
                     "idBuilding": item.building.id,
                 }
+            }).sort(function(a, b) {
+                var textA = a.idBuilding;
+                var textB = b.idBuilding;
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
             }),
         });}
     }, [campaign]);
