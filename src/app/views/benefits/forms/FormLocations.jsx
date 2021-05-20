@@ -89,6 +89,7 @@ const FormAdminBenefits = (props) => {
     const [errorPhone, setErrorPhone] = useState({error: false, errorMessage: ""});
     const [errorWhatsApp, setErrorWhatsApp] = useState({error: false, errorMessage: ""});
     const [errorProvince, setErrorProvince] = useState({error: false, errorMessage: ""});
+    const [errorType, setErrorType] = useState({error: false, errorMessage: ""});
     const [errorCanton, setErrorCanton] = useState({error: false, errorMessage: ""});
     const [errorDistrito, setErrorDistrito] = useState({error: false, errorMessage: ""});
     const [errorAddress, setErrorAddress] = useState({error: false, errorMessage: ""});
@@ -106,6 +107,7 @@ const FormAdminBenefits = (props) => {
         whatsapp: "",
         latitude: "",
         longitude: "",
+        type: "",
         active: false,
         principalLocation: false,
     });
@@ -134,10 +136,13 @@ const FormAdminBenefits = (props) => {
             else {setErrorCanton({error: false, errorMessage:``});}
         if(locationsform.district == "") {setErrorDistrito({error: true, errorMessage:`Este campo es requerido`});}
             else {setErrorDistrito({error: false, errorMessage:``});}
+        if(locationsform.type == "") {setErrorType({error: true, errorMessage:`Este campo es requerido`});}
+            else {setErrorType({error: false, errorMessage:``});}
         
         console.log(locationsform)
         //Si se eligió la ubicación pricipal entonces se pasa la anterior a false
         if (locationsform.principalLocation) {
+            console.log("validacion false", benefitslocations[0].benefitLocations)
             var mainlocation = benefitslocations[0].benefitLocations.filter(function(item) {
                 if (item.idLocation == props.id || !item.principalLocation) {
                   return false; // skip
@@ -151,14 +156,14 @@ const FormAdminBenefits = (props) => {
             console.log("main", mainlocation)
             mainlocation.length != 0 && await dispatch(UpdateBenefitLocation(mainlocation[0].idLocation, {...mainlocation[0], provinceCode: mainlocation[0].codProvincia, whatsapp: mainlocation[0].whatsApp,
             cantonCode: 7, districtCode: mainlocation[0].codDistrito, district: mainlocation[0].distrito, province: mainlocation[0].provincia,
-            idBenefit: mainlocation[0].benefit.idBenefit, principalLocation: false}, {latitude: mainlocation[0].latitude, longitude: mainlocation[0].longitude }));
+            idBenefit: props.idBenefit, principalLocation: false}, {latitude: mainlocation[0].latitude, longitude: mainlocation[0].longitude }));
         }
         // Guarda o edita según sea el caso si todas las validaciones son correctas
-        if (locationsform.phone != "" && locationsform.whatsapp != "" && locationsform.address != "" && locationsform.province != "" && locationsform.canton != "" && locationsform.district != ""
+        if (locationsform.phone != "" && locationsform.whatsapp != "" && locationsform.address != "" && locationsform.type != "" && locationsform.province != "" && locationsform.canton != "" && locationsform.district != ""
             && locationsform.phone.length == 8 && locationsform.whatsapp.length == 8 && regex.test(locationsform.phone) && regex.test(locationsform.whatsapp) && props.id) {
             await dispatch(UpdateBenefitLocation(props.id, locationsform, locationsMapform));
             setOpen(true);
-        } else if (locationsform.phone != "" && locationsform.whatsapp != "" && locationsform.address != "" && locationsform.province != "" && locationsform.canton != "" && locationsform.district != ""
+        } else if (locationsform.phone != "" && locationsform.whatsapp != "" && locationsform.address != "" && locationsform.type != "" && locationsform.province != "" && locationsform.canton != "" && locationsform.district != ""
             && locationsform.phone.length == 8 && locationsform.whatsapp.length == 8 && regex.test(locationsform.phone) && regex.test(locationsform.whatsapp)) {
             await dispatch(AddBenefitLocation(locationsform, locationsMapform));
             setOpen(true);
@@ -204,6 +209,7 @@ const FormAdminBenefits = (props) => {
 
     const handleChange = (event) => {
         const name = event.target.name;
+        const regex = /^\+?(0|[1-9]\d*)$/;
         if (name == "active" || name == "principalLocation") {
             if (name == "principalLocation") {
                 event.target.checked && setOpenMessage(true)
@@ -218,6 +224,18 @@ const FormAdminBenefits = (props) => {
             [name]: event.target.value,
             })
         }
+        if(event.target.name == "type" && event.target.value == "") {setErrorType({error: true, errorMessage:`Este campo es requerido`});}
+            else if (event.target.name == "type") {setErrorType({error: false, errorMessage:``});}
+        if(event.target.name == "phone" && event.target.value == "") {setErrorPhone({error: true, errorMessage:`Este campo es requerido`});}
+            else if (event.target.name == "phone" && !regex.test(event.target.value)) {setErrorPhone({error: true, errorMessage:`Solo se permiten números`});}
+                else if(event.target.name == "phone" && event.target.value.length != 8) {setErrorPhone({error: true, errorMessage:`El número debe tener 8 caracteres`});}
+                    else if (event.target.name == "phone") {setErrorPhone({error: false, errorMessage:``});}
+        if(event.target.name == "whatsapp" && event.target.value == "") {setErrorWhatsApp({error: true, errorMessage:`Este campo es requerido`});}
+            else if (event.target.name == "whatsapp" && !regex.test(event.target.value)) {setErrorWhatsApp({error: true, errorMessage:`Solo se permiten números`});}
+                else if(event.target.name == "whatsapp" && event.target.value.length != 8) {setErrorWhatsApp({error: true, errorMessage:`El número debe tener 8 caracteres`});}
+                    else if (event.target.name == "whatsapp") {setErrorWhatsApp({error: false, errorMessage:``});}
+        if(event.target.name == "address" && event.target.value == "") {setErrorAddress({error: true, errorMessage:`Este campo es requerido`});}
+            else if (event.target.name == "address") {setErrorAddress({error: false, errorMessage:``});}
     };
 
     const onChangeLocation = (lat, lng) => {
@@ -246,6 +264,8 @@ const FormAdminBenefits = (props) => {
           cantonCode: "",
           districtCode: "",
         });
+        if(event.target.value == "") {setErrorProvince({error: true, errorMessage:`Este campo es requerido`});}
+            else {setErrorProvince({error: false, errorMessage:``});}
     };
 
     const handleChangeCanton = (event) => {
@@ -263,6 +283,8 @@ const FormAdminBenefits = (props) => {
           district: "",
           districtCode: "",
         });
+        if(event.target.value == "") {setErrorCanton({error: true, errorMessage:`Este campo es requerido`});}
+            else {setErrorCanton({error: false, errorMessage:``});}
     };
 
     const handleChangeDistrict = (event) => {
@@ -276,11 +298,13 @@ const FormAdminBenefits = (props) => {
           [name]: event.target.value,
           district: districtName
         });
+        if(event.target.value == "") {setErrorDistrito({error: true, errorMessage:`Este campo es requerido`});}
+            else {setErrorDistrito({error: false, errorMessage:``});}
     };
 
     return (
         <div className={"p-24"}>
-            {console.log("Benefit", benefitslocations[0].locations)}
+            {console.log("locationsform", locationsform)}
             {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsById(props.idBenefit))}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> : <ValidationModal idioma={"Español"} path={""} state={"Recordatorio"} save={() => {}} message={"Se va a establecer esta localización como la principal del beneficio"} setOpen={setOpenMessage} open={openMessage} />}
             <Card className={classes.formcard} elevation={6}>
@@ -299,6 +323,24 @@ const FormAdminBenefits = (props) => {
                                 error={errorAddress.error}
                             />
                             <FormHelperText error={errorAddress.error} id="my-helper-textaddress">{errorAddress.errorMessage}</FormHelperText>
+                        </FormControl>
+                        <FormControl className={classes.textvalidator}>
+                            <SelectValidator 
+                                label="Tipo de Ubicación*" 
+                                name="type"
+                                style={{width: "100%"}}
+                                value={locationsform.type} 
+                                onChange={handleChange} 
+                                error={errorType.error}
+                            >
+                                <MenuItem key={`type-remote`} id={`type-remote`} value={"Remota"}>
+                                    {"Remota"}
+                                </MenuItem>
+                                <MenuItem key={`type-fisica`} id={`type-fisica`} value={"Física"}>
+                                    {"Física"}
+                                </MenuItem>
+                            </SelectValidator> 
+                            <FormHelperText error={errorType.error} id="my-helper-textprovince">{errorType.errorMessage}</FormHelperText>
                         </FormControl>
                         <FormControl className={classes.textvalidator}>
                             <SelectValidator 

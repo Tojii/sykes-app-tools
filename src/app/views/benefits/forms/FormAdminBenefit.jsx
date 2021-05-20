@@ -125,7 +125,8 @@ const FormAdminBenefits = () => {
         facebook: "",
         instagram: "",
         email: "",
-        active: false
+        active: false,
+        benefitLinks: []
     });
 
     const handleFormSubmit = async () => {
@@ -258,7 +259,7 @@ const FormAdminBenefits = () => {
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {console.log("vinculos",benefitslinks)}
+            {console.log("vinculos",benefitsform)}
             {(isLoading || isLoadingLocation || isLoadingLinks) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Beneficio" : "Agregar Beneficio"}</h2>}
@@ -391,7 +392,7 @@ const FormAdminBenefits = () => {
                             }
                         </div>
                         <div>
-                            <Links benefitsform={benefitsform} benefitsLinks={benefitslinks} setBenefitsLinks={handleChangeLinks} />
+                            <Links benefitsform={benefitsform} benefitsLinks={benefitsform.benefitLinks} setBenefitsLinks={handleChangeLinks} />
                             {errorLinks.error && <Alert style={{width: "70%", marginLeft: "15%"}} severity="error">Formato de vínculo no válido: Uno de los links ingresados no es válido</Alert>}
                         </div>
                         {id ? <LocationsTable benefitslocations={benefit[0] ? benefit[0].benefitLocations : []} idBenefit={id} /> : null}
