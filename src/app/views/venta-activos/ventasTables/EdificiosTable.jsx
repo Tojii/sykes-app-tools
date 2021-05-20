@@ -26,6 +26,7 @@ const EdificiosTable = (props) => {
     const buildings = useSelector(state => state.building.buildings);
     const successCampaign = useSelector(state => state.building.success);
     const isLoading  = useSelector(state => state.building.loading);
+    const errorMessage  = useSelector(state => state.building.errorMessage);
     const [open, setOpen] = useState(false);
     const edificios = [{id:1, name: "Edificio 1"}, {id:2, name: "Edificio 2"}, {id:2, name: "Edificio 2"}]
     
@@ -167,7 +168,8 @@ const EdificiosTable = (props) => {
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">
-            {isLoading ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Edificios"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetBuildings());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el edificio no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
+            {console.log("error", errorMessage)}
+            {isLoading ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Edificios"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetBuildings());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : (errorMessage && errorMessage != undefined ? errorMessage : "¡Se produjo un error, el edificio no pudo ser eliminado!")} setOpen={setOpen} open={open} />}
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}

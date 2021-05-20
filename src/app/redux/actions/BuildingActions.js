@@ -91,7 +91,8 @@ export const AddBuilding = (payload) => {
       .catch((error) => {
         globalErrorHandler(error);
         dispatch({
-          type: BU_ERROR
+          type: BU_ERROR,
+          data: error.response.data
         })
       });
   };
@@ -121,7 +122,8 @@ export const UpdateBuilding = (id, payload) => dispatch => {
   .catch((error) => {
     globalErrorHandler(error);
     dispatch({
-      type: BU_ERROR
+      type: BU_ERROR,
+      data: error.response.data
     })
   });
 };
@@ -140,7 +142,8 @@ export const DeleteBuilding = (id) => dispatch => {
     .catch((error) => {
       globalErrorHandler(error);
       dispatch({
-        type: BU_ERROR
+        type: BU_ERROR,
+        data: error.response.data
       })
     });
 };

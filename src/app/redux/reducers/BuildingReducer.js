@@ -16,6 +16,7 @@ const initialState = {
     building: [],
     addBuilding: null,
     success: true,
+    errorMessage: ""
 };
 
 const BuildingReducer = function(state = initialState, action){
@@ -30,7 +31,8 @@ const BuildingReducer = function(state = initialState, action){
             return {
               ...state,
               success: false,
-              loading: false
+              loading: false,
+              errorMessage: action.data
             }
         }
         case GET_BUILDINGS: {
