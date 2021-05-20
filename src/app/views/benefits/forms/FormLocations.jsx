@@ -83,6 +83,7 @@ const FormAdminBenefits = (props) => {
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
     const [disableCanton, setDisableCanton] = useState(true);
     const [disableDistrict, setDisableDistrict] = useState(true);
+    const [showInformation, setshowInformation] = useState(true);
     const provinces = useSelector(state => state.locations.provinces);
     const cantons = useSelector(state => state.locations.cantons);
     const districts = useSelector(state => state.locations.districts);
@@ -206,6 +207,36 @@ const FormAdminBenefits = (props) => {
         }
     }, [location]);
 
+    const handleType = (event) => {
+        const name = event.target.name;
+        if(event.target.value != "Remota") {
+            setshowInformation(true)
+            setLocationsForm({
+                ...locationsform,
+                [name]: event.target.value,
+            })
+        } else {
+            setshowInformation(false)
+            setLocationsForm({
+                ...locationsform,
+                [name]: event.target.value,
+                province: "",
+                provinceCode: "",
+                cantonCode: "",
+                canton: "",
+                districtCode: "",
+                district: "",
+                latitude: "",
+                longitude: "",
+            })
+            setLocationsMapForm({
+                latitude: "",
+                longitude: "",
+            })
+        }
+        if(event.target.name == "type" && event.target.value == "") {setErrorType({error: true, errorMessage:`Este campo es requerido`});}
+            else if (event.target.name == "type") {setErrorType({error: false, errorMessage:``});}
+    }
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -224,8 +255,6 @@ const FormAdminBenefits = (props) => {
             [name]: event.target.value,
             })
         }
-        if(event.target.name == "type" && event.target.value == "") {setErrorType({error: true, errorMessage:`Este campo es requerido`});}
-            else if (event.target.name == "type") {setErrorType({error: false, errorMessage:``});}
         if(event.target.name == "phone" && event.target.value == "") {setErrorPhone({error: true, errorMessage:`Este campo es requerido`});}
             else if (event.target.name == "phone" && !regex.test(event.target.value)) {setErrorPhone({error: true, errorMessage:`Solo se permiten números`});}
                 else if(event.target.name == "phone" && event.target.value.length != 8) {setErrorPhone({error: true, errorMessage:`El número debe tener 8 caracteres`});}
@@ -330,7 +359,7 @@ const FormAdminBenefits = (props) => {
                                 name="type"
                                 style={{width: "100%"}}
                                 value={locationsform.type} 
-                                onChange={handleChange} 
+                                onChange={handleType} 
                                 error={errorType.error}
                             >
                                 <MenuItem key={`type-remote`} id={`type-remote`} value={"Remota"}>
@@ -342,7 +371,7 @@ const FormAdminBenefits = (props) => {
                             </SelectValidator> 
                             <FormHelperText error={errorType.error} id="my-helper-textprovince">{errorType.errorMessage}</FormHelperText>
                         </FormControl>
-                        <FormControl className={classes.textvalidator}>
+                        {showInformation ? <FormControl className={classes.textvalidator}>
                             <SelectValidator 
                                 label="Provincia*" 
                                 name="provinceCode"
@@ -358,8 +387,8 @@ const FormAdminBenefits = (props) => {
                                 ))}
                             </SelectValidator> 
                             <FormHelperText error={errorProvince.error} id="my-helper-textprovince">{errorProvince.errorMessage}</FormHelperText>
-                        </FormControl>
-                        <FormControl className={classes.textvalidator}>
+                        </FormControl> : null}
+                        {showInformation ? <FormControl className={classes.textvalidator}>
                             <SelectValidator 
                                 label="Cantón*" 
                                 name="cantonCode"
@@ -376,8 +405,8 @@ const FormAdminBenefits = (props) => {
                                 ))}
                             </SelectValidator>
                             <FormHelperText error={errorCanton.error} id="my-helper-textcanton">{errorCanton.errorMessage}</FormHelperText> 
-                        </FormControl>
-                        <FormControl className={classes.textvalidator}>
+                        </FormControl> : null}
+                        {showInformation ? <FormControl className={classes.textvalidator}>
                             <SelectValidator 
                                 label="Distrito*" 
                                 name="districtCode"
@@ -394,7 +423,7 @@ const FormAdminBenefits = (props) => {
                                 ))}
                             </SelectValidator>
                             <FormHelperText error={errorDistrito.error} id="my-helper-textdistrict">{errorDistrito.errorMessage}</FormHelperText> 
-                        </FormControl> 
+                        </FormControl> : null}
                         <FormControl className={classes.textvalidator}>
                             <TextValidator
                                 style={{width: "100%"}}
@@ -443,10 +472,10 @@ const FormAdminBenefits = (props) => {
                                 />
                             }
                         />
-                        <div style={{ height: "350px", marginLeft: "25%", marginBottom: "5%", width: "50%" }}>
+                        {showInformation ? <div style={{ height: "350px", marginLeft: "25%", marginBottom: "5%", width: "50%" }}>
                         <Places location={ [{id: 1, lat: props.id && locationsform.latitude ? parseFloat(locationsform.latitude.replace(",", ".")) : locationMap.lat, lng: props.id && locationsform.longitude ? parseFloat(locationsform.longitude.replace(",", ".")) : locationMap.lng}] } lat={props.id && locationsform.latitude ? parseFloat(locationsform.latitude.replace(",", ".")) : locationMap.lat} lng={props.id && locationsform.longitude ? parseFloat(locationsform.longitude.replace(",", ".")) : locationMap.lng} zoomLevel={10} draggable={true} onChangeLocation={onChangeLocation} show /> {/* include it here */}
-                        </div>
-                        <FormControl className={classes.textvalidator}>
+                        </div> : null}
+                        {showInformation ? <FormControl className={classes.textvalidator}>
                             <TextValidator
                                 style={{width: "100%"}}
                                 label="Latitud*"
@@ -458,8 +487,8 @@ const FormAdminBenefits = (props) => {
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
                             />
-                        </FormControl>
-                        <FormControl className={classes.textvalidator}>
+                        </FormControl> : null}
+                        {showInformation ? <FormControl className={classes.textvalidator}>
                             <TextValidator
                                 style={{width: "100%"}}
                                 label="Longitud*"
@@ -471,7 +500,7 @@ const FormAdminBenefits = (props) => {
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
                             />
-                        </FormControl>
+                        </FormControl> : null}
                         <div className={classes.sectionbutton}>
                             <Button style={{margin: "1%", marginTop: "10%", marginBottom: "5%", width: "105.92px"}} onClick={handleFormSubmitLocation} variant="contained" color="primary">
                                 ENVIAR  
