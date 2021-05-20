@@ -64,7 +64,7 @@ const FormAdminEdificios = () => {
     const [edificiosform, setEdificiosForm] = useState({
         name: "",
         id: "",
-        active: false
+        active: true
     });
     const classes = useStyles();
     const successCampaign = useSelector(state => state.building.success);

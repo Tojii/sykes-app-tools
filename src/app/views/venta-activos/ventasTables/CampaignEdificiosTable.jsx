@@ -30,11 +30,8 @@ const EdificiosTable = (props) => {
     const successCampaign = useSelector(state => state.campaign.success);
     const campaignsActive = useSelector(state => state.campaign.campaignsActive);
     const isLoading  = useSelector(state => state.campaign.loading);
-    const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
+    const isLoadingBuilding  = useSelector(state => state.building.loading);
     const [open, setOpen] = useState(false);
-    const edificios = [{id:1, name: "Edificio 1", active: false}, {id:2, name: "Edificio 2", active: false}, {id:3, name: "Edificio 3", active: false}]
-    const [edificioshabilitados, setEdificiosHabilitados] = useState([{id:1, name: "Edificio 1"}])
-    // const [purchaseList, setPurchaseList] = useState([]);
     
 
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
@@ -236,7 +233,7 @@ const EdificiosTable = (props) => {
   }
 
   return (
-      isLoading ? <Loading /> :
+      (isLoading || isLoadingBuilding) ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">
             {console.log(props.edificiosCampaign, buildings)}
