@@ -159,7 +159,14 @@ const LocationsTable = (props) => {
            display: true,
            filterOptions: { 
             fullWidth: window.screen.width <= 1024 ? true : false
-           }
+           },
+           setCellProps: value => {
+              return {
+                style: {
+                  wordBreak: "break-word"
+                }
+              };
+            },
           }
         },
         {

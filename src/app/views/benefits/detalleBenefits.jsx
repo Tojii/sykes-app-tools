@@ -148,6 +148,8 @@ const DetalleBenefits = (props) => {
     //const promociones = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
     //let promociones = [];
     const [promociones, setPromociones] = useState([]);
+    const [showMap, setShowMap] = useState(false);
+    const [showRemote, setShowRemote] = useState(false);
     const location = { address: 'San José, Costa Rica', lat: 9.903329970416294, lng: -84.08271419551181 } // our location object from earlier
 
     useEffect(() => {
@@ -166,7 +168,23 @@ const DetalleBenefits = (props) => {
             }).map((item, index) => {
                 return item.discountName
             }))
-    }, [discounts])
+
+            setShowMap(benefit[0] && benefit[0].benefitLocations ? benefit[0].benefitLocations.filter(function(item) {
+                if (!item.active || !item.active) {
+                  return false; // skip
+                } else {
+                    return true;
+                };
+            }).map((item, index) => {return item}).length != 0 : false)
+
+            setShowRemote(benefit[0] && benefit[0].benefitLocations ? benefit[0].benefitLocations.filter(function(item) {
+                if (!item.active || !item.active) {
+                  return false; // skip
+                } else {
+                    return true;
+                };
+            }).map((item, index) => {return item}).length != 0 : false)
+    }, [discounts, benefit])
 
     const showImage = () => {
         return (
@@ -258,7 +276,7 @@ const DetalleBenefits = (props) => {
                                                             </Grid>
                                                         </Grid>
                                                     </Paper>
-                                                    <Paper className={classes.paper}>
+                                                    {showMap ? <Paper className={classes.paper}>
                                                         <Grid container spacing={2}>
                                                             <Grid item xs={12} sm container>
                                                                 <Grid item xs container direction="row" spacing={2}>
@@ -270,8 +288,9 @@ const DetalleBenefits = (props) => {
                                                                             <Places locations={ benefit[0] && benefit[0].benefitLocations ? benefit[0].benefitLocations.filter(function(item) {
                                                                                 if (!item.active || !item.active) {
                                                                                   return false; // skip
-                                                                                }
-                                                                                return true;
+                                                                                } else {
+                                                                                    return true
+                                                                                };
                                                                             }).map((item, index) => {return item}) : [] } lat={location.lat} lng={location.lng} zoomLevel={7} draggable={false} 
                                                                             content={benefit[0] && benefit[0].benefitLocations ? benefit[0].benefitLocations.filter(function(item) {
                                                                                 if (!item.active || !item.active) {
@@ -295,7 +314,7 @@ const DetalleBenefits = (props) => {
                                                                 </Grid>
                                                             </Grid>
                                                         </Grid>
-                                                    </Paper>
+                                                    </Paper> : null}
                                                 </Grid>
                                                 <Grid className={classes.gridtext} item lg={4} md={4} sm={4} xs={12}>
                                                     <Paper className={classes.papercardinfo}>
