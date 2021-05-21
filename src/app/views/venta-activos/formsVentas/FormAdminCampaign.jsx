@@ -136,8 +136,8 @@ const FormAdminCampaign = () => {
         if(id && campaign != [] && campaign[0] != [""] && campaign[0] != undefined) {setCampaignForm({
             name: campaign[0].name,
             description: campaign[0].description,
-            startDate: campaign[0].startDate,
-            endDate: campaign[0].endDate,
+            startDate: new Date(campaign[0].startDate),
+            endDate: new Date(campaign[0].endDate),
             maxLimitPerPerson: campaign[0].maxLimitPerPerson != undefined ? campaign[0].maxLimitPerPerson.toString() : null,
             campaignItems: campaign[0].campaignItems,
             activeEdificio: campaign[0].pickUpInBuilding,
@@ -237,6 +237,7 @@ const FormAdminCampaign = () => {
                 setCampaignForm({
                     ...campaignform,
                     [name]: event.target.checked,
+                    edificiosCampaign: []
                 })
             }
             if ( event.target.checked) {
@@ -254,16 +255,20 @@ const FormAdminCampaign = () => {
         if (date != null) {
           setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
         }
+        if (campaignform.endDate != null && date.getTime() > campaignform.endDate.getTime()) {
+            //isErrorValidation = true;
+            setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*La fecha de inicio no puede ser mayor a la fecha de finaización" }));
+          } 
         setCampaignForm({
           ...campaignform,
           startDate: date,
-          endDate: null,
+          //endDate: null,
         });
     };
 
     const handleDateChangeEndDate = date => {
         if (date != null) {
-          setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "", endDate: "" }));
+          setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
         }
         setCampaignForm({
           ...campaignform,
@@ -273,7 +278,7 @@ const FormAdminCampaign = () => {
 
     return (
         <div className="p-24">
-            {console.log("edificios", campaignform.edificiosCampaign)}
+            {console.log("edificios", campaignform)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading && id) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Campaña" : "Agregar Campaña"}</h2>}

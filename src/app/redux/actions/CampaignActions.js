@@ -133,7 +133,7 @@ export const GetCampaignsActive = () => {
         });
 
         api.post(`/Campaign`, 
-        { "name": payload.name, "description": payload.description, "startDate": moment(payload.startDate).format('YYYY-MM-DD HH:mm:ss'), "endDate": moment(payload.endDate).format('YYYY-MM-DD HH:mm:ss'), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10),
+        { "name": payload.name, "description": payload.description, "startDate": payload.startDate.toJSON(), "endDate": payload.endDate.toJSON(), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10),
           "pickUpInBuilding": payload.activeEdificio, "sentToHome": payload.activeEnvioCasa, "message": payload.message, "shippingMessage": payload.shippingMessage,
           "buildings": payload.edificiosCampaign.map(item => {
             return {
@@ -205,7 +205,7 @@ export const AddCampaignItems = (id, payload, files) => {
         type: CA_LOADING
     });
     
-    api.put(`/Campaign/${id}`, { "name": payload.name, "description": payload.description, "startDate": moment(payload.startDate).format('YYYY-MM-DD HH:mm:ss'), "endDate": moment(payload.endDate).format('YYYY-MM-DD HH:mm:ss'), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10),
+    api.put(`/Campaign/${id}`, { "name": payload.name, "description": payload.description, "startDate": payload.startDate.toJSON(), "endDate": payload.endDate.toJSON(), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10),
     "pickUpInBuilding": payload.activeEdificio, "sentToHome": payload.activeEnvioCasa, "message": payload.message, "shippingMessage": payload.shippingMessage,
     "buildings": payload.edificiosCampaign.map(item => {
       return {
