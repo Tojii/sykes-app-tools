@@ -59,14 +59,13 @@ export const SaveReimbursement = (Data, Files, badge, fullname) =>{
   formData.append('email', Data.email);
   
   if(Data.startDate)
-    formData.append('startDate', (format(Data.startDate, 'P p')).toString());
+    formData.append('startDate', Data.startDate.toJSON());
 
   if(Data.endDate)
-    formData.append('endDate', (format(Data.endDate, 'P p')).toString());
+    formData.append('endDate', Data.endDate.toJSON());
   
   if(Data.certificationDate)
-    formData.append('certificationDate', (format(Data.certificationDate, 'P p')).toString());
-  
+    formData.append('certificationDate', Data.certificationDate.toJSON());
   
   if(Files.length > 0){
     Files.forEach(item => {
