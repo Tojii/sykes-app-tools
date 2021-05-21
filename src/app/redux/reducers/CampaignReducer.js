@@ -24,6 +24,7 @@ const initialState = {
     addCampaign: null,
     addCampaignItems: null,
     success: true,
+    errorMessage: ""
 };
 
 const CampaignReducer = function(state = initialState, action){
@@ -38,7 +39,8 @@ const CampaignReducer = function(state = initialState, action){
             return {
               ...state,
               success: false,
-              loading: false
+              loading: false,
+              errorMessage: action.data
             }
         }
         case GET_CAMPAIGNS: {

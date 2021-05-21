@@ -281,7 +281,8 @@ export const DeleteCampaign = (id) => dispatch => {
     .catch((error) => {
       globalErrorHandler(error);
       dispatch({
-        type: CA_ERROR
+        type: CA_ERROR,
+        data: error.response.data
       })
     });
 };
@@ -301,7 +302,8 @@ export const DeleteCampaignItem = (id) => dispatch => {
   .catch((error) => {
     globalErrorHandler(error);
     dispatch({
-      type: CA_ERROR
+      type: CA_ERROR,
+      data: error.response.data
     })
   });
 };
