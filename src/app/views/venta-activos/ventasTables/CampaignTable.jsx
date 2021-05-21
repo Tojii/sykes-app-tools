@@ -366,7 +366,7 @@ const CampaignTable = (props) => {
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">
-            {isLoading ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : (errorMessage && errorMessage != undefined && errorMessage.length < 100 ? errorMessage : "¡Se produjo un error, el edificio no pudo ser eliminado!")} setOpen={setOpen} open={open} />}
+            {isLoading ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : (errorMessage && errorMessage != undefined && errorMessage.length < 100 ? errorMessage : "¡Se produjo un error, la campaña no pudo ser eliminada!")} setOpen={setOpen} open={open} />}
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}
