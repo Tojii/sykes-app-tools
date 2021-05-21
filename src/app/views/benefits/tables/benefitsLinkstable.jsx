@@ -301,9 +301,9 @@ const BenefitsLinksTable = (props) => {
               //errorMessages={["Formato de url no válido"]}
               value={value}
               >
-                {builddata.map(data => (
-                    <MenuItem key={`data-${data.order}`} id={data.order} value={data.order}>
-                    {data.order || " "}
+                {builddata.map((data, index) => (
+                    <MenuItem key={`data-${data.order}`} id={data.order} value={index + 1}>
+                    {index + 1 || " "}
                     </MenuItem> 
                 ))}
               </SelectValidator>} else {return value}
