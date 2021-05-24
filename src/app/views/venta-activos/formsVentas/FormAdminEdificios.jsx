@@ -112,9 +112,9 @@ const FormAdminEdificios = () => {
         <div className="p-24">
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Edificios"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetBuildings());}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
-                {(isLoading && id) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Edificio" : "Agregar Edificio"}</h2>}
+                {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Edificio" : "Agregar Edificio"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>                 
-                    {(isLoading && id) ? <Loading/> :
+                    {(isLoading) ? <Loading/> :
                     <>
                         <TextValidator
                             className={classes.textvalidator}
