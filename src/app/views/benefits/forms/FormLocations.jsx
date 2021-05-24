@@ -10,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
 import { GetProvince, GetCantons, GetDistricts } from "../../../redux/actions/LocationActions";
 import Places from '../../../components/maps/SetPlace';
+import NotFound from "app/views/sessions/NotFound";
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -95,6 +96,7 @@ const FormAdminBenefits = (props) => {
     const [errorDistrito, setErrorDistrito] = useState({error: false, errorMessage: ""});
     const [errorAddress, setErrorAddress] = useState({error: false, errorMessage: ""});
     const [locationsMapform, setLocationsMapForm] = useState({ latitude: "", longitude: "",})
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const [locationsform, setLocationsForm] = useState({
         idBenefit: props.idBenefit,
         address: "",
@@ -337,10 +339,10 @@ const FormAdminBenefits = (props) => {
             {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsById(props.idBenefit))}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> : <ValidationModal idioma={"Español"} path={""} state={"Recordatorio"} save={() => {}} message={"Se va a establecer esta localización como la principal del beneficio"} setOpen={setOpenMessage} open={openMessage} />}
             <Card className={classes.formcard} elevation={6}>
-                {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{props.id ? "Editar Localización" : "Agregar Localización"}</h2>}
+                {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> : (admin ? <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{props.id ? "Editar Localización" : "Agregar Localización"}</h2> : null)}
                 <ValidatorForm {...useRef('formLocation')} onSubmit={handleFormSubmitLocation}>  
                     {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> :
-                    <>               
+                    admin ? <>               
                         <FormControl className={classes.textvalidator}>
                             <TextValidator
                                 style={{width: "100%"}}
@@ -510,7 +512,7 @@ const FormAdminBenefits = (props) => {
                                 CANCELAR
                             </Button>
                         </div>
-                    </>
+                    </> : <NotFound/>
                     }
                 </ValidatorForm>
             </Card>

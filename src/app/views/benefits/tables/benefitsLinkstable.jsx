@@ -64,8 +64,6 @@ const BenefitsLinksTable = (props) => {
     const [edificioshabilitados, setEdificiosHabilitados] = useState([{id:1, name: "Edificio 1"}])
     // const [purchaseList, setPurchaseList] = useState([]);
     const buildings = [{name: "Facebook", link: ""}, {name: "Instagram", link: ""}]
-    
-
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
   
     useEffect(() => {
@@ -101,7 +99,7 @@ const BenefitsLinksTable = (props) => {
           "name": item.name,
           "link": props.benefitsLinks[index] != undefined ? props.benefitsLinks[index].link : "",
           "showIcon": showImage(item),
-          "order" : (props.benefitsLinks[index] != undefined && props.benefitsLinks[index].order) ? props.benefitsLinks[index].order : index + 1,
+          "order" : props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink) != undefined ? props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink).order : index + 1,
           "icon": item.icon,
         }
       }))
@@ -210,6 +208,7 @@ const BenefitsLinksTable = (props) => {
       }
     }) : links.filter(function(item) {
       if (!item.active) {
+        console.log("find", props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink))
         return false; // skip
       }
       return true;
@@ -217,9 +216,9 @@ const BenefitsLinksTable = (props) => {
       return { 
         "idBenefitLink": item.idBenefitLink,
         "name": item.name,
-        "link": props.benefitsLinks[index] != undefined ? props.benefitsLinks[index].link : "",
+        "link": props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink) != undefined ? (props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink)).link : "",
         "showIcon": showImage(item),
-        "order" : (props.benefitsLinks[index] != undefined && props.benefitsLinks[index].order) ? props.benefitsLinks[index].order : index + 1,
+        "order" : props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink) != undefined ? props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink).order : index + 1,
         "icon": item.icon,
       }
     }))

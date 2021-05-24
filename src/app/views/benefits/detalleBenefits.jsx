@@ -500,6 +500,40 @@ const DetalleBenefits = (props) => {
                                                         </Grid>
                                                     </Paper>
                                                     : null}
+                                                    {promociones.length > 0 ?
+                                                    <Paper className={classes.papercardprom}>
+                                                        <Grid container spacing={2}>
+                                                            <Grid item xs={12} sm container>
+                                                                <Grid item xs container direction="column" spacing={2}>
+                                                                    <Grid item xs>
+                                                                        <Typography className={classes.lineTypo} style={{color: "#484748", marginLeft: "2%"}} gutterBottom variant="subtitle1">
+                                                                            UBICACIONES REMOTAS
+                                                                        </Typography>
+                                                                        {benefit[0] && benefit[0].benefitLocations ? benefit[0].benefitLocations.filter(function(item) {
+                                                                                if (!item.active || !item.active) {
+                                                                                  return false; // skip
+                                                                                } else {
+                                                                                    return true
+                                                                                };
+                                                                            }).map((item, index) => {
+                                                                                return <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
+                                                                                    <Grid className={classes.graytext} item lg={12} md={12} sm={12} xs={12}>
+                                                                                        {"Dirección: " + item.address}
+                                                                                    </Grid>
+                                                                                    <Grid className={classes.graytext} item lg={12} md={12} sm={12} xs={12} >
+                                                                                        {"Teléfono: " + item.phone}
+                                                                                    </Grid>
+                                                                                    <Grid className={classes.graytext} item lg={12} md={12} sm={12} xs={12}>
+                                                                                        {"WhatsApp: " + item.whatsApp}
+                                                                                    </Grid>
+                                                                                </Grid>  
+                                                                            }) : []}                                               
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </Paper>
+                                                    : null}
                                                 </Grid>
                                             </Grid>
                                         </div>

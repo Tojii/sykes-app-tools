@@ -10,6 +10,7 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { Link } from 'react-router-dom';
 import history from "history.js";
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
+import NotFound from "../../sessions/NotFound"
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -78,8 +79,8 @@ const DetalleBenefits = (props) => {
     const isLoading  = useSelector(state => state.benefit.loadingSettings); 
     const successBenefit = useSelector(state => state.benefit.success);
     let { id } = useParams(); 
-    // const user = useSelector(state => state.user);
-    //const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const user = useSelector(state => state.user);
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     const [files, setFiles] = useState(null);
     const [filesFooter, setFilesFooter] = useState(null);
     const [filesBadge, setFilesBadge] = useState(null);
@@ -297,10 +298,11 @@ const DetalleBenefits = (props) => {
                 {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Configuration"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetPageSettings());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
                 <Card className={classes.cardContainer} elevation={6}>
                     <div className={classes.margindiv}>
-                        {(isLoading) ? <Loading/> : <h1 style={{ color: "#4cb050", marginLeft: "3%", marginTop: "2%", fontWeight: "bold"}} className="mb-20">Configuraciones Generales &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminBenefitButton()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminPromButton()} 
-                        &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminCategoryButton()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminLinksButton()}</h1>}
+                        {(isLoading) ? <Loading/> : (admin ? <h1 style={{ color: "#4cb050", marginLeft: "3%", marginTop: "2%", fontWeight: "bold"}} className="mb-20">Configuraciones Generales &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminBenefitButton()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminPromButton()} 
+                        &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminCategoryButton()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminLinksButton()}</h1> : null)}
                         <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
                         {(isLoading) ? <Loading/> :
+                        admin ?
                         <>             
                             <TextValidator
                                 className={classes.textvalidator}
@@ -379,7 +381,7 @@ const DetalleBenefits = (props) => {
                                     VOLVER
                                 </Button>
                             </div>
-                        </>
+                        </> : <NotFound/>
                         }
                         </ValidatorForm>      
                     </div>

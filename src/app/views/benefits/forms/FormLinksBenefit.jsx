@@ -19,6 +19,7 @@ import {
   } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import es from "date-fns/locale/es";
+import NotFound from "app/views/sessions/NotFound";
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -96,6 +97,7 @@ const FormLinksBenefits = () => {
     const [logo, setLogo] = useState(null);
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
     const [errorMessage, setErrorMessage] = useState([]);
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     
     const [linksform, setLinkForm] = useState({
         id: "",
@@ -206,10 +208,10 @@ const FormLinksBenefits = () => {
             {console.log(link)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Links"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetSocialLinks());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
-                {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Vínculo" : "Agregar Vínculo"}</h2>}
+                {(isLoading) ? <Loading/> : (admin ? <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Vínculo" : "Agregar Vínculo"}</h2> : null)}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
                     {(isLoading) ? <Loading/> :
-                    <>            
+                    admin ? <>            
                         {/* <SelectValidator 
                             label="Beneficio*" 
                             name="idBenefit"
@@ -272,7 +274,7 @@ const FormLinksBenefits = () => {
                                 CANCELAR
                             </Button>
                         </div>
-                    </>
+                    </> : <NotFound/>
                     }
                 </ValidatorForm>
             </Card>

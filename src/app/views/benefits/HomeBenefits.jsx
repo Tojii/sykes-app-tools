@@ -70,7 +70,7 @@ const HomeBenefits = () => {
     const [disableCanton, setDisableCanton] = useState(true);
     //let cantons = [];
     const location = { address: 'San José, Costa Rica', lat: 9.603329970416294, lng: -84.08271419551181 } // our location object from earlier
-    //const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     //console.log("user",user)
     const onChangeLocation = (lat, lng) => {
         console.log("lat", lat);
@@ -167,7 +167,7 @@ const HomeBenefits = () => {
             {(user.badge == undefined || isLoading || loadingLocation || isLoadingSettings || isLoadingProvince) ? <Loading /> :
                 <Card className={classes.cardContainer} elevation={6}>
                     <div className={classes.margindiv}>
-                        <h1 style={{ color: "#4cb050", marginTop: "2%", marginLeft: "1%", fontWeight: "bold"}} className="mb-20">{showImage()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; CATEGORIAS &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {configurationButton()}</h1>     
+                        <h1 style={{ color: "#4cb050", marginTop: "2%", marginLeft: "1%", fontWeight: "bold"}} className="mb-20">{showImage()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; CATEGORIAS &nbsp; {admin ? <span style={{color:"gray", fontWeight: "normal"}}>|</span> : null} &nbsp; {admin ? configurationButton() : null}</h1>     
                         <Grid style={{ marginLeft: "0.5%"}} container spacing={2} direction="row">
                             <Grid key={1} className={classes.gridtext} item lg={6} md={6} sm={6} xs={12}>
                                 <h5 style={{ color: "#939598", marginLeft: window.screen.width >= 1024 ? "1%" : null, textAlign: "justify", width: window.screen.width <= 1024 ? "95%" : null}}>{pageSettings[0] != null ? pageSettings[0].reminder : ""}</h5> 

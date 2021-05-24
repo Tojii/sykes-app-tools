@@ -1,4 +1,4 @@
-import api from "../Api";
+import api, { globalErrorHandler } from "../Api";
 
 export const GET_ACCOUNT = "GET_ACCOUNT";
 export const GET_SUPERVISOR_ACCOUNT = "GET_SUPERVISOR_ACCOUNT";
@@ -14,7 +14,7 @@ export const getAccount = () => {
       type: GET_ACCOUNT,
       data: res.data
       })
-    );
+    ).catch(globalErrorHandler);
   };
 };
 
@@ -25,7 +25,7 @@ export const getSupervisorAccount = account => {
       type: GET_SUPERVISOR_ACCOUNT,
       data: res.data
       });
-    })
+    }).catch(globalErrorHandler);
   };
 };
 
@@ -66,7 +66,7 @@ export const submitData = Data => {
       dispatch({
       type: SUBMIT_DATA
       });
-    })
+    }).catch(globalErrorHandler);
   };
 };
 
@@ -81,7 +81,7 @@ export const getValidation = username => {
       type: GET_VALIDATE,
       data: res.data
       })
-    );
+    ).catch(globalErrorHandler);
   };
 };
 

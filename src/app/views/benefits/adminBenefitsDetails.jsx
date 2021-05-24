@@ -9,6 +9,7 @@ import { useParams } from "react-router";
 import LocationsTable from "./tables/ubicacionesTable"
 import Chip from '@material-ui/core/Chip';
 import Links from "./tables/benefitsLinkstable"
+import NotFound from "../sessions/NotFound";
 
 
 const useStyles = makeStyles({
@@ -43,6 +44,8 @@ const AdminBenefitDetalle = (props) => {
     const benefit = useSelector(state => state.benefit.benefit);
     const isLoading  = useSelector(state => state.benefit.loading);
     const isLoadingLocation  = useSelector(state => state.benefit.loadingLocation);
+    const user = useSelector(state => state.user);
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
 
     useEffect(() => {
         dispatch(GetBenefitsById(id));
@@ -57,7 +60,7 @@ const AdminBenefitDetalle = (props) => {
         <div className="m-sm-30">
             {console.log(benefit)}
             {(isLoading || isLoadingLocation) ? <Loading/> : 
-            <Grid container spacing={2}>
+            admin ? <Grid container spacing={2}>
                 <Grid item md={12} xs={12}> 
                     <Card className={classes.formcard} elevation={6}>                              
                             <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">Detalles del beneficio</h2>
@@ -130,7 +133,7 @@ const AdminBenefitDetalle = (props) => {
                             </div>
                     </Card>
                 </Grid>
-            </Grid>}
+            </Grid> : <NotFound/>}
         </div>
     );
 }

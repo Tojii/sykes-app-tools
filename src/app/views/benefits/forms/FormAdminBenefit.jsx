@@ -14,6 +14,7 @@ import LocationsTable from "../tables/ubicacionesTable";
 import MenuItem from '@material-ui/core/MenuItem';
 import Links from "../tables/benefitsLinkstable"
 import Alert from '@material-ui/lab/Alert';
+import NotFound from "app/views/sessions/NotFound";
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -112,6 +113,7 @@ const FormAdminBenefits = () => {
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
     const [benefitslinks, setBenefitsLinks] = useState([]);
     const [errorLinks, setErrorLinks] = useState({error: false, errorMessage: ""});
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
     
     const [benefitsform, setBenefitsForm] = useState({
         idBenefit: "",
@@ -262,10 +264,10 @@ const FormAdminBenefits = () => {
             {console.log("vinculos",benefitsform)}
             {(isLoading || isLoadingLocation || isLoadingLinks) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
-                {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Beneficio" : "Agregar Beneficio"}</h2>}
+                {(isLoading) ? <Loading/> : (admin ? <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Beneficio" : "Agregar Beneficio"}</h2> : null)}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
                     {(isLoading) ? <Loading/> :
-                    <>  
+                    admin ? <>  
                         <SelectValidator 
                             label="Categoría*" 
                             name="idCategory"
@@ -405,7 +407,7 @@ const FormAdminBenefits = () => {
                                 CANCELAR
                             </Button>
                         </div>
-                    </>
+                    </> : <NotFound/>
                     }
                 </ValidatorForm>
             </Card>
