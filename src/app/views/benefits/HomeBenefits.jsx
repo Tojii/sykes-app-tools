@@ -272,13 +272,13 @@ const HomeBenefits = () => {
                                     <div style={{ height: "655px", padding: isMdScreen() ? "10px" : "25px", width: "100%", marginLeft: isMdScreen() ? "3%" : "1%" }}>
                                         <Places 
                                             locations={ benefitslocationsCanton ? benefitslocationsCanton.filter(function(item) {
-                                                if (!item.benefit.active || !item.active || (category != "" && category != "all" && category != item.benefit.category.idCategory)) {
+                                                if (item.ubicationType == "Remota" || !item.benefit.active || !item.active || (category != "" && category != "all" && category != item.benefit.category.idCategory)) {
                                                   return false; // skip
                                                 }
                                                 return true;
                                             }).map((item, index) => {return item}) : [] } 
                                             content={benefitslocationsCanton ? benefitslocationsCanton.filter(function(item) {
-                                                if (!item.benefit.active || !item.active || (category != "" && category != "all" && category != item.benefit.category.idCategory)) {
+                                                if (item.ubicationType == "Remota" || !item.benefit.active || !item.active || (category != "" && category != "all" && category != item.benefit.category.idCategory)) {
                                                   return false; // skip
                                                 }
                                                 return true;

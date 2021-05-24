@@ -276,7 +276,10 @@ const AdminBenefitsTable = () => {
             filter: true,
             customBodyRenderLite: (dataIndex) => {
               let value = builddata[dataIndex][12];
-              return value.map((val, key) => {
+              return value.filter((val, key) => {
+                if (!val || val == "") {return false}
+                return true 
+              }).map((val, key) => {
                 return <Chip style={{backgroundColor: "#039be5", margin: "1%", color: "white"}} label={val} key={key} />;
               });
             },
@@ -288,7 +291,10 @@ const AdminBenefitsTable = () => {
             filter: true,
             customBodyRenderLite: (dataIndex) => {
               let value = builddata[dataIndex][13];
-              return value.map((val, key) => {
+              return value.filter((val, key) => {
+                if (!val || val == "") {return false}
+                return true 
+              }).map((val, key) => {
                 return <Chip style={{backgroundColor: "#039be5", margin: "1%", color: "white"}} label={val} key={key} />;
               });
             },
@@ -301,7 +307,10 @@ const AdminBenefitsTable = () => {
             display: false,
             customBodyRenderLite: (dataIndex) => {
               let value = builddata[dataIndex][14];
-              return value.map((val, key) => {
+              return value.filter((val, key) => {
+                if (!val || val == "") {return false}
+                return true 
+              }).map((val, key) => {
                 return <Chip style={{backgroundColor: "#039be5", margin: "1%", color: "white"}} label={val} key={key} />;
               });
             },

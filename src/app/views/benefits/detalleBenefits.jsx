@@ -170,7 +170,7 @@ const DetalleBenefits = (props) => {
             }))
 
             setShowMap(benefit[0] && benefit[0].benefitLocations ? benefit[0].benefitLocations.filter(function(item) {
-                if (!item.active || !item.active) {
+                if (item.ubicationType == "Remota" || !item.active || !item.active) {
                   return false; // skip
                 } else {
                     return true;
@@ -178,7 +178,7 @@ const DetalleBenefits = (props) => {
             }).map((item, index) => {return item}).length != 0 : false)
 
             setShowRemote(benefit[0] && benefit[0].benefitLocations ? benefit[0].benefitLocations.filter(function(item) {
-                if (!item.active || !item.active) {
+                if (item.ubicationType == "Física" || !item.active || !item.active) {
                   return false; // skip
                 } else {
                     return true;
@@ -286,14 +286,14 @@ const DetalleBenefits = (props) => {
                                                                         </Typography>
                                                                         <div style={{ height: "400px", padding: isMdScreen() ? "10px" : "25px", width: "100%", marginLeft: isMdScreen() ? "3%" : "1%" }}>
                                                                             <Places locations={ benefit[0] && benefit[0].benefitLocations ? benefit[0].benefitLocations.filter(function(item) {
-                                                                                if (!item.active || !item.active) {
+                                                                                if (item.ubicationType == "Remota" || !item.active || !item.active) {
                                                                                   return false; // skip
                                                                                 } else {
                                                                                     return true
                                                                                 };
                                                                             }).map((item, index) => {return item}) : [] } lat={location.lat} lng={location.lng} zoomLevel={7} draggable={false} 
                                                                             content={benefit[0] && benefit[0].benefitLocations ? benefit[0].benefitLocations.filter(function(item) {
-                                                                                if (!item.active || !item.active) {
+                                                                                if (item.ubicationType == "Remota" || !item.active || !item.active) {
                                                                                   return false; // skip
                                                                                 }
                                                                                 return true;
@@ -463,7 +463,7 @@ const DetalleBenefits = (props) => {
                                                                 return false;
                                                             }).map((item, index) => {
                                                                 return (
-                                                                    <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                                    <Grid key={"link-" + item.link} item lg={3} md={3} sm={3} xs={3}>
                                                                         <div style={{textAlignLast: "center"}}>
                                                                             <a href={`https://${item.link}`}>
                                                                                 <img
@@ -475,11 +475,7 @@ const DetalleBenefits = (props) => {
                                                                         </div>
                                                                     </Grid>
                                                                 )
-                                                            })
-
-                                                           : null}
-                                                            
-                                                          
+                                                            }) : null}                                                                
                                                         </Grid>
                                                     </Paper> 
                                                     {promociones.length > 0 ?
@@ -500,7 +496,7 @@ const DetalleBenefits = (props) => {
                                                         </Grid>
                                                     </Paper>
                                                     : null}
-                                                    {promociones.length > 0 ?
+                                                    {showRemote ?
                                                     <Paper className={classes.papercardprom}>
                                                         <Grid container spacing={2}>
                                                             <Grid item xs={12} sm container>
@@ -510,13 +506,13 @@ const DetalleBenefits = (props) => {
                                                                             UBICACIONES REMOTAS
                                                                         </Typography>
                                                                         {benefit[0] && benefit[0].benefitLocations ? benefit[0].benefitLocations.filter(function(item) {
-                                                                                if (!item.active || !item.active) {
+                                                                                if (item.ubicationType != "Remota" || !item.active || !item.active) {
                                                                                   return false; // skip
                                                                                 } else {
                                                                                     return true
                                                                                 };
                                                                             }).map((item, index) => {
-                                                                                return <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
+                                                                                return <Grid container spacing={2} key={"remote-" + index} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
                                                                                     <Grid className={classes.graytext} item lg={12} md={12} sm={12} xs={12}>
                                                                                         {"Dirección: " + item.address}
                                                                                     </Grid>

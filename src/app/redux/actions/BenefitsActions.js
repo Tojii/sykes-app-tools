@@ -397,6 +397,7 @@ export const AddBenefitLocation = (payload, payloadMap) => {
     formData.append('WhatsApp', payload.whatsapp);
     formData.append('Active', payload.active);
     formData.append('PrincipalLocation', payload.principalLocation);
+    formData.append('UbicationType', payload.ubicationType);
     const config = {
         headers: {
             'content-type': 'multipart/form-data',
@@ -526,6 +527,7 @@ export const UpdateBenefitLocation = (id, payload, payloadMap) => dispatch => {
     formData.append('WhatsApp', payload.whatsapp);
     formData.append('Active', payload.active);
     formData.append('PrincipalLocation', payload.principalLocation);
+    formData.append('UbicationType', payload.ubicationType);
     const config = {
         headers: {
             'content-type': 'multipart/form-data',

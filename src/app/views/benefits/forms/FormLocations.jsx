@@ -110,7 +110,7 @@ const FormAdminBenefits = (props) => {
         whatsapp: "",
         latitude: "",
         longitude: "",
-        type: "",
+        ubicationType: "",
         active: false,
         principalLocation: false,
     });
@@ -118,6 +118,44 @@ const FormAdminBenefits = (props) => {
         address: 'San José, Costa Rica',
         lat: 9.903329970416294, lng: -84.08271419551181
       } // our location object from earlier
+
+    useEffect(() => {
+        GetBenefitsById(props.idBenefit)
+        dispatch(GetProvince());
+        if (props.id) {
+            dispatch(GetBenefitsLocationsById(props.id));
+        } 
+    }, []);
+
+    useEffect(() => {
+        if(props.id && location != [] && location[0] != [""] && location[0] != undefined) {setLocationsForm({
+            idBenefit: location[0].benefit.idBenefit,
+            province: location[0].provincia,
+            canton: location[0].canton,
+            district: location[0].distrito,
+            provinceCode: location[0].codProvincia ? location[0].codProvincia : "",
+            cantonCode: location[0].codCanton ? location[0].codCanton : "",
+            districtCode: location[0].codDistrito ? location[0].codDistrito : "",
+            address: location[0].address,
+            latitude: location[0].latitude,
+            longitude: location[0].longitude,
+            phone: location[0].phone,
+            whatsapp: location[0].whatsApp,
+            active: location[0].active,
+            principalLocation: location[0].principalLocation,
+            ubicationType: location[0].ubicationType,
+            });
+            setLocationsMapForm({
+                latitude: location[0].latitude,
+                longitude: location[0].longitude,
+            })
+            location[0].codProvincia && dispatch(GetCantons(location[0].codProvincia));
+            location[0].codProvincia && location[0].codCanton && dispatch(GetDistricts(location[0].codProvincia, location[0].codCanton));
+            location[0].ubicationType == "Remota" && setshowInformation(false)
+            setDisableCanton(false);
+            setDisableDistrict(false);
+        }
+    }, [location]);
 
     const handleFormSubmitLocation = async () => {
         const regex = /^\+?(0|[1-9]\d*)$/;
@@ -139,7 +177,7 @@ const FormAdminBenefits = (props) => {
             else {setErrorCanton({error: false, errorMessage:``});}
         if(locationsform.district == "") {setErrorDistrito({error: true, errorMessage:`Este campo es requerido`});}
             else {setErrorDistrito({error: false, errorMessage:``});}
-        if(locationsform.type == "") {setErrorType({error: true, errorMessage:`Este campo es requerido`});}
+        if(locationsform.ubicationType == "") {setErrorType({error: true, errorMessage:`Este campo es requerido`});}
             else {setErrorType({error: false, errorMessage:``});}
         
         console.log(locationsform)
@@ -162,52 +200,16 @@ const FormAdminBenefits = (props) => {
             idBenefit: props.idBenefit, principalLocation: false}, {latitude: mainlocation[0].latitude, longitude: mainlocation[0].longitude }));
         }
         // Guarda o edita según sea el caso si todas las validaciones son correctas
-        if (locationsform.phone != "" && locationsform.whatsapp != "" && locationsform.address != "" && locationsform.type != "" && locationsform.province != "" && locationsform.canton != "" && locationsform.district != ""
+        if (location.ubicationType != "" && locationsform.phone != "" && locationsform.whatsapp != "" && locationsform.address != "" && locationsform.ubicationType != "" && (locationsform.province != "" || !showInformation) && (locationsform.canton != "" || !showInformation) && (locationsform.district != "" || !showInformation)
             && locationsform.phone.length == 8 && locationsform.whatsapp.length == 8 && regex.test(locationsform.phone) && regex.test(locationsform.whatsapp) && props.id) {
             await dispatch(UpdateBenefitLocation(props.id, locationsform, locationsMapform));
             setOpen(true);
-        } else if (locationsform.phone != "" && locationsform.whatsapp != "" && locationsform.address != "" && locationsform.type != "" && locationsform.province != "" && locationsform.canton != "" && locationsform.district != ""
+        } else if (location.ubicationType != "" && locationsform.phone != "" && locationsform.whatsapp != "" && locationsform.address != "" && locationsform.ubicationType != "" && (locationsform.province != "" || !showInformation) && (locationsform.canton != "" || !showInformation) != "" && (locationsform.district != "" || !showInformation)
             && locationsform.phone.length == 8 && locationsform.whatsapp.length == 8 && regex.test(locationsform.phone) && regex.test(locationsform.whatsapp)) {
             await dispatch(AddBenefitLocation(locationsform, locationsMapform));
             setOpen(true);
         }
     };
-
-    useEffect(() => {
-        GetBenefitsById(props.idBenefit)
-        dispatch(GetProvince());
-        if (props.id) {
-            dispatch(GetBenefitsLocationsById(props.id));
-        } 
-    }, []);
-
-    useEffect(() => {
-        if(props.id && location != [] && location[0] != [""] && location[0] != undefined) {setLocationsForm({
-            idBenefit: location[0].benefit.idBenefit,
-            province: location[0].provincia,
-            canton: location[0].canton,
-            district: location[0].distrito,
-            provinceCode: location[0].codProvincia,
-            cantonCode: location[0].codCanton,
-            districtCode: location[0].codDistrito,
-            address: location[0].address,
-            latitude: location[0].latitude,
-            longitude: location[0].longitude,
-            phone: location[0].phone,
-            whatsapp: location[0].whatsApp,
-            active: location[0].active,
-            principalLocation: location[0].principalLocation
-            });
-            setLocationsMapForm({
-                latitude: location[0].latitude,
-                longitude: location[0].longitude,
-            })
-            dispatch(GetCantons(location[0].codProvincia));
-            dispatch(GetDistricts(location[0].codProvincia, location[0].codCanton));
-            setDisableCanton(false);
-            setDisableDistrict(false);
-        }
-    }, [location]);
 
     const handleType = (event) => {
         const name = event.target.name;
@@ -236,8 +238,8 @@ const FormAdminBenefits = (props) => {
                 longitude: "",
             })
         }
-        if(event.target.name == "type" && event.target.value == "") {setErrorType({error: true, errorMessage:`Este campo es requerido`});}
-            else if (event.target.name == "type") {setErrorType({error: false, errorMessage:``});}
+        if(event.target.name == "ubicationType" && event.target.value == "") {setErrorType({error: true, errorMessage:`Este campo es requerido`});}
+            else if (event.target.name == "ubicationType") {setErrorType({error: false, errorMessage:``});}
     }
 
     const handleChange = (event) => {
@@ -358,9 +360,9 @@ const FormAdminBenefits = (props) => {
                         <FormControl className={classes.textvalidator}>
                             <SelectValidator 
                                 label="Tipo de Ubicación*" 
-                                name="type"
+                                name="ubicationType"
                                 style={{width: "100%"}}
-                                value={locationsform.type} 
+                                value={locationsform.ubicationType} 
                                 onChange={handleType} 
                                 error={errorType.error}
                             >
