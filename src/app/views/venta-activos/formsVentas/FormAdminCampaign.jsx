@@ -255,9 +255,10 @@ const FormAdminCampaign = () => {
         if (date != null) {
           setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
         }
-        if (campaignform.endDate != null && date.getTime() > campaignform.endDate.getTime()) {
+        //console.log("echas", date.setHours(0,0,0,0), campaignform.endDate != null && campaignform.endDate.setHours(0,0,0,0))
+        if (campaignform.endDate != null && date.setHours(0,0,0,0) >= campaignform.endDate.setHours(0,0,0,0)) {
             //isErrorValidation = true;
-            setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*La fecha de inicio no puede ser mayor a la fecha de finaización" }));
+            setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*La fecha de inicio no puede ser mayor o igual a la fecha de finaización" }));
           } 
         setCampaignForm({
           ...campaignform,
