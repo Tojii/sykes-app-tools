@@ -113,6 +113,7 @@ const CategoriesTable = (props) => {
       return [
           item.idCategory,
           item.name,
+          item.order,
           showImage(item),
       ]}
     })
@@ -130,6 +131,18 @@ const CategoriesTable = (props) => {
         {
           name: "name",
           label: "Nombre",
+          options: {
+           filter: true,
+           sort: true,
+           display: true,
+           filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+           }
+          }
+        },
+        {
+          name: "order",
+          label: "Orden",
           options: {
            filter: true,
            sort: true,

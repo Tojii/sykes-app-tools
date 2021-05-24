@@ -90,6 +90,7 @@ const FormCategoryBenefits = () => {
     const classes = useStyles();
     const benefit = useSelector(state => state.benefit.benefit);
     const category = useSelector(state => state.category.category);
+    const categories = useSelector(state => state.category.benefitscategories);
     const successBenefit = useSelector(state => state.category.success);
     const isLoading  = useSelector(state => state.category.loading);
     const [open, setOpen] = useState(false);
@@ -102,6 +103,7 @@ const FormCategoryBenefits = () => {
     const [categoryform, setCategoryForm] = useState({
         idCategory: "",
         name: "",
+        order: "",
         image: null,
     });
 
@@ -126,7 +128,7 @@ const FormCategoryBenefits = () => {
     }
 
     useEffect(() => {
-        //dispatch(GetBenefits());
+        dispatch(GetCategories());
         //dispatch(GetBenefitsLocations());
         if (id) {
             dispatch(GetBenefitsCategoryById(id));
@@ -138,6 +140,7 @@ const FormCategoryBenefits = () => {
             idCategory: category[0].idCategory,
             name: category[0].name,
             image: category[0].image,
+            order: category[0].order,
         });}
     }, [category]);
 
@@ -212,6 +215,24 @@ const FormCategoryBenefits = () => {
                             validators={["required","maxStringLength:100"]}
                             errorMessages={["Este campo es requerido", "Máximo 100 carácteres"]}
                         />
+                        <SelectValidator
+                            className={classes.textvalidator}
+                            label="Orden*"
+                            onChange={handleChange
+                            }
+                            type="text"
+                            name="order"
+                            value={categoryform.order}
+                            >
+                            {categories.map((data, index) => (
+                                <MenuItem key={`data-${data.order}`} id={data.order} value={index + 1}>
+                                {index + 1 || " "}
+                                </MenuItem> 
+                            ))}
+                            <MenuItem key={`data-${categories.length + 1}`} id={categories.length + 1} value={categories.length + 1}>
+                                {categories.length + 1 || " "}
+                                </MenuItem> 
+                        </SelectValidator>
                         <FormControl className={classes.textvalidator}>
                             <label className={classes.filelabel} id="logo">Imagen (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
                             <Input type="file" name="files" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect} 

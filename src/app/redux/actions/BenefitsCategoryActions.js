@@ -68,6 +68,7 @@ export const AddCategory = (payload, Image) => {
   //console.log("addver", payload, files)
   var formData = new FormData();
     formData.append('Name', payload.name);
+    formData.append('Order', payload.order);
     formData.append('files', Image);
     const config = {
         headers: {
@@ -99,6 +100,7 @@ export const AddCategory = (payload, Image) => {
 export const UpdateCategory = (id, payload, Image) => dispatch => {
   var formData = new FormData();
     formData.append('Name', payload.name);
+    formData.append('Order', payload.order);
     formData.append('files', Image);
   const config = {
       headers: {

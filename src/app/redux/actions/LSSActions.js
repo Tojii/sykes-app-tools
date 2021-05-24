@@ -35,7 +35,7 @@ export const submitData = Data => {
       type: LSS_LOADING
     });
 
-    await api.post(`${process.env.REACT_APP_API_URL}/Survey`, 
+    await api.post(`${process.env.REACT_APP_API_URL}/LSS`, 
     {
       "cuentaArea": Data.CuentaArea, 
       "jefeDirecto": Data.JefeDirecto,
@@ -76,7 +76,7 @@ export const getValidation = username => {
       type: LSS_LOADING
     });
 
-    await api.get(`${process.env.REACT_APP_API_URL}/Survey?username=${username}`).then(res => 
+    await api.get(`${process.env.REACT_APP_API_URL}/LSS?username=${username}`).then(res => 
       dispatch({
       type: GET_VALIDATE,
       data: res.data

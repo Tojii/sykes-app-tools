@@ -17,7 +17,7 @@ import {
 class Wrapper extends Component {
 
   componentDidMount() {
-    //this.props.getValidation(this.props.user.username);
+    this.props.getValidation(this.props.user.username);
   }
   
   render() {
