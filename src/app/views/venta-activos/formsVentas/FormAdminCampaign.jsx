@@ -163,7 +163,7 @@ const FormAdminCampaign = () => {
     const handleFormSubmit = async () => {
         //console.log("save", edificiosSave)
        
-        if (campaignform.startDate != null && campaignform.endDate != null && (campaignform.activeEdificio || campaignform.activeEnvioCasa) && (!campaignform.activeEdificio || campaignform.activeEdificio && edificiosSave) ) { 
+        if (campaignform.startDate != null && campaignform.endDate != null && (campaignform.startDate.setHours(0,0,0,0) < campaignform.endDate.setHours(0,0,0,0)) && (campaignform.activeEdificio || campaignform.activeEnvioCasa) && (!campaignform.activeEdificio || campaignform.activeEdificio && edificiosSave) ) { 
             if (id) {
                 await dispatch(UpdateCampaign(id,campaignform));
                 setOpen(true);
@@ -223,21 +223,13 @@ const FormAdminCampaign = () => {
                 setCampaignForm({
                     ...campaignform,
                     [name]: event.target.checked,
-                    edificiosCampaign: campaignform.edificiosCampaign.map((item, index) => {
-                        return { 
-                          "id": item.id,
-                          "nameBuilding": item.nameBuilding,
-                          "active": false,
-                          "activeBuilding": item.activeBuilding,
-                          "idBuilding": item.idBuilding,
-                        }
-                      }),
+                    edificiosCampaign: []
                 })
             } else {
                 setCampaignForm({
                     ...campaignform,
                     [name]: event.target.checked,
-                    edificiosCampaign: []
+                    //edificiosCampaign: []
                 })
             }
             if ( event.target.checked) {
