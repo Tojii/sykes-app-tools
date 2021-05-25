@@ -130,15 +130,15 @@ const FormAdminBenefits = (props) => {
     useEffect(() => {
         if(props.id && location != [] && location[0] != [""] && location[0] != undefined) {setLocationsForm({
             idBenefit: location[0].benefit.idBenefit,
-            province: location[0].provincia,
-            canton: location[0].canton,
-            district: location[0].distrito,
+            province: location[0].provincia ? location[0].provincia : "",
+            canton: location[0].canton ? location[0].canton : "",
+            district: location[0].distrito ? location[0].distrito : "",
             provinceCode: location[0].codProvincia ? location[0].codProvincia : "",
             cantonCode: location[0].codCanton ? location[0].codCanton : "",
             districtCode: location[0].codDistrito ? location[0].codDistrito : "",
             address: location[0].address,
-            latitude: location[0].latitude,
-            longitude: location[0].longitude,
+            latitude: location[0].latitude ? location[0].latitude : "",
+            longitude: location[0].longitude ? location[0].longitude : "",
             phone: location[0].phone,
             whatsapp: location[0].whatsApp,
             active: location[0].active,
@@ -146,12 +146,12 @@ const FormAdminBenefits = (props) => {
             ubicationType: location[0].ubicationType,
             });
             setLocationsMapForm({
-                latitude: location[0].latitude,
-                longitude: location[0].longitude,
+                latitude: location[0].latitude ? location[0].latitude : "",
+                longitude: location[0].longitude ? location[0].longitude : "",
             })
             location[0].codProvincia && dispatch(GetCantons(location[0].codProvincia));
             location[0].codProvincia && location[0].codCanton && dispatch(GetDistricts(location[0].codProvincia, location[0].codCanton));
-            location[0].ubicationType == "Remota" && setshowInformation(false)
+            location[0].ubicationType == "Remota" ? setshowInformation(false) : setshowInformation(true)
             setDisableCanton(false);
             setDisableDistrict(false);
         }
@@ -195,9 +195,9 @@ const FormAdminBenefits = (props) => {
                 )
             })
             console.log("main", mainlocation)
-            mainlocation.length != 0 && await dispatch(UpdateBenefitLocation(mainlocation[0].idLocation, {...mainlocation[0], provinceCode: mainlocation[0].codProvincia, whatsapp: mainlocation[0].whatsApp,
-            cantonCode: 7, districtCode: mainlocation[0].codDistrito, district: mainlocation[0].distrito, province: mainlocation[0].provincia,
-            idBenefit: props.idBenefit, principalLocation: false}, {latitude: mainlocation[0].latitude, longitude: mainlocation[0].longitude }));
+            mainlocation.length != 0 && await dispatch(UpdateBenefitLocation(mainlocation[0].idLocation, {...mainlocation[0], provinceCode: mainlocation[0].codProvincia ? mainlocation[0].codProvincia : "", whatsapp: mainlocation[0].whatsApp,
+            cantonCode: mainlocation[0].codCanton ? mainlocation[0].codCanton : "", districtCode: mainlocation[0].codDistrito ? mainlocation[0].codDistrito : "", district: mainlocation[0].distrito ? mainlocation[0].distrito : "", province: mainlocation[0].provincia ? mainlocation[0].provincia : "",
+            idBenefit: props.idBenefit, canton: mainlocation[0].canton ? mainlocation[0].canton : "" , principalLocation: false}, {latitude: mainlocation[0].latitude ? mainlocation[0].latitude : "", longitude: mainlocation[0].longitude ? mainlocation[0].longitude : ""}));
         }
         // Guarda o edita según sea el caso si todas las validaciones son correctas
         if (location.ubicationType != "" && locationsform.phone != "" && locationsform.whatsapp != "" && locationsform.address != "" && locationsform.ubicationType != "" && (locationsform.province != "" || !showInformation) && (locationsform.canton != "" || !showInformation) && (locationsform.district != "" || !showInformation)
@@ -346,18 +346,6 @@ const FormAdminBenefits = (props) => {
                     {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> :
                     admin ? <>               
                         <FormControl className={classes.textvalidator}>
-                            <TextValidator
-                                style={{width: "100%"}}
-                                label="Dirección*"
-                                onChange={handleChange}
-                                type="text"
-                                name="address"
-                                value={locationsform.address}
-                                error={errorAddress.error}
-                            />
-                            <FormHelperText error={errorAddress.error} id="my-helper-textaddress">{errorAddress.errorMessage}</FormHelperText>
-                        </FormControl>
-                        <FormControl className={classes.textvalidator}>
                             <SelectValidator 
                                 label="Tipo de Ubicación*" 
                                 name="ubicationType"
@@ -374,6 +362,18 @@ const FormAdminBenefits = (props) => {
                                 </MenuItem>
                             </SelectValidator> 
                             <FormHelperText error={errorType.error} id="my-helper-textprovince">{errorType.errorMessage}</FormHelperText>
+                        </FormControl>
+                        <FormControl className={classes.textvalidator}>
+                            <TextValidator
+                                style={{width: "100%"}}
+                                label="Dirección*"
+                                onChange={handleChange}
+                                type="text"
+                                name="address"
+                                value={locationsform.address}
+                                error={errorAddress.error}
+                            />
+                            <FormHelperText error={errorAddress.error} id="my-helper-textaddress">{errorAddress.errorMessage}</FormHelperText>
                         </FormControl>
                         {showInformation ? <FormControl className={classes.textvalidator}>
                             <SelectValidator 

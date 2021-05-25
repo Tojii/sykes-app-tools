@@ -230,9 +230,9 @@ const DetalleBenefits = (props) => {
                                                         {province.name || " "}
                                                         </MenuItem>
                                                     ))}
-                                                    <MenuItem key={`province-all`} id={"all"} value={"all"}>
+                                                    {province != "" && <MenuItem key={`province-all`} id={"all"} value={"all"}>
                                                         {"Todos"}
-                                                    </MenuItem>
+                                                    </MenuItem>}
                                                 </Select> 
                                         </FormControl>
                                         <FormControl style={{ width: isMdScreen() ? "40%" : "15%", marginLeft: isMdScreen() ? "3%" : "1%" }}>

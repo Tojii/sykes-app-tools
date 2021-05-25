@@ -181,7 +181,11 @@ const HomeBenefits = () => {
                                             />
                                         </a>
                                     </Grid>
-                                    {benefitscategories.map((item, index) => {
+                                    {benefitscategories.sort(function(a, b) {
+                                        var textA = a.order;
+                                        var textB = b.order;
+                                        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                                    }).map((item, index) => {
                                     return (
                                         <Grid key={item.idCategory} item lg={3} md={3} sm={3} xs={7} className={classes.box}>
                                             <a onClick={() => history.push({pathname: `/Benefits/Category/${item.idCategory}`})} >
@@ -227,9 +231,9 @@ const HomeBenefits = () => {
                                                     {category.name || " "}
                                                     </MenuItem> 
                                                 ))}
-                                                <MenuItem key={`category-all`} id={"all"} value={"all"}>
+                                                {category != "" && <MenuItem key={`category-all`} id={"all"} value={"all"}>
                                                     {"Todas"}
-                                                </MenuItem>
+                                                </MenuItem>}
                                             </Select> 
                                     </FormControl>
                                     <FormControl style={{ width: isMdScreen() ? "25%" : "20%", marginLeft: isMdScreen() ? "3%" : "4%" }}>
@@ -245,9 +249,9 @@ const HomeBenefits = () => {
                                                     {province.name || " "}
                                                     </MenuItem>
                                                 ))}
-                                                <MenuItem key={`province-all`} id={"all"} value={"all"}>
+                                                {province != "" && <MenuItem key={`province-all`} id={"all"} value={"all"}>
                                                     {"Todos"}
-                                                </MenuItem>
+                                                </MenuItem>}
                                             </Select> 
                                     </FormControl>
                                     <FormControl style={{ width: isMdScreen() ? "25%" : "20%", marginLeft: isMdScreen() ? "3%" : "4%" }}>
@@ -264,9 +268,9 @@ const HomeBenefits = () => {
                                                 {canton || " "}
                                                 </MenuItem>
                                             ))}
-                                                <MenuItem key={`canton-all`} id={"all"} value={"all"}>
+                                                {canton != "" && <MenuItem key={`canton-all`} id={"all"} value={"all"}>
                                                     {"Todos"}
-                                                </MenuItem>
+                                                </MenuItem>}
                                             </Select> 
                                     </FormControl>
                                     <div style={{ height: "655px", padding: isMdScreen() ? "10px" : "25px", width: "100%", marginLeft: isMdScreen() ? "3%" : "1%" }}>

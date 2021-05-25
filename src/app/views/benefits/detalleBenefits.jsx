@@ -448,7 +448,7 @@ const DetalleBenefits = (props) => {
                                                                 </div>
                                                             </Grid>
                                                             <Grid item lg={9} md={9} sm={9} xs={9}>
-                                                            <a href={`https://${benefit[0] ? benefit[0].link : ""}`} style={{color: "#039be5"}}>
+                                                            <a href={`${benefit[0] ? (benefit[0].link.includes("http") ? benefit[0].link : `https://${benefit[0].link}`) : ""}`} target="_blank" style={{color: "#039be5"}}>
                                                                 {benefit[0] ? benefit[0].link : ""}
                                                             </a>
                                                             </Grid>
@@ -465,7 +465,7 @@ const DetalleBenefits = (props) => {
                                                                 return (
                                                                     <Grid key={"link-" + item.link} item lg={3} md={3} sm={3} xs={3}>
                                                                         <div style={{textAlignLast: "center"}}>
-                                                                            <a href={`https://${item.link}`}>
+                                                                            <a href={item.link.includes("http") ? `${item.link}` : `https://${item.link}`} target="_blank">
                                                                                 <img
                                                                                     className={classes.miniatureimage}
                                                                                     alt="..."

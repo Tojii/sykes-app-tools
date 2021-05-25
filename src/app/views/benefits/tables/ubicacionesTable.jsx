@@ -120,8 +120,9 @@ const LocationsTable = (props) => {
       if (item != undefined) {
       return [
           item.idLocation,
-          item.idBenefit,
+          props.idBenefit,
           item.address,
+          item.ubicationType,
           item.provincia,
           item.canton,
           item.phone,
@@ -167,6 +168,18 @@ const LocationsTable = (props) => {
                 }
               };
             },
+          }
+        },
+        {
+          name: "ubicationType",
+          label: "Tipo de Ubicación",
+          options: {
+           filter: true,
+           sort: true,
+           display: true,
+           filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+           }
           }
         },
         {
@@ -220,7 +233,7 @@ const LocationsTable = (props) => {
           options: {
             filter: true,
             customBodyRenderLite: (dataIndex) => {
-              let value = builddata[dataIndex][7];
+              let value = builddata[dataIndex][8];
               return value.map((val, key) => {
                 return <Chip style={{backgroundColor: val == "Active" ? "#4cb050" : "#939598", margin: "1%", color: "white"}} label={val} key={key} />;
               });
@@ -232,7 +245,7 @@ const LocationsTable = (props) => {
           options: {
             filter: true,
             customBodyRenderLite: (dataIndex) => {
-              let value = builddata[dataIndex][8];
+              let value = builddata[dataIndex][9];
               return value.map((val, key) => {
                 return <Chip style={{backgroundColor: val == "Active" ? "#4cb050" : "#939598", margin: "1%", color: "white"}} label={val} key={key} />;
               });
@@ -309,7 +322,7 @@ const LocationsTable = (props) => {
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={props.type != "detail" ? classes.tableMargin + " m-sm-30" : "m-sm-30"}>
-          {console.log(successCampaignItems)}
+          {console.log("hola", props.benefitslocations)}
           {(isLoading || isLoadingLocation) ? <Loading /> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsById(props.idBenefit))}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la localización no pudo ser eliminada!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
