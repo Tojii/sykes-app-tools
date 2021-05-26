@@ -472,7 +472,6 @@ const FormVentas = () => {
             <Card className={classes.formcard} elevation={6}>
                 {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <Alert severity="info" className={classes.textmessage}>*El rebajo de artículos comprados se hará de planilla</Alert>}
                 {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : (campaign[0] && campaign[0] != undefined && campaign[0].message != "") && <Alert severity="info" className={classes.textmessage}>{campaign[0] ? campaign[0].message : ""}</Alert>}
-                {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : (campaign[0] && campaign[0] != undefined && campaign[0].shippingMessage && showInformation) ? <Alert severity="info" className={classes.textmessage}>{campaign[0] ? campaign[0].shippingMessage : ""}</Alert> : null}
                 {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <h2 style={{ textAlign: "center", marginTop: "2%" }} className="mb-20">Datos del usuario</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>
                     {(isLoadingCampaign || isLoadingOrder) ? <Loading /> :
@@ -535,6 +534,7 @@ const FormVentas = () => {
                                     {"Recoger en edificio"}
                                 </MenuItem>}  
                             </SelectValidator>
+                            {(campaign[0] && campaign[0] != undefined && campaign[0].shippingMessage && showInformation) ? <Alert severity="info" className={classes.textvalidator}>{campaign[0] ? campaign[0].shippingMessage : ""}</Alert> : null}
                             {showEdificio ? <SelectValidator
                                 label="Edificio*"
                                 name="buildingID"
@@ -602,6 +602,7 @@ const FormVentas = () => {
                                 label="Dirección Exacta*"
                                 onChange={handleChange}
                                 //disabled={true}
+                                multiline
                                 type="text"
                                 name="address"
                                 value={ventasform.address}
