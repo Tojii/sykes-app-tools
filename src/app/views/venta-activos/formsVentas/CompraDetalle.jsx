@@ -145,9 +145,6 @@ const CompraDetalle = (props) => {
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Método de entrega:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].sendMethod }</TableCell>
                                     </TableRow>
-                                    {order[0] != undefined && order[0].sendMethod == "Envío a la casa" && <TableRow>
-                                        <TableCell colSpan={3} width={"70%"} className="px-sm-24"><Alert style={{marginTop:"10px"}} severity="info" >{order[0] ? order[0].campaign.shippingMessage : ""}</Alert> </TableCell>
-                                    </TableRow>}
                                     {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Provincia:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].province }</TableCell>
@@ -168,6 +165,10 @@ const CompraDetalle = (props) => {
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Edificio:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].building.name }</TableCell>
                                     </TableRow> : null}
+                                    {order[0] != undefined && order[0].sendMethod == "Envío a la casa" && 
+                                    <TableRow>
+                                        <TableCell colSpan={2} width={"70%"} className="px-sm-24"><Alert style={{marginTop:"10px"}} severity="info" >{order[0] ? order[0].campaign.shippingMessage : ""}</Alert> </TableCell>
+                                    </TableRow>}
                                 </TableBody>
                             </Table>
                             <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">Datos de la compra:</h2>
