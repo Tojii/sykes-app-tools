@@ -204,7 +204,7 @@ const FormAdminInventario = () => {
         let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
         let list = [];
         let sizes = 0;
-        console.log("image prop", event.target.files[0])
+        //console.log("image prop", event.target.files[0])
 
         if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
                 if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
@@ -234,7 +234,6 @@ const FormAdminInventario = () => {
 
     return (
         <div className="p-24">
-            {console.log("inventario", campaigns)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Artículo" : "Agregar Artículo"}</h2>}

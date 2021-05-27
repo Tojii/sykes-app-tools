@@ -110,7 +110,7 @@ const EdificiosTable = (props) => {
       });
       setBuilddata(edificiosChange) 
       props.setEdificiosCampaign(edificiosChange); 
-      console.log("buildata", edificiosChange)
+      //console.log("buildata", edificiosChange)
     }
 
     const [builddata, setBuilddata] = useState( props.edificiosCampaign.length == 0 ? buildings.map((item, index) => {
@@ -236,7 +236,6 @@ const EdificiosTable = (props) => {
       (isLoading || isLoadingBuilding) ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">
-            {console.log(props.edificiosCampaign, buildings)}
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}

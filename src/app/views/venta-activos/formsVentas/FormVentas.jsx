@@ -64,6 +64,9 @@ const useStyles = makeStyles({
         },
         wordBreak: "break-word"
     },
+    break: {
+        wordBreak: "break-word"
+    },
     gridtext: {
         "@media (min-width: 0px)": {
             marginLeft: "2%",
@@ -534,7 +537,7 @@ const FormVentas = () => {
                                     {"Recoger en edificio"}
                                 </MenuItem>}  
                             </SelectValidator>
-                            {(campaign[0] && campaign[0] != undefined && campaign[0].shippingMessage && showInformation) ? <Alert severity="info" className={classes.textvalidator}>{campaign[0] ? campaign[0].shippingMessage : ""}</Alert> : null}
+                            {(campaign[0] && campaign[0] != undefined && campaign[0].shippingMessage && showInformation) ? <Alert severity="info" className={classes.textvalidator + " " + classes.break}>{campaign[0] ? campaign[0].shippingMessage : ""}</Alert> : null}
                             {showEdificio ? <SelectValidator
                                 label="Edificio*"
                                 name="buildingID"

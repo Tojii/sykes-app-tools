@@ -271,7 +271,6 @@ const FormAdminCampaign = () => {
 
     return (
         <div className="p-24">
-            {console.log("edificios", campaignform)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Campaña" : "Agregar Campaña"}</h2>}
@@ -342,6 +341,7 @@ const FormAdminCampaign = () => {
                             label="Mensaje"
                             onChange={handleChange}
                             type="text"
+                            multiline
                             name="message"
                             value={campaignform.message}
                         />
@@ -350,6 +350,7 @@ const FormAdminCampaign = () => {
                             label="Mensaje de envío"
                             onChange={handleChange}
                             type="text"
+                            multiline
                             name="shippingMessage"
                             value={campaignform.shippingMessage}
                         />
