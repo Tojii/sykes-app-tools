@@ -125,48 +125,48 @@ const CompraDetalle = (props) => {
                             <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">Datos del usuario:</h2>
                              <Table>
                                 <TableBody>
-                                    <TableRow>
+                                    <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Badge:</h6></TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].badge }</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Nombre:</h6></TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].name }</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Correo electronico:</h6></TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].email }</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Telefono:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].phone }</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Método de entrega:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].sendMethod }</TableCell>
                                     </TableRow>
-                                    {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow>
+                                    {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Provincia:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].province }</TableCell>
                                     </TableRow> : null}
-                                    {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow>
+                                    {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Cantón:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].canton }</TableCell>
                                     </TableRow> : null}
-                                    {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow>
+                                    {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Distrito:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].district }</TableCell>
                                     </TableRow> : null}
-                                    {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow>
+                                    {(order[0] != undefined && order[0].sendMethod == "Envío a la casa") ? <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Dirección exacta:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].address }</TableCell>
                                     </TableRow> : null}
-                                    {(order[0] != undefined && order[0].sendMethod == "Recoger en edificio") ? <TableRow>
+                                    {(order[0] != undefined && order[0].sendMethod == "Recoger en edificio") ? <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Edificio:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].building.name }</TableCell>
                                     </TableRow> : null}
                                     {order[0] != undefined && order[0].sendMethod == "Envío a la casa" && 
-                                    <TableRow>
+                                    <TableRow className={classes.break}>
                                         <TableCell colSpan={2} width={"70%"} className="px-sm-24"><Alert style={{marginTop:"10px"}} severity="info" >{order[0] ? order[0].campaign.shippingMessage : ""}</Alert> </TableCell>
                                     </TableRow>}
                                 </TableBody>
@@ -174,23 +174,23 @@ const CompraDetalle = (props) => {
                             <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">Datos de la compra:</h2>
                             <Table>
                                 <TableBody>
-                                    <TableRow>
+                                    <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Campaña:</h6></TableCell>
                                         <TableCell width={"70%"} className="px-sm-24">{ order[0] == undefined ? "" : order[0].campaign.name }</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Fecha:</h6></TableCell>
                                         <TableCell className="px-sm-24">{ (order[0] != null && order[0] != undefined && order[0].createdDate != "") ? moment(new Date(order[0].createdDate)).format(SPACED_DATE_FORMAT) : "" }</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}><h6>Notas:</h6></TableCell>
                                         <TableCell width={"70%"} className="px-sm-24">{ order[0] == undefined ? "" : order[0].notes }</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Total articulos comprados:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : order[0].totalItems }</TableCell>
                                     </TableRow>
-                                    <TableRow>
+                                    <TableRow className={classes.break}>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24"}> <h6>Total Compra:</h6> </TableCell>
                                         <TableCell className="px-sm-24">{ order[0] == undefined ? "" : "₡" + parseFloat(order[0].total).toFixed(2) }</TableCell>
                                     </TableRow>
