@@ -102,6 +102,7 @@ const Home = () => {
                                     <img
                                         //maxHeight={"515px"}
                                         //width={"390px"}
+                                        style={{cursor: "pointer"}}
                                         className={classes.imageCarousel}
                                         alt="..."
                                         src={`${image.image}`}

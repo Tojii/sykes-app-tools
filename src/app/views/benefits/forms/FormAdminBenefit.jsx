@@ -306,6 +306,7 @@ const FormAdminBenefits = () => {
                         <TextValidator
                             className={classes.textvalidator}
                             label="Descripción*"
+                            multiline
                             onChange={handleChange}
                             type="text"
                             name="description"
@@ -316,6 +317,7 @@ const FormAdminBenefits = () => {
                         <TextValidator
                             className={classes.textvalidator}
                             label="Información de Beneficio*"
+                            multiline
                             onChange={handleChange}
                             type="text"
                             name="benefitInfo"

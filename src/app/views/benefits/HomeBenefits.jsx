@@ -173,7 +173,7 @@ const HomeBenefits = () => {
                                 <h5 style={{ color: "#939598", marginLeft: window.screen.width >= 1024 ? "1%" : null, textAlign: "justify", width: window.screen.width <= 1024 ? "95%" : null}}>{pageSettings[0] != null ? pageSettings[0].reminder : ""}</h5> 
                                 <Grid container spacing={2}> 
                                     <Grid key={0} item lg={3} md={3} sm={3} xs={7} className={classes.box}>
-                                        <a onClick={() => history.push({pathname: `/Benefits/Category`})}>
+                                        <a style={{cursor: "pointer"}} onClick={() => history.push({pathname: `/Benefits/Category`})}>
                                             <img
                                                 className={classes.media}
                                                 alt="..."
@@ -188,7 +188,7 @@ const HomeBenefits = () => {
                                     }).map((item, index) => {
                                     return (
                                         <Grid key={item.idCategory} item lg={3} md={3} sm={3} xs={7} className={classes.box}>
-                                            <a onClick={() => history.push({pathname: `/Benefits/Category/${item.idCategory}`})} >
+                                            <a style={{cursor: "pointer"}} onClick={() => history.push({pathname: `/Benefits/Category/${item.idCategory}`})} >
                                                 {item.image && <img
                                                     className={classes.media}
                                                     alt="..."
@@ -198,7 +198,7 @@ const HomeBenefits = () => {
                                         </Grid>
                                     )})}
                                     <Grid key={"discount"} item lg={3} md={3} sm={3} xs={7} className={classes.box}>
-                                        <a onClick={() => history.push({pathname: `/Benefits/MontlyDiscounts`})}>
+                                        <a style={{cursor: "pointer"}} onClick={() => history.push({pathname: `/Benefits/MontlyDiscounts`})}>
                                             <img
                                                 className={classes.media}
                                                 alt="..."

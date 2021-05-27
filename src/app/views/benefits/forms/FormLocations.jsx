@@ -241,7 +241,7 @@ const FormAdminBenefits = (props) => {
         if(event.target.name == "ubicationType" && event.target.value == "") {setErrorType({error: true, errorMessage:`Este campo es requerido`});}
             else if (event.target.name == "ubicationType") {setErrorType({error: false, errorMessage:``});}
     }
-
+    
     const handleChange = (event) => {
         const name = event.target.name;
         const regex = /^\+?(0|[1-9]\d*)$/;
@@ -276,6 +276,17 @@ const FormAdminBenefits = (props) => {
         setLocationsMapForm({
             latitude: lat,
             longitude: lng,
+        })
+    }
+
+    const handleChangeMap = (event) => {
+        setLocationsMapForm({
+            ...locationsMapform,
+            [event.target.name]: event.target.value,
+        })
+        setLocationsForm({
+            ...locationsform,
+            [event.target.name]: event.target.value,
         })
     }
 
@@ -337,7 +348,7 @@ const FormAdminBenefits = (props) => {
 
     return (
         <div className={"p-24"}>
-            {console.log("locationsform", locationsform)}
+            {console.log("locationsform", locationsform, locationsMapform)}
             {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsById(props.idBenefit))}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             {(isLoading || isLoadingLocation || isLoadingProvince) ? <Loading/> : <ValidationModal idioma={"Español"} path={""} state={"Recordatorio"} save={() => {}} message={"Se va a establecer esta localización como la principal del beneficio"} setOpen={setOpenMessage} open={openMessage} />}
             <Card className={classes.formcard} elevation={6}>
@@ -483,10 +494,10 @@ const FormAdminBenefits = (props) => {
                             <TextValidator
                                 style={{width: "100%"}}
                                 label="Latitud*"
-                                //onChange={handleChange}
+                                onChange={handleChangeMap}
                                 type="text"
                                 name="latitude"
-                                disabled={true}
+                                //disabled={true}
                                 value={locationsMapform.latitude}
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
@@ -496,10 +507,10 @@ const FormAdminBenefits = (props) => {
                             <TextValidator
                                 style={{width: "100%"}}
                                 label="Longitud*"
-                                //onChange={handleChange}
+                                onChange={handleChangeMap}
                                 type="text"
                                 name="longitude"
-                                disabled={true}
+                                //disabled={true}
                                 value={locationsMapform.longitude}
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}

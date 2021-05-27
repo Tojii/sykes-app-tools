@@ -340,7 +340,7 @@ const LocationsTable = (props) => {
               {/* } */}
             </Grid>
           </Grid>
-          <Dialog fullWidth maxWidth="md" onClose={handleClose} open={shouldOpenNewDialog.open}>
+          <Dialog disableBackdropClick fullWidth maxWidth="md" onClose={handleClose} open={shouldOpenNewDialog.open}>
             <DialogTitle  id="customized-dialog-title" onClose={handleClose}></DialogTitle>
             <AgregarDialog type={shouldOpenNewDialog.type} close={handleClose} id={shouldOpenNewDialog.id} idBenefit={shouldOpenNewDialog.idBenefit} />
           </Dialog>
