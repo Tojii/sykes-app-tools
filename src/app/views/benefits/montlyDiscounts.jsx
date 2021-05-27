@@ -73,6 +73,23 @@ const Home = () => {
         dispatch(GetDiscounts());
     }, []);
 
+    const showCarousel = () => {
+        if (images.filter(function(image) {
+            var d = new Date();
+            var start = new Date(image.startDate);
+            var end = new Date(image.endDate);
+            d.setHours(0,0,0,0);
+            start.setHours(0,0,0,0);
+            end.setHours(0,0,0,0);
+            if (start.getTime() > d.getTime() || end.getTime() < d.getTime()) { //use only active discounts
+                console.log(start.getTime(), d.getTime(), end.getTime())
+            return false; // skip
+            }
+            return true;
+        }).length == 0) {return false} 
+        else {return true}
+    }
+
     return (
         <div className="m-sm-30">
             { isLoading ? <Loading/> : 
@@ -87,7 +104,7 @@ const Home = () => {
             <div className={classes.widthCarousel}>
                 { isLoading ? <Loading /> :
                     benefitUser ? <div>
-                        <Carousel>
+                        {showCarousel() ? <Carousel>
                             {images.filter(function(image) {
                                 var d = new Date();
                                 var start = new Date(image.startDate);
@@ -115,7 +132,7 @@ const Home = () => {
                                     />
                                 </div>
                             ))}
-                        </Carousel>
+                        </Carousel> : <h4 style={{textAlign:"center"}}>No hay promociones disponibles en este momento.</h4>}
                     </div> : <NotFound/>}
             </div>
         </div>

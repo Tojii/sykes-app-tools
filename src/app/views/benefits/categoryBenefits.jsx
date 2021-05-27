@@ -159,6 +159,33 @@ const DetalleBenefits = (props) => {
         );
     }
 
+    const showCards = () => {
+       if (benefitscategory[0].benefits.filter(function(item) {
+            var locationstemp = item.benefitLocations.filter(function(item) {
+                if (province != "" && province != "all" && province != item.provincia ) {
+                  return false; // skip
+                }
+                if (canton != "" && canton != "all" && canton != item.canton ) {
+                    return false; // skip
+                }
+                return true;
+            }).map((item, index) => {
+                return { 
+                    canton: item.canton,
+                    provincia: item.provincia
+                }})
+            if (locationstemp.length == 0 || !item.active) {
+              return false; // skip
+            }
+            //console.log("temp", locationstemp)
+            return true;
+        }).length == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function handleLocation (locations) {
         var tooltipAddress = locations.filter(function(item) {
             if (!item.principalLocation) {
@@ -251,6 +278,7 @@ const DetalleBenefits = (props) => {
                                                 </Select> 
                                         </FormControl>
                                         </div>
+                                        {showCards() && <h4 style={{textAlign:"center"}}>No se encontró ningún beneficio.</h4>}
                                         <div style={{backgroundColor: "lightgray"}}>
                                             <Grid container spacing={2}> 
                                                 {(benefitscategory[0] != undefined && benefitscategory[0].benefits != undefined) ? benefitscategory[0].benefits.filter(function(item) {

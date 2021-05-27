@@ -102,6 +102,80 @@ const DiscountsTable = (props) => {
       );
     }
 
+    const customFilterListRender = (v, title) => {
+      if (v[0] && v[1] && false) {
+        return [`Fecha Inicio: ${new Date(v[0]).toLocaleDateString()}`, `Fecha Final: ${new Date(v[1]).toLocaleDateString()}`];
+      } else if (v[0] && v[1] && true) {
+        return `${title} desde: ${new Date(v[0]).toLocaleDateString()}, hasta: ${new Date(v[1]).toLocaleDateString()}`;
+      } else if (v[0]) {
+        return `${title} desde: ${new Date(v[0]).toLocaleDateString()}`;
+      } else if (v[1]) {
+        return `${title} hasta: ${new Date(v[1]).toLocaleDateString()}`;
+      }
+      return [];
+    }
+
+    const customFilterListUpdate = (filterList, filterPos, index) => { 
+      if (filterPos === 0) {
+        filterList[index].splice(filterPos, 1, '');
+      } else if (filterPos === 1) {
+        filterList[index].splice(filterPos, 1);
+      } else if (filterPos === -1) {
+        filterList[index] = [];
+      }
+      return filterList;
+    }
+
+    const Logic = (age, filters) => {
+      var date = new Date(age.replace( /(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3"))
+      if (filters[0] && filters[1]) {
+        return date.getTime() <= new Date(filters[0]).getTime() || date.getTime() > new Date(filters[1]).getTime();
+      } else if (filters[0]) {
+        return date.getTime() <= new Date(filters[0]).getTime();
+      } else if (filters[1]) {
+        return date.getTime() > new Date(filters[1]).getTime();
+      }
+      return false;
+    }
+
+    const Display = (filterList, onChange, index, column, title) => {
+      return ( <div style={{ width: '100%' }}>
+        <FormLabel>{title}</FormLabel>
+        <FormGroup row>
+           <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
+              <DatePicker
+                  cancelLabel="CANCELAR"
+                  error={false}
+                  format="dd/MM/yyyy"
+                  label="Inicio"
+                  value={filterList[index][0] || null}
+                  onChange={event => {
+                    filterList[index][0] = event;
+                    filterList[index][1] = null;
+                    onChange(filterList[index], index, column);
+                  }}
+                  style={{ width: '48%' }}
+              />
+           </MuiPickersUtilsProvider>
+           <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
+              <DatePicker
+                  style={{ width: '48%', marginLeft: '4%' }}
+                  cancelLabel="CANCELAR"
+                  error={false}
+                  format="dd/MM/yyyy"
+                  label="Final"
+                  value={filterList[index][1] || null}
+                  onChange={event => {
+                    filterList[index][1] = event;
+                    onChange(filterList[index], index, column);
+                  }} 
+                  minDate={filterList[index][0] != null ? new Date(filterList[index][0]).setTime(new Date(filterList[index][0]).getTime() + 1 * 86400000) : null}
+              />
+          </MuiPickersUtilsProvider>
+        </FormGroup>
+      </div>)
+    }
+
     const builddata = discounts.map(item => {
       if (item != undefined) {
       return [
@@ -178,81 +252,14 @@ const DiscountsTable = (props) => {
             filter: true,
             filterType: 'custom',
             customFilterListOptions: {
-              render: v => {
-                if (v[0] && v[1] && false) {
-                  return [`Fecha Inicio: ${new Date(v[0]).toLocaleDateString()}`, `Fecha Final: ${new Date(v[1]).toLocaleDateString()}`];
-                } else if (v[0] && v[1] && true) {
-                  return `Fecha Inicio desde: ${new Date(v[0]).toLocaleDateString()}, hasta: ${new Date(v[1]).toLocaleDateString()}`;
-                } else if (v[0]) {
-                  return `Fecha Inicio desde: ${new Date(v[0]).toLocaleDateString()}`;
-                } else if (v[1]) {
-                  return `Fecha Inicio hasta: ${new Date(v[1]).toLocaleDateString()}`;
-                }
-                return [];
-              },
-              update: (filterList, filterPos, index) => { 
-                if (filterPos === 0) {
-                  filterList[index].splice(filterPos, 1, '');
-                } else if (filterPos === 1) {
-                  filterList[index].splice(filterPos, 1);
-                } else if (filterPos === -1) {
-                  filterList[index] = [];
-                }
-  
-                return filterList;
-              },
+              render: v => customFilterListRender(v, "Fecha Inicio"),
+              update: (filterList, filterPos, index) => customFilterListUpdate(filterList, filterPos, index)
             },
             filterOptions: {
               fullWidth: window.screen.width <= 1024 ? true : false,
               names: [],
-              logic(age, filters) {
-                var date = new Date(age.replace( /(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3"))
-                if (filters[0] && filters[1]) {
-                  return date.getTime() <= new Date(filters[0]).getTime() || date.getTime() > new Date(filters[1]).getTime();
-                } else if (filters[0]) {
-                  return date.getTime() <= new Date(filters[0]).getTime();
-                } else if (filters[1]) {
-                  return date.getTime() > new Date(filters[1]).getTime();
-                }
-                return false;
-              },
-              display: (filterList, onChange, index, column) => (
-                <div style={{ width: '100%' }}>
-                  <FormLabel>Fecha Inicio</FormLabel>
-                  <FormGroup row>
-                     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-                        <DatePicker
-                            cancelLabel="CANCELAR"
-                            error={false}
-                            format="dd/MM/yyyy"
-                            label="Inicio"
-                            value={filterList[index][0] || null}
-                            onChange={event => {
-                              filterList[index][0] = event;
-                              filterList[index][1] = null;
-                              onChange(filterList[index], index, column);
-                            }}
-                            style={{ width: '48%' }}
-                        />
-                     </MuiPickersUtilsProvider>
-                     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-                        <DatePicker
-                            style={{ width: '48%', marginLeft: '4%' }}
-                            cancelLabel="CANCELAR"
-                            error={false}
-                            format="dd/MM/yyyy"
-                            label="Final"
-                            value={filterList[index][1] || null}
-                            onChange={event => {
-                              filterList[index][1] = event;
-                              onChange(filterList[index], index, column);
-                            }} 
-                            minDate={filterList[index][0] != null ? new Date(filterList[index][0]).setTime(new Date(filterList[index][0]).getTime() + 1 * 86400000) : null}
-                        />
-                    </MuiPickersUtilsProvider>
-                  </FormGroup>
-                </div>
-              ),
+              logic: Logic,
+              display: (filterList, onChange, index, column) => ( Display(filterList, onChange, index, column, "Fecha Inicio"))
             },
             customBodyRender: value =>
              (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : "",
@@ -266,81 +273,14 @@ const DiscountsTable = (props) => {
             filter: true,
             filterType: 'custom',
             customFilterListOptions: {
-              render: v => {
-                if (v[0] && v[1] && false) {
-                  return [`Fecha Inicio: ${new Date(v[0]).toLocaleDateString()}`, `Fecha Final: ${new Date(v[1]).toLocaleDateString()}`];
-                } else if (v[0] && v[1] && true) {
-                  return `Fecha Final desde: ${new Date(v[0]).toLocaleDateString()}, hasta: ${new Date(v[1]).toLocaleDateString()}`;
-                } else if (v[0]) {
-                  return `Fecha Final desde: ${new Date(v[0]).toLocaleDateString()}`;
-                } else if (v[1]) {
-                  return `Fecha Final hasta: ${new Date(v[1]).toLocaleDateString()}`;
-                }
-                return [];
-              },
-              update: (filterList, filterPos, index) => { 
-                if (filterPos === 0) {
-                  filterList[index].splice(filterPos, 1, '');
-                } else if (filterPos === 1) {
-                  filterList[index].splice(filterPos, 1);
-                } else if (filterPos === -1) {
-                  filterList[index] = [];
-                }
-  
-                return filterList;
-              },
+              render: v => customFilterListRender(v, "Fecha Final"),
+              update: (filterList, filterPos, index) => customFilterListUpdate(filterList, filterPos, index)
             },
             filterOptions: {
               fullWidth: window.screen.width <= 1024 ? true : false,
               names: [],
-              logic(age, filters) {
-                var date = new Date(age.replace( /(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3"))
-                if (filters[0] && filters[1]) {
-                  return date.getTime() <= new Date(filters[0]).getTime() || date.getTime() > new Date(filters[0]).getTime(1);
-                } else if (filters[0]) {
-                  return date.getTime() <= new Date(filters[0]).getTime();
-                } else if (filters[1]) {
-                  return date.getTime() >= new Date(filters[1]).getTime();
-                }
-                return false;
-              },
-              display: (filterList, onChange, index, column) => (
-                <div style={{ width: '100%' }}>
-                  <FormLabel>Fecha Finalización</FormLabel>
-                  <FormGroup row>
-                     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-                        <DatePicker
-                            cancelLabel="CANCELAR"
-                            error={false}
-                            format="dd/MM/yyyy"
-                            label="Inicio"
-                            value={filterList[index][0] || null}
-                            onChange={event => {
-                              filterList[index][0] = event;
-                              filterList[index][1] = null;
-                              onChange(filterList[index], index, column);
-                            }}
-                            style={{ width: '48%' }}
-                        />
-                     </MuiPickersUtilsProvider>
-                     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-                        <DatePicker
-                            style={{ width: '48%', marginLeft: '4%' }}
-                            cancelLabel="CANCELAR"
-                            error={false}
-                            format="dd/MM/yyyy"
-                            label="Final"
-                            value={filterList[index][1] || null}
-                            onChange={event => {
-                              filterList[index][1] = event;
-                              onChange(filterList[index], index, column);
-                            }} 
-                            minDate={filterList[index][0] != null ? new Date(filterList[index][0]).setTime(new Date(filterList[index][0]).getTime() + 1 * 86400000) : null}
-                        />
-                    </MuiPickersUtilsProvider>
-                  </FormGroup>
-                </div>
-              ),
+              logic: Logic,
+              display: (filterList, onChange, index, column) => ( Display(filterList, onChange, index, column, "Fecha Finalización"))
             },
             customBodyRender: value =>
              (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : "",

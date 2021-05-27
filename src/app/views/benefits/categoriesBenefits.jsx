@@ -175,6 +175,39 @@ const DetalleBenefits = (props) => {
         return tooltipAddress;
     }
 
+    const showCards = () => { 
+        var benefitstemp = benefitscategories.map((item, index) => { return (item.benefits.filter(function(item) {
+            var locationstemp = item.benefitLocations.filter(function(item) {
+                if (province != "" && province != "all" && province != item.provincia ) {
+                  return false; // skip
+                }
+                if (canton != "" && canton != "all" && canton != item.canton ) {
+                    return false; // skip
+                }
+                return true;
+            }).map((item, index) => {
+                return { 
+                    canton: item.canton,
+                    provincia: item.provincia
+                }})
+            console.log("temp", locationstemp)
+            if (locationstemp.length == 0 || !item.active) {
+              return false; // skip
+            }      
+            return true;
+        }))})
+        if (benefitstemp.filter(function(item) {
+            if (item.length == 0) {
+              return false; // skip
+            }
+            return true;
+        }).length == 0) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     const handleChangeProvince = (event) => {
         setDisableCanton(false);
         if (event.target.value == "all") {
@@ -257,6 +290,7 @@ const DetalleBenefits = (props) => {
                                                 </Select> 
                                         </FormControl>
                                         </div>
+                                        {showCards() && <h4 style={{textAlign:"center"}}>No se encontró ningún beneficio.</h4>}
                                         <div style={{backgroundColor: "lightgray"}}>
                                             <Grid container spacing={2}> 
                                                 {(benefitscategories[0] != undefined && benefitscategories != null && benefitscategories.length != 0) ? benefitscategories.map((item, index) => { return (item.benefits.filter(function(item) {

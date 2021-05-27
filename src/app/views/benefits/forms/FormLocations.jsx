@@ -162,11 +162,11 @@ const FormAdminBenefits = (props) => {
 
         // Validaciones de los campos del form
         if(locationsform.phone == "") {setErrorPhone({error: true, errorMessage:`Este campo es requerido`});}
-            else if (!regex.test(locationsform.phone)) {setErrorPhone({error: true, errorMessage:`Solo se permiten números`});}
+            else if (!regex.test(locationsform.phone)) {setErrorPhone({error: true, errorMessage:`Solo se permiten números válidos`});}
                 else if(locationsform.phone.length != 8) {setErrorPhone({error: true, errorMessage:`El número debe tener 8 caracteres`});}
                     else {setErrorPhone({error: false, errorMessage:``});}
         if(locationsform.whatsapp == "") {setErrorWhatsApp({error: true, errorMessage:`Este campo es requerido`});}
-            else if (!regex.test(locationsform.whatsapp)) {setErrorWhatsApp({error: true, errorMessage:`Solo se permiten números`});}
+            else if (!regex.test(locationsform.whatsapp)) {setErrorWhatsApp({error: true, errorMessage:`Solo se permiten números válidos`});}
                 else if(locationsform.whatsapp.length != 8) {setErrorWhatsApp({error: true, errorMessage:`El número debe tener 8 caracteres`});}
                     else {setErrorWhatsApp({error: false, errorMessage:``});}
         if(locationsform.address == "") {setErrorAddress({error: true, errorMessage:`Este campo es requerido`});}
@@ -260,11 +260,11 @@ const FormAdminBenefits = (props) => {
             })
         }
         if(event.target.name == "phone" && event.target.value == "") {setErrorPhone({error: true, errorMessage:`Este campo es requerido`});}
-            else if (event.target.name == "phone" && !regex.test(event.target.value)) {setErrorPhone({error: true, errorMessage:`Solo se permiten números`});}
+            else if (event.target.name == "phone" && !regex.test(event.target.value)) {setErrorPhone({error: true, errorMessage:`Solo se permiten números válidos`});}
                 else if(event.target.name == "phone" && event.target.value.length != 8) {setErrorPhone({error: true, errorMessage:`El número debe tener 8 caracteres`});}
                     else if (event.target.name == "phone") {setErrorPhone({error: false, errorMessage:``});}
         if(event.target.name == "whatsapp" && event.target.value == "") {setErrorWhatsApp({error: true, errorMessage:`Este campo es requerido`});}
-            else if (event.target.name == "whatsapp" && !regex.test(event.target.value)) {setErrorWhatsApp({error: true, errorMessage:`Solo se permiten números`});}
+            else if (event.target.name == "whatsapp" && !regex.test(event.target.value)) {setErrorWhatsApp({error: true, errorMessage:`Solo se permiten números válidos`});}
                 else if(event.target.name == "whatsapp" && event.target.value.length != 8) {setErrorWhatsApp({error: true, errorMessage:`El número debe tener 8 caracteres`});}
                     else if (event.target.name == "whatsapp") {setErrorWhatsApp({error: false, errorMessage:``});}
         if(event.target.name == "address" && event.target.value == "") {setErrorAddress({error: true, errorMessage:`Este campo es requerido`});}
