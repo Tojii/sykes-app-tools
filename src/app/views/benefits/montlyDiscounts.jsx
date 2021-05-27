@@ -7,6 +7,7 @@ import {
 } from "../../redux/actions/BenefitsDiscountActions";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import { Breadcrumb } from "matx";
+import NotFound from '../sessions/NotFound';
 
 const useStyles = makeStyles({
 
@@ -64,6 +65,8 @@ const Home = () => {
     const dispatch = useDispatch();
     const images = useSelector(state => state.discount.benefitsdiscounts);
     const isLoading = useSelector(state => state.discount.loading);
+    const user = useSelector(state => state.user);
+    const benefitUser = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
     const classes = useStyles();
 
     useEffect(() => {
@@ -72,18 +75,18 @@ const Home = () => {
 
     return (
         <div className="m-sm-30">
-            {console.log(images)}
-            { isLoading ? <Loading/> : <div className="mb-sm-30">
-            <Breadcrumb
-            routeSegments={[
-            { name: "Benefits Home", path: "/Benefits/Home" },
-            { name: "Promociones", path: `/Benefits/MontlyDiscounts` },          
-            ]}
-            />
+            { isLoading ? <Loading/> : 
+            <div className="mb-sm-30">
+                <Breadcrumb
+                    routeSegments={[
+                    { name: "Benefits Home", path: "/Benefits/Home" },
+                    { name: "Promociones", path: `/Benefits/MontlyDiscounts` },          
+                    ]}
+                />
             </div>}
             <div className={classes.widthCarousel}>
                 { isLoading ? <Loading /> :
-                    <div>
+                    benefitUser ? <div>
                         <Carousel>
                             {images.filter(function(image) {
                                 var d = new Date();
@@ -113,9 +116,7 @@ const Home = () => {
                                 </div>
                             ))}
                         </Carousel>
-                    </div>
-
-                }
+                    </div> : <NotFound/>}
             </div>
         </div>
     )

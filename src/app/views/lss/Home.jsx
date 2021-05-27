@@ -6,8 +6,15 @@ import {
 import { Link } from 'react-router-dom';
 import { SimpleCard } from "matx";
 import Container from './Container';
+import NotFound from "../sessions/NotFound";
+import { useSelector } from 'react-redux';
 
-const Home = () => (
+const Home = () => {
+  const user = useSelector(state => state.user);
+  const lssUser = ((user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('LSS_User')) || (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('LSS_Owner')))
+
+  return (
+    lssUser ? 
       <Container>
         <SimpleCard>
             <Grid container>
@@ -27,8 +34,10 @@ const Home = () => (
               <Grid item xs={12} sm={8}></Grid>
             </Grid>
         </SimpleCard>
-      </Container>
-      )
+      </Container> 
+    : <NotFound/>
+  )
+}
 
 
 export default Home;

@@ -7,6 +7,7 @@ export const navigations = [
   {
     name: "LSS",
     path: "/lss",
+    display: "none",
     icon: "content_paste",
     //badge: { value: "New", color: "secondary" },
   },
@@ -67,19 +68,19 @@ export const navigations = [
   { 
     name: "Benefits",
     icon: "add_business",
-    display: null,
+    display: "none",
     children:[
     {
       name: "Benefits Home",
       path: "/Benefits/Home",
       iconText: "BH",
-      display: null
+      display: "none"
     },
     {
       name: "Admin Benefits",
       path: "/Benefits/AdminFormBenefits",
       iconText: "AB",
-      display: null
+      display: "none"
     },
     // {
     //   name: "Promociones",

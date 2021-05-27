@@ -78,9 +78,8 @@ const DetalleBenefits = (props) => {
     const pageSettings = useSelector(state => state.benefit.pageSettings);
     const isLoading  = useSelector(state => state.benefit.loadingSettings); 
     const successBenefit = useSelector(state => state.benefit.success);
-    let { id } = useParams(); 
     const user = useSelector(state => state.user);
-    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
     const [files, setFiles] = useState(null);
     const [filesFooter, setFilesFooter] = useState(null);
     const [filesBadge, setFilesBadge] = useState(null);

@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import SettingsIcon from "@material-ui/icons/Settings";
 import { GetProvince } from "../../redux/actions/LocationActions";
 import history from "history.js";
+import NotFound from "../sessions/NotFound";
 
 const useStyles = makeStyles({
     cardContainer:{
@@ -70,7 +71,8 @@ const HomeBenefits = () => {
     const [disableCanton, setDisableCanton] = useState(true);
     //let cantons = [];
     const location = { address: 'San José, Costa Rica', lat: 9.603329970416294, lng: -84.08271419551181 } // our location object from earlier
-    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
+    const benefitUser = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
     //console.log("user",user)
     const onChangeLocation = (lat, lng) => {
         console.log("lat", lat);
@@ -165,7 +167,7 @@ const HomeBenefits = () => {
                 />
             </div>}
             {(user.badge == undefined || isLoading || loadingLocation || isLoadingSettings || isLoadingProvince) ? <Loading /> :
-                <Card className={classes.cardContainer} elevation={6}>
+                benefitUser ? <Card className={classes.cardContainer} elevation={6}>
                     <div className={classes.margindiv}>
                         <h1 style={{ color: "#4cb050", marginTop: "2%", marginLeft: "1%", fontWeight: "bold"}} className="mb-20">{showImage()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; CATEGORIAS &nbsp; {admin ? <span style={{color:"gray", fontWeight: "normal"}}>|</span> : null} &nbsp; {admin ? configurationButton() : null}</h1>     
                         <Grid style={{ marginLeft: "0.5%"}} container spacing={2} direction="row">
@@ -303,7 +305,7 @@ const HomeBenefits = () => {
                             </Grid>
                         </Grid>
                     </div> 
-                </Card>
+                </Card> : <NotFound/>
             }
         </div>
     )

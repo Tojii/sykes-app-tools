@@ -14,6 +14,10 @@ import { isMdScreen } from "utils";
 import { useParams } from "react-router";
 import { Breadcrumb } from "matx";
 import history from "history.js";
+import NotFound from "../sessions/NotFound";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import Edit from "@material-ui/icons/Edit";
 
   const cn = (...args) => args.filter(Boolean).join(' ')
 
@@ -127,6 +131,13 @@ import history from "history.js";
     },
     break: {
         wordBreak: "break-word"
+    },
+    iconContainer: {
+        marginRight: "24px",
+    },
+    iconButton: {
+        height: "50%",
+        alignSelf: "center"
     }
 })
 
@@ -142,11 +153,9 @@ const DetalleBenefits = (props) => {
     const isLoadingSettings  = useSelector(state => state.benefit.loadingSettings); 
     let { id } = useParams(); 
     const pageSettings = useSelector(state => state.benefit.pageSettings);
-    // const user = useSelector(state => state.user);
-    //const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
-    //console.log("user",user)
-    //const promociones = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    //let promociones = [];
+    const user = useSelector(state => state.user);
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
+    const benefitUser = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
     const [promociones, setPromociones] = useState([]);
     const [showMap, setShowMap] = useState(false);
     const [showRemote, setShowRemote] = useState(false);
@@ -160,7 +169,7 @@ const DetalleBenefits = (props) => {
 
     useEffect(() => {
             setPromociones(discounts.filter(function(item) {
-                console.log("prueba", item.benefit.idBenefit,id)
+                //console.log("prueba", item.benefit.idBenefit,id)
                 if (item.benefit.idBenefit != id) {
                 return false; // skip
                 }
@@ -197,6 +206,21 @@ const DetalleBenefits = (props) => {
         );
     }
 
+    const handleEdit= () => {
+        //console.log(id)
+        history.push(`/Benefits/FormAdminBenefits/${id}`);
+      };
+
+    const editButton = () => {
+        return (
+            <Tooltip title={"Editar"}>
+                <IconButton className={classes.iconButton} onClick={handleEdit}>
+                    <Edit className={[classes.iconEdit].join(" ")} />
+                </IconButton>
+            </Tooltip>
+        )
+    }
+
     const onChangeLocation = (lat, lng) => {
         console.log("lat", lat);
         console.log("lng", lng);
@@ -218,14 +242,14 @@ const DetalleBenefits = (props) => {
                     ]}
                 />
                 </div>}
-                {console.log("benefit", benefit)}
-                { (isLoading || isLoadingSettings) ? <Loading/> :
+                {(isLoading || isLoadingSettings) ? <Loading/> :
+                benefitUser ?
                 (benefit[0] != undefined && benefit[0].active) ?
                 <Card className={classes.cardContainer} elevation={6}>
                     <div className={classes.margindiv}>
                         <h1 style={{ color: "#4cb050", marginLeft: "2%", marginTop: "2%", fontWeight: "bold"}} className="mb-20">{showImage()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {benefit[0] ? benefit[0].category.name.toUpperCase() : ""}</h1>
                         <h5 style={{ color: "#939598", marginLeft: "2%"}}> {pageSettings[0] != null ? pageSettings[0].reminder : ""} </h5>
-                            <h2 style={{ color: "#ff9805", marginLeft: "2%", marginTop: "2%",}} className="mb-20"> {benefit[0] ? benefit[0].name : ""}</h2>      
+                            <div style={{display: "flex"}}><h2 style={{ color: "#ff9805", marginLeft: "2%", marginTop: "2%",}} className="mb-20"> {benefit[0] ? benefit[0].name : ""}</h2> &nbsp; &nbsp; {admin && editButton()} </div>  
                             <Tabs style={{marginLeft: "2%", marginTop: "2%",}}>
                                 <div className={classes.tabs}>
                                     <div className={classes.tabList} >
@@ -537,7 +561,7 @@ const DetalleBenefits = (props) => {
                                 </div>
                             </Tabs>
                     </div>
-                </Card> : <h4 style={{textAlign:"center"}}>El beneficio no se encuentra disponible en este momento.</h4>}
+                </Card> : <h4 style={{textAlign:"center"}}>El beneficio no se encuentra disponible en este momento.</h4> : <NotFound/>}
             </div>
         </>
     )

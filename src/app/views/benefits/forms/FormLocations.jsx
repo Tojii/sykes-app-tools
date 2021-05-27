@@ -96,7 +96,7 @@ const FormAdminBenefits = (props) => {
     const [errorDistrito, setErrorDistrito] = useState({error: false, errorMessage: ""});
     const [errorAddress, setErrorAddress] = useState({error: false, errorMessage: ""});
     const [locationsMapform, setLocationsMapForm] = useState({ latitude: "", longitude: "",})
-    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
     const [locationsform, setLocationsForm] = useState({
         idBenefit: props.idBenefit,
         address: "",

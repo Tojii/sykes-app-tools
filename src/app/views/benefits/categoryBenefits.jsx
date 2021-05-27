@@ -15,6 +15,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { GetProvince } from "../../redux/actions/LocationActions";
 import ValidationModal from '../growth-opportunities/components/ValidationDialog';
+import NotFound from "../sessions/NotFound";
 
   const useStyles = makeStyles({
     tabs: {
@@ -124,8 +125,8 @@ const DetalleBenefits = (props) => {
     const [disableCanton, setDisableCanton] = useState(true);
     const [openMessage, setOpenMessage] = useState(false);
     let { id } = useParams(); 
-    // const user = useSelector(state => state.user);
-    //const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const user = useSelector(state => state.user);
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
     //console.log("user",user)
 
     useEffect(() => {
@@ -203,7 +204,7 @@ const DetalleBenefits = (props) => {
                     />
                 </div>}
                 {(isLoading || isLoadingSettings || isLoadingProvince || loadingLocation) ? <Loading/> :
-                <Card className={classes.cardContainer} elevation={6}> 
+                admin ? <Card className={classes.cardContainer} elevation={6}> 
                     <div className={classes.margindiv}>
                         <h1 style={{ color: "#4cb050", marginLeft: "2%", marginTop: "2%", fontWeight: "bold"}} className="mb-20">{showImage()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {benefitscategory[0] && benefitscategory[0].name ? benefitscategory[0].name.toUpperCase() : ""}</h1>
                         <h5 style={{ color: "#939598", marginLeft: "2%"}}>{pageSettings[0] != null ? pageSettings[0].reminder : ""}</h5>
@@ -325,7 +326,7 @@ const DetalleBenefits = (props) => {
                             : <h4 style={{ marginTop: "5%", color: "#484748", marginLeft: "2%"}}>Lo sentimos, no se encontraron beneficios para esta categoría.</h4>
                             } 
                     </div>
-                </Card>}
+                </Card> : <NotFound/>}
             </div>
         </>
     )

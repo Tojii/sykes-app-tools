@@ -53,7 +53,7 @@ const CategoriesTable = (props) => {
     const successCampaignItems = useSelector(state => state.category.success);
     const isLoading  = useSelector(state => state.category.loading);
     const [open, setOpen] = useState(false);
-    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
+    const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
     const [shouldOpenNewDialog, setShouldOpenNewDialog] = useState({ open: false, type: "new" });
     const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
 

@@ -30,17 +30,39 @@ class MatxVerticalNav extends Component {
     console.log("nav",user)
     if ( user!=undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) { 
         data.map((item, index) => {
+          if (data[index].name == "LSS") {
+            if ((user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('LSS_User')) || (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('LSS_Owner'))) {
+              data[index].display = null;
+            } else {
+              data[index].display = "none";
+            }
+          }
           if (item.children) {
             item.children.map((item2, index2) => {
-              if ((user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_User')) || (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner'))) {
-                data[index].display = null;
-                if(item2.name == "Ventas Home") {
-                  data[index].children[index2].display = null;  
+              if (data[index].name == "Venta de Activos") {
+                if ((user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_User')) || (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner'))) {
+                  data[index].display = null;
+                  if(item2.name == "Ventas Home") {
+                    data[index].children[index2].display = null;  
+                  }
+                } else {
+                  data[index].display = "none";
+                  if(item2.name == "Ventas Home") {
+                    data[index].children[index2].display = "none";  
+                  }
                 }
-              } else {
-                data[index].display = "none";
-                if(item2.name == "Ventas Home") {
-                  data[index].children[index2].display = "none";  
+              }
+              if (data[index].name == "Benefits") {
+                if ((user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_User')) || (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner'))) {
+                  data[index].display = null;
+                  if(item2.name == "Benefits Home") {
+                    data[index].children[index2].display = null;  
+                  }
+                } else {
+                  data[index].display = "none";
+                  if(item2.name == "Benefits Home") {
+                    data[index].children[index2].display = "none";  
+                  }
                 }
               }
               if ((user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner'))) {
@@ -49,6 +71,15 @@ class MatxVerticalNav extends Component {
                 }
               } else {
                 if(item2.name == "Administración Campaña" || item2.name == "Administración Inventario" || item2.name == "Consulta de Compras" || item2.name == "Consulta sobre Artículos Comprados") {
+                  data[index].children[index2].display = "none";  
+                }
+              }
+              if ((user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner'))) {
+                if(item2.name == "Admin Benefits") {
+                  data[index].children[index2].display = null;  
+                }
+              } else {
+                if(item2.name == "Admin Benefits") {
                   data[index].children[index2].display = "none";  
                 }
               }
