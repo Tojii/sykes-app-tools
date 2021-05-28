@@ -128,8 +128,6 @@ const DetalleBenefits = (props) => {
     let { id } = useParams(); 
     const user = useSelector(state => state.user);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
-    
-    //console.log("user",user)
 
     useEffect(() => {
         dispatch(GetBenefitsCategory());
@@ -146,7 +144,6 @@ const DetalleBenefits = (props) => {
             }).map((item, index) => {
             return item.canton
         }))))
-        //console.log("cantons",cantons)
     }, [benefitslocations])
 
     const showImage = () => {
@@ -190,7 +187,6 @@ const DetalleBenefits = (props) => {
                     canton: item.canton,
                     provincia: item.provincia
                 }})
-            console.log("temp", locationstemp)
             if (locationstemp.length == 0 || !item.active) {
               return false; // skip
             }      
@@ -231,7 +227,6 @@ const DetalleBenefits = (props) => {
 
     return (
         <>
-            {console.log("category", benefitscategories)}
             <div className="m-sm-30">
                 {(isLoading || isLoadingSettings || isLoadingProvince || loadingLocation) ? <Loading/> :
                 <div className="mb-sm-30">
@@ -310,7 +305,6 @@ const DetalleBenefits = (props) => {
                                                     if (locationstemp.length == 0 || !item.active) {
                                                       return false; // skip
                                                     }
-                                                    //console.log("temp", locationstemp)
                                                     return true;
                                                 }).map((item, index) => {
                                                     return (

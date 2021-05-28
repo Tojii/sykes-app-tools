@@ -169,7 +169,6 @@ const DetalleBenefits = (props) => {
 
     useEffect(() => {
             setPromociones(discounts.filter(function(item) {
-                //console.log("prueba", item.benefit.idBenefit,id)
                 if (item.benefit.idBenefit != id) {
                 return false; // skip
                 }
@@ -222,8 +221,8 @@ const DetalleBenefits = (props) => {
     }
 
     const onChangeLocation = (lat, lng) => {
-        console.log("lat", lat);
-        console.log("lng", lng);
+        //console.log("lat", lat);
+        //console.log("lng", lng);
     }
 
     const executeScrollDescription = () => descriptionRef.current.scrollIntoView()   

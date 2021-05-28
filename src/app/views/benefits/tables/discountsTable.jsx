@@ -57,7 +57,6 @@ const DiscountsTable = (props) => {
 
     useEffect(() => {
       dispatch(GetDiscounts());
-      //console.log("effect")
     }, []);
 
     const getMuiTheme = () =>
@@ -405,7 +404,6 @@ const DiscountsTable = (props) => {
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={props.type != "detail" ? classes.tableMargin + " m-sm-30" : "m-sm-30"}>
-          {console.log(successCampaignItems)}
           <div className="mb-sm-30">
                 <Breadcrumb
                 routeSegments={[
@@ -415,7 +413,6 @@ const DiscountsTable = (props) => {
                 ]}
             />
           </div>
-          {console.log(discounts)}
           {(isLoading) ? <Loading /> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetDiscounts())}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la promoción no pudo ser eliminada!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>

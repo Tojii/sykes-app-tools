@@ -49,17 +49,14 @@ const CategoriesTable = (props) => {
     const classes = useStyles();
     const user = useSelector(state => state.user);
     const categories = useSelector(state => state.category.benefitscategories);
-    const image = null;
     const successCampaignItems = useSelector(state => state.category.success);
     const isLoading  = useSelector(state => state.category.loading);
     const [open, setOpen] = useState(false);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
     const [shouldOpenNewDialog, setShouldOpenNewDialog] = useState({ open: false, type: "new" });
-    const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
 
     useEffect(() => {
       dispatch(GetCategories());
-      console.log("effect")
     }, []);
 
     const getMuiTheme = () =>
@@ -234,7 +231,6 @@ const CategoriesTable = (props) => {
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={props.type != "detail" ? classes.tableMargin + " m-sm-30" : "m-sm-30"}>
-          {console.log(categories)}
           <div className="mb-sm-30">
                 <Breadcrumb
                 routeSegments={[

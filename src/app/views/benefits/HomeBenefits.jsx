@@ -158,7 +158,6 @@ const HomeBenefits = () => {
 
     return (
         <div className="m-sm-30">
-            {console.log("benetisCanton", benefitslocations)}
             {(user.badge == undefined || isLoading || loadingLocation || isLoadingSettings || isLoadingProvince) ? <Loading /> : <div className="mb-sm-30">
                 <Breadcrumb
                 routeSegments={[

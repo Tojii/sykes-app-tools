@@ -127,7 +127,6 @@ const DetalleBenefits = (props) => {
     let { id } = useParams(); 
     const user = useSelector(state => state.user);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
-    //console.log("user",user)
 
     useEffect(() => {
         dispatch(GetBenefitsCategoryById(id));
@@ -219,7 +218,6 @@ const DetalleBenefits = (props) => {
 
     return (
         <>
-            {console.log("category", benefitscategory)}
             <div className="m-sm-30">
                 {(isLoading || isLoadingSettings || isLoadingProvince || loadingLocation) ? <Loading/> :
                 <div className="mb-sm-30">

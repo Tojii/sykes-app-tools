@@ -53,17 +53,14 @@ const LinksTable = (props) => {
     const classes = useStyles();
     const user = useSelector(state => state.user);
     const links = useSelector(state => state.links.benefitslinks);
-    const image = null;
     const successLinkItems = useSelector(state => state.links.success);
     const isLoading  = useSelector(state => state.links.loading);
     const [open, setOpen] = useState(false);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
     const [shouldOpenNewDialog, setShouldOpenNewDialog] = useState({ open: false, type: "new" });
-    const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
 
     useEffect(() => {
       dispatch(GetSocialLinks());
-      console.log("effect")
     }, []);
 
     const getMuiTheme = () =>
@@ -79,10 +76,6 @@ const LinksTable = (props) => {
       //console.log(id)
       history.push(`/Benefits/FormLinksBenefit/${id}`);
     };
-
-    const handleClose = () => {
-      setShouldOpenNewDialog({open: false, index: 0});
-    }
 
     const showImage = (item) => {
       return (
@@ -248,7 +241,6 @@ const LinksTable = (props) => {
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={props.type != "detail" ? classes.tableMargin + " m-sm-30" : "m-sm-30"}>
-          {console.log(links)}
           <div className="mb-sm-30">
                 <Breadcrumb
                 routeSegments={[

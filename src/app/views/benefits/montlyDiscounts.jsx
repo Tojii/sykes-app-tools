@@ -82,8 +82,8 @@ const Home = () => {
             start.setHours(0,0,0,0);
             end.setHours(0,0,0,0);
             if (start.getTime() > d.getTime() || end.getTime() < d.getTime()) { //use only active discounts
-                console.log(start.getTime(), d.getTime(), end.getTime())
-            return false; // skip
+                //console.log(start.getTime(), d.getTime(), end.getTime())
+                return false; // skip
             }
             return true;
         }).length == 0) {return false} 
@@ -113,8 +113,8 @@ const Home = () => {
                                 start.setHours(0,0,0,0);
                                 end.setHours(0,0,0,0);
                                 if (start.getTime() > d.getTime() || end.getTime() < d.getTime()) { //use only active discounts
-                                    console.log(start.getTime(), d.getTime(), end.getTime())
-                                return false; // skip
+                                    //console.log(start.getTime(), d.getTime(), end.getTime())
+                                    return false; // skip
                                 }
                                 return true;
                             }).map((image, index) => (

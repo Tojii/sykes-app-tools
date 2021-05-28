@@ -111,8 +111,10 @@ const FormAdminBenefits = () => {
     const [files, setFiles] = useState(null);
     const [logo, setLogo] = useState(null);
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
+    const [errorLink, setErrorLink] = useState({error: false, errorMessage: ""});
     const [benefitslinks, setBenefitsLinks] = useState([]);
     const [errorLinks, setErrorLinks] = useState({error: false, errorMessage: ""});
+    const regex = /^(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})$/;
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
     
     const [benefitsform, setBenefitsForm] = useState({
@@ -132,7 +134,7 @@ const FormAdminBenefits = () => {
     });
 
     const handleFormSubmit = async () => {
-        if (!errorLinks.error) {
+        if (!errorLinks.error && !errorLink.error) {
             if (((id && benefitsform.logo != null))) {
                 await dispatch(UpdateBenefit(id, benefitsform, files));
                 setOpen(true);
@@ -144,8 +146,13 @@ const FormAdminBenefits = () => {
     };
 
     const presave = () => {
-        if (logo == null) {
+        if (benefitsform.logo == null) {
             setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
+        }
+        if (regex.test(benefitsform.link) || benefitsform.link == "") {
+            setErrorLink({error: false, errorMessage:``});
+        } else {
+            setErrorLink({error: true, errorMessage:`Formato de url no válido`});
         }
     }
 
@@ -197,13 +204,25 @@ const FormAdminBenefits = () => {
         }
     };
 
+    const handleChangeLinkForm = (event) => {
+        const name = event.target.name;
+        setBenefitsForm({
+            ...benefitsform,
+            [name]: event.target.value,
+        })
+        if (regex.test(event.target.value) || event.target.value == "") {
+            setErrorLink({error: false, errorMessage:``});
+        } else {
+            setErrorLink({error: true, errorMessage:`Formato de url no válido`});
+        }
+    };
+
     const handleChangeLinks = (links) => {
         setBenefitsForm({
             ...benefitsform,
             benefitLinks: links,
         });
         setBenefitsLinks(links)
-        const regex = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
         var error = false;
         for (var i = 0; i < links.length; i++) {
             if (links[i] && !regex.test(links[i].link) && links[i].link != "") {
@@ -261,7 +280,6 @@ const FormAdminBenefits = () => {
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {console.log("vinculos",benefitsform)}
             {(isLoading || isLoadingLocation || isLoadingLinks) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : (admin ? <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Beneficio" : "Agregar Beneficio"}</h2> : null)}
@@ -325,48 +343,19 @@ const FormAdminBenefits = () => {
                             validators={["required"]}
                             errorMessages={["Este campo es requerido"]}
                         />
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Link*"
-                            onChange={handleChange}
-                            type="text"
-                            name="link"
-                            
-                            value={benefitsform.link}
-                            validators={["required"]}
-                            validators={["required", "matchRegexp:^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$"]}
-                            errorMessages={["Este campo es requerido", "Formato de url no válido"]}
-                        />
-                        {/* <TextValidator
-                            className={classes.textvalidator}
-                            label="Facebook"
-                            onChange={handleChange}
-                            type="text"
-                            name="facebook" 
-                            value={benefitsform.facebook}
-                            validators={["maxStringLength:200"]}
-                            errorMessages={["Máximo 200 carácteres"]}
-                        />
-                         <TextValidator
-                            className={classes.textvalidator}
-                            label="Instagram"
-                            onChange={handleChange}
-                            type="text"
-                            name="instagram" 
-                            value={benefitsform.instagram}
-                            validators={["maxStringLength:200"]}
-                            errorMessages={["Máximo 200 carácteres"]}
-                        />
-                         <TextValidator
-                            className={classes.textvalidator}
-                            label="Email"
-                            onChange={handleChange}
-                            type="text"
-                            name="email" 
-                            value={benefitsform.email}
-                            validators={["matchRegexp:^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"]}
-                            errorMessages={["Correo no válido"]}
-                        /> */}
+                         <FormControl className={classes.textvalidator}>
+                            <TextValidator
+                                //className={classes.textvalidator}
+                                fullWidth
+                                label="Link"
+                                onChange={handleChangeLinkForm}
+                                type="text"
+                                name="link"
+                                error={errorLink.error}
+                                value={benefitsform.link}
+                            />
+                            <FormHelperText error={errorLink.error} id="my-helper-text-link">{errorLink.errorMessage}</FormHelperText> 
+                        </FormControl>
                         <FormControlLabel
                             className={classes.textvalidator}
                             label="Activar Beneficio"

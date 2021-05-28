@@ -54,7 +54,6 @@ const BenefitsLinksTable = (props) => {
     }, []);
 
     useEffect(() => {
-      console.log("effect", props.benefitsLinks)
       setBuilddata( props.benefitsLinks.length == 0 ? links.filter(function(item) {
         if (!item.active) {
           return false; // skip
@@ -163,7 +162,6 @@ const BenefitsLinksTable = (props) => {
       }
     }) : links.filter(function(item) {
       if (!item.active) {
-        console.log("find", props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink))
         return false; // skip
       }
       return true;
@@ -316,7 +314,6 @@ const BenefitsLinksTable = (props) => {
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className={classes.tableMargin + " m-sm-30"}>
-            {console.log("links", builddata)}
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}

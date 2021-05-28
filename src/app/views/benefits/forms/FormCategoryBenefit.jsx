@@ -198,7 +198,6 @@ const FormCategoryBenefits = () => {
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {console.log(category)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Categories"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetCategories());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : (admin ? <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Categoría" : "Agregar Categoría"}</h2> : null)}

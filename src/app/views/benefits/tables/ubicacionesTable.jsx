@@ -68,7 +68,6 @@ const LocationsTable = (props) => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const user = useSelector(state => state.user);
-    const image = null;
     const successCampaignItems = useSelector(state => state.benefit.success);
     const isLoadingLocation  = useSelector(state => state.benefit.loadingLocation);
     const isLoading  = useSelector(state => state.benefit.loading);
@@ -78,11 +77,17 @@ const LocationsTable = (props) => {
 
     useEffect(() => {
       //dispatch(GetBenefitsLocations());
-      console.log("effect")
     }, []);
 
     const getMuiTheme = () =>
     createMuiTheme({
+      overrides: {
+        MuiTableCell: {
+          root: {
+            backgroundColor: "white"
+          }
+        }
+      }
     });
 
     const handleDelete = async (id) => {
@@ -322,7 +327,6 @@ const LocationsTable = (props) => {
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={props.type != "detail" ? classes.tableMargin + " m-sm-30" : "m-sm-30"}>
-          {console.log("hola", props.benefitslocations)}
           {(isLoading || isLoadingLocation) ? <Loading /> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsById(props.idBenefit))}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la localización no pudo ser eliminada!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>

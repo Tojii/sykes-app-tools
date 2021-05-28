@@ -284,7 +284,6 @@ const DetalleBenefits = (props) => {
     return (
         <>
             <div className="m-sm-30">
-                {console.log("form", settingsform )}
                 { isLoading ? <Loading/> : <div className="mb-sm-30">
                     <Breadcrumb
                     routeSegments={[

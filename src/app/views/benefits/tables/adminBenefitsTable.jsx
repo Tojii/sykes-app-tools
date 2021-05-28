@@ -406,7 +406,6 @@ const AdminBenefitsTable = () => {
     (isLoading || user.badge == undefined) ? <Loading /> :
       admin ?
         <div className={classes.tableMargin + " m-sm-20"}>
-          {console.log(benefits)}
           {(isLoading) ? <Loading /> :<ValidationModal idioma={"Español"} path={"/Benefits/AdminFormBenefits"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefits());}} message={(successBenefit) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el beneficio no pudo ser eliminado!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>

@@ -205,28 +205,12 @@ const FormLinksBenefits = () => {
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {console.log(link)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Links"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetSocialLinks());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : (admin ? <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Vínculo" : "Agregar Vínculo"}</h2> : null)}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
                     {(isLoading) ? <Loading/> :
                     admin ? <>            
-                        {/* <SelectValidator 
-                            label="Beneficio*" 
-                            name="idBenefit"
-                            className={classes.textvalidator} 
-                            value={linksform.idBenefit} 
-                            onChange={handleChange} 
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        >
-                            {benefitscategories.map(category => (
-                                <MenuItem key={`category-${category.idCategory}`} id={category.idCategory} value={category.idCategory ? category.idCategory : ""}>
-                                {category.name || " "}
-                                </MenuItem> 
-                            ))}
-                        </SelectValidator>  */}
                         <TextValidator
                             className={classes.textvalidator}
                             label="Nombre*"

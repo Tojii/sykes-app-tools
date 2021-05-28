@@ -11,7 +11,6 @@ import { GetBenefitsDiscountById, UpdateDiscount, AddDiscount, GetDiscounts } fr
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import history from "history.js";
-import LocationsTable from "../tables/ubicacionesTable";
 import MenuItem from '@material-ui/core/MenuItem';
 import {
     MuiPickersUtilsProvider,
@@ -20,6 +19,7 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import es from "date-fns/locale/es";
 import NotFound from "app/views/sessions/NotFound";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -195,7 +195,6 @@ const FormDiscountBenefits = () => {
 
     const handleChange = (event) => {
         const name = event.target.name;
-        console.log("prueba", event)
         if (name == "active") {
             setDiscountForm({
                 ...discountform,
@@ -211,7 +210,6 @@ const FormDiscountBenefits = () => {
 
     const handleChangeBenefit = (event, index) => {
         const name = event.target.name;
-        console.log("prueba", event)
         setDiscountForm({
             ...discountform,
             [name]: event.target.value,
@@ -219,11 +217,14 @@ const FormDiscountBenefits = () => {
         })
         for(var i = 0; benefits.length > i; i++) {
             if (benefits[i].benefit.idBenefit == event.target.value) {
-                console.log("locations", benefits[i].locations)
                 setLocationsSelect(benefits[i].locations)
+                if (benefits[i].locations.length == 0) {
+                    setDisabledLocation(true)
+                } else {
+                    setDisabledLocation(false)
+                }
             }
         }
-        setDisabledLocation(false)
     };
 
     const getBase64 = (file) => {
@@ -271,7 +272,6 @@ const FormDiscountBenefits = () => {
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {console.log(discountform)}
             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Discounts"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetDiscounts());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : (admin ? <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Promoción" : "Agregar Promoción"}</h2> : null)}
@@ -308,7 +308,8 @@ const FormDiscountBenefits = () => {
                                 {location.address || " "}
                                 </MenuItem> 
                             ))}
-                        </SelectValidator>            
+                        </SelectValidator>
+                        {(discountform.idBenefits != "" && locationsSelect.length == 0) && <Alert severity="info" className={classes.textvalidator + " " + classes.break}>{"No hay localizaciones asociadas al beneficio seleccionado"}</Alert>}            
                         <TextValidator
                             className={classes.textvalidator}
                             label="Promoción*"

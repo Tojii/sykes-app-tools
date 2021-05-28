@@ -58,7 +58,6 @@ const AdminBenefitDetalle = (props) => {
 
     return (
         <div className="m-sm-30">
-            {console.log(benefit)}
             {(isLoading || isLoadingLocation) ? <Loading/> : 
             admin ? <Grid container spacing={2}>
                 <Grid item md={12} xs={12}> 
