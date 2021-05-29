@@ -2,23 +2,15 @@ import React, { useState, useRef, useEffect } from "react";
 import { Button, Card, FormHelperText, FormControlLabel, Switch } from "@material-ui/core";
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
-import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
-import { GetBenefitsById, UpdateBenefit, AddBenefit, GetBenefits, GetBenefitsActive, GetBenefitsCategory, GetBenefitsLocations } from "../../../redux/actions/BenefitsActions";
+import { GetBenefits } from "../../../redux/actions/BenefitsActions";
 import { GetBenefitsLinksById, UpdateBenefitLink, AddBenefitLinks, GetSocialLinks } from "../../../redux/actions/BenefitsLinksActions";
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import history from "history.js";
-import LocationsTable from "../tables/ubicacionesTable";
-import MenuItem from '@material-ui/core/MenuItem';
-import {
-    MuiPickersUtilsProvider,
-    DatePicker 
-  } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
-import es from "date-fns/locale/es";
 import NotFound from "app/views/sessions/NotFound";
 
 const useStyles = makeStyles({
@@ -89,14 +81,12 @@ const FormLinksBenefits = () => {
     let { id } = useParams();
     const classes = useStyles();
     const link = useSelector(state => state.links.link);
-    const benefitslinks = useSelector(state => state.links.benefitslinks);
     const successBenefit = useSelector(state => state.links.success);
     const isLoading  = useSelector(state => state.links.loading);
     const [open, setOpen] = useState(false);
     const [files, setFiles] = useState(null);
     const [logo, setLogo] = useState(null);
     const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
-    const [errorMessage, setErrorMessage] = useState([]);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
     
     const [linksform, setLinkForm] = useState({
@@ -107,7 +97,7 @@ const FormLinksBenefits = () => {
         icon: null,
     });
 
-    const handleFormSubmit = async () => {
+    const handleFormSubmit = async () => { //update or add data in Links
         if (((id && linksform.icon != null))) {
             await dispatch(UpdateBenefitLink(id, linksform, files));
             setOpen(true);
@@ -117,7 +107,7 @@ const FormLinksBenefits = () => {
         }
     };
 
-    const presave = () => {
+    const presave = () => { //validations before submit
         if (linksform.icon == null) {
             setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
         }
@@ -129,15 +119,13 @@ const FormLinksBenefits = () => {
 
     useEffect(() => {
         dispatch(GetBenefits());
-        //dispatch(GetBenefitsLocations());
         if (id) {
             dispatch(GetBenefitsLinksById(id));
         } 
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { //load data when is edit form
         if(id && link != [] && link[0] != [""] && link[0] != undefined) {setLinkForm({
-            //idBenefit: link[0].benefit.idBenefit,
             name: link[0].name,
             icon: link[0].icon,
             active: link[0].active,
@@ -160,7 +148,7 @@ const FormLinksBenefits = () => {
         }
     };
 
-    const getBase64 = (file) => {
+    const getBase64 = (file) => { // get image in base64
         let reader = new FileReader();
         let imageupload = ""
         reader.readAsDataURL(file);
@@ -174,27 +162,27 @@ const FormLinksBenefits = () => {
         };
     }
 
-    const handleFileSelect = event => {
+    const handleFileSelect = event => { //manages validations when a file is upload
         let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
 
         if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
-                if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
-                    setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
-                    setFiles(null);
-                    setLinkForm({...linksform, files: null, logo: null});
-                    setLogo(null);
-                }
-                else if (filesList.size/1024/1024 > 2) {
-                    setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
-                    setFiles(null);
-                    setLinkForm({...linksform, files: null, logo: null});
-                    setLogo(null);
-                } else {
-                    setErrorFile({error: false, errorMessage:``});
-                    setFiles(event.target.files[0]);
-                    setLinkForm({...linksform, files: event.target.files[0]});
-                    getBase64(event.target.files[0]);
-                }
+            if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
+                setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
+                setFiles(null);
+                setLinkForm({...linksform, files: null, logo: null});
+                setLogo(null);
+            }
+            else if (filesList.size/1024/1024 > 2) {
+                setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
+                setFiles(null);
+                setLinkForm({...linksform, files: null, logo: null});
+                setLogo(null);
+            } else {
+                setErrorFile({error: false, errorMessage:``});
+                setFiles(event.target.files[0]);
+                setLinkForm({...linksform, files: event.target.files[0]});
+                getBase64(event.target.files[0]);
+            }
         } else {
             setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
             setFiles(null);

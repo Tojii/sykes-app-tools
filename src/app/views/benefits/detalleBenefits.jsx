@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { GetBenefitsById, GetPageSettings } from "../../redux/actions/BenefitsActions";
-import { DeleteBenefitDiscount, GetDiscounts } from "../../redux/actions/BenefitsDiscountActions";
+import { GetDiscounts } from "../../redux/actions/BenefitsDiscountActions";
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import Places from '../../components/maps/Places';
 import { isMdScreen } from "utils";
@@ -206,7 +206,6 @@ const DetalleBenefits = (props) => {
     }
 
     const handleEdit= () => {
-        //console.log(id)
         history.push(`/Benefits/FormAdminBenefits/${id}`);
       };
 
@@ -327,7 +326,7 @@ const DetalleBenefits = (props) => {
                                                                             '<div id="bodyContent">' +
                                                                             `<p><b>Address: </b> ${item.address} </p>` +
                                                                             `<p><b>Phone: </b> ${item.phone} </p>` +
-                                                                            `<p><b>WhatsApp: </b> ${item.whatsApp} </p>` +
+                                                                            `<p style="display:${!item.whatsApp ? "none" : null};"><b>WhatsApp: </b> ${item.whatsApp} </p>` +
                                                                             "</div>" +
                                                                             "</div>"}) : []}
                                                                             onChangeLocation={onChangeLocation} show /> {/* include it here */}
@@ -471,7 +470,7 @@ const DetalleBenefits = (props) => {
                                                                 </div>
                                                             </Grid>
                                                             <Grid item lg={9} md={9} sm={9} xs={9}>
-                                                            <a href={`${benefit[0] ? (benefit[0].link.includes("http") ? benefit[0].link : `https://${benefit[0].link}`) : ""}`} target="_blank" style={{color: "#039be5"}}>
+                                                            <a href={`${(benefit[0] && benefit[0].link) ? (benefit[0].link.includes("http") ? benefit[0].link : `https://${benefit[0].link}`) : ""}`} target="_blank" style={{color: "#039be5"}}>
                                                                 {benefit[0] ? benefit[0].link : ""}
                                                             </a>
                                                             </Grid>

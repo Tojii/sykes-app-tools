@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
-import { Card, CardActionArea, CardContent, CardMedia, Divider, Tooltip, FormControl, InputLabel } from "@material-ui/core";
+import { Card, CardActionArea, CardContent, Divider, Tooltip, FormControl, InputLabel } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import { Tabs, Panel } from '@bumaga/tabs'
 import Grid from '@material-ui/core/Grid';
@@ -49,7 +49,6 @@ import NotFound from "../sessions/NotFound";
     root: {
         width: isMdScreen() ? "100%" : "70%",
         height: isMdScreen() ? "100%" : "100%",
-        //height: 415,
         boxShadow: "5px 4px 16px 0px rgb(0 0 0 / 0.4)",
     },
     media: {
@@ -93,7 +92,6 @@ import NotFound from "../sessions/NotFound";
         boxShadow: "5px 4px 16px 0px rgb(0 0 0 / 0.4)",
     },
     miniatureimage: {
-        //margin: "5%",
         maxWidth: "30px",
         textAlign: "right"
     },
@@ -125,7 +123,6 @@ const DetalleBenefits = (props) => {
     const [cantons, setCantons] = useState([]); 
     const [disableCanton, setDisableCanton] = useState(true);
     const [openMessage, setOpenMessage] = useState(false);
-    let { id } = useParams(); 
     const user = useSelector(state => state.user);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
 

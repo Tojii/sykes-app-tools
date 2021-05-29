@@ -96,7 +96,6 @@ const LocationsTable = (props) => {
     };
 
     const handleEdit= (id) => {
-      //console.log(id)
       setShouldOpenNewDialog({ open: true, type: "edit", id: id, idBenefit: props.idBenefit })
     };
 
@@ -324,7 +323,7 @@ const LocationsTable = (props) => {
   }
 
   return (
-    (isLoading || user.badge == undefined) ? <Loading /> :
+    (isLoading) ? <Loading /> :
       admin ?
         <div className={props.type != "detail" ? classes.tableMargin + " m-sm-30" : "m-sm-30"}>
           {(isLoading || isLoadingLocation) ? <Loading /> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetBenefitsById(props.idBenefit))}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la localización no pudo ser eliminada!"} setOpen={setOpen} open={open} />}

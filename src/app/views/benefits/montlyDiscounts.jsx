@@ -47,18 +47,7 @@ const useStyles = makeStyles({
         "@media (min-width: 1025px)": {
             
         },
-        // maxHeight:"545px", 
-        // maxWidth: "1400px", 
     },
-    // divImage: {
-    //     textAlign: "-moz-center",
-    //     "@media screen and (-webkit-min-device-pixel-ratio:0)": { 
-    //         textAlign: "-webkit-center",
-    //     },
-    // },
-    // divCarousel: {
-    //     alignSelf: "center"
-    // }
 });
 
 const Home = () => {
@@ -120,8 +109,6 @@ const Home = () => {
                             }).map((image, index) => (
                                 <div key={index} className={classes.divImage + " pb-16"}>
                                     <img
-                                        //maxHeight={"515px"}
-                                        //width={"390px"}
                                         style={{cursor: "pointer"}}
                                         className={classes.imageCarousel}
                                         alt="..."

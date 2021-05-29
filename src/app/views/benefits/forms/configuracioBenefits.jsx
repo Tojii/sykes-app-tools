@@ -4,7 +4,6 @@ import { Card, Button, FormControl, Input, FormHelperText, Tooltip } from "@mate
 import { makeStyles } from '@material-ui/core/styles';
 import { GetPageSettings, AddPageSettings, UpdatePageSettings } from "../../../redux/actions/BenefitsActions";
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
-import { useParams } from "react-router";
 import { Breadcrumb } from "matx";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { Link } from 'react-router-dom';
@@ -103,7 +102,7 @@ const DetalleBenefits = (props) => {
         dispatch(GetPageSettings());
     }, [])
 
-    useEffect(() => {
+    useEffect(() => { //load data if exist in pageSettings
         (pageSettings.length != 0 && pageSettings[0] != null && pageSettings[0] != undefined) && setSettingsForm({
             id: pageSettings[0].id,
             header: pageSettings[0].header,
@@ -116,7 +115,7 @@ const DetalleBenefits = (props) => {
         
     }, [pageSettings])
 
-    const adminBenefitButton = () => {
+    const adminBenefitButton = () => { //button to Benefits Administration
         return (
             <React.Fragment>
               <Tooltip title={"Admin Beneficios"}>
@@ -132,7 +131,7 @@ const DetalleBenefits = (props) => {
         );
     }
 
-    const adminPromButton = () => {
+    const adminPromButton = () => {  //button to Discounts Administration
         return (
             <React.Fragment>
               <Tooltip title={"Admin Promociones"}>
@@ -148,7 +147,7 @@ const DetalleBenefits = (props) => {
         );
     }
 
-    const adminCategoryButton = () => {
+    const adminCategoryButton = () => { //button to Categories Administration
         return (
             <React.Fragment>
               <Tooltip title={"Admin Categorías"}>
@@ -164,7 +163,7 @@ const DetalleBenefits = (props) => {
         );
     }
 
-    const adminLinksButton = () => {
+    const adminLinksButton = () => { //button to Links Administration
         return (
             <React.Fragment>
               <Tooltip title={"Admin Links"}>
@@ -180,7 +179,7 @@ const DetalleBenefits = (props) => {
         );
     }
 
-    const presave = () => {
+    const presave = () => { //validations before submit
         if (settingsform.logo == null) {
             setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
         }
@@ -192,7 +191,7 @@ const DetalleBenefits = (props) => {
         }
     }
 
-    const handleBack = () => {
+    const handleBack = () => { //Go to Home page
         history.push("/Benefits/Home");
     }
 
@@ -211,7 +210,7 @@ const DetalleBenefits = (props) => {
         }
     };
 
-    const handleFormSubmit = async () => {
+    const handleFormSubmit = async () => { //update or add data in PageSettings
         if (((pageSettings.length != 0 ))) {
             await dispatch(UpdatePageSettings("1", settingsform, files, filesFooter, filesBadge));
             setOpen(true);
@@ -221,7 +220,7 @@ const DetalleBenefits = (props) => {
         }
     };
 
-    const getBase64 = (file, name) => {
+    const getBase64 = (file, name) => { // get image in base64
         let reader = new FileReader();
         let imageupload = ""
         reader.readAsDataURL(file);
@@ -235,9 +234,8 @@ const DetalleBenefits = (props) => {
         };
     }
 
-    const handleFileSelect = event => {
+    const handleFileSelect = event => { //manages validations when a file is upload
         let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
-        //console.log("file", event.target.name)
         const name = event.target.name;
         if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
                 if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
@@ -292,7 +290,6 @@ const DetalleBenefits = (props) => {
                     ]}
                 />
                 </div>}
-                {/* {console.log("pageSettings", pageSettings)} */}
                 {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Configuration"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetPageSettings());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
                 <Card className={classes.cardContainer} elevation={6}>
                     <div className={classes.margindiv}>

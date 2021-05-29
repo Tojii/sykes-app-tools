@@ -33,8 +33,6 @@ const useStyles = makeStyles({
         height: "90%"
     },
     mediafooter: {
-        //width: "872px",
-        //height: "209px",
         marginTop: "3%"
     },
     medialogo: {
@@ -69,11 +67,9 @@ const HomeBenefits = () => {
     const [cantons, setCantons] = useState([]);
     const pageSettings = useSelector(state => state.benefit.pageSettings);
     const [disableCanton, setDisableCanton] = useState(true);
-    //let cantons = [];
     const location = { address: 'San José, Costa Rica', lat: 9.603329970416294, lng: -84.08271419551181 } // our location object from earlier
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
     const benefitUser = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_User') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
-    //console.log("user",user)
     const onChangeLocation = (lat, lng) => {
         console.log("lat", lat);
         console.log("lng", lng);
@@ -153,7 +149,6 @@ const HomeBenefits = () => {
         }).map((item, index) => {
             return item.canton
         }))))
-        //console.log("cantons",cantons)
     }, [benefitslocations])
 
     return (
@@ -294,7 +289,7 @@ const HomeBenefits = () => {
                                             '<div id="bodyContent">' +
                                             `<p><b>Address: </b> ${item.address} </p>` +
                                             `<p><b>Phone: </b> ${item.phone} </p>` +
-                                            `<p><b>WhatsApp: </b> ${item.whatsApp} </p>` +
+                                            `<p style="display:${!item.whatsApp ? "none" : null};"><b>WhatsApp: </b> ${item.whatsApp} </p>` +
                                             `<a style="color:#039be5; text-decoration: underline;" href="${process.env.PUBLIC_URL}/Benefits/Detalle/${item.benefit.idBenefit}">Ver detalle</a>` +
                                             "</div>" +
                                             "</div>"}) : [] }

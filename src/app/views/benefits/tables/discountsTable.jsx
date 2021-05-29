@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import CustomToolbarSelect from "../../venta-activos/ventasTables/CustomSelect"
 import { Button, Card, Grid, Tooltip, FormLabel, FormGroup } from "@material-ui/core";
-import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
@@ -69,7 +69,6 @@ const DiscountsTable = (props) => {
     };
 
     const handleEdit= (id) => {
-      //console.log(id)
       history.push(`/Benefits/FormDiscountBenefits/${id}`);
     };
 

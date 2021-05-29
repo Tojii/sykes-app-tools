@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button, Card, FormHelperText, FormControlLabel, Switch } from "@material-ui/core";
+import { Button, Card, FormHelperText } from "@material-ui/core";
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
-import { GetBenefitsById, UpdateBenefit, AddBenefit, GetBenefits, GetBenefitsActive, GetBenefitsCategory, GetBenefitsLocations } from "../../../redux/actions/BenefitsActions";
+import { GetBenefits } from "../../../redux/actions/BenefitsActions";
 import { GetBenefitsDiscountById, UpdateDiscount, AddDiscount, GetDiscounts } from "../../../redux/actions/BenefitsDiscountActions";
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
@@ -110,7 +110,7 @@ const FormDiscountBenefits = () => {
         endDate: null
     });
 
-    const handleFormSubmit = async () => {
+    const handleFormSubmit = async () => { //update or add data in Discount
         if (discountform.startDate != null && discountform.endDate != null && new Date(discountform.startDate).getTime() < new Date(discountform.endDate).getTime()) {
             if (((id && discountform.image != null))) {
                 await dispatch(UpdateDiscount(id, discountform, files));
@@ -122,7 +122,7 @@ const FormDiscountBenefits = () => {
         }
     };
 
-    const presave = () => {
+    const presave = () => { //validations before submit
         if (discountform.image == null) {
             setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
         }
@@ -143,7 +143,7 @@ const FormDiscountBenefits = () => {
         history.push("/Benefits/Discounts");
     }
 
-    const handleDateChangeStartDate = date => {
+    const handleDateChangeStartDate = date => { //validation for startDate field
         if (date != null) {
           setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
         }
@@ -156,7 +156,7 @@ const FormDiscountBenefits = () => {
         });
     };
 
-    const handleDateChangeEndDate = date => {
+    const handleDateChangeEndDate = date => { //validation for endDate field
         if (date != null) {
           setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
         }
@@ -168,13 +168,12 @@ const FormDiscountBenefits = () => {
 
     useEffect(() => {
         dispatch(GetBenefits());
-        //dispatch(GetBenefitsLocations());
         if (id) {
             dispatch(GetBenefitsDiscountById(id));
         } 
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { //load data when is edit form
         if(id && discount != [] && discount[0] != [""] && discount[0] != undefined && discount[0].benefit != null) {setDiscountForm({
             idBenefits: discount[0].benefit.idBenefit,
             idLocation: discount[0].location.idLocation,
@@ -227,7 +226,7 @@ const FormDiscountBenefits = () => {
         }
     };
 
-    const getBase64 = (file) => {
+    const getBase64 = (file) => { // get image in base64
         let reader = new FileReader();
         let imageupload = ""
         reader.readAsDataURL(file);
@@ -241,27 +240,27 @@ const FormDiscountBenefits = () => {
         };
     }
 
-    const handleFileSelect = event => {
+    const handleFileSelect = event => { //manages validations when a file is upload
         let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
 
         if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
-                if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
-                    setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
-                    setFiles(null);
-                    setDiscountForm({...discountform, files: null, image: null});
-                    setImage(null);
-                }
-                else if (filesList.size/1024/1024 > 2) {
-                    setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
-                    setFiles(null);
-                    setDiscountForm({...discountform, files: null, image: null});
-                    setImage(null);
-                } else {
-                    setErrorFile({error: false, errorMessage:``});
-                    setFiles(event.target.files[0]);
-                    setDiscountForm({...discountform, files: event.target.files[0]});
-                    getBase64(event.target.files[0]);
-                }
+            if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
+                setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
+                setFiles(null);
+                setDiscountForm({...discountform, files: null, image: null});
+                setImage(null);
+            }
+            else if (filesList.size/1024/1024 > 2) {
+                setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
+                setFiles(null);
+                setDiscountForm({...discountform, files: null, image: null});
+                setImage(null);
+            } else {
+                setErrorFile({error: false, errorMessage:``});
+                setFiles(event.target.files[0]);
+                setDiscountForm({...discountform, files: event.target.files[0]});
+                getBase64(event.target.files[0]);
+            }
         } else if (filesList != null) {
             setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
             setFiles(null);

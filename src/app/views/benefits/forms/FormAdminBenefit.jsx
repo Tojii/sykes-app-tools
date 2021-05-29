@@ -6,7 +6,7 @@ import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
-import { GetBenefitsById, UpdateBenefit, AddBenefit, GetBenefits, GetBenefitsActive, GetBenefitsCategory, GetBenefitsLocations } from "../../../redux/actions/BenefitsActions";
+import { GetBenefitsById, UpdateBenefit, AddBenefit, GetBenefits, GetBenefitsCategory, GetBenefitsLocations } from "../../../redux/actions/BenefitsActions";
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import history from "history.js";
@@ -133,7 +133,7 @@ const FormAdminBenefits = () => {
         benefitLinks: []
     });
 
-    const handleFormSubmit = async () => {
+    const handleFormSubmit = async () => { //update or add data in Benefits
         if (!errorLinks.error && !errorLink.error) {
             if (((id && benefitsform.logo != null))) {
                 await dispatch(UpdateBenefit(id, benefitsform, files));
@@ -145,7 +145,7 @@ const FormAdminBenefits = () => {
         }
     };
 
-    const presave = () => {
+    const presave = () => { //validations before submit
         if (benefitsform.logo == null) {
             setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
         }
@@ -168,7 +168,7 @@ const FormAdminBenefits = () => {
         } 
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { //load data when is edit form
         if(id && benefit != [] && benefit[0] != [""] && benefit[0] != undefined) {setBenefitsForm({
             idBenefit: benefit[0].idBenefit,
             idCategory: benefit[0].category.idCategory,
@@ -177,7 +177,7 @@ const FormAdminBenefits = () => {
             logo: benefit[0].logo,
             detail: benefit[0].detail,
             benefitInfo: benefit[0].benefitInfo,
-            link: benefit[0].link,
+            link: benefit[0].link ? benefit[0].link : "",
             facebook: benefit[0].facebook ? benefit[0].facebook : "",
             instagram: benefit[0].instagram ? benefit[0].instagram : "",
             email: benefit[0].email ? benefit[0].email : "",
@@ -204,7 +204,7 @@ const FormAdminBenefits = () => {
         }
     };
 
-    const handleChangeLinkForm = (event) => {
+    const handleChangeLinkForm = (event) => { //validation for Link field
         const name = event.target.name;
         setBenefitsForm({
             ...benefitsform,
@@ -217,7 +217,7 @@ const FormAdminBenefits = () => {
         }
     };
 
-    const handleChangeLinks = (links) => {
+    const handleChangeLinks = (links) => { ////validation for Links Table 
         setBenefitsForm({
             ...benefitsform,
             benefitLinks: links,
@@ -226,16 +226,13 @@ const FormAdminBenefits = () => {
         var error = false;
         for (var i = 0; i < links.length; i++) {
             if (links[i] && !regex.test(links[i].link) && links[i].link != "") {
-                //setEdificiosSave(true);
-                //console.log("error!")
                 error = true;
-                //setErrorLinks({error: true, errorMessage:``});
             }
         } 
         setErrorLinks({error: error, errorMessage:``}); 
     };
 
-    const getBase64 = (file) => {
+    const getBase64 = (file) => { // get image in base64
         let reader = new FileReader();
         let imageupload = ""
         reader.readAsDataURL(file);
@@ -249,27 +246,27 @@ const FormAdminBenefits = () => {
         };
     }
 
-    const handleFileSelect = event => {
+    const handleFileSelect = event => { //manages validations when a file is upload
         let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
 
         if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
-                if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
-                    setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
-                    setFiles(null);
-                    setBenefitsForm({...benefitsform, files: null, logo: null});
-                    setLogo(null);
-                }
-                else if (filesList.size/1024/1024 > 2) {
-                    setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
-                    setFiles(null);
-                    setBenefitsForm({...benefitsform, files: null, logo: null});
-                    setLogo(null);
-                } else {
-                    setErrorFile({error: false, errorMessage:``});
-                    setFiles(event.target.files[0]);
-                    setBenefitsForm({...benefitsform, files: event.target.files[0]});
-                    getBase64(event.target.files[0]);
-                }
+            if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
+                setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
+                setFiles(null);
+                setBenefitsForm({...benefitsform, files: null, logo: null});
+                setLogo(null);
+            }
+            else if (filesList.size/1024/1024 > 2) {
+                setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
+                setFiles(null);
+                setBenefitsForm({...benefitsform, files: null, logo: null});
+                setLogo(null);
+            } else {
+                setErrorFile({error: false, errorMessage:``});
+                setFiles(event.target.files[0]);
+                setBenefitsForm({...benefitsform, files: event.target.files[0]});
+                getBase64(event.target.files[0]);
+            }
         } else {
             setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
             setFiles(null);
@@ -345,7 +342,6 @@ const FormAdminBenefits = () => {
                         />
                          <FormControl className={classes.textvalidator}>
                             <TextValidator
-                                //className={classes.textvalidator}
                                 fullWidth
                                 label="Link"
                                 onChange={handleChangeLinkForm}
@@ -385,7 +381,7 @@ const FormAdminBenefits = () => {
                             }
                         </div>
                         <div>
-                            <Links benefitsform={benefitsform} benefitsLinks={benefitsform.benefitLinks} setBenefitsLinks={handleChangeLinks} />
+                            <Links benefitsform={benefitsform} benefitsLinks={benefitsform.benefitLinks} setBenefitsLinks={handleChangeLinks} /> 
                             {errorLinks.error && <Alert style={{width: "70%", marginLeft: "15%"}} severity="error">Formato de vínculo no válido: Uno de los links ingresados no es válido</Alert>}
                         </div>
                         {id ? <LocationsTable benefitslocations={benefit[0] ? benefit[0].benefitLocations : []} idBenefit={id} /> : null}

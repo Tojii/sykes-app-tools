@@ -3,17 +3,11 @@ import MUIDataTable from "mui-datatables";
 import { GetSocialLinks } from "../../../redux/actions/BenefitsLinksActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
-import {
-    Button,
-    Card,
-    Grid,
-    Tooltip,
-    Chip
-} from "@material-ui/core";
-import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { Card, Grid } from "@material-ui/core";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import CustomFooter from '../../muidatatable/CustomFooter';
 import NotFound from "../../sessions/NotFound"
-import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
+import { TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -102,7 +96,6 @@ const BenefitsLinksTable = (props) => {
     }
 
     const changeLink = (link, dataIndex) => {
-      //console.log(link, dataIndex)
       var linksChange = links.filter(function(item) {
         if (!item.active) {
           return false; // skip
@@ -124,7 +117,6 @@ const BenefitsLinksTable = (props) => {
     }
 
     const changeOrder = (order, dataIndex) => {
-      //console.log(link, dataIndex)
       var actualorder = builddata[dataIndex].order
       var linksChange = links.filter(function(item) {
         if (!item.active) {
@@ -214,7 +206,6 @@ const BenefitsLinksTable = (props) => {
           name: "Link",
           options: {
             filter: true,
-            //display: false,
             customBodyRenderLite: (dataIndex) => {
               let value = builddata[dataIndex].link
               if (isAdmin) {return <TextValidator
@@ -232,7 +223,6 @@ const BenefitsLinksTable = (props) => {
           name: "Orden",
           options: {
             filter: true,
-            //display: false,
             customBodyRenderLite: (dataIndex) => {
               let value = builddata[dataIndex].order
               if (isAdmin) {return <SelectValidator

@@ -3,8 +3,8 @@ import MUIDataTable from "mui-datatables";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import CustomToolbarSelect from "../../venta-activos/ventasTables/CustomSelect"
-import { Button, Card, Grid, Tooltip, FormLabel, FormGroup } from "@material-ui/core";
-import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { Button, Card, Grid, Tooltip } from "@material-ui/core";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
@@ -15,13 +15,6 @@ import ValidationModal from '../../growth-opportunities/components/ValidationDia
 import { Link } from 'react-router-dom';
 import { Breadcrumb } from "matx";
 import "date-fns";
-import DateFnsUtils from "@date-io/date-fns";
-import es from "date-fns/locale/es";
-import {
-    MuiPickersUtilsProvider,
-    DatePicker 
-  } from "@material-ui/pickers";
-import moment from "moment";
 import Chip from '@material-ui/core/Chip'; 
 
 
@@ -57,7 +50,6 @@ const LinksTable = (props) => {
     const isLoading  = useSelector(state => state.links.loading);
     const [open, setOpen] = useState(false);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
-    const [shouldOpenNewDialog, setShouldOpenNewDialog] = useState({ open: false, type: "new" });
 
     useEffect(() => {
       dispatch(GetSocialLinks());
@@ -73,7 +65,6 @@ const LinksTable = (props) => {
     };
 
     const handleEdit= (id) => {
-      //console.log(id)
       history.push(`/Benefits/FormLinksBenefit/${id}`);
     };
 
@@ -109,7 +100,6 @@ const LinksTable = (props) => {
       if (item != undefined) {
       return [
           item.idBenefitLink,
-          //item.benefit.idBenefit,
           item.name,
           item.active ? ["Active"] : ["Inactive"],
           showImage(item),
@@ -126,15 +116,6 @@ const LinksTable = (props) => {
             display: false,
           }
         },
-        // {
-        //   name: "idBenefit",
-        //   label: "ID Beneficio",
-        //   options: {
-        //     filter: false,
-        //     sort: true,
-        //     display: false,
-        //   }
-        // },
         {
           name: "name",
           label: "Nombre",
@@ -253,7 +234,7 @@ const LinksTable = (props) => {
           {(isLoading) ? <Loading /> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successLinkItems) ? "Success!" : "Error!"} save={() => {dispatch(GetSocialLinks())}} message={(successLinkItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, el link no pudo ser eliminada!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
-              {/* { isLoading ? <Loading /> :   */}
+              { isLoading ? <Loading /> :  
                 <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                     <MuiThemeProvider theme={getMuiTheme()}>
                       <MUIDataTable  className="w-100"
@@ -264,7 +245,7 @@ const LinksTable = (props) => {
                       />
                     </MuiThemeProvider>
                 </Card>
-              {/* } */}
+              }
             </Grid>
           </Grid>
         </div> 

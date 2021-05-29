@@ -3,7 +3,7 @@ import { Button, Card, FormControlLabel, Switch, FormHelperText, FormControl } f
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { AddBenefitLocation, GetBenefitsLocationsById, UpdateBenefitLocation, GetBenefitsById, GetBenefitsLocations} from "../../../redux/actions/BenefitsActions";
+import { AddBenefitLocation, GetBenefitsLocationsById, UpdateBenefitLocation, GetBenefitsById } from "../../../redux/actions/BenefitsActions";
 import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
@@ -79,9 +79,6 @@ const FormAdminBenefits = (props) => {
     const isLoading  = useSelector(state => state.benefit.loading);
     const [open, setOpen] = useState(false);
     const [openMessage, setOpenMessage] = useState(false);
-    const [files, setFiles] = useState(null);
-    const [logo, setLogo] = useState(null);
-    const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
     const [disableCanton, setDisableCanton] = useState(true);
     const [disableDistrict, setDisableDistrict] = useState(true);
     const [showInformation, setshowInformation] = useState(true);
@@ -127,7 +124,7 @@ const FormAdminBenefits = (props) => {
         } 
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { //load data when is edit form
         if(props.id && location != [] && location[0] != [""] && location[0] != undefined) {setLocationsForm({
             idBenefit: location[0].benefit.idBenefit,
             province: location[0].provincia ? location[0].provincia : "",
@@ -140,7 +137,7 @@ const FormAdminBenefits = (props) => {
             latitude: location[0].latitude ? location[0].latitude : "",
             longitude: location[0].longitude ? location[0].longitude : "",
             phone: location[0].phone,
-            whatsapp: location[0].whatsApp,
+            whatsapp: location[0].whatsApp ? location[0].whatsApp : "",
             active: location[0].active,
             principalLocation: location[0].principalLocation,
             ubicationType: location[0].ubicationType,
@@ -197,7 +194,7 @@ const FormAdminBenefits = (props) => {
         }
         // Guarda o edita según sea el caso si todas las validaciones son correctas
         if (location.ubicationType != "" && locationsform.phone != "" && locationsform.address != "" && locationsform.ubicationType != "" && (locationsform.province != "" || !showInformation) && (locationsform.canton != "" || !showInformation) && (locationsform.district != "" || !showInformation)
-            && locationsform.phone.length == 8 && (locationsform.whatsapp.length == 8 || locationsform.whatsapp.length == 0) && regex.test(locationsform.phone) && regex.test(locationsform.whatsapp) && props.id) {
+            && locationsform.phone.length == 8 && (locationsform.whatsapp.length == 8 || locationsform.whatsapp.length == 0) && regex.test(locationsform.phone) && ((regex.test(locationsform.whatsapp)) || locationsform.whatsapp.length == 0) && props.id) {
             await dispatch(UpdateBenefitLocation(props.id, locationsform, locationsMapform));
             setOpen(true);
         } else if (location.ubicationType != "" && locationsform.phone != "" && locationsform.address != "" && locationsform.ubicationType != "" && (locationsform.province != "" || !showInformation) && (locationsform.canton != "" || !showInformation) != "" && (locationsform.district != "" || !showInformation)
@@ -207,7 +204,7 @@ const FormAdminBenefits = (props) => {
         }
     };
 
-    const handleType = (event) => {
+    const handleType = (event) => { //show or hide fields when ubication type changes
         const name = event.target.name;
         if(event.target.value != "Remota") {
             setshowInformation(true)
@@ -267,7 +264,6 @@ const FormAdminBenefits = (props) => {
     };
 
     const onChangeLocation = (lat, lng) => {
-        //console.log("lat", lat, lng);
         setLocationsMapForm({
             latitude: lat,
             longitude: lng,
@@ -285,7 +281,7 @@ const FormAdminBenefits = (props) => {
         })
     }
 
-    const handleChangeProvince = (event) => {
+    const handleChangeProvince = (event) => { // obtains the cantons associated with the province
         let provinceName = "";
         setDisableCanton(false);
         setDisableDistrict(true);
@@ -307,7 +303,7 @@ const FormAdminBenefits = (props) => {
             else {setErrorProvince({error: false, errorMessage:``});}
     };
 
-    const handleChangeCanton = (event) => {
+    const handleChangeCanton = (event) => { // obtains the districts associated with the canton
         let cantonName = "";
         setDisableDistrict(false);
         dispatch(GetDistricts(locationsform.provinceCode, event.target.value));
@@ -326,7 +322,7 @@ const FormAdminBenefits = (props) => {
             else {setErrorCanton({error: false, errorMessage:``});}
     };
 
-    const handleChangeDistrict = (event) => {
+    const handleChangeDistrict = (event) => { // validations for districts
         let districtName = "";
         districts.map(district => (
             (district.code == event.target.value) ? districtName = district.name : null
@@ -491,7 +487,6 @@ const FormAdminBenefits = (props) => {
                                 onChange={handleChangeMap}
                                 type="text"
                                 name="latitude"
-                                //disabled={true}
                                 value={locationsMapform.latitude}
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
@@ -504,7 +499,6 @@ const FormAdminBenefits = (props) => {
                                 onChange={handleChangeMap}
                                 type="text"
                                 name="longitude"
-                                //disabled={true}
                                 value={locationsMapform.longitude}
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}

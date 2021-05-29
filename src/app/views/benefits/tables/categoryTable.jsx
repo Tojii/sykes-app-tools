@@ -3,8 +3,8 @@ import MUIDataTable from "mui-datatables";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import CustomToolbarSelect from "../../venta-activos/ventasTables/CustomSelect"
-import { Button, Card, Grid, Tooltip, FormLabel, FormGroup } from "@material-ui/core";
-import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import { Button, Card, Grid, Tooltip } from "@material-ui/core";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
@@ -15,14 +15,6 @@ import ValidationModal from '../../growth-opportunities/components/ValidationDia
 import { Link } from 'react-router-dom';
 import { Breadcrumb } from "matx";
 import "date-fns";
-import DateFnsUtils from "@date-io/date-fns";
-import es from "date-fns/locale/es";
-import {
-    MuiPickersUtilsProvider,
-    DatePicker 
-  } from "@material-ui/pickers";
-import moment from "moment";
-
 
 const useStyles = makeStyles({
   sectionbutton: {
@@ -69,13 +61,8 @@ const CategoriesTable = (props) => {
     };
 
     const handleEdit= (id) => {
-      //console.log(id)
       history.push(`/Benefits/FormCategoryBenefits/${id}`);
     };
-
-    const handleClose = () => {
-      setShouldOpenNewDialog({open: false, index: 0});
-    }
 
     const showImage = (item) => {
       return (
@@ -243,7 +230,7 @@ const CategoriesTable = (props) => {
           {(isLoading) ? <Loading /> : <ValidationModal idioma={"Español"} path={history.location.pathname} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCategories())}} message={(successCampaignItems) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la categoría no pudo ser eliminada!"} setOpen={setOpen} open={open} />}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
-              {/* { isLoading ? <Loading /> :   */}
+              { isLoading ? <Loading /> :  
                 <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
                     <MuiThemeProvider theme={getMuiTheme()}>
                       <MUIDataTable  className="w-100"
@@ -254,7 +241,7 @@ const CategoriesTable = (props) => {
                       />
                     </MuiThemeProvider>
                 </Card>
-              {/* } */}
+              } 
             </Grid>
           </Grid>
         </div> 
