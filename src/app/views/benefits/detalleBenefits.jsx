@@ -482,7 +482,13 @@ const DetalleBenefits = (props) => {
                                                             </a>
                                                             </Grid>
                                                         </Grid>}
-                                                        {(benefit[0] && benefit[0].benefitLinks && benefit[0].benefitLinks.length != 0) && 
+                                                        {/* {console.log("linksmostrar", benefit[0].benefitLinks)} */}
+                                                        {(benefit[0] && benefit[0].benefitLinks && benefit[0].benefitLinks.filter(function(item) {
+                                                                if ((item.order == "1" || item.order == "2" || item.order == "3" || item.order == "4") && item.link) {
+                                                                return true; // skip
+                                                                }
+                                                                return false;
+                                                            }).length != 0) && 
                                                         <Grid container spacing={2} justify="center" alignItems="center" direction="row">                                                            
                                                             {benefit[0].benefitLinks.filter(function(item) {
                                                                 if ((item.order == "1" || item.order == "2" || item.order == "3" || item.order == "4") && item.link) {

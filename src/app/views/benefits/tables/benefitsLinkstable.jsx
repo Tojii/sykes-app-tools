@@ -73,7 +73,7 @@ const BenefitsLinksTable = (props) => {
           "name": item.name,
           "link": props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink) != undefined ? (props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink)).link : "",
           "showIcon": showImage(item),
-          "order" : props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink) != undefined ? props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink).order : index + 1,
+          "order" : props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink) != undefined ? props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink).order : null,
           "icon": item.icon,
         }
       }))
@@ -163,7 +163,7 @@ const BenefitsLinksTable = (props) => {
         "name": item.name,
         "link": props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink) != undefined ? (props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink)).link : "",
         "showIcon": showImage(item),
-        "order" : props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink) != undefined ? props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink).order : index + 1,
+        "order" : props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink) != undefined ? props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink).order : null,
         "icon": item.icon,
       }
     }))
