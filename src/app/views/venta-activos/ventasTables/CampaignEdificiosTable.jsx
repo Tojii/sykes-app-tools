@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MUIDataTable from "mui-datatables";
 import { GetBuildings } from "../../../redux/actions/BuildingActions";
-import { CleanPurchase } from "../../../redux/actions/OrderActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import CustomToolbarSelect from "./CustomSelect"
@@ -18,17 +17,12 @@ import { Link } from 'react-router-dom';
 import history from "history.js";
 import CustomFooter from '../../muidatatable/CustomFooter';
 import NotFound from "../../sessions/NotFound"
-import ValidationModal from '../../growth-opportunities/components/ValidationDialog';
 
 const EdificiosTable = (props) => {
     const dispatch = useDispatch();
     const isAdmin = props.admin != undefined ? props.admin : true;
     const user = useSelector(state => state.user);
     const buildings = useSelector(state => state.building.buildings);
-    // const purchases = useSelector(state => state.order.purchases);
-    // const addCampaign = useSelector(state => state.campaign.addCampaign);
-    const successCampaign = useSelector(state => state.campaign.success);
-    const campaignsActive = useSelector(state => state.campaign.campaignsActive);
     const isLoading  = useSelector(state => state.campaign.loading);
     const isLoadingBuilding  = useSelector(state => state.building.loading);
     const [open, setOpen] = useState(false);
@@ -37,9 +31,7 @@ const EdificiosTable = (props) => {
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('AssetsSale_Owner')) : false
   
     useEffect(() => {
-        // dispatch(CleanPurchase());
         dispatch(GetBuildings());
-        // !isAdmin && dispatch(GetCampaignsActive());
     }, []);
 
     useEffect(() => {
@@ -66,30 +58,12 @@ const EdificiosTable = (props) => {
     });
 
     const handleDelete = async (id) => {
-      //await dispatch(DeleteCampaign(id));
       setOpen(true);
     };
 
     const handleEdit = (id) => { 
       history.push(`/Ventas/FormAdminEdificios/${id}`);
     };
-
-    const addButton = () => {
-      return (
-          <React.Fragment>
-            <Tooltip title={"Nuevo"}>
-              <Button
-                component={Link} to="/Ventas/FormAdminEdificios"
-                variant="contained"
-                color="primary"
-                startIcon={<AddIcon />}
-              >
-                Nuevo
-              </Button>
-            </Tooltip>
-          </React.Fragment>
-      );
-    }
 
     const changeStatus = (dataIndex) => {
       var edificiosChange = props.edificiosCampaign.length == 0 ? buildings.map((item, index) => {
@@ -137,8 +111,6 @@ const EdificiosTable = (props) => {
             options: {
              filter: false,
              sort: true,
-             //display: false,
-             //viewColumns: isAdmin,
             }
         },
         {

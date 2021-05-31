@@ -200,9 +200,6 @@ const FormVentas = () => {
             index: 0
         }
     );
-    const message = "Costo de servicio de entrega no está incluido y varia dependiendo de la distancia"
-    const activeEdificio = true;
-    const activeEnvioCasa = true;
 
     useEffect(() => {
         setOpenPurchase(false);
@@ -547,7 +544,11 @@ const FormVentas = () => {
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
                             >
-                                {campaign[0].buildings.map(edificio => (
+                                {campaign[0].buildings.sort(function(a, b) {
+                                        var textA = a.building.name ;
+                                        var textB = b.building.name ;
+                                        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                                    }).map(edificio => (
                                     edificio.active && <MenuItem key={`edificio-${edificio.id}`} id={edificio.id} value={edificio.building.name ? edificio.building.id : ""}>
                                         {edificio.building.name || " "}
                                     </MenuItem>
