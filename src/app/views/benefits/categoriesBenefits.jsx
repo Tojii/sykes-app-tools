@@ -205,6 +205,7 @@ const DetalleBenefits = (props) => {
         setDisableCanton(false);
         if (event.target.value == "all") {
             dispatch(GetBenefitsCategory());
+            setDisableCanton(true)
             setCantons([])
         } else {
             dispatch(GetBenefitsLocationsByProvincia(event.target.value));

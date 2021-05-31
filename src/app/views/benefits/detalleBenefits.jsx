@@ -378,7 +378,7 @@ const DetalleBenefits = (props) => {
                                                             }).map((item, index) => {
                                                                 return (
                                                                     <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
-                                                                        {`+ (506) ${item.address}`}
+                                                                        {`${item.address}`}
                                                                     </Grid>
                                                                 )
                                                             }).length == 0 ? <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
@@ -415,13 +415,19 @@ const DetalleBenefits = (props) => {
                                                             }).map((item, index) => {
                                                                 return (
                                                                     <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
-                                                                        {`+ (506) ${item.phone}`}
+                                                                        {`${item.phone}`}
                                                                     </Grid>
                                                                 )
                                                             }).length == 0 ? <Grid className={classes.graytext} item lg={9} md={9} sm={9} xs={9}>
                                                             {`${benefit[0] && benefit[0].benefitLocations[0] ? benefit[0].benefitLocations[0].phone : ""}`}
                                                             </Grid> : null}
                                                         </Grid>
+                                                        {benefit[0] && benefit[0].benefitLocations[0] && benefit[0].benefitLocations.filter(function(item) {
+                                                                if (!item.whatsApp) {
+                                                                return false; // skip
+                                                                }
+                                                                return true;
+                                                        }).length != 0 && 
                                                         <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
                                                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                                                 <div style={{textAlignLast: "center"}}>
@@ -433,7 +439,7 @@ const DetalleBenefits = (props) => {
                                                                 </div>
                                                             </Grid>
                                                             {benefit[0] && benefit[0].benefitLocations[0] && benefit[0].benefitLocations.filter(function(item) {
-                                                                if (!item.principalLocation) {
+                                                                if (!item.principalLocation || !item.whatsApp) {
                                                                 return false; // skip
                                                                 }
                                                                 return true;
@@ -459,7 +465,8 @@ const DetalleBenefits = (props) => {
                                                             {`+ (506) ${benefit[0] && benefit[0].benefitLocations[0] ? benefit[0].benefitLocations[0].whatsApp : ""}`}
                                                             </Grid> : null}
                                                         </Grid>
-                                                        <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
+                                                        }
+                                                        {benefit[0] && benefit[0].link && <Grid container spacing={2} justify="center" alignItems="center" direction="row" className={classes.lineGrid}>
                                                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                                                 <div style={{textAlignLast: "center"}}>
                                                                     <img
@@ -474,11 +481,10 @@ const DetalleBenefits = (props) => {
                                                                 {benefit[0] ? benefit[0].link : ""}
                                                             </a>
                                                             </Grid>
-                                                        </Grid>
-                                                        <Grid container spacing={2} justify="center" alignItems="center" direction="row">
-                                                            {benefit[0] && benefit[0].benefitLinks ?
-
-                                                            benefit[0].benefitLinks.filter(function(item) {
+                                                        </Grid>}
+                                                        {(benefit[0] && benefit[0].benefitLinks && benefit[0].benefitLinks.length != 0) && 
+                                                        <Grid container spacing={2} justify="center" alignItems="center" direction="row">                                                            
+                                                            {benefit[0].benefitLinks.filter(function(item) {
                                                                 if ((item.order == "1" || item.order == "2" || item.order == "3" || item.order == "4") && item.link) {
                                                                 return true; // skip
                                                                 }
@@ -497,8 +503,8 @@ const DetalleBenefits = (props) => {
                                                                         </div>
                                                                     </Grid>
                                                                 )
-                                                            }) : null}                                                                
-                                                        </Grid>
+                                                            })}                                                               
+                                                        </Grid>}
                                                     </Paper> 
                                                     {promociones.length > 0 ?
                                                     <Paper className={classes.papercardprom}>

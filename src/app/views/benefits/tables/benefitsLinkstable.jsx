@@ -71,7 +71,7 @@ const BenefitsLinksTable = (props) => {
         return { 
           "idBenefitLink": item.idBenefitLink,
           "name": item.name,
-          "link": props.benefitsLinks[index] != undefined ? props.benefitsLinks[index].link : "",
+          "link": props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink) != undefined ? (props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink)).link : "",
           "showIcon": showImage(item),
           "order" : props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink) != undefined ? props.benefitsLinks.find(element => element.idBenefitLink == item.idBenefitLink).order : index + 1,
           "icon": item.icon,
@@ -231,8 +231,13 @@ const BenefitsLinksTable = (props) => {
               name="prueba"
               value={value}
               >
-                {links.map((data, index) => (
-                    <MenuItem key={`data-${data.order}`} id={data.order} value={index + 1}>
+                {links.filter(function(item) {
+                  if (!item.active) {
+                    return false; // skip
+                  }
+                  return true;
+                  }).map((data, index) => (
+                    <MenuItem key={`data-${index}`} id={index} value={index + 1}>
                     {index + 1 || " "}
                     </MenuItem> 
                 ))}
