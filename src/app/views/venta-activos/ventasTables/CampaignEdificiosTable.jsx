@@ -35,14 +35,22 @@ const EdificiosTable = (props) => {
     }, []);
 
     useEffect(() => {
-      setBuilddata(props.edificiosCampaign.length == 0 ? buildings.map((item, index) => {
+      setBuilddata(props.edificiosCampaign.length == 0 ? buildings.sort(function(a, b) {
+        var textA = a.idBuilding;
+        var textB = b.idBuilding;
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    }).map((item, index) => {
         return { 
           "idBuilding": item.id,
           "nameBuilding": item.name,
           "activeBuilding": item.active,
           "active": false,
         }
-      }) : buildings.map((item, index) => {
+      }) : buildings.sort(function(a, b) {
+        var textA = a.idBuilding;
+        var textB = b.idBuilding;
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    }).map((item, index) => {
         return { 
           "id": props.edificiosCampaign[index] == undefined ? undefined : props.edificiosCampaign[index].id,
           "nameBuilding": item.name,
@@ -77,7 +85,7 @@ const EdificiosTable = (props) => {
         return { 
             "id": props.edificiosCampaign[index] == undefined ? undefined : props.edificiosCampaign[index].id,
             "nameBuilding": item.name,
-            "active": index == dataIndex ? (props.edificiosCampaign[index] != undefined ? (props.edificiosCampaign[index] && props.edificiosCampaign[index].active ? false : true) : (buildings[index].active ? false : true)) : (props.edificiosCampaign[index] != undefined ? props.edificiosCampaign[index].active : buildings[index].active),
+            "active": index == dataIndex ? (props.edificiosCampaign[index] != undefined ? (props.edificiosCampaign[index] && props.edificiosCampaign[index].active ? false : true) : (buildings[index].active ? false : true)) : (props.edificiosCampaign[index] != undefined ? props.edificiosCampaign[index].active : false),
             "activeBuilding": item.active,
             "idBuilding": item.id,
         }
@@ -208,6 +216,7 @@ const EdificiosTable = (props) => {
       (isLoading || isLoadingBuilding) ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">
+            {/* {console.log("buildata",builddata)} */}
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}
