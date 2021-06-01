@@ -101,11 +101,19 @@ const FormAdminEdificios = () => {
     }
     
     const handleChange = (event) => {
-        const name = event.target.name;    
-        setEdificiosForm({
-            ...edificiosform,
-            [name]: event.target.value,
+        const name = event.target.name; 
+        
+        if (name == "active") {
+            setEdificiosForm({
+                ...edificiosform,
+                [name]: event.target.checked,
             });
+        } else {
+            setEdificiosForm({
+                ...edificiosform,
+                [name]: event.target.value,
+            });
+        }
     };
 
     return (
@@ -125,6 +133,18 @@ const FormAdminEdificios = () => {
                             value={edificiosform.name}
                             validators={["required","maxStringLength:30"]}
                             errorMessages={["Este campo es requerido", "Máximo 30 carácteres"]}
+                        />
+                         <FormControlLabel
+                            className={classes.textvalidator}
+                            label="Activar edificio"
+                            control={
+                                <Switch
+                                checked={edificiosform.active}
+                                name="active"
+                                color="primary"
+                                onChange={handleChange}
+                                />
+                            }
                         />
                         <div className={classes.sectionbutton}>
                         <Button style={{margin: "1%", width: "105.92px"}} variant="contained" color="primary" type="submit">

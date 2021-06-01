@@ -9,7 +9,8 @@ import {
     Button,
     Card,
     Grid,
-    Tooltip
+    Tooltip,
+    Chip
 } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
@@ -73,6 +74,7 @@ const EdificiosTable = (props) => {
       return [
           item.id,
           item.name,
+          item.active
       ]
     })
 
@@ -97,7 +99,20 @@ const EdificiosTable = (props) => {
             fullWidth: window.screen.width <= 1024 ? true : false
            }
           }
-        },       
+        },
+        {
+          name: " ",
+          options: {
+            filter: false,
+            viewColumns: false,
+            //display: false,
+            customBodyRenderLite: (dataIndex) => {
+              let value = builddata[dataIndex][2];
+              return <Chip style={{backgroundColor: value == true ? "#039be5" : "gray", margin: "1%", color: "white"}} label={value == true ? "Active" : "Inactive"}  />;
+             
+            },
+          }
+        },        
     ]
 
     const options = {

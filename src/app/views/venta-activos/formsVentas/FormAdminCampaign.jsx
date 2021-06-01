@@ -232,7 +232,7 @@ const FormAdminCampaign = () => {
                     //edificiosCampaign: []
                 })
             }
-            if ( event.target.checked) {
+            if (event.target.checked) {
                 setErrorActive({error: false, errorMessage:``});
             }
         } else {
