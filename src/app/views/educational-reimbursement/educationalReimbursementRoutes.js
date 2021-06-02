@@ -1,5 +1,6 @@
   
 import { MatxLoadable } from "matx";
+import { isMdScreen } from "utils";
 
 const Home = MatxLoadable({
   loader: () => import("./Home")
@@ -30,11 +31,13 @@ const settings = {
   const educationalReimbursementRoutes = [
     {
       path: "/ReembolsoEducativo/Nuevo",
-      component: Form
+      component: Form,
+      settings
     },
     {
       path: "/ReembolsoEducativo/ListaReembolsos",
-      component: Home
+      component: Home,
+      settings
     },
     {
       path:"/ReembolsoEducativo/Detalle",

@@ -252,7 +252,7 @@ const FormVentas = () => {
             ...ventasform,
             totalComprados: ventasform.totalComprados - carrito[index].buyquantity,
             freightVentas: ventasform.freightVentas - carrito[index].estimatedPrice,
-            totalCompra: Math.round((ventasform.totalCompra - carrito[index].subtotal) * 100) / 100, 
+            totalCompra: Math.round((ventasform.totalCompra - carrito[index].subtotal) * 100) / 100,
         })
         carritolist.splice(index, 1);
         setCarrito([...carritolist]);
@@ -274,7 +274,7 @@ const FormVentas = () => {
             }
             //console.log("cantidad", purchases[0], ventasform.totalCompra, cantidad)
         }
-        
+
     }
 
     const [carrito, setCarrito] = useState([]);
@@ -351,13 +351,13 @@ const FormVentas = () => {
         setVentasForm({
             ...ventasform,
             [name]: event.target.value,
-            building: {"id":event.target.value},
+            building: { "id": event.target.value },
         });
     };
 
     const handleChangeEntrega = (event) => {
         const name = event.target.name;
-        if(event.target.value == "Envío a la casa") {
+        if (event.target.value == "Envío a la casa") {
             setshowInformation(true)
             setshowEdificio(false)
             setVentasForm({
@@ -529,10 +529,10 @@ const FormVentas = () => {
                             >
                                 {(campaign[0] && campaign[0].sentToHome) && <MenuItem key={`entrega-envío`} id={"Envío a la casa"} value={"Envío a la casa"}>
                                     {"Envío a la casa"}
-                                </MenuItem>}  
+                                </MenuItem>}
                                 {(campaign[0] && campaign[0].pickUpInBuilding) && <MenuItem key={`entrega-edificio`} id={"Entrega en edificio"} value={"Recoger en edificio"}>
                                     {"Recoger en edificio"}
-                                </MenuItem>}  
+                                </MenuItem>}
                             </SelectValidator>
                             {(campaign[0] && campaign[0] != undefined && campaign[0].shippingMessage && showInformation) ? <Alert severity="info" className={classes.textvalidator + " " + classes.break}>{campaign[0] ? campaign[0].shippingMessage : ""}</Alert> : null}
                             {showEdificio ? <SelectValidator
@@ -544,11 +544,11 @@ const FormVentas = () => {
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
                             >
-                                {campaign[0].buildings.sort(function(a, b) {
-                                        var textA = a.building.name ;
-                                        var textB = b.building.name ;
-                                        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-                                    }).map(edificio => (
+                                {campaign[0].buildings.sort(function (a, b) {
+                                    var textA = a.building.name;
+                                    var textB = b.building.name;
+                                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                                }).map(edificio => (
                                     edificio.active && <MenuItem key={`edificio-${edificio.id}`} id={edificio.id} value={edificio.building.name ? edificio.building.id : ""}>
                                         {edificio.building.name || " "}
                                     </MenuItem>
@@ -717,7 +717,7 @@ const FormVentas = () => {
                                                         </Grid>
                                                         <Grid container spacing={1}>
                                                             <Grid item xs={12}>
-                                                                <Grid container 
+                                                                <Grid container
                                                                     direction="row"
                                                                     justify="center"
                                                                     alignItems="center"
@@ -795,7 +795,7 @@ const FormVentas = () => {
                                                                 spacing={2}>
                                                                 <Grid
                                                                     item zeroMinWidth xs={6}
-                                                                    
+
                                                                 >
                                                                     <Typography gutterBottom variant="subtitle1">
                                                                         Cantidad:
@@ -871,7 +871,7 @@ const FormVentas = () => {
                                 validators={["required"]}
                                 errorMessages={["Este campo es requerido"]}
                             />
-                             {/* {showInformation ? <TextValidator
+                            {/* {showInformation ? <TextValidator
                                 className={classes.textvalidator}
                                 label="Flete aproximado"
                                 onChange={handleChange}
@@ -892,7 +892,7 @@ const FormVentas = () => {
                     }
                 </ValidatorForm>
                 <Dialog fullWidth maxWidth="md" onClose={handleClose} open={shouldOpenDetailsDialog.open}>
-                {isLoadingCampaign ? <Loading/> : <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+                    {isLoadingCampaign ? <Loading /> : <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                         Detalles del artículo:
                     </DialogTitle>}
                     <AgregarDialog type={"agregar"} close={handleClose} purchases={purchases} ventas={ventasform} setventas={setVentasForm} indexlist={indexlist} setIndex={setIndexlist} carrito={carrito} setCarrito={setCarrito} order={[{}]} id={shouldOpenDetailsDialog.id} index={shouldOpenDetailsDialog.index} />

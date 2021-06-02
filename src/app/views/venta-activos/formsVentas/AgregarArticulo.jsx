@@ -1,24 +1,24 @@
 import React, { useState, Component, useRef, useEffect } from "react";
 import {
-  Button,
-  Card,
-  Grid, 
-  Table,
-  TableBody,
-  TableCell,
-  TableRow
+    Button,
+    Card,
+    Grid,
+    Table,
+    TableBody,
+    TableCell,
+    TableRow
 } from "@material-ui/core";
 import MenuItem from '@material-ui/core/MenuItem';
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
-import {addRaft} from "../../../redux/actions/RaftActions";
+import { addRaft } from "../../../redux/actions/RaftActions";
 import { useSelector, useDispatch } from 'react-redux';
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import { GetCampaignItemsById } from "../../../redux/actions/CampaignActions";
 
 
 const useStyles = makeStyles({
-    textvalidator: {     
+    textvalidator: {
         "@media (min-width: 0px)": {
             marginLeft: "0%",
             width: "50%",
@@ -30,7 +30,7 @@ const useStyles = makeStyles({
             marginTop: "3%",
         },
     },
-    imageadd: {          
+    imageadd: {
         "@media (min-width: 0px)": {
             marginLeft: "0%",
         },
@@ -57,7 +57,7 @@ const useStyles = makeStyles({
         marginTop: "3%",
         marginBottom: "2%",
     },
-    cellspace:{
+    cellspace: {
         whiteSpace: "unset",
     },
     break: {
@@ -66,10 +66,10 @@ const useStyles = makeStyles({
 });
 
 const AgregarArticulo = (props) => {
-    
+
     const campaignItems = useSelector(state => state.campaign.campaignitem);
     const detail = props.order[props.index] != undefined ? props.order[props.index] : [{}];
-    const isLoading  = useSelector(state => state.campaign.loading);
+    const isLoading = useSelector(state => state.campaign.loading);
     const max = props.type == "agregar" ? props.ventas.maximo - props.ventas.totalComprados : 0;
     const cantComprada = props.type == "agregar" && props.purchases[0] != undefined ? props.purchases[0].items[props.index].totalPurchasedItems : 0
     //const cantCompradaArticulo = props.type == "agregar" && props.purchases[0] != undefined ? props.purchases[0].items[props.index].totalPurchasedItems : 0
@@ -89,36 +89,37 @@ const AgregarArticulo = (props) => {
     const handleCantidad = () => {
         let i;
         if (campaignItems[0] != undefined) {
-            for (i = 1; i <= (campaignItems[0].maxLimitPerPerson - cantComprada) && i <= campaignItems[0].stockQuantity && i <= max && i <= cantCompradaAnterior ; i++) {
+            for (i = 1; i <= (campaignItems[0].maxLimitPerPerson - cantComprada) && i <= campaignItems[0].stockQuantity && i <= max && i <= cantCompradaAnterior; i++) {
                 cantidad.push(i);
             }
-        } 
+        }
     }
 
     const handleFormSubmit = async () => {
         setDisableAgregar(true);
-        if(props.ventas.maximo < props.ventas.totalComprados + cantidadArticulo) {
+        if (props.ventas.maximo < props.ventas.totalComprados + cantidadArticulo) {
             //console.log("se sobrepasa el limite")
-        } else { 
+        } else {
             if (!props.indexlist.includes(props.id)) {
                 let totalCompraVentas = props.ventas.totalCompra + cantidadArticulo * campaignItems[0].unitPrice;
                 //console.log("prueba",totalCompraVentas)
                 props.setCarrito(
-                    [ 
+                    [
                         ...props.carrito,
-                        {id: campaignItems[0].id,
-                        name: campaignItems[0].name,
-                        buyquantity: cantidadArticulo,
-                        unitPrice: campaignItems[0].unitPrice,
-                        quantity: campaignItems[0].quantity,
-                        subtotal: Math.round((cantidadArticulo * campaignItems[0].unitPrice) * 100) / 100,
-                        maxLimitPerPerson: campaignItems[0].maxLimitPerPerson - cantComprada,
-                        stockQuantity: campaignItems[0].stockQuantity,
-                        limiteActual: props.ventas.maximo - props.ventas.totalComprados + cantidadArticulo,
-                        estimatedPrice: campaignItems[0].estimatedPrice,
-                        image: campaignItems[0].image
-                    },    
-                ]);
+                        {
+                            id: campaignItems[0].id,
+                            name: campaignItems[0].name,
+                            buyquantity: cantidadArticulo,
+                            unitPrice: campaignItems[0].unitPrice,
+                            quantity: campaignItems[0].quantity,
+                            subtotal: Math.round((cantidadArticulo * campaignItems[0].unitPrice) * 100) / 100,
+                            maxLimitPerPerson: campaignItems[0].maxLimitPerPerson - cantComprada,
+                            stockQuantity: campaignItems[0].stockQuantity,
+                            limiteActual: props.ventas.maximo - props.ventas.totalComprados + cantidadArticulo,
+                            estimatedPrice: campaignItems[0].estimatedPrice,
+                            image: campaignItems[0].image
+                        },
+                    ]);
 
                 props.setventas({
                     ...props.ventas,
@@ -133,13 +134,13 @@ const AgregarArticulo = (props) => {
             }
         }
     };
-    
+
     const presave = () => {
         //setDisableAgregar(true);
     }
 
     const handleChange = (event) => {
-        setCantidadArticulo( 
+        setCantidadArticulo(
             event.target.value,
         );
     };
@@ -147,37 +148,37 @@ const AgregarArticulo = (props) => {
     return (
         <div className="m-sm-30">
             <Grid container spacing={2}>
-                <Grid item md={12} xs={12}> 
+                <Grid item md={12} xs={12}>
                     <Card className={classes.formcard} elevation={6}>
-                        <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>                 
-                            { campaignItems[0] == undefined || isLoading ? <Loading /> : <Table>
+                        <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>
+                            {campaignItems[0] == undefined || isLoading ? <Loading /> : <Table>
                                 <TableBody>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Artículo:</h6></TableCell>
-                                        <TableCell width={"70%"} className={classes.break + " px-sm-24 border-none"}>{ campaignItems[0] == undefined ? "" : campaignItems[0].name }</TableCell>
+                                        <TableCell width={"70%"} className={classes.break + " px-sm-24 border-none"}>{campaignItems[0] == undefined ? "" : campaignItems[0].name}</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Descripción del Artículo:</h6></TableCell>
-                                        <TableCell className={classes.break + " px-sm-24 border-none"}>{ campaignItems[0] == undefined ? "" : campaignItems[0].description }</TableCell>
+                                        <TableCell className={classes.break + " px-sm-24 border-none"}>{campaignItems[0] == undefined ? "" : campaignItems[0].description}</TableCell>
                                     </TableRow>
                                     {campaignItems[0].image != null ?
-                                    <TableRow>
-                                        <TableCell colSpan={3} className="px-sm-24 border-none">
-                                            <div className={classes.sectionimage}>
-                                                <img
-                                                //height={"515px"}
-                                                //width={"390px"}
-                                                className={classes.imageadd}                                          
-                                                alt="..."
-                                                src={`${campaignItems[0].image}`}
-                                                />
-                                            </div>
-                                        </TableCell>
-                                    </TableRow> : null
+                                        <TableRow>
+                                            <TableCell colSpan={3} className="px-sm-24 border-none">
+                                                <div className={classes.sectionimage}>
+                                                    <img
+                                                        //height={"515px"}
+                                                        //width={"390px"}
+                                                        className={classes.imageadd}
+                                                        alt="..."
+                                                        src={`${campaignItems[0].image}`}
+                                                    />
+                                                </div>
+                                            </TableCell>
+                                        </TableRow> : null
                                     }
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Valor del artículo:</h6></TableCell>
-                                        <TableCell className="px-sm-24 border-none">{ campaignItems[0] == undefined ? "" : "₡" + campaignItems[0].unitPrice }</TableCell>
+                                        <TableCell className="px-sm-24 border-none">{campaignItems[0] == undefined ? "" : "₡" + campaignItems[0].unitPrice}</TableCell>
                                     </TableRow>
                                     {/* {(props.ventas != undefined && props.ventas.sendMethod != "Recoger en edificio") ? <TableRow>
                                         <TableCell width={"25%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Precio estimado de envío:</h6></TableCell>
@@ -185,47 +186,47 @@ const AgregarArticulo = (props) => {
                                     </TableRow> : null} */}
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24 border-none"}><h6>Cantidad:</h6></TableCell>
-                                        { props.type == "agregar" ? <TableCell className="px-sm-24 border-none">
-                                            <SelectValidator  
+                                        {props.type == "agregar" ? <TableCell className="px-sm-24 border-none">
+                                            <SelectValidator
                                                 name="cantidad"
-                                                className={classes.textvalidator} 
-                                                value={cantidadArticulo} 
-                                                onChange={handleChange} 
+                                                className={classes.textvalidator}
+                                                value={cantidadArticulo}
+                                                onChange={handleChange}
                                                 validators={["required"]}
                                                 errorMessages={["Este campo es requerido"]}
                                             >
                                                 {handleCantidad()}
                                                 {cantidad.map(categoria => (
-                                                                <MenuItem key={`categoria-${categoria}`} value={categoria ? categoria : ""}>
-                                                                {categoria || " "}
-                                                                </MenuItem>
-                                                            ))}
-                                            </SelectValidator> 
+                                                    <MenuItem key={`categoria-${categoria}`} value={categoria ? categoria : ""}>
+                                                        {categoria || " "}
+                                                    </MenuItem>
+                                                ))}
+                                            </SelectValidator>
                                         </TableCell>
-                                        : <TableCell className="px-sm-24 border-none">{ detail.amount }</TableCell>}
+                                            : <TableCell className="px-sm-24 border-none">{detail.amount}</TableCell>}
                                     </TableRow>
                                     <TableRow>
                                         <TableCell width={"30%"} className={classes.cellspace + " pl-sm-24 border-none"}> <h6>Subtotal:</h6> </TableCell>
-                                        { props.type == "agregar" ?
+                                        {props.type == "agregar" ?
                                             <TableCell className="px-sm-24 border-none">{campaignItems[0] == undefined ? "" : "₡" + Math.round((cantidadArticulo * campaignItems[0].unitPrice) * 100) / 100}</TableCell>
                                             : <TableCell className="px-sm-24 border-none">{detail == undefined ? "" : "₡" + Math.round((detail.subTotal) * 100) / 100}</TableCell>
                                         }
                                     </TableRow>
                                 </TableBody>
                             </Table>}
-                      
+
                             {campaignItems[0] == undefined || isLoading ? <Loading /> : <div className={classes.sectionbutton}>
-                                <Button variant="contained" color="primary" onClick={presave} disabled={disableAgregar} style={{margin: "1%", width: "105.92px", display: (campaignItems[0] == undefined || props.type == "detalles") ? "none" : null}} type="submit">
+                                <Button variant="contained" color="primary" onClick={presave} disabled={disableAgregar} style={{ margin: "1%", width: "105.92px", display: (campaignItems[0] == undefined || props.type == "detalles") ? "none" : null }} type="submit">
                                     AGREGAR
                                 </Button>
-                                <Button variant="contained" style={{margin: "1%", display: (campaignItems[0] == undefined || props.order == undefined)? "none" : null}} onClick={props.close} color="default">
+                                <Button variant="contained" style={{ margin: "1%", display: (campaignItems[0] == undefined || props.order == undefined) ? "none" : null }} onClick={props.close} color="default">
                                     {props.type == "detalles" ? "VOLVER" : "CANCELAR"}
                                 </Button>
                             </div>}
                         </ValidatorForm>
                     </Card>
                 </Grid>
-          </Grid>
+            </Grid>
         </div>
     );
 }
