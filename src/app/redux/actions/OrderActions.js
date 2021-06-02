@@ -158,7 +158,12 @@ export const OR_LOADING_ITEMS = "OR_LOADING_ITEMS";
             });
             console.log(res.data)
         })
-        .catch(globalErrorHandler);
+        .catch((error) => {
+          globalErrorHandler(error);
+          dispatch({
+            type: OR_ERROR
+          })
+        });
     };
 };
 

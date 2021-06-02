@@ -10,6 +10,10 @@ const Inventario = MatxLoadable({
   loader: () => import("./ventasTables/InventarioTable")
 });
 
+const Edificios = MatxLoadable({
+  loader: () => import("./ventasTables/EdificiosTable")
+});
+
 const Compras = MatxLoadable({
   loader: () => import("./ventasTables/ComprasTable")
 });
@@ -36,6 +40,10 @@ const CompraDetalle = MatxLoadable({
 
 const FormAdminCampaign = MatxLoadable({
   loader: () => import("./formsVentas/FormAdminCampaign")
+});
+
+const FormAdminEdificio = MatxLoadable({
+  loader: () => import("./formsVentas/FormAdminEdificios")
 });
 
 const FormAdminInventario = MatxLoadable({
@@ -83,6 +91,11 @@ const raftRoutes = [
     settings
   },
   {
+    path: "/Ventas/Edificios",
+    component: Edificios,
+    settings
+  },
+  {
     path: "/Ventas/Compras",
     component: Compras,
     settings
@@ -100,6 +113,16 @@ const raftRoutes = [
   {
     path: "/Ventas/FormAdminCampaign",
     component: FormAdminCampaign,
+    settings
+  },
+  {
+    path: "/Ventas/FormAdminEdificios/:id",
+    component: FormAdminEdificio,
+    settings
+  },
+  {
+    path: "/Ventas/FormAdminEdificios",
+    component: FormAdminEdificio,
     settings
   },
   {

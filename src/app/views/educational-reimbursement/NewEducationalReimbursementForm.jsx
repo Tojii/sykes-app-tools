@@ -257,6 +257,10 @@ const EducationalReimbursementForm = () => {
           isErrorValidation = true;
           setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "*Se debe seleccionar la fecha de finalización" }));
         }
+        if (form.endDate != null && form.startDate.getTime() > form.endDate.getTime()) {
+          isErrorValidation = true;
+          setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*La fecha de inicio no puede ser mayor a la fecha de finaización" }));
+        }
       }
     }
     if (!isErrorValidation && !isError && !emailError) {
@@ -346,16 +350,20 @@ const EducationalReimbursementForm = () => {
     if (date != null) {
       setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
     }
+    if (form.endDate != null && date.getTime() > form.endDate.getTime()) {
+      //isErrorValidation = true;
+      setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*La fecha de inicio no puede ser mayor a la fecha de finaización" }));
+    }
     setForm({
       ...form,
       startDate: date,
-      endDate: null,
+      //endDate: null,
     });
   };
 
   const handleDateChangeEndDate = date => {
     if (date != null) {
-      setErrorMessage(errorMessage => ({ ...errorMessage, endDate: "", endDate: "" }));
+      setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
     }
     setForm({
       ...form,
@@ -514,8 +522,8 @@ const EducationalReimbursementForm = () => {
                     value={form.endDate}
                     name="endDate"
                     onChange={handleDateChangeEndDate}
-                    minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000) : null}
                     disabled={!form.startDate}
+                    minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000) : null}
                   />
                 </MuiPickersUtilsProvider>
               </div> :
@@ -530,7 +538,6 @@ const EducationalReimbursementForm = () => {
                   value={form.certificationDate}
                   name="certificationDate"
                   onChange={handleDateChangeCertificationDate}
-                  //minDate={form.startDate != null ? new Date(form.startDate).setTime(new Date(form.startDate).getTime() + 1 * 86400000) : null}
                 />
               </MuiPickersUtilsProvider>
             }
@@ -545,7 +552,7 @@ const EducationalReimbursementForm = () => {
 
   return (
     <div>
-      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={(saveReimbursement != null && !saveReimbursement.success) == false ? "Success!" : "Error!"} save={() => {}} message={(saveReimbursement != null && !saveReimbursement.success) == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
+      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={saveReimbursement ? "Success!" : "Error!"} save={() => {}} message={saveReimbursement ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
       {(isLoading || !user) ? <Loading /> :
         <div className="m-sm-30">
           <SimpleCard title="Nuevo Reembolso Educativo">
@@ -562,8 +569,8 @@ const EducationalReimbursementForm = () => {
                   {saveReimbursement != null ? 
                   <div>
                     <div className="d-flex justify-content-center mb-16">
-                    <Alert variant="outlined" severity={!saveReimbursement.success == false ? "success" : "error"}>
-                      {!saveReimbursement.success == false ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
+                    <Alert variant="outlined" severity={saveReimbursement ? "success" : "error"}>
+                      {saveReimbursement ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
                     </Alert>
                   </div>
                   {/* <Button variant="contained" color="secondary" onClick={handleReset}>

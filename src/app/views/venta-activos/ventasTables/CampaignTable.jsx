@@ -9,7 +9,8 @@ import {
     Button,
     Card,
     Grid,
-    Tooltip
+    Tooltip,
+    Chip
 } from "@material-ui/core";
 import { createMuiTheme, MuiThemeProvider, withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
@@ -31,6 +32,7 @@ const CampaignTable = (props) => {
     const successCampaign = useSelector(state => state.campaign.success);
     const campaignsActive = useSelector(state => state.campaign.campaignsActive);
     const isLoading  = useSelector(state => state.campaign.loading);
+    const errorMessage  = useSelector(state => state.campaign.errorMessage);
     const SPACED_DATE_FORMAT = "DD/MM/YYYY";  
     const [open, setOpen] = useState(false);
     // const [purchaseList, setPurchaseList] = useState([]);
@@ -110,6 +112,9 @@ const CampaignTable = (props) => {
           item.startDate,
           item.endDate,
           item.maxLimitPerPerson,
+          item.pickUpInBuilding,
+          item.sentToHome,
+          item.message,
           stock,
           compraButton(item)
       ]
@@ -140,6 +145,9 @@ const CampaignTable = (props) => {
         item.startDate,
         item.endDate,
         item.maxLimitPerPerson,
+        item.pickUpInBuilding,
+        item.sentToHome,
+        item.message,
         stock,
         compraButton(item)
     ]
@@ -175,7 +183,14 @@ const CampaignTable = (props) => {
             sort: true,
             filterOptions: { 
               fullWidth: window.screen.width <= 1024 ? true : false
-            }
+            },
+            setCellProps: value => {
+              return {
+                style: {
+                  wordBreak: "break-word"
+                }
+              };
+            },
           }
         },
         {
@@ -213,6 +228,50 @@ const CampaignTable = (props) => {
             filterOptions: { 
               fullWidth: window.screen.width <= 1024 ? true : false
             }
+          }
+        },
+        {
+          name: "Recoger en edificio",
+          options: {
+            filter: true,
+            display: false,
+            viewColumns: isAdmin,
+            customBodyRenderLite: (dataIndex) => {
+              let value = builddata[dataIndex][6];
+              return <Chip style={{backgroundColor: value == true ? "#039be5" : "gray", margin: "1%", color: "white"}} label={value == true ? "Active" : "Inactive"}  />; 
+            },
+          }
+        },   
+        {
+          name: "Envío a la casa",
+          options: {
+            filter: true,
+            display: false,
+            viewColumns: isAdmin,
+            customBodyRenderLite: (dataIndex) => {
+              let value = builddata[dataIndex][7];
+              return <Chip style={{backgroundColor: value == true ? "#039be5" : "gray", margin: "1%", color: "white"}} label={value == true ? "Active" : "Inactive"}  />; 
+            },
+          }
+        },   
+        {
+          name: "message",
+          label: "Mensaje Campaña ",
+          options: {
+            filter: true,
+            sort: true,
+            display: false,
+            viewColumns: isAdmin,
+            filterOptions: { 
+              fullWidth: window.screen.width <= 1024 ? true : false
+            },
+            setCellProps: value => {
+              return {
+                style: {
+                  wordBreak: "break-word"
+                }
+              };
+            },
           }
         },
         {
@@ -307,7 +366,7 @@ const CampaignTable = (props) => {
       isLoading ? <Loading /> :
         (admin || !isAdmin) ?
           <div className="m-sm-30">
-            {isLoading ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : "¡Se produjo un error, la campaña no pudo ser eliminada!"} setOpen={setOpen} open={open} />}
+            {isLoading ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Campaign"} state={(successCampaign) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaigns());}} message={(successCampaign) ? "¡Eliminado exitosamente!" : (errorMessage && errorMessage != undefined && errorMessage.length < 100 ? errorMessage : "¡Se produjo un error, la campaña no pudo ser eliminada!")} setOpen={setOpen} open={open} />}
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
                 {/* { isLoading ? <Loading /> :   */}

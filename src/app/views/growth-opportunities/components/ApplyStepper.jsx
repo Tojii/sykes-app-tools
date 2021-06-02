@@ -60,6 +60,8 @@ const ApplyStepper = (props) => {
 
 
     function getStepContent(stepIndex) {
+      console.log("index", stepIndex);
+
       switch (stepIndex) {
       case 0:
           return <UserForm setDisableNext={setDisableNext}/>
@@ -77,6 +79,7 @@ const ApplyStepper = (props) => {
     }
 
     const handleNext = () => {
+      console.log("handle next");
         if(!disableNext){
           setActiveStep(prevActiveStep => prevActiveStep + 1);
         }
@@ -92,6 +95,7 @@ const ApplyStepper = (props) => {
     };
 
     const handleNextValidation = () => {
+      console.log("handle validation");
       setActiveStep(prevActiveStep => prevActiveStep + 1);
       setDisableNext(true);
     };
@@ -160,7 +164,7 @@ const ApplyStepper = (props) => {
                 </div>
               ) : (
                 <div>
-                  {getStepContent(activeStep, props)}
+                  { getStepContent(activeStep, props) }
                   <div className="pt-24">
                     <Button
                       variant="contained"

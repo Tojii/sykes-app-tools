@@ -5,7 +5,6 @@ import {
   FormControlLabel,
   Grid,
   Button,
-  withStyles,
   CircularProgress
 } from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
@@ -14,8 +13,9 @@ import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { withRouter } from "react-router-dom";
 import { login } from "../../redux/actions/LoginActions";
+import { withStyles } from "@material-ui/core/styles";
 
-const styles = theme => ({
+const styles = (theme) => ({
   wrapper: {
     position: "relative"
   },
@@ -51,8 +51,10 @@ class SignIn extends Component {
   };
   
   render() {
-    const error = !this.props.loginState.error ? null : 
-      <Alert variant="outlined" severity="error">{this.props.loginState.error}</Alert>
+
+    //console.log(this.props.loginState.error)
+    const error = (!this.props.loginState.error) ? null : 
+    (typeof(this.props.loginState.error) == "object") ? null : <Alert variant="outlined" severity="error">{this.props.loginState.error}</Alert>
 
     let { email, password } = this.state;
     let { classes } = this.props;

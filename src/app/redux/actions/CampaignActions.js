@@ -133,7 +133,18 @@ export const GetCampaignsActive = () => {
         });
 
         api.post(`/Campaign`, 
-        { "name": payload.name, "description": payload.description, "startDate": moment(payload.startDate).format('YYYY-MM-DD HH:mm:ss'), "endDate": moment(payload.endDate).format('YYYY-MM-DD HH:mm:ss'), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10)
+        { "name": payload.name, "description": payload.description, "startDate": payload.startDate.toJSON(), "endDate": payload.endDate.toJSON(), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10),
+          "pickUpInBuilding": payload.activeEdificio, "sentToHome": payload.activeEnvioCasa, "message": payload.message, "shippingMessage": payload.shippingMessage,
+          "buildings": payload.edificiosCampaign.map(item => {
+            return {
+              "building": {
+                "id": item.idBuilding,
+                "name": item.nameBuilding,
+                "active": item.activeBuilding,
+              },
+              "active": item.active,
+            }
+          })
         }, config).then(res => {
             dispatch({
                 type: ADD_CAMPAIGN,
@@ -141,7 +152,12 @@ export const GetCampaignsActive = () => {
             });
             console.log(res.data)
         })
-        .catch(globalErrorHandler);
+        .catch((error) => {
+          globalErrorHandler(error);
+          dispatch({
+            type: CA_ERROR
+          })
+        });
     };
 };
 
@@ -152,10 +168,11 @@ export const AddCampaignItems = (id, payload, files) => {
     formData.append('description', payload.description);
     formData.append('quantity', parseInt(payload.quantity, 10));
     formData.append('stockQuantity', parseInt(payload.stockQuantity, 10));
-    formData.append('unitPrice', payload.unitPrice.replace(".", ","));
+    formData.append('unitPrice', payload.unitPrice);
     formData.append('maxLimitPerPerson', parseInt(payload.maxLimitPerPerson, 10));
+    formData.append('EstimatedPrice', payload.shippingPrice.replace(".", ","));
     formData.append('files', files);
-    console.log("add", payload.unitPrice.replace(".", ","))
+    //console.log("add", payload.unitPrice.replace(".", ","))
     const config = {
         headers: {
             'content-type': 'multipart/form-data',
@@ -174,7 +191,12 @@ export const AddCampaignItems = (id, payload, files) => {
           });
           console.log(res.data)
       })
-      .catch(globalErrorHandler);
+      .catch((error) => {
+        globalErrorHandler(error);
+        dispatch({
+          type: CA_ERROR
+        })
+      });
   };
 };
 
@@ -183,14 +205,31 @@ export const AddCampaignItems = (id, payload, files) => {
         type: CA_LOADING
     });
     
-    api.put(`/Campaign/${id}`, { "name": payload.name, "description": payload.description, "startDate": moment(payload.startDate).format('YYYY-MM-DD HH:mm:ss'), "endDate": moment(payload.endDate).format('YYYY-MM-DD HH:mm:ss'), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10)
+    api.put(`/Campaign/${id}`, { "name": payload.name, "description": payload.description, "startDate": payload.startDate.toJSON(), "endDate": payload.endDate.toJSON(), "maxLimitPerPerson": parseInt(payload.maxLimitPerPerson, 10),
+    "pickUpInBuilding": payload.activeEdificio, "sentToHome": payload.activeEnvioCasa, "message": payload.message, "shippingMessage": payload.shippingMessage,
+    "buildings": payload.edificiosCampaign.map(item => {
+      return {
+          "building": {
+            "id": item.idBuilding,
+            "name": item.nameBuilding,
+            "active": item.activeBuilding,
+          },
+          "active": item.active,
+          "id": item.id
+      }
+    })
     }).then(res => {
         dispatch({
             type: UPDATE_CAMPAIGN,
             payload: res.data
         });
     })
-    .catch(globalErrorHandler);
+    .catch((error) => {
+      globalErrorHandler(error);
+      dispatch({
+        type: CA_ERROR
+      })
+    });
 };
 
 export const UpdateCampaignItems = (id, payload, files) => dispatch => {
@@ -199,14 +238,15 @@ export const UpdateCampaignItems = (id, payload, files) => dispatch => {
         'content-type': 'multipart/form-data',
     }
   }  
-  //console.log("updatever", files)
+  //console.log("updatever", payload.unitPrice)
   var formData = new FormData();
     formData.append('name', payload.name);
     formData.append('description', payload.description);
     formData.append('quantity', payload.quantity);
     formData.append('stockQuantity', parseInt(payload.stockQuantity, 10));
-    formData.append('unitPrice', payload.unitPrice.replace(".", ","));
+    formData.append('unitPrice', payload.unitPrice);
     formData.append('maxLimitPerPerson', payload.maxLimitPerPerson);
+    formData.append('EstimatedPrice', payload.shippingPrice.replace(".", ","));
     if (files != null) {formData.append('files', files);}
   dispatch({
       type: CA_LOADING
@@ -219,7 +259,12 @@ export const UpdateCampaignItems = (id, payload, files) => dispatch => {
           payload: res.data
       });
   })
-  .catch(globalErrorHandler);
+  .catch((error) => {
+    globalErrorHandler(error);
+    dispatch({
+      type: CA_ERROR
+    })
+  });
 };
 
 export const DeleteCampaign = (id) => dispatch => {
@@ -233,7 +278,13 @@ export const DeleteCampaign = (id) => dispatch => {
             payload: res.data
         });
     })
-    .catch(globalErrorHandler);
+    .catch((error) => {
+      globalErrorHandler(error);
+      dispatch({
+        type: CA_ERROR,
+        data: error.response.data
+      })
+    });
 };
 
 export const DeleteCampaignItem = (id) => dispatch => {
@@ -248,7 +299,13 @@ export const DeleteCampaignItem = (id) => dispatch => {
       });
       
   })
-  .catch(globalErrorHandler);
+  .catch((error) => {
+    globalErrorHandler(error);
+    dispatch({
+      type: CA_ERROR,
+      data: error.response.data
+    })
+  });
 };
 
 

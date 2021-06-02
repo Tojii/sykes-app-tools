@@ -1,6 +1,5 @@
-import { format } from 'date-fns';
 import  api, { globalErrorHandler } from "../Api"
-
+import { format } from 'date-fns';
 export const GET_REIMBURSEMENT_LIST_BY_USER = "GET_REIMBURSEMENT_LIST_BY_USER";
 export const SAVE_REIMBURSEMENT = "SAVE_REIMBURSEMENT";
 export const RE_LOADING = "RE_LOADING";
@@ -15,6 +14,7 @@ export const GetReimbursementListByUser = (badgeId) => {
             type: GET_REIMBURSEMENT_LIST_BY_USER,
             data: res.data
             });
+            //console.log(res.data)
       })).catch(globalErrorHandler);
   } 
 };
@@ -61,9 +61,9 @@ export const SaveReimbursement = (Data, Files, badge, fullname) =>{
   }
  
   const config = {
-    headers: {
-        'content-type': 'multipart/form-data',
-    }
+    // headers: {
+    //     'content-type': 'multipart/form-data',
+    // }
   }  
 
   return async dispatch => {
@@ -80,8 +80,7 @@ export const SaveReimbursement = (Data, Files, badge, fullname) =>{
                 data: res.data,
           });
           //console.log(res.data)
-        }))
-        .catch(globalErrorHandler);
+        })).catch(globalErrorHandler);
         
     }
 }
@@ -96,9 +95,8 @@ export const GetInformationLists = () => {
             type: GET_INFORMATION_LISTS,
             data: res.data
         });
-    }))
-    .catch(globalErrorHandler);
-  }
+    })).catch(globalErrorHandler);
+}
 }
 
 export const getStudiesCatergory = () => {
@@ -108,8 +106,6 @@ export const getStudiesCatergory = () => {
         type: GET_STUDIES_CATEGORY,
         data: res.data
       });
-    }))
-    .catch(globalErrorHandler);
+    })).catch(globalErrorHandler);
   }
 }
-

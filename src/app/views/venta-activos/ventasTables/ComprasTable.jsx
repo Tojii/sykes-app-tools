@@ -172,7 +172,14 @@ const ComprasTable = (props) => {
           display: false,
           filterOptions: { 
             fullWidth: window.screen.width <= 1024 ? true : false
-          }
+          },
+          setCellProps: value => {
+            return {
+              style: {
+                wordBreak: "break-word"
+              }
+            };
+          },
           }
         },
         {
@@ -282,7 +289,14 @@ const ComprasTable = (props) => {
             sort: true,
             filterOptions: { 
               fullWidth: window.screen.width <= 1024 ? true : false
-            }
+            },
+            setCellProps: value => {
+              return {
+                style: {
+                  wordBreak: "break-word"
+                }
+              };
+            },
           }
         },
         {
@@ -296,6 +310,18 @@ const ComprasTable = (props) => {
             }
           }
         },
+        // {
+        //   name: "freight",
+        //   label: "Flete aproximado ",
+        //   options: {
+        //     filter: true,
+        //     sort: true,
+        //     display: false,
+        //     filterOptions: { 
+        //       fullWidth: window.screen.width <= 1024 ? true : false
+        //     }
+        //   }
+        // },
         {
           name: "total",
           label: "Total Compra",
@@ -305,6 +331,19 @@ const ComprasTable = (props) => {
             filterOptions: { 
               fullWidth: window.screen.width <= 1024 ? true : false
             }
+          }
+        },
+        {
+          name: "sendMethod",
+          label: "Método de entrega",
+          options: {
+          filter: true,
+          viewColumns: true,
+          sort: true,
+          display: true,
+          filterOptions: { 
+            fullWidth: window.screen.width <= 1024 ? true : false
+          }
           }
         },
         {
@@ -358,7 +397,9 @@ const ComprasTable = (props) => {
           item.createdDate, 
           item.notes,
           item.totalItems,
-          "₡" + item.total,
+          // "₡" + (item.freight ? item.freight : 0),
+          "₡" + parseFloat(item.total).toFixed(2),
+          item.sendMethod,
           detallesButton(item)
       ]
     })

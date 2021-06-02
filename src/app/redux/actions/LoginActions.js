@@ -55,6 +55,15 @@ export function login({ email, password, force }) {
   };
 }
 
+export const clearLogin = () => {
+  // console.log("mensaje de error", error)
+  return dispatch => {
+    dispatch({
+      type: LOGIN_CLEAR
+    });
+  };
+}
+
 export const setError = error => {
   // console.log("mensaje de error", error)
   return dispatch => {
@@ -67,7 +76,7 @@ export const setError = error => {
 
 export const refreshtoken = (refreshtoken) => {
   return async dispatch => {
-    const response = await api.post(`/authenticate/refresh`, `"${refreshtoken}"`).catch(globalErrorHandler);;
+    const response = await api.post(`/authenticate/refresh`, `"${refreshtoken}"`).catch(globalErrorHandler);
     dispatch({
       type: LOGIN_SUCCESS,
       data: response.data

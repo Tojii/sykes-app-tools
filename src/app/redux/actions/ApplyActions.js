@@ -15,12 +15,14 @@ export const setApplyData = (payload) => dispatch => {
 };
 
 export const setLoading = () => dispatch => {
+    //console.log("error")
     dispatch({
         type: SET_LOADING,
     })
 };
 
 export const saveJobApplication = (payload) => dispatch => {
+    //console.log("save Jobs", payload);
     var formData = new FormData();
     formData.append('email', payload.email);
     formData.append('phone', payload.phone);
@@ -86,10 +88,11 @@ export const saveJobApplication = (payload) => dispatch => {
 };
 
 export const setValidations = (badge, jobId) => dispatch => {
-    api.get(`/GrowthOpportunityMetric/Validate?jobId=${jobId}`).then(res => 
+    api.get(`/GrowthOpportunityMetric/Validate?jobId=${jobId}`).then(res => {
         dispatch({
             type: SET_VALIDATIONS,
             payload: res.data
-        })
-    ).catch(globalErrorHandler);
+        });
+        //console.log("validacion", res.data)
+    }).catch(globalErrorHandler); 
 };

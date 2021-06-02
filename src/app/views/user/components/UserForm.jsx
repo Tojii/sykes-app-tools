@@ -54,39 +54,37 @@ const UserForm = (props) => {
 
     const handleUserEmail = (event) => {
         if (event.target.value !== "" && validateEmail(event.target.value))
-        { 
-            const payload = {
-                phone: user.phone,
-                email: event.target.value,
-                badge: user.badge
-            }
-            user.email = event.target.value;
-            dispatch(setUserData(user));
-            apply['phone'] = form_user.phone;
-            apply['email'] = event.target.value;
-            apply['badge'] = user.badge;
-            setApplyData(apply);
-            //handleSubmitCallback(payload);
+        {   //Bad Endpoint return data. In hold to finish.
+            // const payload = {
+            //     phone: user.phone,
+            //     email: event.target.value,
+            //     badge: user.badge
+            // }
+            // user.email = event.target.value;
+            // dispatch(updateUserData(user));
+            // apply['phone'] = form_user.phone;
+            // apply['email'] = event.target.value;
+            // apply['badge'] = user.badge;
+            // setApplyData(apply);
         }
     }
 
     const handleUserPhone = (event) => {
-        if (event.target.value !== "" && event.target.value.length < 8 && validatePhone(event.target.phone))
-        {       
-            const payload = {
-                phone: event.target.value,
-                email: user.email,
-                badge: user.badge
-            }
-            user.email = form_user.email;
-            user.phone = event.target.value;
-            dispatch(setUserData(user));
+        if (event.target.value !== "" && event.target.value.length <= 8 && validatePhone(event.target.value))
+        {  
+            // const payload = {
+            //     phone: event.target.value,
+            //     email: user.email,
+            //     badge: user.badge
+            // }
+            // user.email = form_user.email;
+            // user.phone = event.target.value;
+            // dispatch(updateUserData(user));
             
-            apply['phone'] = event.target.value.phone;
-            apply['email'] = user.email;
-            apply['badge'] = user.badge;
-            setApplyData(apply);
-            //handleSubmitCallback(payload);
+            // apply['phone'] = event.target.value.phone;
+            // apply['email'] = user.email;
+            // apply['badge'] = user.badge;
+            // setApplyData(apply);
         }
     }
 
@@ -125,23 +123,23 @@ const UserForm = (props) => {
     }, [user]);
 
     const onSubmit = () => {
-        // const payload = {
-        //     phone: form_user.phone,
-        //     email: form_user.email,
-        //     badge: user.badge
-        // }
-        // user.email = form_user.email;
-        // user.phone = form_user.phone;
-        // dispatch(setUserData(user));
+        const payload = {
+            phone: form_user.phone,
+            email: form_user.email,
+            badge: user.badge
+        }
+        user.email = form_user.email;
+        user.phone = form_user.phone;
+        dispatch(setUserData(user));
         
-        // // apply['phone'] = form_user.phone;
-        // // apply['email'] = form_user.email;
-        // // apply['badge'] = user.badge;
-        // // setApplyData(apply);
-        // handleSubmitCallback(payload);
-        // history.push({
-        //     pathname: "/"
-        //   });
+        // apply['phone'] = form_user.phone;
+        // apply['email'] = form_user.email;
+        // apply['badge'] = user.badge;
+        // setApplyData(apply);
+        handleSubmitCallback(payload);
+        history.push({
+            pathname: "/"
+          });
     } 
 
     return (
@@ -182,16 +180,24 @@ const UserForm = (props) => {
                         />
                     </Grid>
                     { history ?
-                    <div className="flex flex-end mx-24 my-16">
+                      <div className="flex flex-space-start flex-middle mx-24 my-16">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            disabled={handleValid()}
+                        >
+                            Save
+                        </Button>
                         <Button
                             className="ml-24"
                             variant="contained"
                             color="secondary"
                             onClick={handleClose}
                         >
-                            Home
+                            Cancel
                         </Button>
-                    </div> : null }
+                    </div>  : null }
                 </ValidatorForm>
             </Grid>
             }

@@ -33,7 +33,7 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
 
     const anchor = {
         vertical: 'bottom',
-        horizontal: 'right',
+        horizontal: 'center',
     }
 
     const handleClose = () => {
@@ -41,20 +41,26 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
     }
 
     useEffect(() => {
-        if(apply.backResume && apply.resume != undefined) {
+        console.log("resume", apply['resume']);
+        if (!apply['resume']) {
+            setDisableNext(true);
+        }
+
+        if(apply.backResume && apply.resume != undefined && apply.resume) {
             if(!apply.fileMessage) {setDisableNext(false)};
-            setFile(apply.resume)
+            setFile(apply.resume);
             apply['backResume'] = false;
         }
     }, [])
 
     const handleFileSelect = (event) => {
+        console.log("handle select");
+
         let files = event.target.files;
         for (const iterator of files) {
-            //console.log("tipo", iterator.type)
-            if (iterator.type == "application/msword" || iterator.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-                iterator.type == "application/pdf" || iterator.name.includes('.docx') || iterator.name.includes('.doc')) {
-                let invalid = iterator.size > 2000000
+            if (iterator.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+                iterator.type == "application/pdf" || iterator.name.includes('.docx')) {
+                let invalid = iterator.size > 2000000 || iterator.size < 1
                 if(invalid){ 
                     setErrorMessage(errorMessage => ({...errorMessage, type:"The file exceeds the allowed size"})) 
                     apply['fileMessage'] = true
@@ -71,7 +77,8 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                 setShowError(invalid);
                 setDisableNext(invalid);
                 setApplyData(apply);
-            }else{
+            } 
+            else{
                 setFile({})
                 setShowError(false);
                 setDisableNext(true);
@@ -99,14 +106,14 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                         <span>Upload File</span>
                         </div>
                     </Fab>
-                    <p>Applicable formats: .doc, .docx, .pdf. Max size: 2MB</p>
+                    <p>Applicable formats: .docx, .pdf. Max size: 2MB</p>
                 </label>
                 <input
                     className="display-none"
                     onChange={handleFileSelect}
                     id="upload-single-file"
                     type="file"
-                    accept=".doc, .docx, .pdf"
+                    accept=".docx, .pdf"
                     //value={}
                 />
             </Grid>
@@ -154,8 +161,9 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                 </div>
             {errorMessage.type ?
             <div className={classes.root}>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}
+            <Snackbar open={open} autoHideDuration={20000} onClose={handleClose}
                 anchorOrigin={anchor}
+                TransitionComponent={'Fade'}
             >
                 
             <Alert onClose={handleClose} severity="warning">

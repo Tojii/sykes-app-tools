@@ -8,7 +8,6 @@ import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
 import { makeStyles } from '@material-ui/core/styles';
-import {addRaft} from "../../../redux/actions/RaftActions";
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from "react-router";
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -17,7 +16,6 @@ import ValidationModal from '../../growth-opportunities/components/ValidationDia
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
 import MenuItem from '@material-ui/core/MenuItem';
 import history from "history.js";
-import moment from "moment"
 
 const useStyles = makeStyles({
     textvalidator: {
@@ -44,6 +42,10 @@ const useStyles = makeStyles({
             width: "100%",
         },
         "@media (min-width: 1024px)": {
+            marginLeft: "15%",
+            width: "70%",
+        },
+        "@media (min-width: 1281px)": {
             marginLeft: "25%",
             width: "50%",
         }
@@ -96,6 +98,7 @@ const FormAdminInventario = () => {
         quantity: "",
         stockQuantity: "",
         unitPrice: "",
+        shippingPrice: "0",
         maxLimitPerPerson: "",
         files: null
     });
@@ -141,6 +144,7 @@ const FormAdminInventario = () => {
             stockQuantity: campaignitem[0].stockQuantity != undefined ? campaignitem[0].stockQuantity.toString() : null,
             unitPrice: campaignitem[0].unitPrice != undefined ? campaignitem[0].unitPrice.toString() : null,
             maxLimitPerPerson: campaignitem[0].maxLimitPerPerson != undefined ? campaignitem[0].maxLimitPerPerson.toString() : "0",
+            shippingPrice: campaignitem[0].estimatedPrice != undefined ? campaignitem[0].estimatedPrice.toString() : "0",
             files: null
         });}
 
@@ -200,7 +204,7 @@ const FormAdminInventario = () => {
         let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
         let list = [];
         let sizes = 0;
-        //console.log("image prop", filesList)
+        //console.log("image prop", event.target.files[0])
 
         if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
                 if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
@@ -220,7 +224,7 @@ const FormAdminInventario = () => {
                     setInventarioForm({...inventarioform, files: event.target.files[0]});
                     getBase64(event.target.files[0]);
                 }
-        } else {
+        } else if (filesList != null) {
             setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
             setFiles(null);
             setInventarioForm({...inventarioform, files: null, image: null});
@@ -230,7 +234,7 @@ const FormAdminInventario = () => {
 
     return (
         <div className="p-24">
-             {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Ventas/Inventario"} state={(successCampaignItems) ? "Success!" : "Error!"} save={() => {dispatch(GetCampaignsItems());}} message={(successCampaignItems) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
                 {(isLoading) ? <Loading/> : <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Artículo" : "Agregar Artículo"}</h2>}
                 <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
@@ -247,7 +251,7 @@ const FormAdminInventario = () => {
                             errorMessages={["Este campo es requerido"]}
                         >
                             {campaigns.map(campaign => (
-                                (new Date(campaign.endDate).getTime() > new Date().getTime()) ?
+                                (new Date(campaign.endDate).getTime() > new Date().getTime() || id) ?
                                 <MenuItem key={`province-${campaign.id}`} id={campaign.id} value={campaign.id ? campaign.id : ""}>
                                 {campaign.name || " "}
                                 </MenuItem> : null
@@ -316,14 +320,29 @@ const FormAdminInventario = () => {
                                 name="unitPrice"
                                 placeholder="0.00"
                                 value={inventarioform.unitPrice}
-                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$","maxStringLength:11"]} 
-                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales", "Máximo 11 carácteres"]}
+                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$","maxStringLength:9"]} 
+                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales", "Máximo 9 carácteres"]}
+                                InputProps={{
+                                    startAdornment:<InputAdornment position="start">₡</InputAdornment>,
+                                  }}  
+                            />
+                        </FormControl>
+                        {/* <FormControl className={classes.textvalidator}>
+                            <TextValidator
+                                fullWidth
+                                label="Precio estimado de envío*"
+                                onChange={handleChange}
+                                type="text"
+                                name="shippingPrice"
+                                placeholder="0.00"
+                                value={inventarioform.shippingPrice}
+                                validators={["required","matchRegexp:^[0-9]+([\.][0-9]{1,2})?$","maxStringLength:9"]} 
+                                errorMessages={["Este campo es requerido","Solo se permiten números positivos, máximo dos decimales", "Máximo 9 carácteres"]}
                                 InputProps={{
                                     startAdornment:<InputAdornment position="start">₡</InputAdornment>,
                                   }}
-                                
                             />
-                        </FormControl>
+                        </FormControl> */}
                         <TextValidator
                             className={classes.textvalidator}
                             label="Límite Máximo de Venta por Empleado*"
@@ -331,8 +350,8 @@ const FormAdminInventario = () => {
                             type="text"
                             name="maxLimitPerPerson" 
                             value={inventarioform.maxLimitPerPerson}
-                            validators={["required","isNumber","maxStringLength:7","isPositive"]}
-                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 7 carácteres", "No se aceptan negativos"]}
+                            validators={["required","isNumber","maxStringLength:3","isPositive"]}
+                            errorMessages={["Este campo es requerido","Solo se permiten números", "Máximo 3 carácteres", "No se aceptan negativos"]}
                         />
                         <FormControl className={classes.textvalidator}>
                             <label className={classes.filelabel} id="image">Imagen Artículo (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>

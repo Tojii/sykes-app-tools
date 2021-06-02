@@ -45,6 +45,12 @@ export const navigations = [
       display: "none"
     },
     {
+      name: "Administración Edificios",
+      path: "/Ventas/Edificios",
+      iconText: "AE",
+      display: "none"
+    },
+    {
       name: "Consulta de Compras",
       path: "/Ventas/Compras",
       iconText: "CC",
