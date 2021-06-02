@@ -12,23 +12,10 @@ import {
 import { connect } from "react-redux";
 import ReactHtmlParser from 'react-html-parser';
 import { setLoading } from "../../../redux/actions/ApplyActions";
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles({
-    tableMargin: {     
-        "@media (min-width: 0px)": {
-            marginBottom: "25%",
-        },
-        "@media (min-width: 1024px)": {
-            marginBottom: "5%",
-        },
-    },
-})
 
 const Job = (props) => {
     const { history, match, growth_opportunity, apply, setLoading } = props
-    const classes = useStyles();
-    
+
     const handleApply = () => {
         setLoading();
         apply["backResume"] = false;
@@ -43,7 +30,7 @@ const Job = (props) => {
 
     return (
         <>
-            <Card className={classes.tableMargin + " m-sm-30"}>
+            <Card className="m-sm-30">
                 <Grid container>
                     <Grid item lg={12}>
                         <h3 className="p-sm-24">{growth_opportunity.title}</h3>
@@ -51,7 +38,7 @@ const Job = (props) => {
                             <TableBody>
                                 <TableRow>
                                     <TableCell width={"25%"} className="pl-sm-24 border-none">OppeningID</TableCell>
-                                    <TableCell className="px-sm-24 border-none">{ growth_opportunity.openingId }</TableCell>
+                                    <TableCell className="px-sm-24 border-none">{growth_opportunity.openingId}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell width={"25%"} className="pl-sm-24 border-none">Job Position</TableCell>
@@ -70,7 +57,7 @@ const Job = (props) => {
                                         Description
                                     </TableCell>
                                     <TableCell className="px-sm-24 border-none" style={{ verticalAlign: 'top' }}>
-                                        { ReactHtmlParser(growth_opportunity.description) }
+                                        {ReactHtmlParser(growth_opportunity.description)}
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -106,9 +93,13 @@ const Job = (props) => {
     )
 }
 
-const mapStateToProps = state => ({
-    growth_opportunity: state.growth.growth_opportunity,
-    apply: state.apply.apply,
-});
+const mapStateToProps = ({ growthReducer, applyReducer }) => {
+    const { growth_opportunity } = growthReducer;
+    const { apply } = applyReducer;
+    return {
+        growth_opportunity,
+        apply,
+    };
+};
 
-export default connect(mapStateToProps, {setLoading})(Job);
+export default connect(mapStateToProps, { setLoading })(Job);

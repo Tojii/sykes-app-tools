@@ -8,12 +8,12 @@ function Form() {
         <div className="m-sm-30">
             <div className="mb-sm-30">
                 <Breadcrumb
-                routeSegments={[
-                { name: "Benefits Home", path: "/Benefits/Home" },
-                { name: "Categoría", path: history.location.prev ? history.location.prev : "/Benefits/Home" },  
-                { name: "Detalle", path: "/Benefits/Detalle" },                
-                ]}
-            />
+                    routeSegments={[
+                        { name: "Benefits Home", path: "/Benefits/Home" },
+                        { name: "Categoría", path: history.location.prev ? history.location.prev : "/Benefits/Home" },
+                        { name: "Detalle", path: "/Benefits/Detalle" },
+                    ]}
+                />
             </div>
             <Detalles />
         </div>

@@ -466,7 +466,7 @@ const FormVentas = () => {
 
     return (
         <div className="m-sm-30">
-            {/* {console.log("carrito", carrito)} */}
+            {console.log("carrito", campaign[0] && campaign[0].buildings)}
             {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={(successOrder) ? "Success!" : "Error!"} save={() => { }} message={(successOrder) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             {(isLoadingCampaign || isLoadingOrder) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Ventas/Home"} state={"¡Lo sentimos!"} save={() => { }} message={"¡Ya se ha alcanzado el máximo de artículos comprados en esta campaña!"} setOpen={setOpenPurchase} open={openPurchase && !isLoadingCampaign} />}
             <Card className={classes.formcard} elevation={6}>
@@ -549,7 +549,7 @@ const FormVentas = () => {
                                     var textB = b.building.name;
                                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                                 }).map(edificio => (
-                                    edificio.active && <MenuItem key={`edificio-${edificio.id}`} id={edificio.id} value={edificio.building.name ? edificio.building.id : ""}>
+                                    edificio.active && edificio.building.active && <MenuItem key={`edificio-${edificio.id}`} id={edificio.id} value={edificio.building.name ? edificio.building.id : ""}>
                                         {edificio.building.name || " "}
                                     </MenuItem>
                                 ))}

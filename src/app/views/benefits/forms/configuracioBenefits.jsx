@@ -14,24 +14,24 @@ import NotFound from "../../sessions/NotFound"
 const useStyles = makeStyles({
     textvalidator: {
         "@media (min-width: 0px)": {
-             marginLeft: "7.5%",
-             width: "85%",
-             marginTop: "3%",
-         },
-         "@media (min-width: 1025px)": {
-             marginLeft: "25%",
-             width: "50%",
-             marginTop: "3%",
-         },
-         "& .MuiInputBase-root.Mui-disabled": {
-             color: "darkgray"
-         },
-         "& .MuiFormLabel-root.Mui-disabled": {
-             color: "rgba(74, 70, 109, 0.43)" 
-         },
-     },
-    cardContainer:{
-        marginBottom:"2%" 
+            marginLeft: "7.5%",
+            width: "85%",
+            marginTop: "3%",
+        },
+        "@media (min-width: 1025px)": {
+            marginLeft: "25%",
+            width: "50%",
+            marginTop: "3%",
+        },
+        "& .MuiInputBase-root.Mui-disabled": {
+            color: "darkgray"
+        },
+        "& .MuiFormLabel-root.Mui-disabled": {
+            color: "rgba(74, 70, 109, 0.43)"
+        },
+    },
+    cardContainer: {
+        marginBottom: "2%"
     },
     styleimage: {
         marginLeft: "auto",
@@ -59,7 +59,7 @@ const useStyles = makeStyles({
         "@media (min-width: 1024px)": {
             display: "inline-block",
         }
-    },  
+    },
     filelabel: {
         color: "rgba(74, 70, 109, 0.54)",
         padding: 0,
@@ -75,7 +75,7 @@ const DetalleBenefits = (props) => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const pageSettings = useSelector(state => state.benefit.pageSettings);
-    const isLoading  = useSelector(state => state.benefit.loadingSettings); 
+    const isLoading = useSelector(state => state.benefit.loadingSettings);
     const successBenefit = useSelector(state => state.benefit.success);
     const user = useSelector(state => state.user);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
@@ -83,9 +83,9 @@ const DetalleBenefits = (props) => {
     const [filesFooter, setFilesFooter] = useState(null);
     const [filesBadge, setFilesBadge] = useState(null);
     const [logo, setLogo] = useState(null);
-    const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
-    const [errorFileFooter, setErrorFileFooter] = useState({error: false, errorMessage: ""});
-    const [errorFileBadge, setErrorFileBadge] = useState({error: false, errorMessage: ""});
+    const [errorFile, setErrorFile] = useState({ error: false, errorMessage: "" });
+    const [errorFileFooter, setErrorFileFooter] = useState({ error: false, errorMessage: "" });
+    const [errorFileBadge, setErrorFileBadge] = useState({ error: false, errorMessage: "" });
     const [open, setOpen] = useState(false);
 
     const [settingsform, setSettingsForm] = useState({
@@ -112,21 +112,21 @@ const DetalleBenefits = (props) => {
             footer: pageSettings[0].footer,
             badge: pageSettings[0].badge
         });
-        
+
     }, [pageSettings])
 
     const adminBenefitButton = () => { //button to Benefits Administration
         return (
             <React.Fragment>
-              <Tooltip title={"Admin Beneficios"}>
-                <Button
-                  component={Link} to="/Benefits/AdminFormBenefits"
-                  variant="contained"
-                  color="primary"
-                >
-                  Admin Beneficios
+                <Tooltip title={"Admin Beneficios"}>
+                    <Button
+                        component={Link} to="/Benefits/AdminFormBenefits"
+                        variant="contained"
+                        color="primary"
+                    >
+                        Admin Beneficios
                 </Button>
-              </Tooltip>
+                </Tooltip>
             </React.Fragment>
         );
     }
@@ -134,15 +134,15 @@ const DetalleBenefits = (props) => {
     const adminPromButton = () => {  //button to Discounts Administration
         return (
             <React.Fragment>
-              <Tooltip title={"Admin Promociones"}>
-                <Button
-                  component={Link} to="/Benefits/Discounts"
-                  variant="contained"
-                  color="primary"
-                >
-                  Admin Promociones
+                <Tooltip title={"Admin Promociones"}>
+                    <Button
+                        component={Link} to="/Benefits/Discounts"
+                        variant="contained"
+                        color="primary"
+                    >
+                        Admin Promociones
                 </Button>
-              </Tooltip>
+                </Tooltip>
             </React.Fragment>
         );
     }
@@ -150,15 +150,15 @@ const DetalleBenefits = (props) => {
     const adminCategoryButton = () => { //button to Categories Administration
         return (
             <React.Fragment>
-              <Tooltip title={"Admin Categorías"}>
-                <Button
-                  component={Link} to="/Benefits/Categories"
-                  variant="contained"
-                  color="primary"
-                >
-                  Admin Categorías
+                <Tooltip title={"Admin Categorías"}>
+                    <Button
+                        component={Link} to="/Benefits/Categories"
+                        variant="contained"
+                        color="primary"
+                    >
+                        Admin Categorías
                 </Button>
-              </Tooltip>
+                </Tooltip>
             </React.Fragment>
         );
     }
@@ -166,28 +166,28 @@ const DetalleBenefits = (props) => {
     const adminLinksButton = () => { //button to Links Administration
         return (
             <React.Fragment>
-              <Tooltip title={"Admin Links"}>
-                <Button
-                  component={Link} to="/Benefits/Links"
-                  variant="contained"
-                  color="primary"
-                >
-                  Admin Links
+                <Tooltip title={"Admin Links"}>
+                    <Button
+                        component={Link} to="/Benefits/Links"
+                        variant="contained"
+                        color="primary"
+                    >
+                        Admin Links
                 </Button>
-              </Tooltip>
+                </Tooltip>
             </React.Fragment>
         );
     }
 
     const presave = () => { //validations before submit
         if (settingsform.logo == null) {
-            setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
+            setErrorFile({ error: true, errorMessage: `Debe adjuntar una imagen` });
         }
         if (settingsform.footer == null) {
-            setErrorFileFooter({error: true, errorMessage:`Debe adjuntar una imagen`});
+            setErrorFileFooter({ error: true, errorMessage: `Debe adjuntar una imagen` });
         }
         if (settingsform.badge == null) {
-            setErrorFileBadge({error: true, errorMessage:`Debe adjuntar una imagen`});
+            setErrorFileBadge({ error: true, errorMessage: `Debe adjuntar una imagen` });
         }
     }
 
@@ -211,7 +211,7 @@ const DetalleBenefits = (props) => {
     };
 
     const handleFormSubmit = async () => { //update or add data in PageSettings
-        if (((pageSettings.length != 0 ))) {
+        if (((pageSettings.length != 0))) {
             await dispatch(UpdatePageSettings("1", settingsform, files, filesFooter, filesBadge));
             setOpen(true);
         } else if ((files != null && filesFooter != null && filesBadge != null)) {
@@ -227,7 +227,7 @@ const DetalleBenefits = (props) => {
         reader.onload = function () {
             imageupload = reader.result
             setLogo(imageupload)
-            setSettingsForm({...settingsform, [name]: imageupload});
+            setSettingsForm({ ...settingsform, [name]: imageupload });
         };
         reader.onerror = function (error) {
             console.log('Error: ', error);
@@ -237,44 +237,44 @@ const DetalleBenefits = (props) => {
     const handleFileSelect = event => { //manages validations when a file is upload
         let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
         const name = event.target.name;
-        if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
-                if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
-                    name == "logo" && setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
-                    name == "footer" && setErrorFileFooter({error: true, errorMessage:`El formato del archivo no es válido`});
-                    name == "badge" && setErrorFileBadge({error: true, errorMessage:`El formato del archivo no es válido`});
-                    name == "logo" && setFiles(null);
-                    name == "footer" && setFilesFooter(null);
-                    name == "badge" && setFilesBadge(null);
-                    setSettingsForm({...settingsform, [name]: null});
-                    setLogo(null);
-                }
-                else if (filesList.size/1024/1024 > 2) {
-                    name == "logo" && setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
-                    name == "footer" && setErrorFileFooter({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
-                    name == "badge" && setErrorFileBadge({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
-                    name == "logo" && setFiles(null);
-                    name == "footer" && setFilesFooter(null);
-                    name == "badge" && setFilesBadge(null);
-                    setSettingsForm({...settingsform, [name]: null});
-                    setLogo(null);
-                } else {
-                    name == "logo" && setErrorFile({error: false, errorMessage:``});
-                    name == "footer" && setErrorFileFooter({error: false, errorMessage:``});
-                    name == "badge" && setErrorFileBadge({error: false, errorMessage:``});
-                    name == "logo" && setFiles(event.target.files[0]);
-                    name == "footer" && setFilesFooter(event.target.files[0]);
-                    name == "badge" && setFilesBadge(event.target.files[0]);
-                    setSettingsForm({...settingsform, [name]: event.target.files[0]});
-                    getBase64(event.target.files[0], name);
-                }
+        if (filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")) {
+            if (filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) {
+                name == "logo" && setErrorFile({ error: true, errorMessage: `El formato del archivo no es válido` });
+                name == "footer" && setErrorFileFooter({ error: true, errorMessage: `El formato del archivo no es válido` });
+                name == "badge" && setErrorFileBadge({ error: true, errorMessage: `El formato del archivo no es válido` });
+                name == "logo" && setFiles(null);
+                name == "footer" && setFilesFooter(null);
+                name == "badge" && setFilesBadge(null);
+                setSettingsForm({ ...settingsform, [name]: null });
+                setLogo(null);
+            }
+            else if (filesList.size / 1024 / 1024 > 2) {
+                name == "logo" && setErrorFile({ error: true, errorMessage: `El tamaño del archivo no debe ser mayor a 2 MB` });
+                name == "footer" && setErrorFileFooter({ error: true, errorMessage: `El tamaño del archivo no debe ser mayor a 2 MB` });
+                name == "badge" && setErrorFileBadge({ error: true, errorMessage: `El tamaño del archivo no debe ser mayor a 2 MB` });
+                name == "logo" && setFiles(null);
+                name == "footer" && setFilesFooter(null);
+                name == "badge" && setFilesBadge(null);
+                setSettingsForm({ ...settingsform, [name]: null });
+                setLogo(null);
+            } else {
+                name == "logo" && setErrorFile({ error: false, errorMessage: `` });
+                name == "footer" && setErrorFileFooter({ error: false, errorMessage: `` });
+                name == "badge" && setErrorFileBadge({ error: false, errorMessage: `` });
+                name == "logo" && setFiles(event.target.files[0]);
+                name == "footer" && setFilesFooter(event.target.files[0]);
+                name == "badge" && setFilesBadge(event.target.files[0]);
+                setSettingsForm({ ...settingsform, [name]: event.target.files[0] });
+                getBase64(event.target.files[0], name);
+            }
         } else {
-            name == "logo" && setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
-            name == "footer" && setErrorFileFooter({error: true, errorMessage:`El formato del archivo no es válido`});
-            name == "badge" && setErrorFileBadge({error: true, errorMessage:`El formato del archivo no es válido`});
+            name == "logo" && setErrorFile({ error: true, errorMessage: `El formato del archivo no es válido` });
+            name == "footer" && setErrorFileFooter({ error: true, errorMessage: `El formato del archivo no es válido` });
+            name == "badge" && setErrorFileBadge({ error: true, errorMessage: `El formato del archivo no es válido` });
             name == "logo" && setFiles(null);
             name == "footer" && setFilesFooter(null);
             name == "badge" && setFilesBadge(null);
-            setSettingsForm({...settingsform, [name]: null});
+            setSettingsForm({ ...settingsform, [name]: null });
             setLogo(null);
         }
     };
@@ -282,103 +282,103 @@ const DetalleBenefits = (props) => {
     return (
         <>
             <div className="m-sm-30">
-                { isLoading ? <Loading/> : <div className="mb-sm-30">
+                {isLoading ? <Loading /> : <div className="mb-sm-30">
                     <Breadcrumb
-                    routeSegments={[
-                    { name: "Benefits Home", path: "/Benefits/Home" },
-                    { name: "Configuraciones", path: `/Benefits/Configuration` },          
-                    ]}
-                />
+                        routeSegments={[
+                            { name: "Benefits Home", path: "/Benefits/Home" },
+                            { name: "Configuraciones", path: `/Benefits/Configuration` },
+                        ]}
+                    />
                 </div>}
-                {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Configuration"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetPageSettings());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+                {(isLoading) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Benefits/Configuration"} state={(successBenefit) ? "Success!" : "Error!"} save={() => { dispatch(GetPageSettings()); }} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
                 <Card className={classes.cardContainer} elevation={6}>
                     <div className={classes.margindiv}>
-                        {(isLoading) ? <Loading/> : (admin ? <h1 style={{ color: "#4cb050", marginLeft: "3%", marginTop: "2%", fontWeight: "bold"}} className="mb-20">Configuraciones Generales &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminBenefitButton()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminPromButton()} 
-                        &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminCategoryButton()} &nbsp; {<span style={{color:"gray", fontWeight: "normal"}}>|</span>} &nbsp; {adminLinksButton()}</h1> : null)}
-                        <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
-                        {(isLoading) ? <Loading/> :
-                        admin ?
-                        <>             
-                            <TextValidator
-                                className={classes.textvalidator}
-                                label="Header*"
-                                onChange={handleChange}
-                                type="text"
-                                name="header"
-                                value={settingsform.header}
-                                validators={["required","maxStringLength:200"]}
-                                errorMessages={["Este campo es requerido", "Máximo 200 carácteres"]}
-                            />
-                            <TextValidator
-                                className={classes.textvalidator}
-                                label="Reminder*"
-                                onChange={handleChange}
-                                type="text"
-                                name="reminder"
-                                value={settingsform.reminder}
-                                validators={["required","maxStringLength:250"]}
-                                errorMessages={["Este campo es requerido","Máximo 250 carácteres"]}
-                            />
-                            <FormControl className={classes.textvalidator}>
-                                <label className={classes.filelabel} id="logo">Logo (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>
-                                <Input type="file" name="logo" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect} 
-                                    />  
-                                <FormHelperText error={errorFile.error} id="my-helper-text">{errorFile.errorMessage}</FormHelperText>                               
-                            </FormControl>
-                            <div className={classes.sectionbutton}>
-                                {settingsform.logo ? 
-                                    <img
-                                    className={classes.styleimage}                                          
-                                    alt="..."
-                                    src={`${settingsform.logo}`}
-                                    />
-                                    : null
-                                }
-                            </div>
-                            <FormControl className={classes.textvalidator}>
-                                <label className={classes.filelabel} id="footer">Footer (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>
-                                <Input type="file" name="footer" error={errorFileFooter.error} aria-describedby="my-helper-textFooter" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect} 
-                                    />  
-                                <FormHelperText error={errorFileFooter.error} id="my-helper-textFooter">{errorFileFooter.errorMessage}</FormHelperText>                               
-                            </FormControl>
-                            <div className={classes.sectionbutton}>
-                                {settingsform.footer ? 
-                                    <img
-                                    className={classes.styleimage}                                          
-                                    alt="..."
-                                    src={`${settingsform.footer}`}
-                                    />
-                                    : null
-                                }
-                            </div>
-                            <FormControl className={classes.textvalidator}>
-                                <label className={classes.filelabel} id="gafete">Gafete (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>
-                                <Input type="file" name="badge" error={errorFileBadge.error} aria-describedby="my-helper-textBadge" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect} 
-                                    />  
-                                <FormHelperText error={errorFileBadge.error} id="my-helper-textBadge">{errorFileBadge.errorMessage}</FormHelperText>                               
-                            </FormControl>
-                            <div className={classes.sectionbutton}>
-                                {settingsform.badge ? 
-                                    <img
-                                    className={classes.styleimage}                                          
-                                    alt="..."
-                                    src={`${settingsform.badge}`}
-                                    />
-                                    : null
-                                }
-                            </div>
-                            <div className={classes.sectionbutton}>
-                                <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
-                                    GUARDAR  
+                        {(isLoading) ? <Loading /> : (admin ? <h1 style={{ color: "#4cb050", marginLeft: "3%", marginTop: "2%", fontWeight: "bold" }} className="mb-20">Configuraciones Generales &nbsp; {<span style={{ color: "gray", fontWeight: "normal" }}>|</span>} &nbsp; {adminBenefitButton()} &nbsp; {<span style={{ color: "gray", fontWeight: "normal" }}>|</span>} &nbsp; {adminPromButton()}
+                        &nbsp; {<span style={{ color: "gray", fontWeight: "normal" }}>|</span>} &nbsp; {adminCategoryButton()} &nbsp; {<span style={{ color: "gray", fontWeight: "normal" }}>|</span>} &nbsp; {adminLinksButton()}</h1> : null)}
+                        <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>
+                            {(isLoading) ? <Loading /> :
+                                admin ?
+                                    <>
+                                        <TextValidator
+                                            className={classes.textvalidator}
+                                            label="Header*"
+                                            onChange={handleChange}
+                                            type="text"
+                                            name="header"
+                                            value={settingsform.header}
+                                            validators={["required", "maxStringLength:200"]}
+                                            errorMessages={["Este campo es requerido", "Máximo 200 carácteres"]}
+                                        />
+                                        <TextValidator
+                                            className={classes.textvalidator}
+                                            label="Reminder*"
+                                            onChange={handleChange}
+                                            type="text"
+                                            name="reminder"
+                                            value={settingsform.reminder}
+                                            validators={["required", "maxStringLength:250"]}
+                                            errorMessages={["Este campo es requerido", "Máximo 250 carácteres"]}
+                                        />
+                                        <FormControl className={classes.textvalidator}>
+                                            <label className={classes.filelabel} id="logo">Logo (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>
+                                            <Input type="file" name="logo" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect}
+                                            />
+                                            <FormHelperText error={errorFile.error} id="my-helper-text">{errorFile.errorMessage}</FormHelperText>
+                                        </FormControl>
+                                        <div className={classes.sectionbutton}>
+                                            {settingsform.logo ?
+                                                <img
+                                                    className={classes.styleimage}
+                                                    alt="..."
+                                                    src={`${settingsform.logo}`}
+                                                />
+                                                : null
+                                            }
+                                        </div>
+                                        <FormControl className={classes.textvalidator}>
+                                            <label className={classes.filelabel} id="footer">Footer (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>
+                                            <Input type="file" name="footer" error={errorFileFooter.error} aria-describedby="my-helper-textFooter" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect}
+                                            />
+                                            <FormHelperText error={errorFileFooter.error} id="my-helper-textFooter">{errorFileFooter.errorMessage}</FormHelperText>
+                                        </FormControl>
+                                        <div className={classes.sectionbutton}>
+                                            {settingsform.footer ?
+                                                <img
+                                                    className={classes.styleimage}
+                                                    alt="..."
+                                                    src={`${settingsform.footer}`}
+                                                />
+                                                : null
+                                            }
+                                        </div>
+                                        <FormControl className={classes.textvalidator}>
+                                            <label className={classes.filelabel} id="gafete">Gafete (applicable formats: .png, .jpeg, .jpg) (Max 2MB)*</label>
+                                            <Input type="file" name="badge" error={errorFileBadge.error} aria-describedby="my-helper-textBadge" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect}
+                                            />
+                                            <FormHelperText error={errorFileBadge.error} id="my-helper-textBadge">{errorFileBadge.errorMessage}</FormHelperText>
+                                        </FormControl>
+                                        <div className={classes.sectionbutton}>
+                                            {settingsform.badge ?
+                                                <img
+                                                    className={classes.styleimage}
+                                                    alt="..."
+                                                    src={`${settingsform.badge}`}
+                                                />
+                                                : null
+                                            }
+                                        </div>
+                                        <div className={classes.sectionbutton}>
+                                            <Button style={{ margin: "1%", width: "105.92px" }} onClick={presave} variant="contained" color="primary" type="submit">
+                                                GUARDAR
                                 </Button>
 
-                                <Button style={{margin: "1%"}} variant="contained" onClick={handleBack} color="default">
-                                    VOLVER
+                                            <Button style={{ margin: "1%" }} variant="contained" onClick={handleBack} color="default">
+                                                VOLVER
                                 </Button>
-                            </div>
-                        </> : <NotFound/>
-                        }
-                        </ValidatorForm>      
+                                        </div>
+                                    </> : <NotFound />
+                            }
+                        </ValidatorForm>
                     </div>
                 </Card>
             </div>

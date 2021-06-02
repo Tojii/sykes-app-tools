@@ -22,7 +22,7 @@ const ApplicationsTable = ({
                         "bg-error": `${item.status}` === 'Denied',
                     })}
                 >
-                { item.status }
+                    {item.status}
                 </small>
             </>
         )
@@ -30,18 +30,18 @@ const ApplicationsTable = ({
 
     const getMuiTheme = () => createMuiTheme({
         overrides: {
-          MuiMenuItem: {
-            root: {
-              whiteSpace: "unset"
+            MuiMenuItem: {
+                root: {
+                    whiteSpace: "unset"
+                }
             }
-          }
         }
     })
 
-    const SPACED_DATE_FORMAT = "DD/MM/YYYY"; 
+    const SPACED_DATE_FORMAT = "DD/MM/YYYY";
 
     const buildData = jobs_applied.map(item => {
-        return [item.job, buildStatusLabel(item), item.created, ]
+        return [item.job, buildStatusLabel(item), item.created,]
     });
 
     const options = {
@@ -49,56 +49,56 @@ const ApplicationsTable = ({
         selectableRowsHeader: false,
         selectableRowsOnClick: false,
         download: false,
-        print: false, 
+        print: false,
         customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage, textLabels) => {
             return (
-              <CustomFooter
-                count={count}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                changeRowsPerPage={changeRowsPerPage}
-                changePage={changePage}
-                textLabels={textLabels}
-              />
+                <CustomFooter
+                    count={count}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    changeRowsPerPage={changeRowsPerPage}
+                    changePage={changePage}
+                    textLabels={textLabels}
+                />
             );
-          },
+        },
     };
 
     const columns = [
         {
             name: "Job Position",
             options: {
-                filterOptions: { 
+                filterOptions: {
                     fullWidth: window.screen.width <= 1024 ? true : false
                 }
             }
         },
         {
-            name:"Status",
+            name: "Status",
             options: {
                 filter: false,
             }
         },
         {
-            name:"Application Date",
+            name: "Application Date",
             options: {
                 filter: true,
                 sort: true,
-                filterOptions: { 
+                filterOptions: {
                     fullWidth: window.screen.width <= 1024 ? true : false
                 },
                 customBodyRender: value =>
-                (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""           
+                    (value != null && value != undefined && value != "") ? moment(new Date(value)).format(SPACED_DATE_FORMAT) : ""
             }
-            
+
         }
     ]
 
     return (
         <>
-            <Card style={{position: "sticky"}} className="w-100 overflow-auto" elevation={6}>
+            <Card style={{ position: "sticky" }} className="w-100 overflow-auto" elevation={6}>
                 <MuiThemeProvider theme={getMuiTheme()}>
-                    <MUIDataTable className="w-100" 
+                    <MUIDataTable className="w-100"
                         title={"My applications"}
                         data={buildData}
                         columns={columns}
@@ -110,9 +110,12 @@ const ApplicationsTable = ({
     )
 }
 
-const mapStateToProps = state => ({
-    jobs_applied: state.growth.jobs_applied,
-});
+const mapStateToProps = ({ growthReducer }) => {
+    const { jobs_applied } = growthReducer;
+    return {
+        jobs_applied,
+    };
+};
 
 export default connect(mapStateToProps, {
 })(ApplicationsTable);

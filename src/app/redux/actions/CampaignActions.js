@@ -272,7 +272,7 @@ export const DeleteCampaign = (id) => dispatch => {
         type: CA_LOADING
     });
     
-    api.delete(`${process.env.REACT_APP_API_URL}/Campaign/${id}`).then(res => {
+    api.delete(`${process.env.REACT_APP_API_URL}/Campaign/${id}?culture=es`).then(res => {
         dispatch({
             type: DELETE_CAMPAIGN,
             payload: res.data

@@ -14,8 +14,8 @@ import history from "history.js";
 import MenuItem from '@material-ui/core/MenuItem';
 import {
     MuiPickersUtilsProvider,
-    DatePicker 
-  } from "@material-ui/pickers";
+    DatePicker
+} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import es from "date-fns/locale/es";
 import NotFound from "app/views/sessions/NotFound";
@@ -24,22 +24,22 @@ import Alert from "@material-ui/lab/Alert";
 const useStyles = makeStyles({
     textvalidator: {
         "@media (min-width: 0px)": {
-             marginLeft: "7.5%",
-             width: "85%",
-             marginTop: "3%",
-         },
-         "@media (min-width: 1025px)": {
-             marginLeft: "25%",
-             width: "50%",
-             marginTop: "3%",
-         },
-         "& .MuiInputBase-root.Mui-disabled": {
-             color: "darkgray"
-         },
-         "& .MuiFormLabel-root.Mui-disabled": {
-             color: "rgba(74, 70, 109, 0.43)" 
-         },
-     },
+            marginLeft: "7.5%",
+            width: "85%",
+            marginTop: "3%",
+        },
+        "@media (min-width: 1025px)": {
+            marginLeft: "25%",
+            width: "50%",
+            marginTop: "3%",
+        },
+        "& .MuiInputBase-root.Mui-disabled": {
+            color: "darkgray"
+        },
+        "& .MuiFormLabel-root.Mui-disabled": {
+            color: "rgba(74, 70, 109, 0.43)"
+        },
+    },
     formcard: {
         "@media (min-width: 0px)": {
             marginLeft: "0%",
@@ -79,11 +79,11 @@ const useStyles = makeStyles({
         "@media (min-width: 1024px)": {
             marginBottom: "5%",
         },
-    }   
+    }
 });
 
 const FormDiscountBenefits = () => {
-    
+
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     let { id } = useParams();
@@ -91,16 +91,16 @@ const FormDiscountBenefits = () => {
     const discount = useSelector(state => state.discount.discount);
     const benefits = useSelector(state => state.benefit.benefits);
     const successBenefit = useSelector(state => state.discount.success);
-    const isLoading  = useSelector(state => state.benefit.loading);
+    const isLoading = useSelector(state => state.benefit.loading);
     const [open, setOpen] = useState(false);
     const [disabledLocation, setDisabledLocation] = useState(true);
     const [files, setFiles] = useState(null);
     const [image, setImage] = useState(null);
-    const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
+    const [errorFile, setErrorFile] = useState({ error: false, errorMessage: "" });
     const [errorMessage, setErrorMessage] = useState([]);
     const [locationsSelect, setLocationsSelect] = useState([]);
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
-    
+
     const [discountform, setDiscountForm] = useState({
         idBenefits: "",
         idLocation: "",
@@ -124,9 +124,9 @@ const FormDiscountBenefits = () => {
 
     const presave = () => { //validations before submit
         if (discountform.image == null) {
-            setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
+            setErrorFile({ error: true, errorMessage: `Debe adjuntar una imagen` });
         }
-        if (discountform.startDate == null || discountform.endDate == null) { 
+        if (discountform.startDate == null || discountform.endDate == null) {
             if (discountform.startDate == null) {
                 setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*Se debe seleccionar la fecha de inicio" }));
             }
@@ -145,24 +145,24 @@ const FormDiscountBenefits = () => {
 
     const handleDateChangeStartDate = date => { //validation for startDate field
         if (date != null) {
-          setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
+            setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
         }
-        if (discountform.endDate != null && date.getTime() >= new Date(discountform.endDate).getTime()) {
+        if (discountform.endDate != null && date.getTime() > new Date(discountform.endDate).getTime()) {
             setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "*La fecha de inicio no puede ser mayor que la fecha de finalización" }));
         }
         setDiscountForm({
-          ...discountform,
-          startDate: date,
+            ...discountform,
+            startDate: date,
         });
     };
 
     const handleDateChangeEndDate = date => { //validation for endDate field
         if (date != null) {
-          setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
+            setErrorMessage(errorMessage => ({ ...errorMessage, startDate: "", endDate: "" }));
         }
         setDiscountForm({
-          ...discountform,
-          endDate: date,
+            ...discountform,
+            endDate: date,
         });
     };
 
@@ -170,19 +170,20 @@ const FormDiscountBenefits = () => {
         dispatch(GetBenefits());
         if (id) {
             dispatch(GetBenefitsDiscountById(id));
-        } 
+        }
     }, []);
 
     useEffect(() => { //load data when is edit form
-        if(id && discount != [] && discount[0] != [""] && discount[0] != undefined && discount[0].benefit != null) {setDiscountForm({
-            idBenefits: discount[0].benefit.idBenefit,
-            idLocation: discount[0].location.idLocation,
-            name: discount[0].discountName,
-            image: discount[0].image,
-            startDate: discount[0].startDate,
-            endDate: discount[0].endDate,
+        if (id && discount != [] && discount[0] != [""] && discount[0] != undefined && discount[0].benefit != null) {
+            setDiscountForm({
+                idBenefits: discount[0].benefit.idBenefit,
+                idLocation: discount[0].location.idLocation,
+                name: discount[0].discountName,
+                image: discount[0].image,
+                startDate: discount[0].startDate,
+                endDate: discount[0].endDate,
             });
-            for(var i = 0; benefits.length > i; i++) {
+            for (var i = 0; benefits.length > i; i++) {
                 if (benefits[i].benefit.idBenefit == discount[0].benefit.idBenefit) {
                     setLocationsSelect(benefits[i].locations)
                 }
@@ -214,7 +215,7 @@ const FormDiscountBenefits = () => {
             [name]: event.target.value,
             idLocation: "",
         })
-        for(var i = 0; benefits.length > i; i++) {
+        for (var i = 0; benefits.length > i; i++) {
             if (benefits[i].benefit.idBenefit == event.target.value) {
                 setLocationsSelect(benefits[i].locations)
                 if (benefits[i].locations.length == 0) {
@@ -233,7 +234,7 @@ const FormDiscountBenefits = () => {
         reader.onload = function () {
             imageupload = reader.result
             setImage(imageupload)
-            setDiscountForm({...discountform, image: imageupload});
+            setDiscountForm({ ...discountform, image: imageupload });
         };
         reader.onerror = function (error) {
             console.log('Error: ', error);
@@ -243,138 +244,138 @@ const FormDiscountBenefits = () => {
     const handleFileSelect = event => { //manages validations when a file is upload
         let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
 
-        if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
-            if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
-                setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
+        if (filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")) {
+            if (filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) {
+                setErrorFile({ error: true, errorMessage: `El formato del archivo no es válido` });
                 setFiles(null);
-                setDiscountForm({...discountform, files: null, image: null});
+                setDiscountForm({ ...discountform, files: null, image: null });
                 setImage(null);
             }
-            else if (filesList.size/1024/1024 > 2) {
-                setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
+            else if (filesList.size / 1024 / 1024 > 2) {
+                setErrorFile({ error: true, errorMessage: `El tamaño del archivo no debe ser mayor a 2 MB` });
                 setFiles(null);
-                setDiscountForm({...discountform, files: null, image: null});
+                setDiscountForm({ ...discountform, files: null, image: null });
                 setImage(null);
             } else {
-                setErrorFile({error: false, errorMessage:``});
+                setErrorFile({ error: false, errorMessage: `` });
                 setFiles(event.target.files[0]);
-                setDiscountForm({...discountform, files: event.target.files[0]});
+                setDiscountForm({ ...discountform, files: event.target.files[0] });
                 getBase64(event.target.files[0]);
             }
         } else if (filesList != null) {
-            setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
+            setErrorFile({ error: true, errorMessage: `El formato del archivo no es válido` });
             setFiles(null);
-            setDiscountForm({...discountform, files: null, image: null});
+            setDiscountForm({ ...discountform, files: null, image: null });
             setImage(null);
         }
     };
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Discounts"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetDiscounts());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {(isLoading) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Benefits/Discounts"} state={(successBenefit) ? "Success!" : "Error!"} save={() => { dispatch(GetDiscounts()); }} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
-                {(isLoading) ? <Loading/> : (admin ? <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Promoción" : "Agregar Promoción"}</h2> : null)}
-                <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
-                    {(isLoading) ? <Loading/> :
-                    admin ? <>  
-                        <SelectValidator 
-                            label="Beneficio*" 
-                            name="idBenefits"
-                            className={classes.textvalidator} 
-                            value={discountform.idBenefits} 
-                            onChange={handleChangeBenefit} 
-                            validators={["required"]}
-                            errorMessages={["Este campo es requerido"]}
-                        >
-                            {benefits.map((benefit, index) => (
-                                <MenuItem key={`category-${benefit.benefit.idBenefit}`} id={benefit.benefit.idBenefit} value={benefit.benefit.idBenefit ? benefit.benefit.idBenefit : ""}>
-                                {benefit.benefit.name || " "}
-                                </MenuItem> 
-                            ))}
-                        </SelectValidator>
-                        <SelectValidator 
-                            label="Localización*" 
-                            name="idLocation"
-                            className={classes.textvalidator} 
-                            value={discountform.idLocation} 
-                            onChange={handleChange} 
-                            validators={["required"]}
-                            disabled={disabledLocation}
-                            errorMessages={["Este campo es requerido"]}
-                        >
-                            {locationsSelect.map((location, index) => (
-                                <MenuItem key={`category-${location.idLocation}`} id={location.idLocation} value={location.idLocation ? location.idLocation : ""}>
-                                {location.address || " "}
-                                </MenuItem> 
-                            ))}
-                        </SelectValidator>
-                        {(discountform.idBenefits != "" && locationsSelect.length == 0) && <Alert severity="info" className={classes.textvalidator + " " + classes.break}>{"No hay localizaciones asociadas al beneficio seleccionado"}</Alert>}            
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Promoción*"
-                            onChange={handleChange}
-                            type="text"
-                            name="name"
-                            value={discountform.name}
-                            validators={["required","maxStringLength:100"]}
-                            errorMessages={["Este campo es requerido", "Máximo 100 carácteres"]}
-                        />
-                        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
-                            <DatePicker
+                {(isLoading) ? <Loading /> : (admin ? <h2 style={{ textAlign: "center", marginTop: "2%" }} className="mb-20">{id ? "Editar Promoción" : "Agregar Promoción"}</h2> : null)}
+                <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>
+                    {(isLoading) ? <Loading /> :
+                        admin ? <>
+                            <SelectValidator
+                                label="Beneficio*"
+                                name="idBenefits"
                                 className={classes.textvalidator}
-                                cancelLabel="CANCELAR"
-                                error={!!errorMessage.startDate}
-                                helperText={errorMessage.startDate}
-                                format="dd/MM/yyyy"
-                                label="Fecha de Inicio*"
-                                value={discountform.startDate}
-                                name="startDate"
-                                onChange={handleDateChangeStartDate}    
-                            />
-                        </MuiPickersUtilsProvider>
-                        <br/>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}> 
-                            <DatePicker
+                                value={discountform.idBenefits}
+                                onChange={handleChangeBenefit}
+                                validators={["required"]}
+                                errorMessages={["Este campo es requerido"]}
+                            >
+                                {benefits.map((benefit, index) => (
+                                    <MenuItem key={`category-${benefit.benefit.idBenefit}`} id={benefit.benefit.idBenefit} value={benefit.benefit.idBenefit ? benefit.benefit.idBenefit : ""}>
+                                        {benefit.benefit.name || " "}
+                                    </MenuItem>
+                                ))}
+                            </SelectValidator>
+                            <SelectValidator
+                                label="Localización*"
+                                name="idLocation"
                                 className={classes.textvalidator}
-                                cancelLabel="CANCELAR"
-                                error={!!errorMessage.endDate}
-                                helperText={errorMessage.endDate}
-                                format="dd/MM/yyyy"
-                                label="Fecha de Finalización*"
-                                value={discountform.endDate}
-                                name="endDate"
-                                onChange={handleDateChangeEndDate}
-                                minDate={discountform.startDate != null ? new Date(discountform.startDate).setTime(new Date(discountform.startDate).getTime() + 1 * 86400000) : null}
-                                disabled={!discountform.startDate}
+                                value={discountform.idLocation}
+                                onChange={handleChange}
+                                validators={["required"]}
+                                disabled={disabledLocation}
+                                errorMessages={["Este campo es requerido"]}
+                            >
+                                {locationsSelect.map((location, index) => (
+                                    <MenuItem key={`category-${location.idLocation}`} id={location.idLocation} value={location.idLocation ? location.idLocation : ""}>
+                                        {location.address || " "}
+                                    </MenuItem>
+                                ))}
+                            </SelectValidator>
+                            {(discountform.idBenefits != "" && locationsSelect.length == 0) && <Alert severity="info" className={classes.textvalidator + " " + classes.break}>{"No hay localizaciones asociadas al beneficio seleccionado"}</Alert>}
+                            <TextValidator
+                                className={classes.textvalidator}
+                                label="Promoción*"
+                                onChange={handleChange}
+                                type="text"
+                                name="name"
+                                value={discountform.name}
+                                validators={["required", "maxStringLength:100"]}
+                                errorMessages={["Este campo es requerido", "Máximo 100 carácteres"]}
                             />
-                        </MuiPickersUtilsProvider>
-                        <FormControl className={classes.textvalidator}>
-                            <label className={classes.filelabel} id="image">Imagen (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
-                            <Input type="file" name="files" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect} 
-                                 />  
-                            <FormHelperText error={errorFile.error} id="my-helper-text">{errorFile.errorMessage}</FormHelperText>                               
-                        </FormControl>
-                        <div className={classes.sectionbutton}>
-                            {discountform.image ? 
-                                <img
-                                className={classes.imageadd}                                          
-                                alt="..."
-                                src={`${discountform.image}`}
+                            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
+                                <DatePicker
+                                    className={classes.textvalidator}
+                                    cancelLabel="CANCELAR"
+                                    error={!!errorMessage.startDate}
+                                    helperText={errorMessage.startDate}
+                                    format="dd/MM/yyyy"
+                                    label="Fecha de Inicio*"
+                                    value={discountform.startDate}
+                                    name="startDate"
+                                    onChange={handleDateChangeStartDate}
                                 />
-                                : null
-                            }
-                        </div>
-                        {/* {id ? <LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} idBenefit={id} /> : null} */}
-                        <div className={classes.sectionbutton}>
-                            <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
-                                ENVIAR  
+                            </MuiPickersUtilsProvider>
+                            <br />
+                            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
+                                <DatePicker
+                                    className={classes.textvalidator}
+                                    cancelLabel="CANCELAR"
+                                    error={!!errorMessage.endDate}
+                                    helperText={errorMessage.endDate}
+                                    format="dd/MM/yyyy"
+                                    label="Fecha de Finalización*"
+                                    value={discountform.endDate}
+                                    name="endDate"
+                                    onChange={handleDateChangeEndDate}
+                                    minDate={discountform.startDate != null ? new Date(discountform.startDate).setTime(new Date(discountform.startDate).getTime() + 1 * 86400000) : null}
+                                    disabled={!discountform.startDate}
+                                />
+                            </MuiPickersUtilsProvider>
+                            <FormControl className={classes.textvalidator}>
+                                <label className={classes.filelabel} id="image">Imagen (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
+                                <Input type="file" name="files" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect}
+                                />
+                                <FormHelperText error={errorFile.error} id="my-helper-text">{errorFile.errorMessage}</FormHelperText>
+                            </FormControl>
+                            <div className={classes.sectionbutton}>
+                                {discountform.image ?
+                                    <img
+                                        className={classes.imageadd}
+                                        alt="..."
+                                        src={`${discountform.image}`}
+                                    />
+                                    : null
+                                }
+                            </div>
+                            {/* {id ? <LocationsTable benefitslocations={benefit[0] ? benefit[0].locations : []} idBenefit={id} /> : null} */}
+                            <div className={classes.sectionbutton}>
+                                <Button style={{ margin: "1%", width: "105.92px" }} onClick={presave} variant="contained" color="primary" type="submit">
+                                    ENVIAR
                             </Button>
 
-                            <Button style={{margin: "1%"}} variant="contained" onClick={handleBack} color="default">
-                                CANCELAR
+                                <Button style={{ margin: "1%" }} variant="contained" onClick={handleBack} color="default">
+                                    CANCELAR
                             </Button>
-                        </div>
-                    </> : <NotFound/>
+                            </div>
+                        </> : <NotFound />
                     }
                 </ValidatorForm>
             </Card>

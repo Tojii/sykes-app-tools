@@ -24,7 +24,7 @@ import UploadForm from "./UploadForm";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
-  DatePicker 
+  DatePicker
 } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -45,33 +45,33 @@ function Alert(props) {
 
 const useStyles = makeStyles({
   textvalidator: {
-     "@media (min-width: 0px)": {
-          marginLeft: "2%",
-          width: "96%",
-          //marginTop: "3%",
-      },
-      "@media (min-width: 1024px)": {
-          marginLeft: "2%",
-          width: "46%",
-      }
+    "@media (min-width: 0px)": {
+      marginLeft: "2%",
+      width: "96%",
+      //marginTop: "3%",
+    },
+    "@media (min-width: 1024px)": {
+      marginLeft: "2%",
+      width: "46%",
+    }
   },
   formcard: {
-      "@media (min-width: 1023px)": {
-          marginLeft: "0%",
-          width: "100%",
-      },
-      "@media (min-width: 1024px)": {
-          marginLeft: "25%",
-          width: "50%",
-      }
-   
-  },
-  sectionbutton: {
+    "@media (min-width: 1023px)": {
+      marginLeft: "0%",
+      width: "100%",
+    },
+    "@media (min-width: 1024px)": {
       marginLeft: "25%",
       width: "50%",
-      marginTop: "3%",
-      marginBottom: "2%",
-      textAlign: "center"
+    }
+
+  },
+  sectionbutton: {
+    marginLeft: "25%",
+    width: "50%",
+    marginTop: "3%",
+    marginBottom: "2%",
+    textAlign: "center"
   },
 });
 
@@ -103,7 +103,7 @@ const EducationalReimbursementForm = () => {
   const [open, setOpen] = useState(false);
   const [finish, setFinish] = useState(false);
   const classes = useStyles();
-  
+
   const [form, setForm] = useState({
     // badge: user.badge, //'42553',,
     // name: user.fullname,
@@ -319,16 +319,16 @@ const EducationalReimbursementForm = () => {
     setError(false);
     setEmailError(false);
     setFiles([]);
-    
+
     setErrorMessage([]);
   };
 
   const handleSubmit = async () => {
     //console.log("save files", files);
     var sizes = 0;
-    for (var i = 0; files.length > i; i++){
+    for (var i = 0; files.length > i; i++) {
       sizes = sizes + files[i].file.size;
-    } 
+    }
     //console.log(sizes);
     if (files.length <= 0) {
       setIsErrorUpload(true);
@@ -371,7 +371,7 @@ const EducationalReimbursementForm = () => {
     });
   };
 
- const handleDateChangeCertificationDate = date => {
+  const handleDateChangeCertificationDate = date => {
     if (date != null) {
       setErrorMessage(errorMessage => ({ ...errorMessage, certificationDate: "" }));
     }
@@ -441,36 +441,36 @@ const EducationalReimbursementForm = () => {
       case 0:
         return (
           (isLoading || !user) ? <Loading /> :
-          <div className="mb-24">
-            <TextField name="bagde" value={user != null ? user.badge : ""} className={classes.textvalidator + " mr-24 mt-24"} label="Badge" disabled variant="filled"
-              InputProps={{
-                readOnly: true,
-              }} />
-            <TextField name="nombre" value={user != null ? user.fullname : ""} className={classes.textvalidator + " mr-24 mt-24"} label="Nombre" disabled variant="filled"
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-            <FormControl className={classes.textvalidator + " form-control-leader mt-24"}>
-              <InputLabel id="CategoriaEstudio">Categoría de Estudio *</InputLabel>
-              <Select labelId="CategoriaEstudio" onChange={event => handleChange(event)}
-                value={form.studiesCategory}
-                name="studiesCategory"
-                validators={[
-                  "required",
-                ]}
-              >
-                {studiesCatergory.map(categoria => (
-                  <MenuItem key={`categoria-${categoria}`} value={categoria}>
-                    {categoria}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <div className={classes.textvalidator + " Message"}>
-              <p>Seleccione una categoría de estudio.</p>
+            <div className="mb-24">
+              <TextField name="bagde" value={user != null ? user.badge : ""} className={classes.textvalidator + " mr-24 mt-24"} label="Badge" disabled variant="filled"
+                InputProps={{
+                  readOnly: true,
+                }} />
+              <TextField name="nombre" value={user != null ? user.fullname : ""} className={classes.textvalidator + " mr-24 mt-24"} label="Nombre" disabled variant="filled"
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+              <FormControl className={classes.textvalidator + " form-control-leader mt-24"}>
+                <InputLabel id="CategoriaEstudio">Categoría de Estudio *</InputLabel>
+                <Select labelId="CategoriaEstudio" onChange={event => handleChange(event)}
+                  value={form.studiesCategory}
+                  name="studiesCategory"
+                  validators={[
+                    "required",
+                  ]}
+                >
+                  {studiesCatergory.map(categoria => (
+                    <MenuItem key={`categoria-${categoria}`} value={categoria}>
+                      {categoria}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <div className={classes.textvalidator + " Message"}>
+                <p>Seleccione una categoría de estudio.</p>
+              </div>
             </div>
-          </div>
         );
       case 1:
         return (
@@ -508,10 +508,10 @@ const EducationalReimbursementForm = () => {
                     label="Fecha de Inicio*"
                     value={form.startDate}
                     name="endDate"
-                    onChange={handleDateChangeStartDate}    
+                    onChange={handleDateChangeStartDate}
                   />
                 </MuiPickersUtilsProvider>
-                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}> 
+                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={es}>
                   <DatePicker
                     className={classes.textvalidator + " mr-24 mt-24"}
                     cancelLabel="CANCELAR"
@@ -552,7 +552,7 @@ const EducationalReimbursementForm = () => {
 
   return (
     <div>
-      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={saveReimbursement ? "Success!" : "Error!"} save={() => {}} message={saveReimbursement ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
+      <ValidationModal idioma={"Español"} path={"/ReembolsoEducativo/ListaReembolsos"} state={saveReimbursement ? "Success!" : "Error!"} save={() => { }} message={saveReimbursement ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />
       {(isLoading || !user) ? <Loading /> :
         <div className="m-sm-30">
           <SimpleCard title="Nuevo Reembolso Educativo">
@@ -566,45 +566,45 @@ const EducationalReimbursementForm = () => {
             <div>
               {activeStep === steps.length ? (
                 <div>
-                  {saveReimbursement != null ? 
-                  <div>
-                    <div className="d-flex justify-content-center mb-16">
-                    <Alert variant="outlined" severity={saveReimbursement ? "success" : "error"}>
-                      {saveReimbursement ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
-                    </Alert>
-                  </div>
-                  {/* <Button variant="contained" color="secondary" onClick={handleReset}>
+                  {saveReimbursement != null ?
+                    <div>
+                      <div className="d-flex justify-content-center mb-16">
+                        <Alert variant="outlined" severity={saveReimbursement ? "success" : "error"}>
+                          {saveReimbursement ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"}
+                        </Alert>
+                      </div>
+                      {/* <Button variant="contained" color="secondary" onClick={handleReset}>
                     Volver a nuevo
                   </Button> */}
-                  
-                  </div> 
-                  : <div></div>}
+
+                    </div>
+                    : <div></div>}
                 </div>
               ) : (
-                  <div>
-                    {getStepContent(activeStep)}
-                    <div className="pt-24">
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        disabled={activeStep === 0}
-                        onClick={handleBack}
-                      >
-                        Regresar
+                <div>
+                  {getStepContent(activeStep)}
+                  <div className="pt-24">
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                    >
+                      Regresar
                       </Button>
-                      
-                      <Button
-                        className="ml-16"
-                        variant="contained"
-                        color="primary"
-                        onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
-                        disabled={(activeStep !== steps.length - 1 && form.studiesCategory) ? false : ((activeStep === steps.length - 1 && files.length !== 0 && finish) ? false : true)}
-                      >
-                        {activeStep === steps.length - 1 ? "Finalizar" : "Siguiente"}
-                      </Button>
-                    </div>
+
+                    <Button
+                      className="ml-16"
+                      variant="contained"
+                      color="primary"
+                      onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
+                      disabled={(activeStep !== steps.length - 1 && form.studiesCategory) ? false : ((activeStep === steps.length - 1 && files.length !== 0 && finish) ? false : true)}
+                    >
+                      {activeStep === steps.length - 1 ? "Finalizar" : "Siguiente"}
+                    </Button>
                   </div>
-                )}
+                </div>
+              )}
             </div>
           </SimpleCard>
         </div>

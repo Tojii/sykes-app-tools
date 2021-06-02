@@ -45,7 +45,7 @@ const useStyles = makeStyles({
             width: "390px"
         },
         "@media (min-width: 1025px)": {
-            
+
         },
     },
 });
@@ -63,44 +63,45 @@ const Home = () => {
     }, []);
 
     const showCarousel = () => {
-        if (images.filter(function(image) {
+        if (images.filter(function (image) {
             var d = new Date();
             var start = new Date(image.startDate);
             var end = new Date(image.endDate);
-            d.setHours(0,0,0,0);
-            start.setHours(0,0,0,0);
-            end.setHours(0,0,0,0);
+            d.setHours(0, 0, 0, 0);
+            start.setHours(0, 0, 0, 0);
+            end.setHours(0, 0, 0, 0);
             if (start.getTime() > d.getTime() || end.getTime() < d.getTime()) { //use only active discounts
                 //console.log(start.getTime(), d.getTime(), end.getTime())
                 return false; // skip
             }
             return true;
-        }).length == 0) {return false} 
-        else {return true}
+        }).length == 0) { return false }
+        else { return true }
     }
 
     return (
         <div className="m-sm-30">
-            { isLoading ? <Loading/> : 
-            <div className="mb-sm-30">
-                <Breadcrumb
-                    routeSegments={[
-                    { name: "Benefits Home", path: "/Benefits/Home" },
-                    { name: "Promociones", path: `/Benefits/MontlyDiscounts` },          
-                    ]}
-                />
-            </div>}
+            { isLoading ? <Loading /> :
+                <div className="mb-sm-30">
+                    <Breadcrumb
+                        routeSegments={[
+                            { name: "Benefits Home", path: "/Benefits/Home" },
+                            { name: "Promociones", path: `/Benefits/MontlyDiscounts` },
+                        ]}
+                    />
+                </div>}
             <div className={classes.widthCarousel}>
-                { isLoading ? <Loading /> :
+                {isLoading ? <Loading /> :
                     benefitUser ? <div>
                         {showCarousel() ? <Carousel>
-                            {images.filter(function(image) {
+                            {images.filter(function (image) {
                                 var d = new Date();
                                 var start = new Date(image.startDate);
                                 var end = new Date(image.endDate);
-                                d.setHours(0,0,0,0);
-                                start.setHours(0,0,0,0);
-                                end.setHours(0,0,0,0);
+                                d.setHours(0, 0, 0, 0);
+                                start.setHours(0, 0, 0, 0);
+                                end.setHours(0, 0, 0, 0);
+                                console.log(start.getTime(), d.getTime(), end.getTime())
                                 if (start.getTime() > d.getTime() || end.getTime() < d.getTime()) { //use only active discounts
                                     //console.log(start.getTime(), d.getTime(), end.getTime())
                                     return false; // skip
@@ -109,7 +110,7 @@ const Home = () => {
                             }).map((image, index) => (
                                 <div key={index} className={classes.divImage + " pb-16"}>
                                     <img
-                                        style={{cursor: "pointer"}}
+                                        style={{ cursor: "pointer" }}
                                         className={classes.imageCarousel}
                                         alt="..."
                                         src={`${image.image}`}
@@ -119,8 +120,8 @@ const Home = () => {
                                     />
                                 </div>
                             ))}
-                        </Carousel> : <h4 style={{textAlign:"center"}}>No hay promociones disponibles en este momento.</h4>}
-                    </div> : <NotFound/>}
+                        </Carousel> : <h4 style={{ textAlign: "center" }}>No hay promociones disponibles en este momento.</h4>}
+                    </div> : <NotFound />}
             </div>
         </div>
     )

@@ -8,7 +8,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
-  }
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     gridtext: {
-      wordWrap: "break-word"
+        wordWrap: "break-word"
     }
 }));
 
@@ -46,8 +46,8 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
             setDisableNext(true);
         }
 
-        if(apply.backResume && apply.resume != undefined && apply.resume) {
-            if(!apply.fileMessage) {setDisableNext(false)};
+        if (apply.backResume && apply.resume != undefined && apply.resume) {
+            if (!apply.fileMessage) { setDisableNext(false) };
             setFile(apply.resume);
             apply['backResume'] = false;
         }
@@ -61,8 +61,8 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
             if (iterator.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
                 iterator.type == "application/pdf" || iterator.name.includes('.docx')) {
                 let invalid = iterator.size > 2000000 || iterator.size < 1
-                if(invalid){ 
-                    setErrorMessage(errorMessage => ({...errorMessage, type:"The file exceeds the allowed size"})) 
+                if (invalid) {
+                    setErrorMessage(errorMessage => ({ ...errorMessage, type: "The file exceeds the allowed size" }))
                     apply['fileMessage'] = true
                     apply['resume'] = {}
                     setOpen(true)
@@ -77,12 +77,12 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                 setShowError(invalid);
                 setDisableNext(invalid);
                 setApplyData(apply);
-            } 
-            else{
+            }
+            else {
                 setFile({})
                 setShowError(false);
                 setDisableNext(true);
-                setErrorMessage(errorMessage => ({...errorMessage, type:"Invalid format file"}))
+                setErrorMessage(errorMessage => ({ ...errorMessage, type: "Invalid format file" }))
                 apply['resume'] = {}
                 apply['fileMessage'] = true
                 setOpen(true)
@@ -91,7 +91,7 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
     };
 
     return (
-        <>  
+        <>
             <Grid item lg={12} className="px-sm-24 text-center">
                 <h3>Adjuntar currículum</h3>
                 <label htmlFor="upload-single-file">
@@ -102,8 +102,8 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                         variant="extended"
                     >
                         <div className="flex flex-middle">
-                        <Icon className="pr-8">cloud_upload</Icon>
-                        <span>Upload File</span>
+                            <Icon className="pr-8">cloud_upload</Icon>
+                            <span>Upload File</span>
                         </div>
                     </Fab>
                     <p>Applicable formats: .docx, .pdf. Max size: 2MB</p>
@@ -114,27 +114,27 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                     id="upload-single-file"
                     type="file"
                     accept=".docx, .pdf"
-                    //value={}
+                //value={}
                 />
             </Grid>
             <Card className="mb-24" elevation={2}>
-            <div className="p-16">
-              <Grid
-                container
-                spacing={2}
-                justify="center"
-                alignItems="center"
-                direction="row"
-              >
-                <Grid item lg={6} md={6} sm={6} xs={6}>
-                  Nombre
+                <div className="p-16">
+                    <Grid
+                        container
+                        spacing={2}
+                        justify="center"
+                        alignItems="center"
+                        direction="row"
+                    >
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            Nombre
                 </Grid>
-                <Grid item lg={6} md={6} sm={6} xs={6}>
-                  Tamaño
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            Tamaño
                 </Grid>
-              </Grid>
-            </div>
-            <Divider></Divider>
+                    </Grid>
+                </div>
+                <Divider></Divider>
                 <div className="px-16 py-16" key={file.name}>
                     <Grid
                         container
@@ -147,35 +147,35 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
                             {file.size ? (
                                 <div className={classes.gridtext}>
                                     {file.name}
-                                    </div>
-                            ) : "No file attached" }
+                                </div>
+                            ) : "No file attached"}
                         </Grid>
                         <Grid lg={6} md={6} sm={6} xs={6}>
                             {file.size ? (
                                 <div className={classes.gridtext}>
                                     {(file.size / 1024 / 1024).toFixed(1)} MB
                                 </div>
-                            ) : "" }
+                            ) : ""}
                         </Grid>
                     </Grid>
                 </div>
-            {errorMessage.type ?
-            <div className={classes.root}>
-            <Snackbar open={open} autoHideDuration={20000} onClose={handleClose}
-                anchorOrigin={anchor}
-                TransitionComponent={'Fade'}
-            >
-                
-            <Alert onClose={handleClose} severity="warning">
-                {errorMessage.type}
-            </Alert>
-            </Snackbar>
-            </div>
-            :
-            <div></div>
-            }  
-                         
-          </Card>
+                {errorMessage.type ?
+                    <div className={classes.root}>
+                        <Snackbar open={open} autoHideDuration={20000} onClose={handleClose}
+                            anchorOrigin={anchor}
+                            TransitionComponent={'Fade'}
+                        >
+
+                            <Alert onClose={handleClose} severity="warning">
+                                {errorMessage.type}
+                            </Alert>
+                        </Snackbar>
+                    </div>
+                    :
+                    <div></div>
+                }
+
+            </Card>
         </>
     );
 }

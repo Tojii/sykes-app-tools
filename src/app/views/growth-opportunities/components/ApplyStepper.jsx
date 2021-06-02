@@ -35,107 +35,107 @@ const useStyles = makeStyles((theme) => ({
   stepperscroll: {
     overflow: "auto",
     "-webkit-overflow-scrolling": "touch",
-   
+
   },
 }));
 
 const ApplyStepper = (props) => {
-    const { 
-      history, 
-      match, 
-      apply, 
-      user,
-      validations,
-      growth_opportunity, 
-      saveJobApplication,
-      saveApplication
-    } = props
-    const dispatch = useDispatch();  
-    const isLoading = useSelector(state => state.apply.loading);
-    const [activeStep, setActiveStep] = useState(0);
-    const [disableNext, setDisableNext] = useState(false);
-    const steps = getSteps();
-    const [open, setOpen] = useState(false);
-    const classes = useStyles();
+  const {
+    history,
+    match,
+    apply,
+    user,
+    validations,
+    growth_opportunity,
+    saveJobApplication,
+    saveApplication
+  } = props
+  const dispatch = useDispatch();
+  const isLoading = useSelector(state => state.applyReducer.loading);
+  const [activeStep, setActiveStep] = useState(0);
+  const [disableNext, setDisableNext] = useState(false);
+  const steps = getSteps();
+  const [open, setOpen] = useState(false);
+  const classes = useStyles();
 
 
-    function getStepContent(stepIndex) {
-      switch (stepIndex) {
+  function getStepContent(stepIndex) {
+    switch (stepIndex) {
       case 0:
-          return <UserForm setDisableNext={setDisableNext}/>
+        return <UserForm setDisableNext={setDisableNext} />
       case 1:
-          return <ValidationStep validations={validations} setDisableNext={setDisableNext} handleCallback={handleNextValidation}/>
+        return <ValidationStep validations={validations} setDisableNext={setDisableNext} handleCallback={handleNextValidation} />
       case 2:
-          return <ResumeStep setDisableNext={setDisableNext}/>
+        return <ResumeStep setDisableNext={setDisableNext} />
       case 3:
-          return <ScheduleStep setDisableNext={setDisableNext}/>
+        return <ScheduleStep setDisableNext={setDisableNext} />
       case 4:
-          return <ConfirmStep setDisableNext={setDisableNext}/>
+        return <ConfirmStep setDisableNext={setDisableNext} />
       default:
         return "";
-      }
     }
+  }
 
-    const handleNext = () => {
-        if(!disableNext){
-          setActiveStep(prevActiveStep => prevActiveStep + 1);
-        }
-        setDisableNext(true);
-        if (activeStep == 0) {
-          const payloadUser = {
-            email: user.email,
-            phone: user.phone,
-            badge: user.badge,
-          }
-          dispatch(updateUserData(payloadUser));
-        }
-    };
-
-    const handleNextValidation = () => {
+  const handleNext = () => {
+    if (!disableNext) {
       setActiveStep(prevActiveStep => prevActiveStep + 1);
-      setDisableNext(true);
-    };
-
-    const handleBack = () => {
-        setActiveStep(prevActiveStep => prevActiveStep - 1);
-        if (activeStep <= 3) {
-          apply["backResume"] = true;
-        }
-        if (activeStep <= 4) {
-          apply["backSchedule"] = true;
-        }
-    };
-
-    const handleReset = () => {
-      history.push('/growth-opportunities');
-    };
-
-    const handleSubmit = async () => {
-      const payload = {
+    }
+    setDisableNext(true);
+    if (activeStep == 0) {
+      const payloadUser = {
         email: user.email,
         phone: user.phone,
         badge: user.badge,
-        fullName: user.fullname,
-        openingId: growth_opportunity.openingId,
-        job: growth_opportunity.title,
-        refresh: false,
-        ...apply,
       }
-      await saveJobApplication(payload);
-      setActiveStep(prevActiveStep => prevActiveStep + 1);
-      setOpen(true);
-    };
+      dispatch(updateUserData(payloadUser));
+    }
+  };
 
-    const handleCancel = () => {
-        history.push(`/growth-opportunities/${match.params.opp_id}`)
-    };
+  const handleNextValidation = () => {
+    setActiveStep(prevActiveStep => prevActiveStep + 1);
+    setDisableNext(true);
+  };
 
-    return (
+  const handleBack = () => {
+    setActiveStep(prevActiveStep => prevActiveStep - 1);
+    if (activeStep <= 3) {
+      apply["backResume"] = true;
+    }
+    if (activeStep <= 4) {
+      apply["backSchedule"] = true;
+    }
+  };
+
+  const handleReset = () => {
+    history.push('/growth-opportunities');
+  };
+
+  const handleSubmit = async () => {
+    const payload = {
+      email: user.email,
+      phone: user.phone,
+      badge: user.badge,
+      fullName: user.fullname,
+      openingId: growth_opportunity.openingId,
+      job: growth_opportunity.title,
+      refresh: false,
+      ...apply,
+    }
+    await saveJobApplication(payload);
+    setActiveStep(prevActiveStep => prevActiveStep + 1);
+    setOpen(true);
+  };
+
+  const handleCancel = () => {
+    history.push(`/growth-opportunities/${match.params.opp_id}`)
+  };
+
+  return (
+    <div>
+      {(isLoading || user.phone === undefined || user.email === undefined) ? <Loading /> :
         <div>
-          {(isLoading || user == null) ? <Loading /> :  
-          <div>     
-            <ValidationModal idioma={"Ingles"} save={() => {}} path={"/growth-opportunities"} state={saveApplication ? "Success!" : "Error!"} message={saveApplication ? "Application done!" : "An error occurred, please try again!"} setOpen={setOpen} open={open} />
-            <ScrollContainer nativeMobileScroll={false} className="scroll-container">
+          <ValidationModal idioma={"Ingles"} save={() => { }} path={"/growth-opportunities"} state={saveApplication ? "Success!" : "Error!"} message={saveApplication ? "Application done!" : "An error occurred, please try again!"} setOpen={setOpen} open={open} />
+          <ScrollContainer nativeMobileScroll={false} className="scroll-container">
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map(label => (
                 <Step key={label}>
@@ -143,65 +143,69 @@ const ApplyStepper = (props) => {
                 </Step>
               ))}
             </Stepper>
-            </ScrollContainer>
-            <div>
-              {activeStep === steps.length ? (
-                <div>
-                  <div className="text-center">
-                      <Icon color="primary" fontSize="large">{saveApplication ? 'done' : 'error'}</Icon>
-                      {saveApplication ? <p>Application done!</p> : <p>"An error occurred, please try again!"</p> }
-                  </div> 
-                  {/* <Button variant="contained" color="secondary" onClick={handleReset}>
+          </ScrollContainer>
+          <div>
+            {activeStep === steps.length ? (
+              <div>
+                <div className="text-center">
+                  <Icon color="primary" fontSize="large">{saveApplication ? 'done' : 'error'}</Icon>
+                  {saveApplication ? <p>Application done!</p> : <p>"An error occurred, please try again!"</p>}
+                </div>
+                {/* <Button variant="contained" color="secondary" onClick={handleReset}>
                     Close
                   </Button> */}
-                </div>
-              ) : (
-                <div>
-                  { getStepContent(activeStep, props) }
-                  <div className="pt-24">
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      disabled={activeStep === 0}
-                      onClick={handleBack}
-                    >
-                      Back
+              </div>
+            ) : (
+              <div>
+                { getStepContent(activeStep, props)}
+                <div className="pt-24">
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    disabled={activeStep === 0}
+                    onClick={handleBack}
+                  >
+                    Back
                     </Button>
+                  <Button
+                    className="ml-16 align-self-end"
+                    variant="contained"
+                    color="primary"
+                    disabled={disableNext}
+                    onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
+                  >
+                    {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                  </Button>
+                  <CardActions style={{ justifyContent: 'flex-end' }}>
                     <Button
-                      className="ml-16 align-self-end"
+                      className="ml-16"
                       variant="contained"
-                      color="primary"
-                      disabled={disableNext}
-                      onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
+                      color="default"
+                      onClick={handleCancel}
                     >
-                      {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                      {"Cancel"}
                     </Button>
-                    <CardActions style={{ justifyContent: 'flex-end' }}>
-                      <Button
-                          className="ml-16"
-                          variant="contained"
-                          color="default"
-                          onClick={handleCancel}
-                      >
-                          {"Cancel"}
-                      </Button>
-                    </CardActions>
-                  </div>
+                  </CardActions>
                 </div>
-              )}
-            </div>
-          </div>}
-        </div>
-      );
+              </div>
+            )}
+          </div>
+        </div>}
+    </div>
+  );
 }
 
-const mapStateToProps = state => ({
-  apply: state.apply.apply,
-  validations: state.apply.validations,
-  saveApplication: state.apply.saveApplication,
-  growth_opportunity: state.growth.growth_opportunity,
-  user: state.user,
-});
+const mapStateToProps = ({ applyReducer, growthReducer, user }) => {
+  const { apply, validations, saveApplication } = applyReducer;
+  const { growth_opportunity } = growthReducer;
+  return {
+    apply,
+    user,
+    validations,
+    growth_opportunity,
+    saveApplication
+  };
+};
 
 export default connect(mapStateToProps, {
   setApplyData, saveJobApplication,

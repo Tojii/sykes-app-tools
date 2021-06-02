@@ -13,7 +13,6 @@ import { setUserData } from "../../../redux/actions/UserActions";
 import { validateEmail } from '../../../../utils';
 import { connect } from "react-redux";
 import Loading from "../../../../matx/components/MatxLoadable/Loading";
-import history from "history.js";
 
 const UserForm = (props) => {
     const {
@@ -27,18 +26,14 @@ const UserForm = (props) => {
     } = props
     const dispatch = useDispatch();
     const [form_user, setUserForm] = useState(user);
-    
-    useEffect(()=>{
-        setUserForm(user);
-    },[]);
 
     const validateEmail = (email) => {
         const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return regexp.test(email);
-      }
+    }
 
     const validatePhone = (phone) => {
-        const regexp = 	/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{2})$/
+        const regexp = /^\D?(\d{3})\D?\D?(\d{3})\D?(\d{2})$/
         return regexp.test(phone)
     }
 
@@ -49,78 +44,52 @@ const UserForm = (props) => {
 
     const handleCustomChange = (event) => {
         let value = event.target.value
-        setUserForm({...form_user, [event.target.name]: value});
+        setUserForm({ ...form_user, [event.target.name]: value });
     }
 
     const handleUserEmail = (event) => {
-        if (event.target.value !== "" && validateEmail(event.target.value))
-        {   //Bad Endpoint return data. In hold to finish.
-            // const payload = {
-            //     phone: user.phone,
-            //     email: event.target.value,
-            //     badge: user.badge
-            // }
-            // user.email = event.target.value;
-            // dispatch(updateUserData(user));
-            // apply['phone'] = form_user.phone;
-            // apply['email'] = event.target.value;
-            // apply['badge'] = user.badge;
-            // setApplyData(apply);
+        if (event.target.value !== "" || validateEmail(event.target.value)) {
         }
     }
 
     const handleUserPhone = (event) => {
-        if (event.target.value !== "" && event.target.value.length <= 8 && validatePhone(event.target.value))
-        {  
-            // const payload = {
-            //     phone: event.target.value,
-            //     email: user.email,
-            //     badge: user.badge
-            // }
-            // user.email = form_user.email;
-            // user.phone = event.target.value;
-            // dispatch(updateUserData(user));
-            
-            // apply['phone'] = event.target.value.phone;
-            // apply['email'] = user.email;
-            // apply['badge'] = user.badge;
-            // setApplyData(apply);
+        if (event.target.value !== "" || event.target.value.length < 8) {
         }
     }
 
     const handlePhoneError = () => {
-        if (form_user === null || form_user.phone === "" || form_user.phone === undefined) return "This field is required"
+        if (form_user.phone === "" || form_user.phone === undefined) return "This field is required"
         else if (form_user.phone.length < 8) return "This field is too short"
-        else if(!validatePhone(form_user.phone)) return "Phone number invalid format"
+        else if (!validatePhone(form_user.phone)) return "Phone number invalid format"
         return ""
     }
 
     const handleEmailError = () => {
-        if (form_user === null || form_user.email === "" || form_user.email === undefined) return "This field is required"
+        if (form_user.email === "" || form_user.email === undefined) return "This field is required"
         return ""
     }
 
     const handleNext = () => {
         if (!setDisableNext) return false;
-        if (form_user === null || form_user.phone === undefined || form_user.email === undefined || form_user.phone.length < 8 || !validatePhone(form_user.phone) || form_user.email === "" || !validateEmail(form_user.email))
-        return setDisableNext(true)
+        if (form_user.phone === undefined || form_user.email === undefined || form_user.phone.length < 8 || !validatePhone(form_user.phone) || form_user.email === "" || !validateEmail(form_user.email))
+            return setDisableNext(true)
         user.email = form_user.email;
         user.phone = form_user.phone;
         //dispatch(setUserData(user));
-        setDisableNext(false); 
+        setDisableNext(false);
     }
 
     const handleValid = () => {
-        return (form_user === null || form_user.phone === undefined || form_user.email === undefined || form_user.phone.length < 8 || !validatePhone(form_user.phone) ||  form_user.email === "" || !validateEmail(form_user.email))
+        return (form_user.phone === undefined || form_user.email === undefined || form_user.phone.length < 8 || !validatePhone(form_user.phone) || form_user.email === "" || !validateEmail(form_user.email))
     }
 
     useEffect(() => {
         handleNext();
         handleValid();
-        if (form_user === null || form_user.phone === undefined || form_user.email === undefined) {
+        if (form_user.phone === undefined || form_user.email === undefined) {
             setUserForm(user)
         }
-    }, [user]);
+    }, [form_user]);
 
     const onSubmit = () => {
         const payload = {
@@ -131,7 +100,7 @@ const UserForm = (props) => {
         user.email = form_user.email;
         user.phone = form_user.phone;
         dispatch(setUserData(user));
-        
+
         // apply['phone'] = form_user.phone;
         // apply['email'] = form_user.email;
         // apply['badge'] = user.badge;
@@ -139,76 +108,78 @@ const UserForm = (props) => {
         handleSubmitCallback(payload);
         history.push({
             pathname: "/"
-          });
-    } 
+        });
+    }
 
     return (
         <>
-            {(form_user.phone === undefined || form_user.email === undefined) ? <Loading/> :
-            <Grid item lg={12}>
-                <h3 className="p-sm-24">Personal Information</h3>
-                <ValidatorForm  onSubmit={onSubmit}>
-                    <Grid item lg={6} md={6} sm={10} xs={10}>
-                        <TextValidator
-                            className="w-100 mx-24 my-16 mx-24 my-16"
-                            label="Email"
-                            onChange={handleCustomChange}
-                            onBlur={handleUserEmail}
-                            type="text"
-                            name="email"
-                            value={form_user.email}
-                            validators={["required", "isEmail"]}
-                            errorMessages={["This field is required", "Invalid email format"]}
-                            error={form_user.email === "" || form_user.email === undefined} 
-                            helperText={handleEmailError()}
-                        />
-                    </Grid>
-                    <Grid  
-                        item lg={6} md={6} sm={10} xs={10}>
-                        <TextValidator
-                            className="w-100 mx-24 my-16"
-                            label="Phone number"
-                            onChange={handleCustomChange}
-                            onBlur={handleUserPhone}
-                            type="text"
-                            name="phone"
-                            value={form_user != null ? form_user.phone : ""}
-                            validators={["required"]}
-                            errorMessages={["This field is required"]}
-                            error={ handlePhoneError().length > 0 }
-                            helperText={ handlePhoneError() }
-                        />
-                    </Grid>
-                    { history ?
-                      <div className="flex flex-space-start flex-middle mx-24 my-16">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                            disabled={handleValid()}
-                        >
-                            Save
+            {(form_user.phone === undefined || form_user.email === undefined) ? <Loading /> :
+                <Grid item lg={11}>
+                    <h3 className="p-sm-24">Personal Information</h3>
+                    <ValidatorForm onSubmit={onSubmit}>
+                        <Grid item lg={6} md={6} sm={10} xs={10}>
+                            <TextValidator
+                                className="w-100 mx-24 my-16"
+                                label="Email"
+                                onChange={handleCustomChange}
+                                onBlur={handleUserEmail}
+                                type="text"
+                                name="email"
+                                value={form_user.email}
+                                validators={["required", "matchRegexp:^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"]}
+                                errorMessages={["This field is required", "Invalid email format"]}
+                                error={form_user.email === "" || form_user.email === undefined}
+                                helperText={handleEmailError()}
+                            />
+                        </Grid>
+                        <Grid item lg={6} md={6} sm={10} xs={10}>
+                            <TextValidator
+                                className="w-100 mx-24 my-16"
+                                label="Phone number"
+                                onChange={handleCustomChange}
+                                onBlur={handleUserPhone}
+                                type="text"
+                                name="phone"
+                                value={form_user.phone}
+                                validators={["required"]}
+                                errorMessages={["This field is required"]}
+                                error={handlePhoneError().length > 0}
+                                helperText={handlePhoneError()}
+                            />
+                        </Grid>
+                        {history ?
+                            <div className="flex flex-space-start flex-middle mx-24 my-16">
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    type="submit"
+                                    disabled={handleValid()}
+                                >
+                                    Save
                         </Button>
-                        <Button
-                            className="ml-24"
-                            variant="contained"
-                            color="secondary"
-                            onClick={handleClose}
-                        >
-                            Cancel
+                                <Button
+                                    className="ml-24"
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={handleClose}
+                                >
+                                    Cancel
                         </Button>
-                    </div>  : null }
-                </ValidatorForm>
-            </Grid>
+                            </div> : null}
+                    </ValidatorForm>
+                </Grid>
             }
         </>
     )
 }
 
-const mapStateToProps = state => ({
-    apply: state.apply.apply,
-    user: state.user,
-});
+const mapStateToProps = ({ user, applyReducer }) => {
+    const { apply } = applyReducer;
+    return {
+        user,
+        apply,
+    };
+};
 
 export default connect(mapStateToProps, {
     setApplyData,

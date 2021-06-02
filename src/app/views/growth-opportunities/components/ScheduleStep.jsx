@@ -4,7 +4,7 @@ import {
     MuiPickersUtilsProvider,
     KeyboardTimePicker,
     TimePicker
-  } from "@material-ui/pickers";
+} from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import { connect } from "react-redux";
@@ -41,17 +41,17 @@ const ScheduleStep = (props) => {
     });
 
     useEffect(() => {
-        if(apply.backSchedule && apply.workSchedule != undefined) {
+        if (apply.backSchedule && apply.workSchedule != undefined) {
             let backdays = days;
-            if(!apply.workSchedule.includes("Monday")){ backdays["Monday"] = false }
-            if(!apply.workSchedule.includes("Tuesday")){ backdays["Tuesday"] = false }
-            if(!apply.workSchedule.includes("Wednesday")){ backdays["Wednesday"] = false }
-            if(!apply.workSchedule.includes("Thursday")){ backdays["Thursday"] = false }
-            if(!apply.workSchedule.includes("Friday")){ backdays["Friday"] = false }
-            if(apply.workSchedule.includes("Saturday")){ backdays["Saturday"] = true }
-            if(apply.workSchedule.includes("Sunday")){ backdays["Sunday"] = true }
-            setTimes({startTime: apply.startTimeBack, endTime: apply.endTimeBack});
-            setDays({...backdays})
+            if (!apply.workSchedule.includes("Monday")) { backdays["Monday"] = false }
+            if (!apply.workSchedule.includes("Tuesday")) { backdays["Tuesday"] = false }
+            if (!apply.workSchedule.includes("Wednesday")) { backdays["Wednesday"] = false }
+            if (!apply.workSchedule.includes("Thursday")) { backdays["Thursday"] = false }
+            if (!apply.workSchedule.includes("Friday")) { backdays["Friday"] = false }
+            if (apply.workSchedule.includes("Saturday")) { backdays["Saturday"] = true }
+            if (apply.workSchedule.includes("Sunday")) { backdays["Sunday"] = true }
+            setTimes({ startTime: apply.startTimeBack, endTime: apply.endTimeBack });
+            setDays({ ...backdays })
             apply['backSchedule'] = false;
         }
         buildScheduleDays();
@@ -62,16 +62,16 @@ const ScheduleStep = (props) => {
     }, [days, times])
 
     const handleDayChange = (day) => event => {
-        setDays({...days, [day]: event.target.checked})
+        setDays({ ...days, [day]: event.target.checked })
     }
 
     const handleTimeChange = (time) => value => {
-        setTimes({...times, [time]: value})
+        setTimes({ ...times, [time]: value })
     }
 
     const buildScheduleDays = () => {
         apply["workSchedule"] = Object.keys(days).map((day) => {
-            return (days[day] && day ) 
+            return (days[day] && day)
         }).filter(Boolean).join(", ");
     }
 
@@ -85,59 +85,59 @@ const ScheduleStep = (props) => {
 
     return (
         <>
-        <Grid container>
-            <Grid item lg={12} md={12} sm={12} xs={6} className="px-sm-24">
-                <h3>Schedule</h3>
+            <Grid container>
+                <Grid item lg={12} md={12} sm={12} xs={6} className="px-sm-24">
+                    <h3>Schedule</h3>
                     <FormGroup row>
-                    {daysCount.map((day, index) => {
-                        return (
-                            <FormControlLabel
-                                key={index}
-                                className={"capitalize"}
-                                control={
-                                    <Switch
-                                        checked={days[day]}
-                                        color="primary"
-                                        onChange={handleDayChange(day)}
-                                        value={days[day]}
-                                    />}
-                                label={day}
-                            />
-                        );
-                    })}
+                        {daysCount.map((day, index) => {
+                            return (
+                                <FormControlLabel
+                                    key={index}
+                                    className={"capitalize"}
+                                    control={
+                                        <Switch
+                                            checked={days[day]}
+                                            color="primary"
+                                            onChange={handleDayChange(day)}
+                                            value={days[day]}
+                                        />}
+                                    label={day}
+                                />
+                            );
+                        })}
                     </FormGroup>
-            </Grid>
-            <Grid item lg={6} md={6} sm={6} xs={12} className="p-sm-24">
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <TimePicker
-                        className="mb-16 w-100"
-                        margin="none"
-                        id="start-time"
-                        label="Start Time"
-                        value={times["startTime"]}
-                        onChange={handleTimeChange("startTime")}
+                </Grid>
+                <Grid item lg={6} md={6} sm={6} xs={12} className="p-sm-24">
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <TimePicker
+                            className="mb-16 w-100"
+                            margin="none"
+                            id="start-time"
+                            label="Start Time"
+                            value={times["startTime"]}
+                            onChange={handleTimeChange("startTime")}
                         // KeyboardButtonProps={{
                         //     "aria-label": "change time"
                         // }}
-                    />
-                </MuiPickersUtilsProvider>
-            </Grid>
-            <Grid item lg={6} md={6} sm={6} xs={12} className="p-sm-24">
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <TimePicker
-                        className="mb-16 w-100"
-                        margin="none"
-                        id="end-time"
-                        label="End Time"
-                        value={times["endTime"]}
-                        onChange={handleTimeChange("endTime")}
+                        />
+                    </MuiPickersUtilsProvider>
+                </Grid>
+                <Grid item lg={6} md={6} sm={6} xs={12} className="p-sm-24">
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <TimePicker
+                            className="mb-16 w-100"
+                            margin="none"
+                            id="end-time"
+                            label="End Time"
+                            value={times["endTime"]}
+                            onChange={handleTimeChange("endTime")}
                         // KeyboardButtonProps={{
                         //     "aria-label": "change time"
                         // }}
-                    />
-                </MuiPickersUtilsProvider>
+                        />
+                    </MuiPickersUtilsProvider>
+                </Grid>
             </Grid>
-        </Grid>
         </>
     );
 }

@@ -75,14 +75,21 @@ export const setGrowthOpportunity = (payload) => dispatch => {
 export const getGrowthOpportunity = (id) => dispatch => {
     dispatch({
         type: GET_GROWTH_OPPORTUNITY,
-        payload: payload,
-    })
+        payload: null
+    });
+
+    api.get(`/GrowthOpportunityOpenings/${id}`).then(res => 
+        dispatch({
+            type: GET_GROWTH_OPPORTUNITY,
+            payload: res.data
+        })
+    ).catch(globalErrorHandler);
 };
 
 
 export const getGrowthOpportunityMetrics = (badge) => dispatch => {
-    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-    axiosInstance.get(`${process.env.REACT_APP_API_URL}/GrowthOpportunityApplication/Metrics`).then(res => {
+    api.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
+    api.get(`${process.env.REACT_APP_API_URL}/GrowthOpportunityApplication/Metrics`).then(res => {
       dispatch({
         type: GET_GROWTH_OPPORTUNITY_METRICS,
         payload: res.data

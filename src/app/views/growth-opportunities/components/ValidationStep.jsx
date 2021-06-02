@@ -21,12 +21,12 @@ const ResumeStep = ({
     }, []);
 
     useEffect(() => {
-        if (validations){
-            if(validations.approvedFinal){ 
+        if (validations) {
+            if (validations.approvedFinal) {
                 handleNextStep();
                 setOpen(false);
             }
-            else{ 
+            else {
                 setOpen(true);
             }
         }
@@ -36,14 +36,14 @@ const ResumeStep = ({
         setDisableNext(false);
         if (validated) return false;
         setValidated(true);
-        setTimeout(function() { 
+        setTimeout(function () {
             handleCallback();
         }, 1000);
     }
 
     return (
         <>
-            <ValidationModal idioma={"Ingles"} path={"/growth-opportunities"} state={"Error!"} message={(validations != null) ? validations.message : "Lo sentimos, pero el usuario actual no puede aplicar a este job"} setOpen={setOpen} open={open} />
+            <ValidationModal idioma={"Ingles"} path={"/growth-opportunities"} state={"Error!"} save={() => { }} message={(validations != null) ? validations.message : "Lo sentimos, pero el usuario actual no puede aplicar a este job"} setOpen={setOpen} open={open} />
             { validations != null ? (
                 validations.approvedFinal ?
                     <div className="text-center">
@@ -54,21 +54,25 @@ const ResumeStep = ({
                         <Icon color="primary" fontSize="large">{'done'}</Icon>
                         <p>Sorry!</p>
                     </div>
-                
-                ) : <div className="text-center">
-                    <CircularProgress className="text-center"/>
-                    <p className="text-muted">Validating, please wait...</p>
-                </div>
+
+            ) : <div className="text-center">
+                <CircularProgress className="text-center" />
+                <p className="text-muted">Validating, please wait...</p>
+            </div>
             }
         </>
     );
 }
 
-const mapStateToProps = state => ({
-    validations: state.apply.validations,
-    growth_opportunity: state.growth.growth_opportunity,
-    user: state.user,
-});
+const mapStateToProps = ({ applyReducer, growthReducer, user }) => {
+    const { validations } = applyReducer;
+    const { growth_opportunity } = growthReducer;
+    return {
+        user,
+        validations,
+        growth_opportunity
+    };
+};
 
 export default connect(mapStateToProps, {
     setApplyData, setValidations

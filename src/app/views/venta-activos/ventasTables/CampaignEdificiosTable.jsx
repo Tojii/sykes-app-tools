@@ -39,6 +39,11 @@ const EdificiosTable = (props) => {
       var textA = a.idBuilding;
       var textB = b.idBuilding;
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    }).filter(function (item) {
+      if (!item.active) {
+        return false; // skip
+      }
+      return true;
     }).map((item, index) => {
       return {
         "idBuilding": item.id,
@@ -50,6 +55,11 @@ const EdificiosTable = (props) => {
       var textA = a.idBuilding;
       var textB = b.idBuilding;
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    }).filter(function (item) {
+      if (!item.active) {
+        return false; // skip
+      }
+      return true;
     }).map((item, index) => {
       return {
         "id": props.edificiosCampaign[index] == undefined ? undefined : props.edificiosCampaign[index].id,
@@ -74,14 +84,24 @@ const EdificiosTable = (props) => {
   };
 
   const changeStatus = (dataIndex) => {
-    var edificiosChange = props.edificiosCampaign.length == 0 ? buildings.map((item, index) => {
+    var edificiosChange = props.edificiosCampaign.length == 0 ? buildings.filter(function (item) {
+      if (!item.active) {
+        return false; // skip
+      }
+      return true;
+    }).map((item, index) => {
       return {
         "idBuilding": item.id,
         "nameBuilding": item.name,
         "activeBuilding": item.active,
         "active": index == dataIndex ? (builddata[index] && builddata[index].active ? false : true) : builddata[index].active
       }
-    }) : buildings.map((item, index) => {
+    }) : buildings.filter(function (item) {
+      if (!item.active) {
+        return false; // skip
+      }
+      return true;
+    }).map((item, index) => {
       return {
         "id": props.edificiosCampaign[index] == undefined ? undefined : props.edificiosCampaign[index].id,
         "nameBuilding": item.name,
@@ -95,14 +115,24 @@ const EdificiosTable = (props) => {
     //console.log("buildata", edificiosChange)
   }
 
-  const [builddata, setBuilddata] = useState(props.edificiosCampaign.length == 0 ? buildings.map((item, index) => {
+  const [builddata, setBuilddata] = useState(props.edificiosCampaign.length == 0 ? buildings.filter(function (item) {
+    if (!item.active) {
+      return false; // skip
+    }
+    return true;
+  }).map((item, index) => {
     return {
       "idBuilding": item.id,
       "nameBuilding": item.name,
       "activeBuilding": item.active,
       "active": false,
     }
-  }) : buildings.map((item, index) => {
+  }) : buildings.filter(function (item) {
+    if (!item.active) {
+      return false; // skip
+    }
+    return true;
+  }).map((item, index) => {
     return {
       "id": props.edificiosCampaign[index] == undefined ? undefined : props.edificiosCampaign[index].id,
       "nameBuilding": item.name,
@@ -216,7 +246,7 @@ const EdificiosTable = (props) => {
     (isLoading || isLoadingBuilding) ? <Loading /> :
       (admin || !isAdmin) ?
         <div className="m-sm-30">
-          {/* {console.log("buildata",builddata)} */}
+          {console.log("buildata", props.edificiosCampaign)}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               {/* { isLoading ? <Loading /> :   */}

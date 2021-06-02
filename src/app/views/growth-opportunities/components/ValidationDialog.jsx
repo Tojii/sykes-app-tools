@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
+import Icon from '@material-ui/core/Icon';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -8,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import history from "history.js";
+import ErrorIcon from '@material-ui/icons/Error';
 
 function PaperComponent(props) {
   return (
@@ -18,10 +20,21 @@ function PaperComponent(props) {
 }
 
 export default function DraggableDialog(props) {
+  //const [open, setOpen] = useState(false);
+
+  //   const handleClickOpen = () => {
+  //     setOpen(true);
+  //   };
+
+  const handleClose = () => {
+    props.setOpen(false);
+  };
+
   const handleModal = () => {
     props.setOpen(false);
+    props.save();
     history.push({
-        pathname: props.path
+      pathname: props.path
     });
   };
 
@@ -31,6 +44,7 @@ export default function DraggableDialog(props) {
         fullWidth={true}
         maxWidth="sm"
         open={props.open}
+        //onClose={handleClose}
         PaperComponent={PaperComponent}
         aria-labelledby="draggable-dialog-title"
       >

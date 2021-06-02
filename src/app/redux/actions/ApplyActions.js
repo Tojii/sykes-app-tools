@@ -40,9 +40,9 @@ export const saveJobApplication = (payload) => dispatch => {
     dispatch({
         type: RE_LOADING
     });
-    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
+    api.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
 
-    axiosInstance.post(`${process.env.REACT_APP_API_URL}/GrowthOpportunityApplication`, formData, config).then(res => {
+    api.post(`${process.env.REACT_APP_API_URL}/GrowthOpportunityApplication`, formData, config).then(res => {
         dispatch({
             type: SAVE_JOB_APPLICATION,
             payload: res.data
@@ -57,8 +57,8 @@ export const saveJobApplication = (payload) => dispatch => {
 };
 
 export const setValidations = (jobId, jobName) => dispatch => {
-    axiosInstance.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
-    axiosInstance.post(`${process.env.REACT_APP_API_URL}/GrowthOpportunityApplication/Validate`, {
+    api.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("jwt_token");
+    api.post(`${process.env.REACT_APP_API_URL}/GrowthOpportunityApplication/Validate`, {
         jobId: jobId, 
         jobName: jobName 
     }).then(res => {

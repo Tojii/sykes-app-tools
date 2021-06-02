@@ -7,11 +7,11 @@ function Form() {
         <div className="m-sm-30">
             <div className="mb-sm-30">
                 <Breadcrumb
-                routeSegments={[
-                { name: "Lista reembolsos Educativos", path: "/ReembolsoEducativo/ListaReembolsos" },
-                { name: "Nuevo" }
-                ]}
-            />
+                    routeSegments={[
+                        { name: "Lista reembolsos Educativos", path: "/ReembolsoEducativo/ListaReembolsos" },
+                        { name: "Nuevo" }
+                    ]}
+                />
             </div>
             <EducationalReimbursementForm />
         </div>

@@ -16,22 +16,22 @@ import NotFound from "app/views/sessions/NotFound";
 const useStyles = makeStyles({
     textvalidator: {
         "@media (min-width: 0px)": {
-             marginLeft: "7.5%",
-             width: "85%",
-             marginTop: "3%",
-         },
-         "@media (min-width: 1025px)": {
-             marginLeft: "25%",
-             width: "50%",
-             marginTop: "3%",
-         },
-         "& .MuiInputBase-root.Mui-disabled": {
-             color: "darkgray"
-         },
-         "& .MuiFormLabel-root.Mui-disabled": {
-             color: "rgba(74, 70, 109, 0.43)" 
-         },
-     },
+            marginLeft: "7.5%",
+            width: "85%",
+            marginTop: "3%",
+        },
+        "@media (min-width: 1025px)": {
+            marginLeft: "25%",
+            width: "50%",
+            marginTop: "3%",
+        },
+        "& .MuiInputBase-root.Mui-disabled": {
+            color: "darkgray"
+        },
+        "& .MuiFormLabel-root.Mui-disabled": {
+            color: "rgba(74, 70, 109, 0.43)"
+        },
+    },
     formcard: {
         "@media (min-width: 0px)": {
             marginLeft: "0%",
@@ -71,24 +71,24 @@ const useStyles = makeStyles({
         "@media (min-width: 1024px)": {
             marginBottom: "5%",
         },
-    }   
+    }
 });
 
 const FormLinksBenefits = () => {
-    
+
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
     let { id } = useParams();
     const classes = useStyles();
     const link = useSelector(state => state.links.link);
     const successBenefit = useSelector(state => state.links.success);
-    const isLoading  = useSelector(state => state.links.loading);
+    const isLoading = useSelector(state => state.links.loading);
     const [open, setOpen] = useState(false);
     const [files, setFiles] = useState(null);
     const [logo, setLogo] = useState(null);
-    const [errorFile, setErrorFile] = useState({error: false, errorMessage: ""});
+    const [errorFile, setErrorFile] = useState({ error: false, errorMessage: "" });
     const admin = (user != undefined && user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] != undefined) ? (user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('System_Admin') || user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].includes('Benefits_Owner')) : false
-    
+
     const [linksform, setLinkForm] = useState({
         id: "",
         idBenefit: "",
@@ -109,7 +109,7 @@ const FormLinksBenefits = () => {
 
     const presave = () => { //validations before submit
         if (linksform.icon == null) {
-            setErrorFile({error: true, errorMessage:`Debe adjuntar una imagen`});
+            setErrorFile({ error: true, errorMessage: `Debe adjuntar una imagen` });
         }
     }
 
@@ -121,15 +121,17 @@ const FormLinksBenefits = () => {
         dispatch(GetBenefits());
         if (id) {
             dispatch(GetBenefitsLinksById(id));
-        } 
+        }
     }, []);
 
     useEffect(() => { //load data when is edit form
-        if(id && link != [] && link[0] != [""] && link[0] != undefined) {setLinkForm({
-            name: link[0].name,
-            icon: link[0].icon,
-            active: link[0].active,
-        });}
+        if (id && link != [] && link[0] != [""] && link[0] != undefined) {
+            setLinkForm({
+                name: link[0].name,
+                icon: link[0].icon,
+                active: link[0].active,
+            });
+        }
     }, [link]);
 
 
@@ -155,7 +157,7 @@ const FormLinksBenefits = () => {
         reader.onload = function () {
             imageupload = reader.result
             setLogo(imageupload)
-            setLinkForm({...linksform, icon: imageupload});
+            setLinkForm({ ...linksform, icon: imageupload });
         };
         reader.onerror = function (error) {
             console.log('Error: ', error);
@@ -165,88 +167,88 @@ const FormLinksBenefits = () => {
     const handleFileSelect = event => { //manages validations when a file is upload
         let filesList = event.target.files[0] != undefined ? event.target.files[0] : null;
 
-        if(filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")){
-            if(filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) { 
-                setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
+        if (filesList != null && (filesList.type == "image/png" || filesList.type == "image/jpeg" || filesList.type == "image/jpg")) {
+            if (filesList.name.includes('.jfif') || filesList.name.includes('.pjp') || filesList.name.includes('.pjpeg')) {
+                setErrorFile({ error: true, errorMessage: `El formato del archivo no es válido` });
                 setFiles(null);
-                setLinkForm({...linksform, files: null, logo: null});
+                setLinkForm({ ...linksform, files: null, logo: null });
                 setLogo(null);
             }
-            else if (filesList.size/1024/1024 > 2) {
-                setErrorFile({error: true, errorMessage:`El tamaño del archivo no debe ser mayor a 2 MB`});
+            else if (filesList.size / 1024 / 1024 > 2) {
+                setErrorFile({ error: true, errorMessage: `El tamaño del archivo no debe ser mayor a 2 MB` });
                 setFiles(null);
-                setLinkForm({...linksform, files: null, logo: null});
+                setLinkForm({ ...linksform, files: null, logo: null });
                 setLogo(null);
             } else {
-                setErrorFile({error: false, errorMessage:``});
+                setErrorFile({ error: false, errorMessage: `` });
                 setFiles(event.target.files[0]);
-                setLinkForm({...linksform, files: event.target.files[0]});
+                setLinkForm({ ...linksform, files: event.target.files[0] });
                 getBase64(event.target.files[0]);
             }
         } else {
-            setErrorFile({error: true, errorMessage:`El formato del archivo no es válido`});
+            setErrorFile({ error: true, errorMessage: `El formato del archivo no es válido` });
             setFiles(null);
-            setLinkForm({...linksform, files: null, logo: null});
+            setLinkForm({ ...linksform, files: null, logo: null });
             setLogo(null);
         }
     };
 
     return (
         <div className={classes.margindiv + " p-24"}>
-            {(isLoading) ? <Loading/> : <ValidationModal idioma={"Español"} path={"/Benefits/Links"} state={(successBenefit) ? "Success!" : "Error!"} save={() => {dispatch(GetSocialLinks());}} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
+            {(isLoading) ? <Loading /> : <ValidationModal idioma={"Español"} path={"/Benefits/Links"} state={(successBenefit) ? "Success!" : "Error!"} save={() => { dispatch(GetSocialLinks()); }} message={(successBenefit) ? "¡Guardado exitosamente!" : "¡Se produjo un error, por favor vuelva a intentarlo!"} setOpen={setOpen} open={open} />}
             <Card className={classes.formcard} elevation={6}>
-                {(isLoading) ? <Loading/> : (admin ? <h2 style={{ textAlign: "center", marginTop: "2%"}} className="mb-20">{id ? "Editar Vínculo" : "Agregar Vínculo"}</h2> : null)}
-                <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>  
-                    {(isLoading) ? <Loading/> :
-                    admin ? <>            
-                        <TextValidator
-                            className={classes.textvalidator}
-                            label="Nombre*"
-                            onChange={handleChange}
-                            type="text"
-                            name="name"
-                            value={linksform.name}
-                            validators={["required","maxStringLength:100"]}
-                            errorMessages={["Este campo es requerido", "Máximo 100 carácteres"]}
-                        />
-                        <FormControlLabel
-                            className={classes.textvalidator}
-                            label="Activar Link"
-                            control={
-                                <Switch
-                                checked={linksform.active}
-                                name="active"
-                                color="primary"
+                {(isLoading) ? <Loading /> : (admin ? <h2 style={{ textAlign: "center", marginTop: "2%" }} className="mb-20">{id ? "Editar Vínculo" : "Agregar Vínculo"}</h2> : null)}
+                <ValidatorForm {...useRef('form')} onSubmit={handleFormSubmit}>
+                    {(isLoading) ? <Loading /> :
+                        admin ? <>
+                            <TextValidator
+                                className={classes.textvalidator}
+                                label="Nombre*"
                                 onChange={handleChange}
+                                type="text"
+                                name="name"
+                                value={linksform.name}
+                                validators={["required", "maxStringLength:100"]}
+                                errorMessages={["Este campo es requerido", "Máximo 100 carácteres"]}
+                            />
+                            <FormControlLabel
+                                className={classes.textvalidator}
+                                label="Activar Link"
+                                control={
+                                    <Switch
+                                        checked={linksform.active}
+                                        name="active"
+                                        color="primary"
+                                        onChange={handleChange}
+                                    />
+                                }
+                            />
+                            <FormControl className={classes.textvalidator}>
+                                <label className={classes.filelabel} id="logo">Icono (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
+                                <Input type="file" name="files" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect}
                                 />
-                            }
-                        />
-                        <FormControl className={classes.textvalidator}>
-                            <label className={classes.filelabel} id="logo">Icono (formatos aplicables: .png, .jpeg, .jpg) (Max 2MB)*</label>
-                            <Input type="file" name="files" error={errorFile.error} aria-describedby="my-helper-text" accept="image/png, image/jpeg, image/jpg" onChange={handleFileSelect} 
-                                 />  
-                            <FormHelperText error={errorFile.error} id="my-helper-text">{errorFile.errorMessage}</FormHelperText>                               
-                        </FormControl>
-                        <div className={classes.sectionbutton}>
-                            {linksform.icon ? 
-                                <img
-                                className={classes.imageadd}                                          
-                                alt="..."
-                                src={`${linksform.icon}`}
-                                />
-                                : null
-                            }
-                        </div>
-                        <div className={classes.sectionbutton}>
-                            <Button style={{margin: "1%", width: "105.92px"}} onClick={presave} variant="contained" color="primary" type="submit">
-                                ENVIAR  
+                                <FormHelperText error={errorFile.error} id="my-helper-text">{errorFile.errorMessage}</FormHelperText>
+                            </FormControl>
+                            <div className={classes.sectionbutton}>
+                                {linksform.icon ?
+                                    <img
+                                        className={classes.imageadd}
+                                        alt="..."
+                                        src={`${linksform.icon}`}
+                                    />
+                                    : null
+                                }
+                            </div>
+                            <div className={classes.sectionbutton}>
+                                <Button style={{ margin: "1%", width: "105.92px" }} onClick={presave} variant="contained" color="primary" type="submit">
+                                    ENVIAR
                             </Button>
 
-                            <Button style={{margin: "1%"}} variant="contained" onClick={handleBack} color="default">
-                                CANCELAR
+                                <Button style={{ margin: "1%" }} variant="contained" onClick={handleBack} color="default">
+                                    CANCELAR
                             </Button>
-                        </div>
-                    </> : <NotFound/>
+                            </div>
+                        </> : <NotFound />
                     }
                 </ValidatorForm>
             </Card>
