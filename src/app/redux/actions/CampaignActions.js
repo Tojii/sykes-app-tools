@@ -168,7 +168,7 @@ export const AddCampaignItems = (id, payload, files) => {
     formData.append('description', payload.description);
     formData.append('quantity', parseInt(payload.quantity, 10));
     formData.append('stockQuantity', parseInt(payload.stockQuantity, 10));
-    formData.append('unitPrice', payload.unitPrice.replace(".", ","));
+    formData.append('unitPrice', payload.unitPrice);
     formData.append('maxLimitPerPerson', parseInt(payload.maxLimitPerPerson, 10));
     formData.append('EstimatedPrice', payload.shippingPrice.replace(".", ","));
     formData.append('files', files);
@@ -238,13 +238,13 @@ export const UpdateCampaignItems = (id, payload, files) => dispatch => {
         'content-type': 'multipart/form-data',
     }
   }  
-  //console.log("updatever", files)
+  //console.log("updatever", payload.unitPrice)
   var formData = new FormData();
     formData.append('name', payload.name);
     formData.append('description', payload.description);
     formData.append('quantity', payload.quantity);
     formData.append('stockQuantity', parseInt(payload.stockQuantity, 10));
-    formData.append('unitPrice', payload.unitPrice.replace(".", ","));
+    formData.append('unitPrice', payload.unitPrice);
     formData.append('maxLimitPerPerson', payload.maxLimitPerPerson);
     formData.append('EstimatedPrice', payload.shippingPrice.replace(".", ","));
     if (files != null) {formData.append('files', files);}
