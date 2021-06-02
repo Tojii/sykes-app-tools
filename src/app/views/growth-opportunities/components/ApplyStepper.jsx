@@ -60,8 +60,6 @@ const ApplyStepper = (props) => {
 
 
     function getStepContent(stepIndex) {
-      console.log("index", stepIndex);
-
       switch (stepIndex) {
       case 0:
           return <UserForm setDisableNext={setDisableNext}/>
@@ -79,7 +77,6 @@ const ApplyStepper = (props) => {
     }
 
     const handleNext = () => {
-      console.log("handle next");
         if(!disableNext){
           setActiveStep(prevActiveStep => prevActiveStep + 1);
         }
@@ -95,7 +92,6 @@ const ApplyStepper = (props) => {
     };
 
     const handleNextValidation = () => {
-      console.log("handle validation");
       setActiveStep(prevActiveStep => prevActiveStep + 1);
       setDisableNext(true);
     };
@@ -116,17 +112,14 @@ const ApplyStepper = (props) => {
 
     const handleSubmit = async () => {
       const payload = {
-        created: format(new Date(), "P p").toString(),
         email: user.email,
         phone: user.phone,
         badge: user.badge,
         fullName: user.fullname,
-        id: growth_opportunity.id,
         openingId: growth_opportunity.openingId,
         job: growth_opportunity.title,
         refresh: false,
         ...apply,
-        ...validations,
       }
       await saveJobApplication(payload);
       setActiveStep(prevActiveStep => prevActiveStep + 1);

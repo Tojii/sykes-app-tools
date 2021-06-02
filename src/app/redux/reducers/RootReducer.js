@@ -6,9 +6,8 @@ import ScrumBoardReducer from "./ScrumBoardReducer";
 import NotificationReducer from "./NotificationReducer";
 import EcommerceReducer from "./EcommerceReducer";
 import LSSReducer from "./LSSReducer";
-import GrowthReducer from "./GrowthOpportunityReducer";
-import MetricsReducer from "./MetricsReducer";
-import ApplyReducer from "./ApplyReducer";
+import growthReducer from "./GrowthOpportunityReducer";
+import applyReducer from "./ApplyReducer";
 //import ReembolsosEducativosReducer from "./ReembolsoEducativoReducer";
 import RaftReducer from "./RaftReducer";
 import EducationalReimbursementReducer from "./EducationalReimbursementReducer";
@@ -41,10 +40,12 @@ const RootReducer = combineReducers({
   links: BenefitsLinksReducer,
   order: OrderReducer,
   locations: LocationReducer,
-  growth: GrowthReducer,
-  metrics: MetricsReducer,
-  apply: ApplyReducer,
+  // growth: GrowthReducer,
+  // metrics: MetricsReducer,
+  // apply: ApplyReducer,
   building: BuildingReducer,
+  growthReducer,
+  applyReducer,
 });
 
 export default RootReducer;
