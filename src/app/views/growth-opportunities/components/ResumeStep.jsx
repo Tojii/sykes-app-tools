@@ -60,9 +60,13 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
         for (const iterator of files) {
             if (iterator.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
                 iterator.type == "application/pdf" || iterator.name.includes('.docx')) {
-                let invalid = iterator.size > 2000000 || iterator.size < 1
+                let invalid = iterator.size > 2000000 || iterator.size < 1 || iterator.size == 0
                 if(invalid){ 
-                    setErrorMessage(errorMessage => ({...errorMessage, type:"The file exceeds the allowed size"})) 
+                    if (iterator.size == 0) {
+                        setErrorMessage(errorMessage => ({...errorMessage, type:"Invalid file size"})) 
+                    } else {
+                        setErrorMessage(errorMessage => ({...errorMessage, type:"The file exceeds the allowed size"})) 
+                    }
                     apply['fileMessage'] = true
                     apply['resume'] = {}
                     setOpen(true)
@@ -180,9 +184,12 @@ const ResumeStep = ({ apply, setApplyData, setDisableNext }) => {
     );
 }
 
-const mapStateToProps = state => ({
-    apply: state.apply.apply,
-});
+const mapStateToProps = ({ applyReducer }) => {
+    const { apply } = applyReducer;
+    return {
+        apply,
+    };
+};
 
 export default connect(mapStateToProps, {
     setApplyData,

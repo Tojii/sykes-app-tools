@@ -68,9 +68,14 @@ const UploadForm  = ({setFinish, files, setFiles, isError, errorMessage}) => {
         } else {
           let item = files.find(x=> x.file.name == iterator.name);
           if(item == null || item == undefined){
-            if (iterator.size/1024/1024 > 1) {
-              setOpen({open:true, message: `¡Uno o mas archivos tienen un peso mayor de 1 MB!`});
-            }else{
+            //console.log("size!!", iterator.size)
+            if (iterator.size/1024/1024 > 1 || iterator.size == 0) {
+              if (iterator.size == 0) {
+                setOpen({open:true, message: `¡Uno o más archivos tienen un tamaño no válido!`});
+              } else {
+                setOpen({open:true, message: `¡Uno o mas archivos tienen un peso mayor de 1 MB!`});
+              }
+            } else{
               list.push({
                 file: iterator,
               });
@@ -118,9 +123,13 @@ const UploadForm  = ({setFinish, files, setFiles, isError, errorMessage}) => {
         } else {
           let item = files.find(x=> x.file.name == iterator.name);
           if(item == null || item == undefined){
-            if (iterator.size/1024/1024 > 1) {
-              setOpen({open:true, message: `¡Uno o mas archivos tienen un peso mayor de 1 MB!`});
-            }else{
+            if (iterator.size/1024/1024 > 1 || iterator.size == 0) {
+              if (iterator.size == 0) {
+                setOpen({open:true, message: `¡Uno o más archivos tienen un tamaño no válido!`});
+              } else {
+                setOpen({open:true, message: `¡Uno o mas archivos tienen un peso mayor de 1 MB!`});
+              }
+            } else{
               list.push({
                 file: iterator,
               });

@@ -1,23 +1,30 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from "react-redux";
 import { getGrowthOpportunity } from "app/redux/actions/GrowthOpportunityActions";
 import Job from "./components/Job"
 import Loading from "../../../matx/components/MatxLoadable/Loading";
-import { useParams } from "react-router";
 
-export default function (props) {
-    const dispatch = useDispatch();
-    const job = useSelector(state => state.growth.growth_opportunity);
-    let { opp_id } = useParams();
+const OpportunityDetail = (props) => {
 
     useEffect(() => {
-        dispatch(getGrowthOpportunity(opp_id));
-    }, [opp_id]);
+        //props.getGrowthOpportunity();
+    }, []);
 
     return (
-        (!job 
-            ? <Loading /> 
+        (!props.growth_opportunity
+            ? <Loading />
             : <Job {...props} />
         )
     )
+}
+
+const mapStateToProps = ({ growthReducer }) => {
+    const { growth_opportunity } = growthReducer;
+    return {
+        growth_opportunity,
+    };
 };
+
+export default connect(mapStateToProps, {
+    getGrowthOpportunity
+})(OpportunityDetail);
