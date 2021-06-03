@@ -23,8 +23,6 @@ export const GetReimbursementListByUser = (badgeId) => {
 export const SaveReimbursement = (Data, Files, badge, fullname) =>{
   
   var formData = new FormData();
-  formData.append('badge', badge);
-  formData.append('name', fullname);
   formData.append('exchangeRate', Data.exchangeRate);
   formData.append('studiesCategory', Data.studiesCategory);
   formData.append('course', Data.course);
@@ -37,23 +35,14 @@ export const SaveReimbursement = (Data, Files, badge, fullname) =>{
   formData.append('others', Data.others);
   formData.append('email', Data.email);
   
-  if(Data.startDate != null){
-    formData.append('startDate', (format(Data.startDate, 'P p')).toString());
-  }else{
-    formData.append('startDate', Data.startDate);
-  }
+  if(Data.startDate)
+    formData.append('startDate', Data.startDate.toJSON());
 
-  if(Data.endDate != null){
-    formData.append('endDate', (format(Data.endDate, 'P p')).toString());
-  }else{
-    formData.append('endDate', Data.endDate);
-  }
+  if(Data.endDate)
+    formData.append('endDate', Data.endDate.toJSON());
   
-  if(Data.certificationDate){
-    formData.append('certificationDate', (format(Data.certificationDate, 'P p')).toString());
-  }else{
-    formData.append('certificationDate', Data.certificationDate);
-  }
+  if(Data.certificationDate)
+    formData.append('certificationDate', Data.certificationDate.toJSON());
   
   if(Files.length > 0){
     Files.forEach(item => {

@@ -3,12 +3,14 @@ import {
     SET_GROWTH_OPPORTUNITY,
     GET_JOBS_APPLIED,
     GET_GROWTH_OPPORTUNITY,
+    GET_GROWTH_OPPORTUNITY_METRICS
 } from "../actions/GrowthOpportunityActions";
 
 const initialState = {
     growth_opportunities: null,
     growth_opportunity: null,
     jobs_applied: null,
+    metrics: null
 };
 
 const GrowthReducer = function(state = initialState, action){
@@ -21,6 +23,8 @@ const GrowthReducer = function(state = initialState, action){
             return { ...state, growth_opportunity: action.payload };
         case GET_GROWTH_OPPORTUNITY:
             return { ...state, growth_opportunity: action.payload };
+        case GET_GROWTH_OPPORTUNITY_METRICS:
+            return { ...state, metrics: action.payload };
         default:
             return { ...state };
      }

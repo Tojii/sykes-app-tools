@@ -367,7 +367,7 @@ const EducationalReimbursementForm = () => {
     }
     setForm({
       ...form,
-      endDate: date,
+      endDate: new Date(date),
     });
   };
 
@@ -378,7 +378,7 @@ const EducationalReimbursementForm = () => {
 
     setForm({
       ...form,
-      certificationDate: date,
+      certificationDate: new Date(date),
     });
   };
 

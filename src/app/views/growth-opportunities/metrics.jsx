@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import MyMetrics from './components/MyMetrics';
 import { connect } from "react-redux";
-import { getMetrics } from "../../redux/actions/MetricsActions"
+import { getGrowthOpportunityMetrics } from "../../redux/actions/GrowthOpportunityActions"
 import Loading from "../../../matx/components/MatxLoadable/Loading";
 import { Breadcrumb } from "matx";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
@@ -41,10 +42,10 @@ const DialogTitle = withStyles(styles)((props) => {
   });
 
 const Metrics = (props) => {
-    const { history, metrics, getMetrics, user, open, handleClose } = props;
+    const { history, metrics, getGrowthOpportunityMetrics, user, open, handleClose } = props;
 
     useEffect(() =>{
-        getMetrics(user.badge);
+      getGrowthOpportunityMetrics(user.badge);
     }, []);
 
     return (
@@ -62,18 +63,23 @@ const Metrics = (props) => {
                     ]}
                 />
                 </div> */}
-                <MyMetrics metrics={metrics} history={history}/>
+                <DialogContent>
+                  <MyMetrics metrics={metrics} history={history}/>
+                </DialogContent>
             </Dialog>
         </>
         : <Loading />
     )
 }
 
-const mapStateToProps = state => ({
-  metrics: state.metrics.metrics,
-  user: state.user,
-});
+const mapStateToProps = ({ growthReducer, user }) => {
+    const { metrics } = growthReducer;
+    return {
+        metrics,
+        user
+    };
+};
 
 export default connect(mapStateToProps, {
-    getMetrics,
+  getGrowthOpportunityMetrics,
 })(Metrics);
