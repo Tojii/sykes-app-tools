@@ -62,9 +62,9 @@ const EdificiosTable = (props) => {
       return true;
     }).map((item, index) => {
       return {
-        "id": props.edificiosCampaign[index] == undefined ? undefined : props.edificiosCampaign[index].id,
+        "id": props.edificiosCampaign.find(element => element.idBuilding == item.id) != undefined ? props.edificiosCampaign.find(element => element.idBuilding == item.id).id : undefined,
         "nameBuilding": item.name,
-        "active": props.edificiosCampaign[index] == undefined ? false : props.edificiosCampaign[index].active,
+        "active": props.edificiosCampaign.find(element => element.idBuilding == item.id) != undefined ? props.edificiosCampaign.find(element => element.idBuilding == item.id).active : false,
         "activeBuilding": item.active,
         "idBuilding": item.id,
       }
@@ -103,9 +103,9 @@ const EdificiosTable = (props) => {
       return true;
     }).map((item, index) => {
       return {
-        "id": props.edificiosCampaign[index] == undefined ? undefined : props.edificiosCampaign[index].id,
+        "id": props.edificiosCampaign.find(element => element.idBuilding == item.id) != undefined ? props.edificiosCampaign.find(element => element.idBuilding == item.id).id : undefined,
         "nameBuilding": item.name,
-        "active": index == dataIndex ? (props.edificiosCampaign[index] != undefined ? (props.edificiosCampaign[index] && props.edificiosCampaign[index].active ? false : true) : (buildings[index].active ? false : true)) : (props.edificiosCampaign[index] != undefined ? props.edificiosCampaign[index].active : false),
+        "active": index == dataIndex ? (props.edificiosCampaign.find(element => element.idBuilding == item.id) != undefined ? (props.edificiosCampaign.find(element => element.idBuilding == item.id).active ? false : true) : (buildings[index].active ? false : true)) : (props.edificiosCampaign.find(element => element.idBuilding == item.id) != undefined ? props.edificiosCampaign.find(element => element.idBuilding == item.id).active : false),
         "activeBuilding": item.active,
         "idBuilding": item.id,
       }
@@ -134,9 +134,10 @@ const EdificiosTable = (props) => {
     return true;
   }).map((item, index) => {
     return {
-      "id": props.edificiosCampaign[index] == undefined ? undefined : props.edificiosCampaign[index].id,
+      
+      "id": props.edificiosCampaign.find(element => element.idBuilding == item.id) != undefined ? props.edificiosCampaign.find(element => element.idBuilding == item.id).id : undefined,
       "nameBuilding": item.name,
-      "active": props.edificiosCampaign[index] == undefined ? false : props.edificiosCampaign[index].active,
+      "active": props.edificiosCampaign.find(element => element.idBuilding == item.id) != undefined ? props.edificiosCampaign.find(element => element.idBuilding == item.id).active : false,
       "activeBuilding": item.active,
       "idBuilding": item.id,
     }
@@ -246,7 +247,7 @@ const EdificiosTable = (props) => {
     (isLoading || isLoadingBuilding) ? <Loading /> :
       (admin || !isAdmin) ?
         <div className="m-sm-30">
-          {console.log("buildata", props.edificiosCampaign)}
+          {console.log("buildata", builddata)}
           <Grid container spacing={2}>
             <Grid item md={12} xs={12}>
               {/* { isLoading ? <Loading /> :   */}
