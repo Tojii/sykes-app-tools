@@ -6,7 +6,9 @@ import {
     Dialog,
     IconButton,
     CardContent,
-    CardHeader
+    CardHeader,
+    FormControl,
+    FormHelperText
 } from "@material-ui/core";
 import MenuItem from '@material-ui/core/MenuItem';
 import { ValidatorForm, TextValidator, SelectValidator } from "react-material-ui-form-validator";
@@ -194,6 +196,7 @@ const FormVentas = () => {
     const [showInformation, setshowInformation] = useState(false);
     const [showEdificio, setshowEdificio] = useState(false);
     const classes = useStyles();
+    const [errorEmail, setErrorEmail] = useState({ error: false, errorMessage: "" });
     const [shouldOpenDetailsDialog, setShouldOpenDetailsDialog] = useState(
         {
             open: false,
@@ -308,7 +311,7 @@ const FormVentas = () => {
     });
 
     const handleFormSubmit = async () => {
-        if (carrito.length > 0 && (purchases[0] != undefined && ventasform.totalComprados <= (ventasform.maximo - purchases[0].totalPurchasedItems))) {
+        if (!errorEmail.error && carrito.length > 0 && (purchases[0] != undefined && ventasform.totalComprados <= (ventasform.maximo - purchases[0].totalPurchasedItems))) {
             setDisableCarrito(false);
             let details = carrito.map(item => {
                 return (
@@ -381,6 +384,20 @@ const FormVentas = () => {
                 cantonCode: "",
                 districtCode: "",
             });
+        }
+    };
+
+    const handleChangeEmail = (event) => { //validation for Link field
+        const name = event.target.name;
+        const regex = /^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        setVentasForm({
+            ...ventasform,
+            [name]: event.target.value,
+        })
+        if (regex.test(event.target.value)) {
+            setErrorEmail({ error: false, errorMessage: `` });
+        } else {
+            setErrorEmail({ error: true, errorMessage: `Correo no válido` });
         }
     };
 
@@ -498,16 +515,21 @@ const FormVentas = () => {
                                 validators={["required", "maxStringLength:150"]}
                                 errorMessages={["Este campo es requerido", "Máximo 150 carácteres"]}
                             />
-                            <TextValidator
-                                className={classes.textvalidator}
-                                label="Correo electronico*"
-                                onChange={handleChange}
-                                type="text"
-                                name="email"
-                                value={ventasform.email}
-                                validators={["required", "matchRegexp:^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"]}
-                                errorMessages={["Este campo es requerido", "Correo no válido"]}
-                            />
+                            <FormControl className={classes.textvalidator}>
+                                <TextValidator
+                                    //className={classes.textvalidator}
+                                    fullWidth
+                                    label="Correo electronico*"
+                                    onChange={handleChangeEmail}
+                                    type="text"
+                                    name="email"
+                                    value={ventasform.email}
+                                    validators={["required"]}
+                                    errorMessages={["Este campo es requerido"]}
+                                    error={errorEmail.error}
+                                />
+                                <FormHelperText error={errorEmail.error} id="my-helper-text-email">{errorEmail.errorMessage}</FormHelperText>
+                            </FormControl>
                             <TextValidator
                                 className={classes.textvalidator}
                                 label="Telefono*"

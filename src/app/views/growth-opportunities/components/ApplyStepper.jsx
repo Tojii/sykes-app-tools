@@ -13,7 +13,7 @@ import ResumeStep from "./ResumeStep";
 import ScheduleStep from "./ScheduleStep";
 import ConfirmStep from "./ConfirmStep";
 import { setApplyData, saveJobApplication } from "../../../redux/actions/ApplyActions"
-import { updateUserData } from "../../../redux/actions/UserActions"
+import { updateUserData, setUserData } from "../../../redux/actions/UserActions"
 import { connect, useDispatch, useSelector } from "react-redux";
 import format from "date-fns/format";
 import ValidationModal from './ValidationDialog';
@@ -48,7 +48,9 @@ const ApplyStepper = (props) => {
     validations,
     growth_opportunity,
     saveJobApplication,
-    saveApplication
+    saveApplication,
+    updateUserData,
+    setUserData
   } = props
   const dispatch = useDispatch();
   const isLoading = useSelector(state => state.applyReducer.loading);
@@ -87,7 +89,8 @@ const ApplyStepper = (props) => {
         phone: user.phone,
         badge: user.badge,
       }
-      dispatch(updateUserData(payloadUser));
+      setUserData(payloadUser);
+      updateUserData(payloadUser);
     }
   };
 
@@ -208,5 +211,5 @@ const mapStateToProps = ({ applyReducer, growthReducer, user }) => {
 };
 
 export default connect(mapStateToProps, {
-  setApplyData, saveJobApplication,
+  setApplyData, saveJobApplication, updateUserData, setUserData
 })(ApplyStepper);
